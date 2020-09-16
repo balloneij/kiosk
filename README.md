@@ -1,11 +1,9 @@
 
-# Kiosk Processing Java
+# Kiosk
 
-![Demo gif](demo.gif)
+![Demonstration gif](demo.gif)
 
-A demo project created by Isaac Ballone to learn how to use Processing through the Java API.
-
-It's pretty straightforward, and easy. Examples on [Processing's website](https://processing.org/examples/) transfer 1:1. All the functions used are exposed through the PApplet class.
+Discovery World's Career Pathways Kiosk developed by an MSOE Senior Design team.
 
 # Setup
 
@@ -15,21 +13,22 @@ It's pretty straightforward, and easy. Examples on [Processing's website](https:
 * Follow Intellij's defaults for importing the project
 * Visit *Troubleshooting* if you had issues
 
+# Build
 
-# Setup through Intellij
+## Setting the build artifacts
 
-## Open the project
-Use the iml
+* `File > Project Structure > Artifacts > '+' > Jar > From modules with dependencies...`
+* Select the Main class
+* Press OK and apply changes
 
-## Add dependencies
+## Building
 
-## Run
+* `Build > Build Artifacts...`
+* Select the artifact and build
 
-Run `Kiosk.main()`.
+## Running
 
-or
-
-Run the Jar using `java -jar build/kiosk-java-processing.jar`
+Run the Jar using `java -jar out/artifacts/kiosk_jar/kiosk.jar`.
 
 # Troubleshooting
 
