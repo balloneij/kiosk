@@ -14,27 +14,24 @@ public class WaveSwipeTransition implements Scene {
     private static final float WAVINESS = (float) 0.05;
 
     private float thetaI = 0;
-    private float x;
+    private float locationX;
     private boolean invertedColors;
 
-    public WaveSwipeTransition(boolean invertedColors)
-    {
+    public WaveSwipeTransition(boolean invertedColors) {
         this.invertedColors = invertedColors;
     }
 
-    public void init(Kiosk app)
-    {
-        this.x = app.width + 10;
+    public void init(Kiosk app) {
+        this.locationX = app.width + 10;
     }
 
     @Override
     public void update(float dt, SceneControl sceneControl) {
-        if (this.x < -10)
-        {
+        if (this.locationX < -10) {
             sceneControl.popScene();
         }
         this.thetaI += WaveSwipeTransition.WAVE_SPEED * dt;
-        this.x -= 500 * dt;
+        this.locationX -= 500 * dt;
     }
 
     @Override
@@ -47,9 +44,8 @@ public class WaveSwipeTransition implements Scene {
 
         app.beginShape();
         app.vertex(app.width, 0);
-        while (y < app.height)
-        {
-            app.vertex(x + 10 * PApplet.sin(theta), y);
+        while (y < app.height) {
+            app.vertex(locationX + 10 * PApplet.sin(theta), y);
             y += 1;
             theta += WaveSwipeTransition.WAVINESS;
         }

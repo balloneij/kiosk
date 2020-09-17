@@ -1,13 +1,12 @@
 package kiosk;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import kiosk.scenes.PromptScene;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
-
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 public class Kiosk extends PApplet {
 
@@ -16,8 +15,10 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private Map<String, LinkedList<EventCallback>> callbacks;
 
-    public Kiosk()
-    {
+    /**
+     * Draws scenes.
+     */
+    public Kiosk() {
         this.sceneControl = new SceneControl();
         this.callbacks = new LinkedHashMap<>();
         this.callbacks.put("mouseReleased", new LinkedList<>());
@@ -33,20 +34,19 @@ public class Kiosk extends PApplet {
         super.setup();
         this.lastMillis = millis();
         this.sceneControl.pushScene(new PromptScene("Which do you like best?", new String[]{
-                "Dogs",
-                "Cats"
+            "Dogs",
+            "Cats"
         }, false));
     }
 
     @Override
     public void draw() {
         int currMillis = millis();
-        float dt = (float)(currMillis - this.lastMillis) / 1000;
+        float dt = (float) (currMillis - this.lastMillis) / 1000;
         this.lastMillis = currMillis;
 
         Scene currentScene = this.sceneControl.currentScene();
-        if (currentScene != this.lastScene)
-        {
+        if (currentScene != this.lastScene) {
             this.clearCallbacks();
             currentScene.init(this);
             this.lastScene = currentScene;
@@ -55,13 +55,11 @@ public class Kiosk extends PApplet {
         currentScene.draw(this);
     }
 
-    public void clearCallbacks()
-    {
+    public void clearCallbacks() {
         this.callbacks.get("mouseReleased").clear();
     }
 
-    public void addMouseReleasedCallback(EventCallback callback)
-    {
+    public void addMouseReleasedCallback(EventCallback callback) {
         this.callbacks.get("mouseReleased").push(callback);
     }
 
@@ -72,8 +70,7 @@ public class Kiosk extends PApplet {
         }
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Kiosk kiosk = new Kiosk();
         kiosk.runSketch();
     }

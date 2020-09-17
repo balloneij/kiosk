@@ -7,11 +7,24 @@ Discovery World's Career Pathways Kiosk developed by an MSOE Senior Design team.
 
 # Setup
 
+## Project
+
 * Clone the repo `git clone git@gitlab.com:msoe.edu/sdl/sd21/discoveryworld/kiosk.git`
 * In Intellij: `File > New > Project from Existing Sources`
 * Navigate to the `kiosk` folder and select it
 * Follow Intellij's defaults for importing the project
 * Visit *Troubleshooting* if you had issues
+
+## Checkstyle linter
+
+* Install the Checkstyle plugin `File > Settings > Plugins > Marketplace`
+* Search for and install the Checkstyle plugin
+* Restart IntelliJ
+* Add the team's checkstyle rules `File > Settings > Tools > Checkstyle > Configuration File > '+'`
+* Add a description and the local file `checkstyle.xml`
+* Press OK
+* Select the new checkstyle's checkbox
+* Apply changes
 
 # Build
 
