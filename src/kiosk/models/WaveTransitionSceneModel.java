@@ -3,10 +3,10 @@ package kiosk.models;
 import kiosk.scenes.Scene;
 import kiosk.scenes.WaveTransitionScene;
 
-public class WaveTransitionSceneModel implements SceneModel {
+public final class WaveTransitionSceneModel implements SceneModel {
 
-    public SceneModel target;
-    public boolean invertedColors;
+    public final SceneModel target;
+    public final boolean invertedColors;
 
     /**
      * Constructs a wave transition model.

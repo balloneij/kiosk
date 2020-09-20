@@ -1,9 +1,9 @@
 package kiosk.models;
 
-public class ButtonModel {
+public final class ButtonModel {
 
-    public String text;
-    public SceneModel target;
+    public final String text;
+    public final SceneModel target;
 
     /**
      * Constructs a button model.

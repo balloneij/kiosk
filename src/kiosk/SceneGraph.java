@@ -51,6 +51,15 @@ public class SceneGraph {
         }
     }
 
+    /**
+     * Reset the current Scene to the root and clear
+     * the scene history.
+     */
+    public void reset() {
+        this.currentScene = this.root.createScene();
+        this.history.push(this.root);
+    }
+
     public Scene getCurrentScene() {
         return currentScene;
     }

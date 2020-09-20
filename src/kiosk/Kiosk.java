@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import kiosk.models.ButtonModel;
 import kiosk.models.PromptSceneModel;
+import kiosk.models.ResetModel;
 import kiosk.models.WaveTransitionSceneModel;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -77,9 +78,11 @@ public class Kiosk extends PApplet {
     private static SceneGraph createExampleSceneGraph() {
         // TODO: Replace this manually object construction with XML
 
+        var reset = new WaveTransitionSceneModel(new ResetModel(), false);
+
         var catsOrDogs = new PromptSceneModel("Which do you prefer?", new ButtonModel[]{
-            new ButtonModel("Cats", null),
-            new ButtonModel("Dogs", null)
+            new ButtonModel("Cats", reset),
+            new ButtonModel("Dogs", reset)
         }, false);
         var transitionToCatsOrDogs = new WaveTransitionSceneModel(catsOrDogs, true);
 
@@ -102,12 +105,8 @@ public class Kiosk extends PApplet {
             new ButtonModel("cap", transitionToYogurt),
             new ButtonModel("!", transitionToYogurt)
         }, true);
-        var transitionToCaps = new WaveTransitionSceneModel(caps, false);
 
-        catsOrDogs.answers[0].target = transitionToCaps;
-        catsOrDogs.answers[1].target = transitionToCaps;
-
-        return new SceneGraph(catsOrDogs);
+        return new SceneGraph(caps);
     }
 
     public static void main(String[] args) {

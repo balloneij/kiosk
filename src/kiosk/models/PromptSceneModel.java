@@ -3,11 +3,11 @@ package kiosk.models;
 import kiosk.scenes.PromptScene;
 import kiosk.scenes.Scene;
 
-public class PromptSceneModel implements SceneModel {
+public final class PromptSceneModel implements SceneModel {
 
-    public String question;
-    public ButtonModel[] answers;
-    public boolean invertedColors;
+    public final String question;
+    public final ButtonModel[] answers;
+    public final boolean invertedColors;
 
     /**
      * Constructs a prompt scene model.
