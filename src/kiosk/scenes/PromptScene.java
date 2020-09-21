@@ -3,90 +3,101 @@ package kiosk.scenes;
 import java.awt.Point;
 import java.awt.Rectangle;
 import kiosk.Kiosk;
-import kiosk.SceneControl;
+import kiosk.SceneGraph;
+import kiosk.models.ButtonModel;
+import kiosk.models.EmptySceneModel;
+import kiosk.models.PromptSceneModel;
+import kiosk.models.SceneModel;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
 
 public class PromptScene implements Scene {
 
-    private String question;
-    private String[] answers;
-    private Rectangle[] answerButtons;
-    private boolean selectionMade;
-    private boolean invertedColors;
+    private PromptSceneModel model;
+    private final Button[] buttons;
 
-    /**
-     * Asks the user a question.
-     * @param question question to be asked
-     * @param answers selection for the user to choose from
-     * @param invertedColors false for a black background
-     */
-    public PromptScene(String question, String[] answers, boolean invertedColors) {
-        this.question = question;
-        this.answers = answers;
-        this.answerButtons = new Rectangle[this.answers.length];
-        this.selectionMade = false;
-        this.invertedColors = invertedColors;
+    private boolean selectionMade = false;
+    private SceneModel selectionSceneModel = new EmptySceneModel();
+
+    public PromptScene(PromptSceneModel model) {
+        this.model = model;
+        this.buttons = new Button[this.model.answers.length];
     }
 
     @Override
-    public void init(Kiosk app) {
-        app.addMouseReleasedCallback(arg -> this.mouseClicked((MouseEvent) arg));
+    public void init(Kiosk sketch) {
+        int width = sketch.width;
+        int height = sketch.height;
+        // Add 4 to the length so the buttons aren't a tight fit
+        int buttonWidth = width / (this.buttons.length + 4);
+        int buttonHeight = 50;
+        // Add 1 to the length to account for both the left and right sides of the buttons
+        int buttonPadding = (width - buttonWidth * this.buttons.length) / (this.buttons.length + 1);
 
-        // Add 2 to account for the left and right
-        int spacing = app.width / (this.answers.length + 1);
-        int x = spacing;
-        int y = app.height * 3 / 4;
-        for (int i = 0; i < this.answerButtons.length; i++) {
-            this.answerButtons[i] = new Rectangle(x - 100, y - 25, 200, 50);
-            x += spacing;
+        int y = height * 3 / 4;
+        int x = buttonPadding;
+        for (int i = 0; i < this.model.answers.length; i++) {
+            ButtonModel model = this.model.answers[i];
+            Rectangle rect = new Rectangle(x, y, buttonWidth, buttonHeight);
+
+            this.buttons[i] = new Button(model, rect);
+            x += buttonWidth + buttonPadding;
+        }
+
+        // Attach mouse click callback
+        sketch.addMouseReleasedCallback(arg -> this.mouseClicked((MouseEvent) arg));
+    }
+
+    @Override
+    public void update(float dt, SceneGraph sceneGraph) {
+        if (this.selectionMade) {
+            sceneGraph.pushScene(this.selectionSceneModel);
         }
     }
 
     @Override
-    public void update(float dt, SceneControl sceneControl) {
-        if (selectionMade) {
-            sceneControl.popScene();
-            sceneControl.pushScene(new PromptScene("Which do you like best?", new String[]{
-                "Dogs",
-                "Cats"
-            }, !this.invertedColors));
-            sceneControl.pushScene(new WaveSwipeTransition(this.invertedColors));
-        }
-    }
+    public void draw(Kiosk sketch) {
+        // TODO: Set the font
+        sketch.rectMode(PConstants.CORNER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-    @Override
-    public void draw(Kiosk app) {
-        app.rectMode(PConstants.CENTER);
-        app.textAlign(PConstants.CENTER, PConstants.CENTER);
+        sketch.background(this.model.invertedColors ? 255 : 0);
+        sketch.fill(this.model.invertedColors ? 0 : 255);
+        sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
 
-        app.background(this.invertedColors ? 255 : 0);
-        app.fill(this.invertedColors ? 0 : 255);
-        app.text(this.question, app.width / 2, app.height / 4);
-
-        for (int i = 0; i < this.answers.length; i++) {
-            String answer = this.answers[i];
-            Rectangle answerButton = this.answerButtons[i];
-
-            app.fill(this.invertedColors ? 0 : 255);
-            app.stroke(this.invertedColors ? 0 : 255);
-            app.rect(answerButton.x + 100, answerButton.y + 25,
-                    answerButton.width, answerButton.height);
-            app.fill(this.invertedColors ? 255 : 0);
-            app.text(answer, answerButton.x + 100, answerButton.y + 25);
+        for (Button button : this.buttons) {
+            // Draw button
+            sketch.fill(this.model.invertedColors ? 0 : 255);
+            sketch.stroke(this.model.invertedColors ? 0 : 255);
+            sketch.rect(button.rect.x, button.rect.y, button.rect.width, button.rect.height);
+            // Draw button text
+            sketch.fill(this.model.invertedColors ? 255 : 0);
+            sketch.text(button.model.text,
+                    (float) button.rect.getCenterX(), (float) button.rect.getCenterY());
         }
     }
 
     private void mouseClicked(MouseEvent event) {
         Point point = new Point(event.getX(), event.getY());
 
-        for (int i = 0; i < this.answerButtons.length; i++) {
-            Rectangle rect = this.answerButtons[i];
-            if (rect.contains(point)) {
-                System.out.println("You've selected" + this.answers[i]);
+        for (Button button : this.buttons) {
+            if (button.rect.contains(point)) {
                 this.selectionMade = true;
+                this.selectionSceneModel = button.model.target;
+                break;
             }
+        }
+    }
+
+    private static class Button {
+
+        public ButtonModel model;
+        public Rectangle rect;
+
+        public Button(ButtonModel model, Rectangle rect) {
+            this.model = model;
+            this.rect = rect;
         }
     }
 }
