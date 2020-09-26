@@ -1,7 +1,5 @@
 package kiosk.scenes;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
@@ -9,20 +7,19 @@ import kiosk.models.EmptySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import processing.core.PConstants;
-import processing.event.MouseEvent;
 
 
 public class PromptScene implements Scene {
 
     private PromptSceneModel model;
-    private final Button[] buttons;
+    private final ButtonControl[] buttons;
 
     private boolean selectionMade = false;
     private SceneModel selectionSceneModel = new EmptySceneModel();
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;
-        this.buttons = new Button[this.model.answers.length];
+        this.buttons = new ButtonControl[this.model.answers.length];
     }
 
     @Override
@@ -39,20 +36,21 @@ public class PromptScene implements Scene {
         int x = buttonPadding;
         for (int i = 0; i < this.model.answers.length; i++) {
             ButtonModel model = this.model.answers[i];
-            Rectangle rect = new Rectangle(x, y, buttonWidth, buttonHeight);
+            var button = new ButtonControl(model, x, y, buttonWidth, buttonHeight);
 
-            this.buttons[i] = new Button(model, rect);
+            sketch.hookControl(button);
+            this.buttons[i] = button;
+
             x += buttonWidth + buttonPadding;
         }
-
-        // Attach mouse click callback
-        sketch.addMouseReleasedCallback(arg -> this.mouseClicked((MouseEvent) arg));
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        if (this.selectionMade) {
-            sceneGraph.pushScene(this.selectionSceneModel);
+        for (ButtonControl button : this.buttons) {
+            if (button.wasClicked()) {
+                sceneGraph.pushScene(button.getTarget());
+            }
         }
     }
 
@@ -66,38 +64,8 @@ public class PromptScene implements Scene {
         sketch.fill(this.model.invertedColors ? 0 : 255);
         sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
 
-        for (Button button : this.buttons) {
-            // Draw button
-            sketch.fill(this.model.invertedColors ? 0 : 255);
-            sketch.stroke(this.model.invertedColors ? 0 : 255);
-            sketch.rect(button.rect.x, button.rect.y, button.rect.width, button.rect.height);
-            // Draw button text
-            sketch.fill(this.model.invertedColors ? 255 : 0);
-            sketch.text(button.model.text,
-                    (float) button.rect.getCenterX(), (float) button.rect.getCenterY());
-        }
-    }
-
-    private void mouseClicked(MouseEvent event) {
-        Point point = new Point(event.getX(), event.getY());
-
-        for (Button button : this.buttons) {
-            if (button.rect.contains(point)) {
-                this.selectionMade = true;
-                this.selectionSceneModel = button.model.target;
-                break;
-            }
-        }
-    }
-
-    private static class Button {
-
-        public ButtonModel model;
-        public Rectangle rect;
-
-        public Button(ButtonModel model, Rectangle rect) {
-            this.model = model;
-            this.rect = rect;
+        for (ButtonControl button : this.buttons) {
+            button.drawRectangle(sketch);
         }
     }
 }

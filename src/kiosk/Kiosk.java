@@ -7,6 +7,7 @@ import kiosk.models.ButtonModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.ResetModel;
 import kiosk.models.WaveTransitionSceneModel;
+import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
@@ -15,7 +16,7 @@ public class Kiosk extends PApplet {
 
     private final SceneGraph sceneGraph;
     private Scene lastScene;
-    private Map<String, LinkedList<EventCallback>> callbacks;
+    private Map<InputEvent, LinkedList<EventListener>> listeners;
     private int lastMillis = 0;
 
     /**
@@ -23,8 +24,11 @@ public class Kiosk extends PApplet {
      */
     public Kiosk() {
         this.sceneGraph = Kiosk.createExampleSceneGraph();
-        this.callbacks = new LinkedHashMap<>();
-        this.callbacks.put("mouseReleased", new LinkedList<>());
+        this.listeners = new LinkedHashMap<>();
+
+        for (InputEvent e : InputEvent.values()) {
+            this.listeners.put(e, new LinkedList<>());
+        }
     }
 
     @Override
@@ -50,7 +54,7 @@ public class Kiosk extends PApplet {
 
         // Initialize the current scene if it hasn't been
         if (currentScene != this.lastScene) {
-            this.clearCallbacks();
+            this.clearEventListeners();
             currentScene.init(this);
             this.lastScene = currentScene;
         }
@@ -60,18 +64,91 @@ public class Kiosk extends PApplet {
         currentScene.draw(this);
     }
 
-    public void clearCallbacks() {
-        this.callbacks.get("mouseReleased").clear();
+    /**
+     * Clear every event listener.
+     */
+    public void clearEventListeners() {
+        // Clear the list of listeners for each event type
+        for (InputEvent e : InputEvent.values()) {
+            this.listeners.get(e).clear();
+        }
     }
 
-    public void addMouseReleasedCallback(EventCallback callback) {
-        this.callbacks.get("mouseReleased").push(callback);
+    /**
+     * Hook a Control's event listeners to the sketch.
+     * @param control with event listeners.
+     */
+    public void hookControl(Control control) {
+        Map<InputEvent, EventListener> newListeners = control.getEventListeners();
+
+        for (InputEvent key : newListeners.keySet()) {
+            this.listeners.get(key).push(newListeners.get(key));
+        }
     }
 
     @Override
+    public void mouseClicked(MouseEvent event) {
+        for (EventListener listener : this.listeners.get(InputEvent.MouseClicked)) {
+            listener.invoke(event);
+        }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent event) {
+        for (EventListener listener : this.listeners.get(InputEvent.MouseDragged)) {
+            listener.invoke(event);
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent event) {
+        for (EventListener listener : this.listeners.get(InputEvent.MouseEntered)) {
+            listener.invoke(event);
+        }
+    }
+
+    @Override
+    public void mouseExited(MouseEvent event) {
+        for (EventListener listener : this.listeners.get(InputEvent.MouseExited)) {
+            listener.invoke(event);
+        }
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent event) {
+        for (EventListener listener : this.listeners.get(InputEvent.MouseMoved)) {
+            listener.invoke(event);
+        }
+    }
+
+    /**
+     * Overload Processing's event handler and propagate
+     * to the relevant listeners.
+     * @param event args passed to the listener
+     */
+    @Override
+    public void mousePressed(MouseEvent event) {
+        for (EventListener listener : this.listeners.get(InputEvent.MousePressed)) {
+            listener.invoke(event);
+        }
+    }
+
+    /**
+     * Overload Processing's event handler and propagate
+     * to the relevant listeners.
+     * @param event args passed to the listener
+     */
+    @Override
     public void mouseReleased(MouseEvent event) {
-        for (EventCallback callback : this.callbacks.get("mouseReleased")) {
-            callback.invoke(event);
+        for (EventListener listener : this.listeners.get(InputEvent.MouseReleased)) {
+            listener.invoke(event);
+        }
+    }
+
+    @Override
+    public void mouseWheel(MouseEvent event) {
+        for (EventListener listener : this.listeners.get(InputEvent.MouseWheel)) {
+            listener.invoke(event);
         }
     }
 
