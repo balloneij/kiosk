@@ -1,0 +1,13 @@
+image: openjdk:14
+
+stages:
+    - build
+    - test
+
+build:
+    stage: build
+    script: /usr/lib/jvm/java-14-openjdk-amd64/bin/javac /src/kiosk/Kiosk.java
+
+test:
+    stage: test
+    script: echo "This is where tests will happen."
