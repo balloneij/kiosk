@@ -1,9 +1,9 @@
 package kiosk;
 
 /**
- * Event callback for input events from Processing.
+ * Event listener for input events from Processing.
  */
-public interface EventCallback {
+public interface EventListener {
     /**
      * Method code to run on the input event.
      * @param arg event data
