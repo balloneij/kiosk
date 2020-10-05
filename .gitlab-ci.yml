@@ -6,7 +6,7 @@ stages:
 
 build:
     stage: build
-    script: /usr/java/openjdk-14/bin/javac /kiosk/src/kiosk/Kiosk.java
+    script: ls -l
 
 test:
     stage: test
