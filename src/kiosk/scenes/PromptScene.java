@@ -3,19 +3,25 @@ package kiosk.scenes;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.EmptySceneModel;
+import kiosk.models.ImageModel;
 import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
 import processing.core.PConstants;
+import processing.core.PFont;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 
 public class PromptScene implements Scene {
 
     private PromptSceneModel model;
     private final ButtonControl[] buttons;
+    private Image penguinImage;
 
-    private boolean selectionMade = false;
-    private SceneModel selectionSceneModel = new EmptySceneModel();
+    private float penguinX = 0;
+    private float penguinRotation = 0;
+    private PFont spookyFont = null;
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;
@@ -43,6 +49,18 @@ public class PromptScene implements Scene {
 
             x += buttonWidth + buttonPadding;
         }
+
+        // Spooky font
+        try {
+            File file = new File("assets/spooky.ttf");
+            this.spookyFont = new PFont(Font.createFont(Font.TRUETYPE_FONT, file), true);
+        } catch (FontFormatException | IOException exception) {
+            // TODO: Find a graceful way to load fonts w/ fallback fonts so we can avoid null checks
+            throw new RuntimeException("Font could not be loaded: " + exception.getMessage());
+        }
+
+        // Penguin
+        this.penguinImage = Image.createImage(sketch, new ImageModel("assets/penguin.png", 64, 64));
     }
 
     @Override
@@ -52,6 +70,10 @@ public class PromptScene implements Scene {
                 sceneGraph.pushScene(button.getTarget());
             }
         }
+
+        // Penguin
+        this.penguinX += 35 * dt;
+        this.penguinRotation += (Math.PI / 2) * dt;
     }
 
     @Override
@@ -62,10 +84,16 @@ public class PromptScene implements Scene {
 
         sketch.background(this.model.invertedColors ? 255 : 0);
         sketch.fill(this.model.invertedColors ? 0 : 255);
+        sketch.textFont(this.spookyFont,24);
         sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
 
         for (ButtonControl button : this.buttons) {
             button.drawRectangle(sketch);
         }
+
+        // Penguin
+        final float penguinY = (float) (Math.sin(this.penguinX * 0.1) * 20 + 20);
+        this.penguinImage.rotate(this.penguinRotation);
+        this.penguinImage.draw(sketch, this.penguinX, penguinY);
     }
 }
