@@ -3,19 +3,14 @@ package kiosk.scenes;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.EmptySceneModel;
 import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
 import processing.core.PConstants;
 
 
 public class PromptScene implements Scene {
 
-    private PromptSceneModel model;
+    private final PromptSceneModel model;
     private final ButtonControl[] buttons;
-
-    private boolean selectionMade = false;
-    private SceneModel selectionSceneModel = new EmptySceneModel();
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;

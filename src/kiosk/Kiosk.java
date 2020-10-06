@@ -1,11 +1,14 @@
 package kiosk;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import kiosk.models.ButtonModel;
+import kiosk.models.LoadedSurveyModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.ResetModel;
+import kiosk.models.SceneModel;
 import kiosk.models.WaveTransitionSceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
@@ -16,7 +19,7 @@ public class Kiosk extends PApplet {
 
     private final SceneGraph sceneGraph;
     private Scene lastScene;
-    private Map<InputEvent, LinkedList<EventListener>> listeners;
+    private final Map<InputEvent, LinkedList<EventListener>> listeners;
     private int lastMillis = 0;
 
     /**
@@ -79,7 +82,7 @@ public class Kiosk extends PApplet {
      * @param control with event listeners.
      */
     public void hookControl(Control control) {
-        Map<InputEvent, EventListener> newListeners = control.getEventListeners();
+        var newListeners = control.getEventListeners();
 
         for (InputEvent key : newListeners.keySet()) {
             this.listeners.get(key).push(newListeners.get(key));
@@ -155,35 +158,45 @@ public class Kiosk extends PApplet {
     private static SceneGraph createExampleSceneGraph() {
         // TODO: Replace this manually object construction with XML
 
-        var reset = new WaveTransitionSceneModel(new ResetModel(), false);
+        var reset = new WaveTransitionSceneModel(new ResetModel(), false, "001");
 
         var catsOrDogs = new PromptSceneModel("Which do you prefer?", new ButtonModel[]{
-            new ButtonModel("Cats", reset),
-            new ButtonModel("Dogs", reset)
+            new ButtonModel("Cats", "001"),
+            new ButtonModel("Dogs", "001")
         }, false);
-        var transitionToCatsOrDogs = new WaveTransitionSceneModel(catsOrDogs, true);
+        var transitionToCatsOrDogs = new WaveTransitionSceneModel(catsOrDogs, true, "002");
 
         var coffee = new PromptSceneModel("How do you like your coffee?", new ButtonModel[]{
-            new ButtonModel("Black", transitionToCatsOrDogs),
-            new ButtonModel("Blacker", transitionToCatsOrDogs)
+            new ButtonModel("Black", "002"),
+            new ButtonModel("Blacker", "002")
         }, true);
-        var transitionToCoffee = new WaveTransitionSceneModel(coffee, false);
+        var transitionToCoffee = new WaveTransitionSceneModel(coffee, false, "003");
 
         var yogurt = new PromptSceneModel("Are you supposed to stir greek yogurt?",
                 new ButtonModel[] {
-                    new ButtonModel("No", transitionToCoffee)
+                    new ButtonModel("No", "003")
                 }, false);
-        var transitionToYogurt = new WaveTransitionSceneModel(yogurt, true);
+        var transitionToYogurt = new WaveTransitionSceneModel(yogurt, true, "004");
 
         var caps = new PromptSceneModel("Caps! Caps for sale!", new ButtonModel[]{
-            new ButtonModel("Fifty", transitionToYogurt),
-            new ButtonModel("cents", transitionToYogurt),
-            new ButtonModel("a", transitionToYogurt),
-            new ButtonModel("cap", transitionToYogurt),
-            new ButtonModel("!", transitionToYogurt)
+            new ButtonModel("Fifty", "004"),
+            new ButtonModel("cents", "004"),
+            new ButtonModel("a", "004"),
+            new ButtonModel("cap", "004"),
+            new ButtonModel("!", "004")
         }, true);
 
-        return new SceneGraph(caps);
+        var initialScenes = new ArrayList<SceneModel>();
+        initialScenes.add(caps);
+        initialScenes.add(transitionToYogurt);
+        initialScenes.add(yogurt);
+        initialScenes.add(transitionToCoffee);
+        initialScenes.add(coffee);
+        initialScenes.add(transitionToCatsOrDogs);
+        initialScenes.add(catsOrDogs);
+        initialScenes.add(reset);
+
+        return new SceneGraph(new LoadedSurveyModel(initialScenes));
     }
 
     public static void main(String[] args) {

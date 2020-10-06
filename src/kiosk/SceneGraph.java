@@ -1,6 +1,9 @@
 package kiosk;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+
+import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.scenes.EmptyScene;
 import kiosk.scenes.Scene;
@@ -9,6 +12,7 @@ public class SceneGraph {
 
     private final SceneModel root;
     private final LinkedList<SceneModel> history;
+    private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
 
     /**
@@ -16,12 +20,13 @@ public class SceneGraph {
      * history while being traversed.
      * @param root of the scene graph
      */
-    public SceneGraph(SceneModel root) {
-        this.root = root;
-        this.currentScene = this.root.createScene();
+    public SceneGraph(LoadedSurveyModel root) {
         this.history = new LinkedList<>();
-
+        this.sceneModels = new HashMap<>();
+        this.root = root.scenes.get(0);
+        this.currentScene = this.root.createScene();
         this.history.push(this.root);
+        root.scenes.forEach(this::registerSceneModel);
     }
 
     /**
@@ -32,6 +37,19 @@ public class SceneGraph {
     public void pushScene(SceneModel sceneModel) {
         this.currentScene = sceneModel.createScene();
         this.history.push(sceneModel);
+    }
+
+    /**
+     * Changes the current Scene. Constructs the new scene
+     * from the scene model id.
+     * @param sceneModelId The id of the registered scene to push.
+     */
+    public void pushScene(String sceneModelId) {
+        var containsModel = sceneModels.containsKey(sceneModelId);
+
+        if (containsModel) {
+            pushScene(sceneModels.get(sceneModelId));
+        }
     }
 
     /**
@@ -58,6 +76,17 @@ public class SceneGraph {
     public void reset() {
         this.currentScene = this.root.createScene();
         this.history.push(this.root);
+    }
+
+    /**
+     * Registers the scene model by it's ID.
+     * @param sceneModel Returns the scene model at the ID, if one exists.
+     */
+    public void registerSceneModel(SceneModel sceneModel) {
+        if (sceneModel.getId().equals(history.peekFirst().getId())) {
+            this.currentScene = sceneModel.createScene();
+        }
+        sceneModels.put(sceneModel.getId(), sceneModel);
     }
 
     public Scene getCurrentScene() {
