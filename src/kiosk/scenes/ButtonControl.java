@@ -6,7 +6,6 @@ import java.util.Map;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.models.ButtonModel;
-import kiosk.models.SceneModel;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
@@ -84,7 +83,7 @@ public class ButtonControl implements Control {
         return isPressed;
     }
 
-    public SceneModel getTarget() {
+    public String getTarget() {
         return this.model.target;
     }
 

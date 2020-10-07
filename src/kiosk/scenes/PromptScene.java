@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class PromptScene implements Scene {
 
-    private PromptSceneModel model;
+    private final PromptSceneModel model;
     private final ButtonControl[] buttons;
     private Image penguinImage;
 

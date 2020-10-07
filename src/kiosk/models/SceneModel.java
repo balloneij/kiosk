@@ -11,4 +11,10 @@ public interface SceneModel {
      * @return a new Scene
      */
     Scene createScene();
+
+    /**
+     * Get this models unique ID.
+     * @return The unique ID which points to this model.
+     */
+    String getId();
 }
