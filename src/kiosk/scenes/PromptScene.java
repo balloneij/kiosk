@@ -1,5 +1,9 @@
 package kiosk.scenes;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
@@ -7,10 +11,6 @@ import kiosk.models.ImageModel;
 import kiosk.models.PromptSceneModel;
 import processing.core.PConstants;
 import processing.core.PFont;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 
 public class PromptScene implements Scene {
@@ -84,7 +84,7 @@ public class PromptScene implements Scene {
 
         sketch.background(this.model.invertedColors ? 255 : 0);
         sketch.fill(this.model.invertedColors ? 0 : 255);
-        sketch.textFont(this.spookyFont,24);
+        sketch.textFont(this.spookyFont, 24);
         sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
 
         for (ButtonControl button : this.buttons) {
