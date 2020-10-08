@@ -2,7 +2,6 @@ package kiosk;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.scenes.EmptyScene;
