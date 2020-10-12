@@ -1,0 +1,14 @@
+package kiosk.models;
+
+import kiosk.scenes.Scene;
+
+/**
+ * A model containing any data necessary to create a Scene instance.
+ */
+public interface SceneModel {
+    /**
+     * Creates a new scene. Presumably uses data from the model.
+     * @return a new Scene
+     */
+    Scene createScene();
+}

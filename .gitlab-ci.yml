@@ -1,4 +1,4 @@
-image: openjdk:14
+image: maven:latest
 
 stages:
     - build
@@ -6,8 +6,8 @@ stages:
 
 build:
     stage: build
-    script: /usr/java/openjdk-14/bin/javac -cp "src;lib" src/kiosk/Kiosk.java
+    script: mvn compile
 
 test:
     stage: test
-    script: echo "This is where tests will happen."
+    script: mvn test
