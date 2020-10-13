@@ -17,9 +17,9 @@ import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
-    private final SceneGraph sceneGraph;
+    protected final SceneGraph sceneGraph;
     private Scene lastScene;
-    private final Map<InputEvent, LinkedList<EventListener>> listeners;
+    private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
 
     /**
@@ -27,10 +27,10 @@ public class Kiosk extends PApplet {
      */
     public Kiosk() {
         this.sceneGraph = Kiosk.createExampleSceneGraph();
-        this.listeners = new LinkedHashMap<>();
+        this.mouseListeners = new LinkedHashMap<>();
 
         for (InputEvent e : InputEvent.values()) {
-            this.listeners.put(e, new LinkedList<>());
+            this.mouseListeners.put(e, new LinkedList<>());
         }
     }
 
@@ -73,7 +73,7 @@ public class Kiosk extends PApplet {
     public void clearEventListeners() {
         // Clear the list of listeners for each event type
         for (InputEvent e : InputEvent.values()) {
-            this.listeners.get(e).clear();
+            this.mouseListeners.get(e).clear();
         }
     }
 
@@ -81,84 +81,84 @@ public class Kiosk extends PApplet {
      * Hook a Control's event listeners to the sketch.
      * @param control with event listeners.
      */
-    public void hookControl(Control control) {
+    public void hookControl(Control<MouseEvent> control) {
         var newListeners = control.getEventListeners();
 
         for (InputEvent key : newListeners.keySet()) {
-            this.listeners.get(key).push(newListeners.get(key));
+            this.mouseListeners.get(key).push(newListeners.get(key));
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MouseClicked)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MouseClicked)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MouseDragged)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MouseDragged)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseEntered(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MouseEntered)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MouseEntered)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseExited(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MouseExited)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MouseExited)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MouseMoved)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MouseMoved)) {
             listener.invoke(event);
         }
     }
 
     /**
-     * Overload Processing's event handler and propagate
+     * Overload Pressings event handler and propagate
      * to the relevant listeners.
      * @param event args passed to the listener
      */
     @Override
     public void mousePressed(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MousePressed)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MousePressed)) {
             listener.invoke(event);
         }
     }
 
     /**
-     * Overload Processing's event handler and propagate
+     * Overload Pressings event handler and propagate
      * to the relevant listeners.
      * @param event args passed to the listener
      */
     @Override
     public void mouseReleased(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MouseReleased)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MouseReleased)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseWheel(MouseEvent event) {
-        for (EventListener listener : this.listeners.get(InputEvent.MouseWheel)) {
+        for (var listener : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
     }
 
     private static SceneGraph createExampleSceneGraph() {
         // TODO: Replace this manually object construction with XML
-
-        var reset = new WaveTransitionSceneModel(new ResetModel(), false, "001");
+        var reset = new ResetModel();
+        var transitionToReset = new WaveTransitionSceneModel(reset, false, "001");
 
         var catsOrDogs = new PromptSceneModel("Which do you prefer?", new ButtonModel[]{
             new ButtonModel("Cats", "001"),
@@ -194,6 +194,7 @@ public class Kiosk extends PApplet {
         initialScenes.add(coffee);
         initialScenes.add(transitionToCatsOrDogs);
         initialScenes.add(catsOrDogs);
+        initialScenes.add(transitionToReset);
         initialScenes.add(reset);
 
         return new SceneGraph(new LoadedSurveyModel(initialScenes));

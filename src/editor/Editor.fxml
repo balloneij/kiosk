@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0"
+            xmlns="http://javafx.com/javafx/9.0.1" fx:controller="editor.Controller">
+    <children>
+        <SplitPane dividerPositions="0.46870109546165883" layoutY="24.0" prefHeight="776.0" prefWidth="1280.0"
+                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                   AnchorPane.topAnchor="25.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" fx:id="editorPane">
+                    <children>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <ToolBar prefHeight="0.0" prefWidth="676.0">
+                                    <items>
+                                        <Label text="Survey Preview:">
+                                            <font>
+                                                <Font size="18.0"/>
+                                            </font>
+                                        </Label>
+                                    </items>
+                                </ToolBar>
+                                <StackPane fx:id="surveyPreviewPane" alignment="TOP_LEFT" prefHeight="457.0" prefWidth="676.0"
+                                           VBox.vgrow="ALWAYS"/>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>

@@ -10,11 +10,11 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
-public class ButtonControl implements Control {
+public class ButtonControl implements Control<MouseEvent> {
 
     private final ButtonModel model;
     private final Rectangle rect;
-    private final Map<InputEvent, EventListener> eventListeners;
+    private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
     private boolean isPressed;
     private boolean wasClicked;
 
@@ -31,10 +31,8 @@ public class ButtonControl implements Control {
         this.rect = new Rectangle(x, y, w, h);
 
         this.eventListeners = new HashMap<>();
-        this.eventListeners.put(InputEvent.MousePressed,
-            arg -> this.onMousePressed((MouseEvent) arg));
-        this.eventListeners.put(InputEvent.MouseReleased,
-            arg -> this.onMouseReleased((MouseEvent) arg));
+        this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
+        this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
     }
 
     /**
@@ -58,7 +56,8 @@ public class ButtonControl implements Control {
                 (float) this.rect.getCenterY());
     }
 
-    public Map<InputEvent, EventListener> getEventListeners() {
+
+    public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
         return this.eventListeners;
     }
 
@@ -77,10 +76,6 @@ public class ButtonControl implements Control {
         // in a subsequent update tick.
         this.wasClicked = false;
         return temp;
-    }
-
-    public boolean isPressed() {
-        return isPressed;
     }
 
     public String getTarget() {
