@@ -4,7 +4,7 @@ import java.util.Map;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 
-public interface Control {
+public interface Control<T> {
 
-    Map<InputEvent, EventListener> getEventListeners();
+    Map<InputEvent, EventListener<T>> getEventListeners();
 }

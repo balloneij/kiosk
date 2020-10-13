@@ -2,9 +2,9 @@ package kiosk;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import kiosk.models.EmptySceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
-import kiosk.scenes.EmptyScene;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
@@ -13,6 +13,8 @@ public class SceneGraph {
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
+    private final LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
+
 
     /**
      * Creates a scene graph which holds the root scene model, and
@@ -26,6 +28,7 @@ public class SceneGraph {
         this.currentScene = this.root.createScene();
         this.history.push(this.root);
         root.scenes.forEach(this::registerSceneModel);
+        this.sceneChangeCallbacks = new LinkedList<>();
     }
 
     /**
@@ -36,6 +39,7 @@ public class SceneGraph {
     public void pushScene(SceneModel sceneModel) {
         this.currentScene = sceneModel.createScene();
         this.history.push(sceneModel);
+        this.onSceneChange(sceneModel);
     }
 
     /**
@@ -47,7 +51,10 @@ public class SceneGraph {
         var containsModel = sceneModels.containsKey(sceneModelId);
 
         if (containsModel) {
-            pushScene(sceneModels.get(sceneModelId));
+            var nextSceneModel = sceneModels.get(sceneModelId);
+            pushScene(nextSceneModel);
+        } else {
+            pushScene(new EmptySceneModel());
         }
     }
 
@@ -62,9 +69,12 @@ public class SceneGraph {
         // Set the next scene from the stack
         SceneModel next = this.history.peek();
         if (next == null) {
-            this.currentScene = new EmptyScene();
+            var emptySceneModel = new EmptySceneModel();
+            this.currentScene = emptySceneModel.createScene();
+            this.onSceneChange(emptySceneModel);
         } else {
             this.currentScene = next.createScene();
+            this.onSceneChange(next);
         }
     }
 
@@ -74,7 +84,9 @@ public class SceneGraph {
      */
     public void reset() {
         this.currentScene = this.root.createScene();
+        this.history.clear();
         this.history.push(this.root);
+        this.onSceneChange(this.root);
     }
 
     /**
@@ -82,12 +94,31 @@ public class SceneGraph {
      * @param sceneModel Returns the scene model at the ID, if one exists.
      */
     public void registerSceneModel(SceneModel sceneModel) {
-        if (sceneModel.getId().equals(history.peekFirst().getId())) {
+        var currentScene = history.peekFirst();
+        if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
             this.currentScene = sceneModel.createScene();
         }
         sceneModels.put(sceneModel.getId(), sceneModel);
     }
 
+    /**
+     * Pass in a callback which will be called with the current scene when the scene changes.
+     * @param callBack The callback to be registered
+     */
+    public void addSceneChangeCallback(EventListener<SceneModel> callBack) {
+        sceneChangeCallbacks.add(callBack);
+    }
+
+    private void onSceneChange(SceneModel nextScene) {
+        for (EventListener<SceneModel> sceneChangeCallback : sceneChangeCallbacks) {
+            sceneChangeCallback.invoke(nextScene);
+        }
+    }
+
+    /**
+     * Get the scene most recently pushed to the state.
+     * @return The current scene.
+     */
     public Scene getCurrentScene() {
         return currentScene;
     }
