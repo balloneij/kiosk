@@ -107,8 +107,6 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(catsOrDogs);
         initialScenes.add(transitionToCaps);
 
-        var test = new LoadedSurveyModel(initialScenes);
-        test.writeToFile(new File("test.xml"));
-        return LoadedSurveyModel.readFromFile(new File("test.xml"));
+        return new LoadedSurveyModel(initialScenes);
     }
 }
