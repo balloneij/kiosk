@@ -37,6 +37,7 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
+        Graphics.loadFonts();
     }
 
     @Override
