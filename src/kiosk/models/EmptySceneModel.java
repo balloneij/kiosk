@@ -5,7 +5,7 @@ import kiosk.scenes.Scene;
 
 public class EmptySceneModel implements SceneModel {
 
-    private final String id;
+    public String id;
 
     /**
      * Constructs a new empty scene model.

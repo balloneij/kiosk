@@ -5,7 +5,7 @@ import kiosk.scenes.Scene;
 
 public final class ResetModel implements SceneModel {
 
-    private final String id;
+    public String id;
 
     /**
      * Constructs a new reset model.

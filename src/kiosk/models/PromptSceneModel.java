@@ -5,10 +5,20 @@ import kiosk.scenes.Scene;
 
 public final class PromptSceneModel implements SceneModel {
 
-    public final String question;
-    public final ButtonModel[] answers;
-    public final boolean invertedColors;
-    private final String id;
+    public String question;
+    public ButtonModel[] answers;
+    public boolean invertedColors;
+    public String id;
+
+    /**
+     * Creates an empty PromptSceneModel.
+     */
+    public PromptSceneModel() {
+        this.question = "null";
+        this.answers = new ButtonModel[]{};
+        this.invertedColors = false;
+        this.id = IdGenerator.getInstance().getNextId();
+    }
 
     /**
      * Constructs a prompt scene model.

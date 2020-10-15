@@ -15,7 +15,6 @@ public class SceneGraph {
     private Scene currentScene;
     private final LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
 
-
     /**
      * Creates a scene graph which holds the root scene model, and
      * history while being traversed.
@@ -24,11 +23,13 @@ public class SceneGraph {
     public SceneGraph(LoadedSurveyModel root) {
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
-        this.root = root.scenes.get(0);
+        this.root = root.scenes[0];
         this.currentScene = this.root.createScene();
         this.history.push(this.root);
-        root.scenes.forEach(this::registerSceneModel);
         this.sceneChangeCallbacks = new LinkedList<>();
+        for (SceneModel sceneModel : root.scenes) {
+            this.registerSceneModel(sceneModel);
+        }
     }
 
     /**
