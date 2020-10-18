@@ -4,6 +4,7 @@ target
 .idea
 *.log
 tmp/
+*.test.xml
 
 # User-specific stuff
 .idea/**/workspace.xml

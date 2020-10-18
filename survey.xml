@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="15" class="java.beans.XMLDecoder">
+ <object class="kiosk.models.LoadedSurveyModel" id="LoadedSurveyModel0">
+  <void class="kiosk.models.LoadedSurveyModel" method="getField">
+   <string>scenes</string>
+   <void method="set">
+    <object idref="LoadedSurveyModel0"/>
+    <array class="kiosk.models.SceneModel" length="8">
+     <void index="0">
+      <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel0">
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>question</string>
+        <void method="set">
+         <object idref="PromptSceneModel0"/>
+         <string>Caps! Caps for sale!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="PromptSceneModel0"/>
+         <array class="kiosk.models.ButtonModel" length="5">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel0">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel0"/>
+              <string>Fifty</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel0"/>
+              <string>3</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel1">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel1"/>
+              <string>cents</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel1"/>
+              <string>3</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel2">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel2"/>
+              <string>a</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel2"/>
+              <string>3</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="3">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel3">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel3"/>
+              <string>cap</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel3"/>
+              <string>3</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="4">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel4">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel4"/>
+              <string>!</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel4"/>
+              <string>3</string>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>invertedColors</string>
+        <void method="set">
+         <object idref="PromptSceneModel0"/>
+         <boolean>true</boolean>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="PromptSceneModel0"/>
+         <string>Generated3</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="1">
+      <object class="kiosk.models.WaveTransitionSceneModel" id="WaveTransitionSceneModel0">
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>target</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel0"/>
+         <string>Generated2</string>
+        </void>
+       </void>
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>invertedColors</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel0"/>
+         <boolean>true</boolean>
+        </void>
+       </void>
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel0"/>
+         <string>1</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="2">
+      <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel1">
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>question</string>
+        <void method="set">
+         <object idref="PromptSceneModel1"/>
+         <string>Are you supposed to stir greek yogurt?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="PromptSceneModel1"/>
+         <array class="kiosk.models.ButtonModel" length="1">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel5">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel5"/>
+              <string>No</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel5"/>
+              <string>2</string>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="PromptSceneModel1"/>
+         <string>Generated2</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="3">
+      <object class="kiosk.models.WaveTransitionSceneModel" id="WaveTransitionSceneModel1">
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>target</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel1"/>
+         <string>Generated1</string>
+        </void>
+       </void>
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel1"/>
+         <string>0</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="4">
+      <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel2">
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>question</string>
+        <void method="set">
+         <object idref="PromptSceneModel2"/>
+         <string>How do you like your coffee?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="PromptSceneModel2"/>
+         <array class="kiosk.models.ButtonModel" length="2">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel6">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel6"/>
+              <string>Black</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel6"/>
+              <string>1</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel7">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel7"/>
+              <string>Blacker</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel7"/>
+              <string>1</string>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>invertedColors</string>
+        <void method="set">
+         <object idref="PromptSceneModel2"/>
+         <boolean>true</boolean>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="PromptSceneModel2"/>
+         <string>Generated1</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="5">
+      <object class="kiosk.models.WaveTransitionSceneModel" id="WaveTransitionSceneModel2">
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>target</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel2"/>
+         <string>Generated0</string>
+        </void>
+       </void>
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>invertedColors</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel2"/>
+         <boolean>true</boolean>
+        </void>
+       </void>
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel2"/>
+         <string>3</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="6">
+      <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel3">
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>question</string>
+        <void method="set">
+         <object idref="PromptSceneModel3"/>
+         <string>Which do you prefer?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="PromptSceneModel3"/>
+         <array class="kiosk.models.ButtonModel" length="2">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel8">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel8"/>
+              <string>Cats</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel8"/>
+              <string>0</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel9">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel9"/>
+              <string>Dogs</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel9"/>
+              <string>0</string>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.PromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="PromptSceneModel3"/>
+         <string>Generated0</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="7">
+      <object class="kiosk.models.WaveTransitionSceneModel" id="WaveTransitionSceneModel3">
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>target</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel3"/>
+         <string>Generated3</string>
+        </void>
+       </void>
+       <void class="kiosk.models.WaveTransitionSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="WaveTransitionSceneModel3"/>
+         <string>2</string>
+        </void>
+       </void>
+      </object>
+     </void>
+    </array>
+   </void>
+  </void>
+ </object>
+</java>
