@@ -1,3 +1,4 @@
+target
 **/META-INF/
 .DS_Store
 .idea
@@ -67,7 +68,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# Editor-based Rest Client
+# editor.Editor-based Rest Client
 .idea/httpRequests
 
 # Android studio 3.1+ serialized cache file

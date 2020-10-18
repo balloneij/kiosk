@@ -1,28 +1,31 @@
 package kiosk.scenes;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
+import java.io.IOException;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.EmptySceneModel;
+import kiosk.models.ImageModel;
 import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
 import processing.core.PConstants;
-import processing.event.MouseEvent;
+import processing.core.PFont;
 
 
 public class PromptScene implements Scene {
 
-    private PromptSceneModel model;
-    private final Button[] buttons;
+    private final PromptSceneModel model;
+    private final ButtonControl[] buttons;
+    private Image penguinImage;
 
-    private boolean selectionMade = false;
-    private SceneModel selectionSceneModel = new EmptySceneModel();
+    private float penguinX = 0;
+    private float penguinRotation = 0;
+    private PFont spookyFont = null;
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;
-        this.buttons = new Button[this.model.answers.length];
+        this.buttons = new ButtonControl[this.model.answers.length];
     }
 
     @Override
@@ -39,21 +42,38 @@ public class PromptScene implements Scene {
         int x = buttonPadding;
         for (int i = 0; i < this.model.answers.length; i++) {
             ButtonModel model = this.model.answers[i];
-            Rectangle rect = new Rectangle(x, y, buttonWidth, buttonHeight);
+            var button = new ButtonControl(model, x, y, buttonWidth, buttonHeight);
 
-            this.buttons[i] = new Button(model, rect);
+            sketch.hookControl(button);
+            this.buttons[i] = button;
+
             x += buttonWidth + buttonPadding;
         }
 
-        // Attach mouse click callback
-        sketch.addMouseReleasedCallback(arg -> this.mouseClicked((MouseEvent) arg));
+        // Spooky font
+        try {
+            File file = new File("assets/spooky.ttf");
+            this.spookyFont = new PFont(Font.createFont(Font.TRUETYPE_FONT, file), true);
+        } catch (FontFormatException | IOException exception) {
+            // TODO: Find a graceful way to load fonts w/ fallback fonts so we can avoid null checks
+            throw new RuntimeException("Font could not be loaded: " + exception.getMessage());
+        }
+
+        // Penguin
+        this.penguinImage = Image.createImage(sketch, new ImageModel("assets/penguin.png", 64, 64));
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        if (this.selectionMade) {
-            sceneGraph.pushScene(this.selectionSceneModel);
+        for (ButtonControl button : this.buttons) {
+            if (button.wasClicked()) {
+                sceneGraph.pushScene(button.getTarget());
+            }
         }
+
+        // Penguin
+        this.penguinX += 35 * dt;
+        this.penguinRotation += (Math.PI / 2) * dt;
     }
 
     @Override
@@ -64,40 +84,16 @@ public class PromptScene implements Scene {
 
         sketch.background(this.model.invertedColors ? 255 : 0);
         sketch.fill(this.model.invertedColors ? 0 : 255);
+        sketch.textFont(this.spookyFont, 24);
         sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
 
-        for (Button button : this.buttons) {
-            // Draw button
-            sketch.fill(this.model.invertedColors ? 0 : 255);
-            sketch.stroke(this.model.invertedColors ? 0 : 255);
-            sketch.rect(button.rect.x, button.rect.y, button.rect.width, button.rect.height);
-            // Draw button text
-            sketch.fill(this.model.invertedColors ? 255 : 0);
-            sketch.text(button.model.text,
-                    (float) button.rect.getCenterX(), (float) button.rect.getCenterY());
+        for (ButtonControl button : this.buttons) {
+            button.drawRectangle(sketch);
         }
-    }
 
-    private void mouseClicked(MouseEvent event) {
-        Point point = new Point(event.getX(), event.getY());
-
-        for (Button button : this.buttons) {
-            if (button.rect.contains(point)) {
-                this.selectionMade = true;
-                this.selectionSceneModel = button.model.target;
-                break;
-            }
-        }
-    }
-
-    private static class Button {
-
-        public ButtonModel model;
-        public Rectangle rect;
-
-        public Button(ButtonModel model, Rectangle rect) {
-            this.model = model;
-            this.rect = rect;
-        }
+        // Penguin
+        final float penguinY = (float) (Math.sin(this.penguinX * 0.1) * 20 + 20);
+        this.penguinImage.rotate(this.penguinRotation);
+        this.penguinImage.draw(sketch, this.penguinX, penguinY);
     }
 }
