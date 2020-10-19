@@ -21,6 +21,8 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
+    private int timeoutMillis = 10000; //TODO replace with info from settings xml
+    private int newSceneMillis;
 
     /**
      * Draws scenes.
@@ -60,11 +62,19 @@ public class Kiosk extends PApplet {
             this.clearEventListeners();
             currentScene.init(this);
             this.lastScene = currentScene;
+            this.newSceneMillis = millis();
         }
 
         // Update and draw the scene
         currentScene.update(dt, this.sceneGraph);
         currentScene.draw(this);
+
+        // Check for timeout
+        int currentSceneMillis = millis() - this.newSceneMillis;
+        if(currentSceneMillis > this.timeoutMillis) {
+            // Reset the kiosk
+            this.sceneGraph.reset();
+        }
     }
 
     /**
