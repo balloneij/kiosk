@@ -21,7 +21,7 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private int timeoutMillis = 10000; //TODO replace with info from settings xml
+    private int timeoutMillis = 30000; //TODO replace with info from settings xml
     private int newSceneMillis;
 
     /**
