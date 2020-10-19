@@ -62,6 +62,7 @@ public class Kiosk extends PApplet {
             this.clearEventListeners();
             currentScene.init(this);
             this.lastScene = currentScene;
+            // Record when a new scene is loaded
             this.newSceneMillis = millis();
         }
 
@@ -69,7 +70,7 @@ public class Kiosk extends PApplet {
         currentScene.update(dt, this.sceneGraph);
         currentScene.draw(this);
 
-        // Check for timeout
+        // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
         if(currentSceneMillis > this.timeoutMillis) {
             // Reset the kiosk
