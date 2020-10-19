@@ -200,8 +200,7 @@ public class Kiosk extends PApplet {
         return new SceneGraph(new LoadedSurveyModel(initialScenes));
     }
 
-    public static void main(String[] args) {
-        Kiosk kiosk = new Kiosk();
-        kiosk.runSketch();
+    public void run() {
+        this.runSketch();
     }
 }
