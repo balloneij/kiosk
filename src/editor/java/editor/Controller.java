@@ -1,8 +1,8 @@
 package editor;
 
-import editor.sceneloaders.PromptSceneLoader;
 import java.net.URL;
 import java.util.ResourceBundle;
+import editor.sceneloaders.PromptSceneLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
