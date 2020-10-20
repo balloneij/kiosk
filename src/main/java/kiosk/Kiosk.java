@@ -150,8 +150,58 @@ public class Kiosk extends PApplet {
         }
     }
 
+<<<<<<< src/main/java/kiosk/Kiosk.java
     public static void main(String[] args) {
         Kiosk kiosk = new Kiosk();
         kiosk.runSketch();
+=======
+    private static SceneGraph createExampleSceneGraph() {
+        // TODO: Replace this manually object construction with XML
+        var reset = new ResetModel();
+        var transitionToReset = new WaveTransitionSceneModel(reset, false, "001");
+
+        var catsOrDogs = new PromptSceneModel("Which do you prefer?", new ButtonModel[]{
+            new ButtonModel("Cats", "001"),
+            new ButtonModel("Dogs", "001")
+        }, false);
+        var transitionToCatsOrDogs = new WaveTransitionSceneModel(catsOrDogs, true, "002");
+
+        var coffee = new PromptSceneModel("How do you like your coffee?", new ButtonModel[]{
+            new ButtonModel("Black", "002"),
+            new ButtonModel("Blacker", "002")
+        }, true);
+        var transitionToCoffee = new WaveTransitionSceneModel(coffee, false, "003");
+
+        var yogurt = new PromptSceneModel("Are you supposed to stir greek yogurt?",
+                new ButtonModel[] {
+                    new ButtonModel("No", "003")
+                }, false);
+        var transitionToYogurt = new WaveTransitionSceneModel(yogurt, true, "004");
+
+        var caps = new PromptSceneModel("Caps! Caps for sale!", new ButtonModel[]{
+            new ButtonModel("Fifty", "004"),
+            new ButtonModel("cents", "004"),
+            new ButtonModel("a", "004"),
+            new ButtonModel("cap", "004"),
+            new ButtonModel("!", "004")
+        }, true);
+
+        var initialScenes = new ArrayList<SceneModel>();
+        initialScenes.add(caps);
+        initialScenes.add(transitionToYogurt);
+        initialScenes.add(yogurt);
+        initialScenes.add(transitionToCoffee);
+        initialScenes.add(coffee);
+        initialScenes.add(transitionToCatsOrDogs);
+        initialScenes.add(catsOrDogs);
+        initialScenes.add(transitionToReset);
+        initialScenes.add(reset);
+
+        return new SceneGraph(new LoadedSurveyModel(initialScenes));
+    }
+
+    public void run() {
+        this.runSketch();
+>>>>>>> src/main/java/kiosk/Kiosk.java
     }
 }
