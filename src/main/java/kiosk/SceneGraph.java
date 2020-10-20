@@ -15,7 +15,6 @@ public class SceneGraph {
     private Scene currentScene;
     private final LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
 
-
     /**
      * Creates a scene graph which holds the root scene model, and
      * history while being traversed.
@@ -24,11 +23,13 @@ public class SceneGraph {
     public SceneGraph(LoadedSurveyModel root) {
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
-        this.root = root.scenes.get(0);
-        this.currentScene = this.root.createScene();
+        this.root = root.scenes[0];
+        this.currentScene = this.root.deepCopy().createScene();
         this.history.push(this.root);
-        root.scenes.forEach(this::registerSceneModel);
         this.sceneChangeCallbacks = new LinkedList<>();
+        for (SceneModel sceneModel : root.scenes) {
+            this.registerSceneModel(sceneModel);
+        }
     }
 
     /**
@@ -37,7 +38,7 @@ public class SceneGraph {
      * @param sceneModel to create a scene from
      */
     public void pushScene(SceneModel sceneModel) {
-        this.currentScene = sceneModel.createScene();
+        this.currentScene = sceneModel.deepCopy().createScene();
         this.history.push(sceneModel);
         this.onSceneChange(sceneModel);
     }
@@ -68,12 +69,13 @@ public class SceneGraph {
 
         // Set the next scene from the stack
         SceneModel next = this.history.peek();
+
         if (next == null) {
             var emptySceneModel = new EmptySceneModel();
             this.currentScene = emptySceneModel.createScene();
             this.onSceneChange(emptySceneModel);
         } else {
-            this.currentScene = next.createScene();
+            this.currentScene = next.deepCopy().createScene();
             this.onSceneChange(next);
         }
     }
@@ -83,7 +85,7 @@ public class SceneGraph {
      * the scene history.
      */
     public void reset() {
-        this.currentScene = this.root.createScene();
+        this.currentScene = this.root.deepCopy().createScene();
         this.history.clear();
         this.history.push(this.root);
         this.onSceneChange(this.root);
@@ -96,7 +98,7 @@ public class SceneGraph {
     public void registerSceneModel(SceneModel sceneModel) {
         var currentScene = history.peekFirst();
         if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
-            this.currentScene = sceneModel.createScene();
+            this.currentScene = sceneModel.deepCopy().createScene();
         }
         sceneModels.put(sceneModel.getId(), sceneModel);
     }
@@ -111,7 +113,7 @@ public class SceneGraph {
 
     private void onSceneChange(SceneModel nextScene) {
         for (EventListener<SceneModel> sceneChangeCallback : sceneChangeCallbacks) {
-            sceneChangeCallback.invoke(nextScene);
+            sceneChangeCallback.invoke(nextScene.deepCopy());
         }
     }
 
