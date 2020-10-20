@@ -31,4 +31,9 @@ public class EmptySceneModel implements SceneModel {
     public String getId() {
         return id;
     }
+
+    @Override
+    public SceneModel deepCopy() {
+        return new EmptySceneModel(id);
+    }
 }

@@ -65,6 +65,13 @@ public class LoadedSurveyModel implements Serializable {
             LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
             errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
             return errorSurvey;
+        } catch (Exception exc) {
+            String errorMsg = "Could not read from survey at '" + file.getPath()
+                    + "'\nThe XML is probably deformed in some way."
+                    + "\nRefer to the console for more specific details.";
+            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
+            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+            return errorSurvey;
         }
     }
 

@@ -17,4 +17,10 @@ public interface SceneModel {
      * @return The unique ID which points to this model.
      */
     String getId();
+
+    /**
+     * Creates a deep copy of the current SceneModel.
+     * @return new copy of the same type
+     */
+    SceneModel deepCopy();
 }

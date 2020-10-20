@@ -27,4 +27,9 @@ public class ErrorSceneModel implements SceneModel {
     public String getId() {
         return this.id;
     }
+
+    @Override
+    public SceneModel deepCopy() {
+        return new ErrorSceneModel(errorMsg);
+    }
 }

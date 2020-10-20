@@ -48,4 +48,9 @@ public final class WaveTransitionSceneModel implements SceneModel {
     public String getId() {
         return id;
     }
+
+    @Override
+    public SceneModel deepCopy() {
+        return new WaveTransitionSceneModel(target, invertedColors, id);
+    }
 }
