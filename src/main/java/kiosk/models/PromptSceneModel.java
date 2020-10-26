@@ -25,24 +25,14 @@ public final class PromptSceneModel implements SceneModel {
      * @param question to ask
      * @param answers buttons with the answers and targets
      * @param invertedColors set to true for white primary, black secondary
-     */
-    public PromptSceneModel(String question, ButtonModel[] answers, boolean invertedColors) {
-        this(question, answers, invertedColors, IdGenerator.getInstance().getNextId());
-    }
-
-    /**
-     * Constructs a prompt scene model.
-     * @param question to ask
-     * @param answers buttons with the answers and targets
-     * @param invertedColors set to true for white primary, black secondary
-     * @param uniqueId An id unique to this specific model.
+     * @param id The unique id of the prompt scene model.
      */
     public PromptSceneModel(String question, ButtonModel[] answers,
-                            boolean invertedColors, String uniqueId) {
+            boolean invertedColors, String id) {
         this.question = question;
         this.answers = answers;
         this.invertedColors = invertedColors;
-        this.id = uniqueId;
+        this.id = id;
     }
 
     @Override
