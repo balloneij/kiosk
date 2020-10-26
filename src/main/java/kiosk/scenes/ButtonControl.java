@@ -3,10 +3,8 @@ package kiosk.scenes;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
-import kiosk.EventListener;
-import kiosk.InputEvent;
+import kiosk.*;
 import kiosk.models.ButtonModel;
-import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
@@ -39,18 +37,28 @@ public class ButtonControl implements Control<MouseEvent> {
      * Draw the button as a rectangle.
      * @param sketch to draw to
      */
-    public void drawRectangle(PApplet sketch) {
-        // TODO: Set the font
+    public void drawRectangle(Kiosk sketch) {
+        // Constants
+        final int buttonRadius = 10;
+        final int textSize = 20;
+        final boolean textBold = true;
+
+        // Draw modifiers
         sketch.rectMode(PConstants.CORNER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        // Draw button
-        sketch.fill(0);
-        sketch.stroke(0);
-        sketch.rect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+        // Draw rectangle
+        if (this.isPressed) {
+            sketch.fill(100, 168, 71);
+        } else {
+            sketch.fill(112, 191, 76);
+        }
+        Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
+                this.rect.width, this.rect.height, buttonRadius);
 
         // Draw text
         sketch.fill(255);
+        Graphics.useSansSerif(sketch, textSize, textBold);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());
