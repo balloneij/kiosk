@@ -5,7 +5,7 @@ import kiosk.scenes.Scene;
 
 public class EmptySceneModel implements SceneModel {
 
-    private final String id;
+    public String id;
 
     /**
      * Constructs a new empty scene model.
@@ -30,5 +30,10 @@ public class EmptySceneModel implements SceneModel {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public SceneModel deepCopy() {
+        return new EmptySceneModel(id);
     }
 }

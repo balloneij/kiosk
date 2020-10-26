@@ -2,9 +2,18 @@ package kiosk.models;
 
 public final class ImageModel {
 
-    public final String path;
-    public final int width;
-    public final int height;
+    public String path;
+    public int width;
+    public int height;
+
+    /**
+     * Creates an 16x16 ImageModel with an invalid path.
+     */
+    public ImageModel() {
+        this.path = "null";
+        this.width = 16;
+        this.height = 16;
+    }
 
     /**
      * Creates the model representation of an image.

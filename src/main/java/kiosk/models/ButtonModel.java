@@ -2,8 +2,13 @@ package kiosk.models;
 
 public final class ButtonModel {
 
-    public final String text;
-    public final String target;
+    public String text;
+    public String target;
+
+    public ButtonModel() {
+        this.text = "null";
+        this.target = "null";
+    }
 
     /**
      * Constructs a button model.

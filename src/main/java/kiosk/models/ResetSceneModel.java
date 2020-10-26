@@ -3,14 +3,14 @@ package kiosk.models;
 import kiosk.scenes.ResetScene;
 import kiosk.scenes.Scene;
 
-public final class ResetModel implements SceneModel {
+public final class ResetSceneModel implements SceneModel {
 
-    private final String id;
+    public String id;
 
     /**
      * Constructs a new reset model.
      */
-    public ResetModel() {
+    public ResetSceneModel() {
         this(IdGenerator.getInstance().getNextId());
     }
 
@@ -18,7 +18,7 @@ public final class ResetModel implements SceneModel {
      * Constructs a new reset model.
      * @param uniqueId An id unique to this specific model.
      */
-    public ResetModel(String uniqueId) {
+    public ResetSceneModel(String uniqueId) {
         this.id = uniqueId;
     }
 
@@ -30,5 +30,10 @@ public final class ResetModel implements SceneModel {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public SceneModel deepCopy() {
+        return new ResetSceneModel(id);
     }
 }

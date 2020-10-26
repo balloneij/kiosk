@@ -5,10 +5,20 @@ import kiosk.scenes.Scene;
 
 public final class PromptSceneModel implements SceneModel {
 
-    public final String question;
-    public final ButtonModel[] answers;
-    public final boolean invertedColors;
-    private final String id;
+    public String question;
+    public ButtonModel[] answers;
+    public boolean invertedColors;
+    public String id;
+
+    /**
+     * Creates an empty PromptSceneModel.
+     */
+    public PromptSceneModel() {
+        this.question = "null";
+        this.answers = new ButtonModel[]{};
+        this.invertedColors = false;
+        this.id = IdGenerator.getInstance().getNextId();
+    }
 
     /**
      * Constructs a prompt scene model.
@@ -43,5 +53,15 @@ public final class PromptSceneModel implements SceneModel {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public SceneModel deepCopy() {
+        ButtonModel[] buttonsCopy = new ButtonModel[this.answers.length];
+        for (int i = 0; i < buttonsCopy.length; i++) {
+            ButtonModel button = this.answers[i];
+            buttonsCopy[i] = new ButtonModel(button.text, button.target);
+        }
+        return new PromptSceneModel(question, buttonsCopy, invertedColors, id);
     }
 }
