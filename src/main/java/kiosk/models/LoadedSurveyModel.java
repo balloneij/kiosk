@@ -52,15 +52,26 @@ public class LoadedSurveyModel implements Serializable {
                 new BufferedInputStream(new FileInputStream(file)))) {
             Object surveyObject = decoder.readObject();
             if (!(surveyObject instanceof LoadedSurveyModel)) {
-                System.err.println("Successfully loaded the survey XML, but "
-                        + "the root object is not of the type 'LoadedSurveyModel'");
-                return createSampleSurvey();
+                String errorMsg = "Successfully loaded the survey XML, but\n"
+                        + "the root object is not of the type 'LoadedSurveyModel'";
+                LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
+                errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+                return errorSurvey;
             }
             return (LoadedSurveyModel) surveyObject;
         } catch (FileNotFoundException exc) {
-            System.err.println("Could not read from survey at '" + file.getPath()
-                    + "': " + exc.getMessage());
-            return createSampleSurvey();
+            String errorMsg = "Could not read from survey at '" + file.getPath()
+                    + "':\n" + exc.getMessage();
+            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
+            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+            return errorSurvey;
+        } catch (Exception exc) {
+            String errorMsg = "Could not read from survey at '" + file.getPath()
+                    + "'\nThe XML is probably deformed in some way."
+                    + "\nRefer to the console for more specific details.";
+            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
+            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+            return errorSurvey;
         }
     }
 
@@ -107,8 +118,6 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(catsOrDogs);
         initialScenes.add(transitionToCaps);
 
-        var test = new LoadedSurveyModel(initialScenes);
-        test.writeToFile(new File("test.xml"));
-        return LoadedSurveyModel.readFromFile(new File("test.xml"));
+        return new LoadedSurveyModel(initialScenes);
     }
 }

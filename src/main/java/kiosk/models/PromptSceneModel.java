@@ -54,4 +54,14 @@ public final class PromptSceneModel implements SceneModel {
     public String getId() {
         return id;
     }
+
+    @Override
+    public SceneModel deepCopy() {
+        ButtonModel[] buttonsCopy = new ButtonModel[this.answers.length];
+        for (int i = 0; i < buttonsCopy.length; i++) {
+            ButtonModel button = this.answers[i];
+            buttonsCopy[i] = new ButtonModel(button.text, button.target);
+        }
+        return new PromptSceneModel(question, buttonsCopy, invertedColors, id);
+    }
 }

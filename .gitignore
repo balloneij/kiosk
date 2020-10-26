@@ -1,8 +1,10 @@
+target
 **/META-INF/
 .DS_Store
 .idea
 *.log
 tmp/
+*.test.xml
 
 # User-specific stuff
 .idea/**/workspace.xml
