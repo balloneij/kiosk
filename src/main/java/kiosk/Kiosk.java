@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.WeightedSpokeGraphSceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -16,7 +17,7 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private int timeoutMillis = 30000; //TODO replace with info from settings xml
+    private final int timeoutMillis = 30000; //TODO replace with info from settings xml
     private int newSceneMillis;
 
     /**
@@ -24,6 +25,13 @@ public class Kiosk extends PApplet {
      */
     public Kiosk() {
         this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
+        this.sceneGraph.pushScene(new WeightedSpokeGraphSceneModel(
+                "Center Text",
+                new String[] {"Text A", "Text B", "Text C", "Text D", "Text E", "Text F", "Text G"},
+                new int[]{1, 2, 1, 3, 1, 5, 1},
+                350,
+                "WeightedSpokeGraph"
+        ));
         this.mouseListeners = new LinkedHashMap<>();
 
         for (InputEvent e : InputEvent.values()) {
@@ -67,7 +75,7 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
-        if(currentSceneMillis > this.timeoutMillis) {
+        if (currentSceneMillis > this.timeoutMillis) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
