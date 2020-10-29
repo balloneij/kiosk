@@ -41,17 +41,25 @@ public class WeightedSpokeGraphScene implements Scene {
             var weight = model.weights[i];
             sketch.fill(0, 0, 0);
 
-            sketch.line(centerX, centerY,
-                    (float) Math.cos(Math.toRadians(deg)) * this.model.size / 2 + centerX,
-                    (float) Math.sin(Math.toRadians(deg)) * this.model.size / 2 + centerY
-            );
-
             var degOffSet = 180 * weight / this.totalWeights; // Subtract from old deg to get delta theta
             deg += degOffSet;
 
             var smRad = (.5f * this.model.size * Math.sin(Math.toRadians(degOffSet))) / (1 + Math.sin(Math.toRadians(degOffSet)));
+            var maxRad = .125f * model.size;
+
+            if (smRad > maxRad)
+                smRad = maxRad;
+
+
             var smX = (-smRad + this.model.size * .5) * Math.cos(Math.toRadians(deg)) + centerX;
             var smY = (-smRad + this.model.size * .5) * Math.sin(Math.toRadians(deg)) + centerY;
+
+            sketch.line(
+                    centerX + (float) Math.cos(Math.toRadians(deg)) * this.model.size * .125f,
+                    centerY + (float) Math.sin(Math.toRadians(deg)) * this.model.size * .125f,
+                    (float) Math.cos(Math.toRadians(deg)) * .5f * this.model.size + centerX,
+                    (float) Math.sin(Math.toRadians(deg)) * .5f * this.model.size + centerY
+            );
 
             sketch.ellipse((float) smX, (float) smY, (float) smRad * 2, (float) smRad * 2);
             deg += degOffSet;
