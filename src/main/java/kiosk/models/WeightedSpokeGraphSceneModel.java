@@ -9,6 +9,7 @@ public class WeightedSpokeGraphSceneModel
     public final String id;
     public final String centerText;
     public final int size;
+    public final int padding;
     public final String[] options;
     public final int[] weights;
 
@@ -21,10 +22,11 @@ public class WeightedSpokeGraphSceneModel
      * @param id The unique id of the scene.
      */
     public WeightedSpokeGraphSceneModel(String centerText, String[] options,
-                                        int[] weights, int size, String id) {
+                                        int[] weights, int size, int padding, String id) {
         this.id = id;
         this.centerText = centerText;
         this.size = size;
+        this.padding = padding;
         this.options = options;
         this.weights = weights;
     }
@@ -42,6 +44,6 @@ public class WeightedSpokeGraphSceneModel
     @Override
     public SceneModel deepCopy() {
         return new WeightedSpokeGraphSceneModel(this.centerText, this.options,
-                this.weights, this.size, this.id);
+                this.weights, this.size, this.padding, this.id);
     }
 }

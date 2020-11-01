@@ -30,6 +30,7 @@ public class Kiosk extends PApplet {
                 new String[] {"Text A", "Text B", "Text C", "Text D", "Text E", "Text F", "Text G"},
                 new int[]{1, 2, 1, 3, 1, 5, 1},
                 350,
+                2,
                 "WeightedSpokeGraph"
         ));
         this.mouseListeners = new LinkedHashMap<>();
