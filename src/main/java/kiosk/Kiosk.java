@@ -22,8 +22,15 @@ public class Kiosk extends PApplet {
     /**
      * Draws scenes.
      */
-    public Kiosk() {
-        this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
+    public Kiosk(String surveyPath) { // TODO would there ever be reason to load more than one survey? If so this could be changed to array
+        if(!surveyPath.isEmpty()){
+            this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
+        } else {
+            // TODO should this come from a default file?
+            this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
+        }
+
+
         this.mouseListeners = new LinkedHashMap<>();
 
         for (InputEvent e : InputEvent.values()) {
