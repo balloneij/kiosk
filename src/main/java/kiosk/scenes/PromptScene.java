@@ -29,6 +29,8 @@ public class PromptScene implements Scene {
     private static final int BUTTON_WIDTH = Kiosk.WIDTH / 8;
     private static final int BUTTON_HEIGHT = Kiosk.HEIGHT / 6;
     private static final int BUTTON_RADIUS = Kiosk.WIDTH / 8;
+    private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
+    private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_X_PADDING = 20;
     private static final int BUTTON_Y = Kiosk.HEIGHT * 7 / 12;
 
@@ -50,7 +52,8 @@ public class PromptScene implements Scene {
         for (int i = 0; i < this.model.answers.length; i++) {
             ButtonModel model = this.model.answers[i];
 
-            int width, height;
+            int width;
+            int height;
 
             if (model.isCircle) {
                 width = BUTTON_RADIUS;
@@ -60,7 +63,14 @@ public class PromptScene implements Scene {
                 height = BUTTON_HEIGHT;
             }
 
+            // Modify the image so it fits inside the button
+            if (model.image != null) {
+                model.image.width = BUTTON_IMAGE_WIDTH;
+                model.image.height = BUTTON_IMAGE_HEIGHT;
+            }
+
             var button = new ButtonControl(model, x, BUTTON_Y, width, height);
+            button.init(sketch);
 
             sketch.hookControl(button);
             this.buttons[i] = button;

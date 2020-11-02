@@ -19,6 +19,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private final ButtonModel model;
     private final Rectangle rect;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
+    private Image image;
     private boolean isPressed;
     private boolean wasClicked;
 
@@ -33,10 +34,17 @@ public class ButtonControl implements Control<MouseEvent> {
     public ButtonControl(ButtonModel model, int x, int y, int w, int h) {
         this.model = model;
         this.rect = new Rectangle(x, y, w, h);
+        this.image = null;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
+    }
+
+    public void init(Kiosk sketch) {
+        if (this.model.image != null) {
+            this.image = Image.createImage(sketch, model.image);
+        }
     }
 
     public void draw(Kiosk sketch) {
@@ -44,6 +52,10 @@ public class ButtonControl implements Control<MouseEvent> {
             this.drawCircle(sketch);
         } else {
             this.drawRectangle(sketch);
+        }
+        if (this.model.image != null) {
+            sketch.imageMode(PConstants.CENTER);
+            this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
         }
     }
 
@@ -78,10 +90,6 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     private void drawCircle(Kiosk sketch) {
-        // Constants
-        final int textSize = 20;
-        final boolean textBold = true;
-
         // Draw modifiers
         sketch.ellipseMode(PConstants.CORNER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);

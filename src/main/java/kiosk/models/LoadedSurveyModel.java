@@ -127,25 +127,29 @@ public class LoadedSurveyModel implements Serializable {
         pathPrompt.actionPhrase = "Choose one of the Icons. Explore different paths.\n"
                 + "You can always go back and begin again";
         ButtonModel humanButton = new ButtonModel();
-        humanButton.text = "Human";
+        humanButton.text = "";
         humanButton.target = "";
         humanButton.isCircle = true;
         humanButton.rgb = new int[] { 152, 33, 107 };
+        humanButton.image = new ImageModel("assets/human.png", 80, 80);
         ButtonModel natureButton = new ButtonModel();
-        natureButton.text = "Nature";
+        natureButton.text = "";
         natureButton.target = "";
         natureButton.isCircle = true;
         natureButton.rgb = new int[] { 51, 108, 103 };
+        natureButton.image = new ImageModel("assets/nature.png", 80, 80);
         ButtonModel smartMachinesButton = new ButtonModel();
-        smartMachinesButton.text = "Smart\nMachines";
+        smartMachinesButton.text = "";
         smartMachinesButton.target = "";
         smartMachinesButton.isCircle = true;
         smartMachinesButton.rgb = new int[] { 219, 98, 38 };
+        smartMachinesButton.image = new ImageModel("assets/robot.png", 80, 80);
         ButtonModel spaceButton = new ButtonModel();
-        spaceButton.text = "Space";
+        spaceButton.text = "";
         spaceButton.target = "";
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
+        spaceButton.image = new ImageModel("assets/space.png", 80, 80);
         pathPrompt.answers = new ButtonModel[] { humanButton, natureButton, smartMachinesButton, spaceButton };
 
         var initialScenes = new ArrayList<SceneModel>();
