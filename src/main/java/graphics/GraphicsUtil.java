@@ -1,6 +1,7 @@
 package graphics;
 
 import kiosk.Kiosk;
+import java.util.Arrays;
 
 public class GraphicsUtil {
 
@@ -18,12 +19,8 @@ public class GraphicsUtil {
      * @param options The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-            String centerText, String[] options) {
+            String centerText, String[] options, int[] weights) {
         var bigCircleDiameter = size / 4.f;
-        var smallCircleDiameter = calculateSmallCircleDiameter(size, options.length, padding);
-        sketch.fill(256, 0, 0);
-        sketch.rect(x, y, size, size);
-        sketch.fill(204, 102, 0);
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
         sketch.ellipse(centerX, centerY, bigCircleDiameter, bigCircleDiameter);
@@ -31,32 +28,50 @@ public class GraphicsUtil {
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
         var textWidth = sketch.textWidth(centerText);
         sketch.text(centerText, centerX - (textWidth / 2), centerY);
-        var degreeShift = 360.f / options.length;
 
+        var totalWeight = (float) Arrays.stream(weights).sum();
+
+        float deg = 0.f;
         for (var i = 0; i < options.length; i++) {
-            sketch.fill(204, 102, 0);
-            var smallCircleCenterX = getOuterCircleX((float) Math.toRadians(i * degreeShift),
-                    centerX, size, smallCircleDiameter);
-            var smallCircleCenterY = getOuterCircleY((float) Math.toRadians(i * degreeShift),
-                    centerY, size, smallCircleDiameter);
-            sketch.ellipse(smallCircleCenterX, smallCircleCenterY, smallCircleDiameter,
-                    smallCircleDiameter);
+            var text = options[i];
+            var weight = weights[i];
+            sketch.fill(0, 0, 0);
 
-            var lineStartX = getLineStartX((float) Math.toRadians(i * degreeShift),
-                    centerX, bigCircleDiameter);
-            var lineStartY = getLineStartY((float) Math.toRadians(i * degreeShift),
-                    centerY, bigCircleDiameter);
-            var lineEndX = getLineEndX((float) Math.toRadians(i * degreeShift),
-                    centerX, size, smallCircleDiameter);
-            var lineEndY = getLineEndY((float) Math.toRadians(i * degreeShift),
-                    centerY, size, smallCircleDiameter);
+            var degOffSet = 180 * weight / totalWeight;
+            deg += degOffSet;
 
-            sketch.line(lineStartX, lineStartY, lineEndX, lineEndY);
-            sketch.fill(0);
-            sketch.textSize(2 * smallCircleDiameter
-                    / (TextRatioEstimate * largestTextLine(options[i])));
-            textWidth = sketch.textWidth(options[i]);
-            sketch.text(options[i], smallCircleCenterX - (textWidth / 2), smallCircleCenterY);
+            var smRad = (.5f * size * Math.sin(Math.toRadians(degOffSet)))
+                    / (1 + Math.sin(Math.toRadians(degOffSet)));
+            var maxRad = .125f * size;
+            if (smRad > maxRad) {
+                smRad = maxRad;
+            }
+            smRad -= padding;
+
+            var smX = (-smRad + size * .5f) * Math.cos(Math.toRadians(deg)) + centerX;
+            var smY = (-smRad + size * .5f) * Math.sin(Math.toRadians(deg)) + centerY;
+
+            sketch.stroke(0, 0, 0);
+            sketch.line(
+                centerX + size * .125f * (float) Math.cos(Math.toRadians(deg)),
+                centerY + size * .125f * (float) Math.sin(Math.toRadians(deg)),
+                (float) Math.cos(Math.toRadians(deg)) * .5f * size + centerX,
+                (float) Math.sin(Math.toRadians(deg)) * .5f * size + centerY
+            );
+
+            var colorSelection = getColor(weight, totalWeight, sketch);
+            sketch.stroke(colorSelection);
+            sketch.fill(colorSelection);
+
+            sketch.ellipse((float) smX, (float) smY, (float) smRad * 2, (float) smRad * 2);
+            deg += degOffSet;
+
+            sketch.stroke(256, 256, 256);
+            sketch.fill(256, 256, 256);
+
+            textWidth = sketch.textWidth(text);
+            sketch.textSize(2.f * (float) smRad / (TextRatioEstimate * largestTextLine(text)));
+            sketch.text(text, (float) smX - (textWidth / 2), (float) smY);
         }
         sketch.textSize(18);
     }
@@ -84,37 +99,10 @@ public class GraphicsUtil {
         return (float) radius * 2.f - padding;
     }
 
-    private static float getOuterCircleX(float radians, float spokeGraphCenterX,
-            float size, float smallCircleDiameter) {
-        float delta = (float) Math.sin(radians) * (size * .5f - smallCircleDiameter * .5f);
-        return spokeGraphCenterX + delta;
-    }
-
-    private static float getOuterCircleY(float radians, float spokeGraphCenterY,
-            float size, float smallCircleDiameter) {
-        float delta = (float) Math.cos(radians) * (size * .5f - smallCircleDiameter * .5f);
-        return spokeGraphCenterY + delta;
-    }
-
-    private static float getLineStartX(float radians, float centerX, float bigCircleDiameter) {
-        float delta = (float) Math.sin(radians) * bigCircleDiameter * .5f;
-        return centerX + delta;
-    }
-
-    private static float getLineStartY(float radians, float centerY, float bigCircleDiameter) {
-        float delta = (float) Math.cos(radians) * bigCircleDiameter * .5f;
-        return centerY + delta;
-    }
-
-    private static float getLineEndX(float toRadians, float centerX,
-            float size, float smallCircleDiameter) {
-        float delta = (float) Math.sin(toRadians) * (size * .5f - smallCircleDiameter);
-        return centerX + delta;
-    }
-
-    private static float getLineEndY(float toRadians, float centerY,
-            float size, float smallCircleDiameter) {
-        float delta = (float) Math.cos(toRadians) * (size * .5f - smallCircleDiameter);
-        return centerY + delta;
+    private static float getColor(float weight, float totalWeight, Kiosk sketch) {
+        var percentage = weight / totalWeight;
+        var from = sketch.color(212, 177, 0);
+        var to = sketch.color(0, 79, 0);
+        return sketch.lerpColor(from, to, percentage);
     }
 }

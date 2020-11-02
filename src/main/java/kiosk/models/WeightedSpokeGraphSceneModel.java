@@ -7,6 +7,8 @@ public class WeightedSpokeGraphSceneModel
         implements SceneModel {
 
     public final String id;
+    public final int centerX;
+    public final int centerY;
     public final String centerText;
     public final int size;
     public final int padding;
@@ -21,9 +23,11 @@ public class WeightedSpokeGraphSceneModel
      * @param weights Governs how large circles are relative to each other.
      * @param id The unique id of the scene.
      */
-    public WeightedSpokeGraphSceneModel(String centerText, String[] options,
-                                        int[] weights, int size, int padding, String id) {
+    public WeightedSpokeGraphSceneModel(String centerText, int centerX, int centerY,
+            String[] options, int[] weights, int size, int padding, String id) {
         this.id = id;
+        this.centerX = centerX;
+        this.centerY = centerY;
         this.centerText = centerText;
         this.size = size;
         this.padding = padding;
@@ -43,7 +47,7 @@ public class WeightedSpokeGraphSceneModel
 
     @Override
     public SceneModel deepCopy() {
-        return new WeightedSpokeGraphSceneModel(this.centerText, this.options,
-                this.weights, this.size, this.padding, this.id);
+        return new WeightedSpokeGraphSceneModel(this.centerText, this.centerX, this.centerY,
+            this.options, this.weights, this.size, this.padding, this.id);
     }
 }
