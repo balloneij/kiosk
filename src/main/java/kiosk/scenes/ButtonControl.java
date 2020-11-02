@@ -33,11 +33,19 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
     }
 
+    public void draw(Kiosk sketch) {
+        if (this.model.isRound) {
+            this.drawCircle(sketch);
+        } else {
+            this.drawRectangle(sketch);
+        }
+    }
+
     /**
      * Draw the button as a rectangle.
      * @param sketch to draw to
      */
-    public void drawRectangle(Kiosk sketch) {
+    private void drawRectangle(Kiosk sketch) {
         // Constants
         final int buttonRadius = 10;
         final int textSize = 20;
@@ -55,6 +63,32 @@ public class ButtonControl implements Control<MouseEvent> {
         }
         Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
                 this.rect.width, this.rect.height, buttonRadius);
+
+        // Draw text
+        sketch.fill(255);
+        Graphics.useSansSerif(sketch, textSize, textBold);
+        sketch.text(this.model.text,
+                (float) this.rect.getCenterX(),
+                (float) this.rect.getCenterY());
+    }
+
+    private void drawCircle(Kiosk sketch) {
+        // Constants
+        final int textSize = 20;
+        final boolean textBold = true;
+
+        // Draw modifiers
+        sketch.ellipseMode(PConstants.CORNER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+
+        // Draw circle
+        if (this.isPressed) {
+            sketch.fill(100, 168, 71);
+        } else {
+            sketch.fill(112, 191, 76);
+        }
+
+        sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
         // Draw text
         sketch.fill(255);

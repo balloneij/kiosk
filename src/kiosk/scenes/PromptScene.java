@@ -73,23 +73,19 @@ public class PromptScene implements Scene {
         sketch.fill(0);
 
         Graphics.useSerif(sketch, 24);
-        sketch.text(this.model.title, boxX + boxWidth / 2, boxY + boxHeight / 5);
+        sketch.text("What Challenge Do you Want to Take On?", boxX + boxWidth / 2, boxY + boxHeight / 5);
 
         float textY = boxY + boxHeight * 1 / 3;
         Graphics.useSansSerif(sketch, 16, false);
-
-        String[] lines = this.model.prompt.split("\n");
-        if (lines.length != 3) {
-            // TODO: Make lines than or greater than 3 fit nicely on :/
-            lines = new String[] { "Only", "three lines", "look good for now" };
-        }
-        for (String line : lines) {
-            sketch.text(line, boxX + boxWidth / 2, textY);
-            textY += 18;
-        }
+        sketch.text("Everyone asks what you want to be when you grow up.", boxX + boxWidth / 2, textY);
+        textY += 18;
+        sketch.text("We're asking what challenges you want to take on.", boxX + boxWidth / 2, textY);
+        textY += 18;
+        sketch.text("What big problem do you want to help solve?", boxX + boxWidth / 2, textY);
+        textY += 20;
 
         Graphics.useSansSerif(sketch, 20, true);
-        sketch.text(this.model.actionPhrase, boxX + boxWidth / 2, textY);
+        sketch.text("Ready?", boxX + boxWidth / 2, textY);
 
 //        sketch.rectMode(PConstants.CORNER);
 //        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -101,7 +97,7 @@ public class PromptScene implements Scene {
 //        sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
 //
         for (ButtonControl button : this.buttons) {
-            button.draw(sketch);
+            button.drawRectangle(sketch);
         }
 //
 //        // Penguin

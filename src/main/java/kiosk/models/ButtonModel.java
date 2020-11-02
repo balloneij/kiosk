@@ -4,10 +4,13 @@ public final class ButtonModel {
 
     public String text;
     public String target;
+    public boolean isCircle;
+    public boolean isRound;
 
     public ButtonModel() {
         this.text = "null";
         this.target = "null";
+        this.isCircle = false;
     }
 
     /**

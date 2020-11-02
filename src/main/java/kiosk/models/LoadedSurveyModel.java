@@ -80,43 +80,51 @@ public class LoadedSurveyModel implements Serializable {
      * @return a survey
      */
     public static LoadedSurveyModel createSampleSurvey() {
-        var catsOrDogs = new PromptSceneModel("Which do you prefer?", new ButtonModel[]{
-            new ButtonModel("Cats", "0"),
-            new ButtonModel("Dogs", "0")
-        }, false);
 
-        var coffee = new PromptSceneModel("How do you like your coffee?", new ButtonModel[]{
-            new ButtonModel("Black", "1"),
-            new ButtonModel("Blacker", "1")
-        }, true);
+        PromptSceneModel titleScreen = new PromptSceneModel();
+        titleScreen.id = "introscene0";
+        titleScreen.title = "Velcome to my lair";
+        titleScreen.prompt = "@,.,@\nI vant to suck\nyour blood";
+        ButtonModel titleScreenButton = new ButtonModel();
+        titleScreenButton.text = "Okay bud";
+        titleScreenButton.target = "introscene1";
+        titleScreen.answers = new ButtonModel[]{ titleScreenButton };
 
-        var yogurt = new PromptSceneModel("Are you supposed to stir greek yogurt?",
-            new ButtonModel[]{
-                new ButtonModel("No", "2")
-            }, false);
+        PromptSceneModel challengePrompt = new PromptSceneModel();
+        challengePrompt.id = "introscene1";
+        challengePrompt.title = "What Challenge Do you Want to Take On?";
+        challengePrompt.prompt = "Everyone asks what you want to be when you grow up.\n"
+                + "We're asking what challenges you want to take on.\n"
+                + "What big problem do you want to help solve?";
+        challengePrompt.actionPhrase = "Ready?";
+        ButtonModel challengeYesButton = new ButtonModel();
+        challengeYesButton.text = "Yes!";
+        challengeYesButton.target = "introscene2";
+        challengePrompt.answers = new ButtonModel[] { challengeYesButton };
 
-        var caps = new PromptSceneModel("Caps! Caps for sale!", new ButtonModel[]{
-            new ButtonModel("Fifty", "3"),
-            new ButtonModel("cents", "3"),
-            new ButtonModel("a", "3"),
-            new ButtonModel("cap", "3"),
-            new ButtonModel("!", "3")
-        }, true);
-
-        var transitionToCoffee = new WaveTransitionSceneModel(coffee.getId(), false, "0");
-        var transitionToYogurt = new WaveTransitionSceneModel(yogurt.getId(), true, "1");
-        var transitionToCaps = new WaveTransitionSceneModel(caps.getId(), false, "2");
-        var transitionToCatsOrDogs = new WaveTransitionSceneModel(catsOrDogs.getId(), true, "3");
+        PromptSceneModel agePrompt = new PromptSceneModel();
+        agePrompt.id = "introscene2";
+        agePrompt.title = "Awesome!";
+        agePrompt.prompt = "Are you in Grade School, Middle School, or\n"
+                + "High School? Or are you an adult?\n ";
+        ButtonModel gradeSchoolButton = new ButtonModel();
+        gradeSchoolButton.text = "Grade\nSchool";
+        gradeSchoolButton.target = "introscene3";
+        gradeSchoolButton.isCircle = true;
+        ButtonModel middleSchoolButton = new ButtonModel();
+        middleSchoolButton.text = "Middle\nSchool";
+        middleSchoolButton.target = "introscene3";
+        middleSchoolButton.isCircle = true;
+        ButtonModel adultButton = new ButtonModel();
+        adultButton.text = "Adult";
+        adultButton.target = "introscene3";
+        adultButton.isCircle = true;
+        agePrompt.answers = new ButtonModel[] { gradeSchoolButton, middleSchoolButton, adultButton };
 
         var initialScenes = new ArrayList<SceneModel>();
-        initialScenes.add(caps);
-        initialScenes.add(transitionToYogurt);
-        initialScenes.add(yogurt);
-        initialScenes.add(transitionToCoffee);
-        initialScenes.add(coffee);
-        initialScenes.add(transitionToCatsOrDogs);
-        initialScenes.add(catsOrDogs);
-        initialScenes.add(transitionToCaps);
+        initialScenes.add(titleScreen);
+        initialScenes.add(challengePrompt);
+        initialScenes.add(agePrompt);
 
         return new LoadedSurveyModel(initialScenes);
     }

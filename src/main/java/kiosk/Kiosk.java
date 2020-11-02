@@ -1,6 +1,5 @@
 package kiosk;
 
-import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -21,7 +20,8 @@ public class Kiosk extends PApplet {
      * Draws scenes.
      */
     public Kiosk() {
-        this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
+//        this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
+        this.sceneGraph = new SceneGraph(LoadedSurveyModel.createSampleSurvey());
         this.mouseListeners = new LinkedHashMap<>();
 
         for (InputEvent e : InputEvent.values()) {
