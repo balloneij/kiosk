@@ -1,27 +1,41 @@
 package kiosk.scenes;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.File;
-import java.io.IOException;
+import kiosk.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.ImageModel;
 import kiosk.models.PromptSceneModel;
 import processing.core.PConstants;
-import processing.core.PFont;
 
 
 public class PromptScene implements Scene {
 
+    // White foreground
+    private static final int FOREGROUND_WIDTH = Kiosk.WIDTH * 2 / 3;
+    private static final int FOREGROUND_HEIGHT = Kiosk.HEIGHT * 3 / 4;
+    private static final int FOREGROUND_X_PADDING = Kiosk.WIDTH / 6;
+    private static final int FOREGROUND_Y_PADDING = Kiosk.HEIGHT / 8;
+    private static final int FOREGROUND_CURVE_RADIUS = 50;
+
+    // Text
+    private static final int TITLE_Y = Kiosk.HEIGHT / 4;
+    private static final int TITLE_FONT_SIZE = 24;
+    private static final int PROMPT_Y = Kiosk.HEIGHT * 3 / 8;
+    private static final int PROMPT_FONT_SIZE = 16;
+    private static final int ACTION_Y = Kiosk.HEIGHT / 2;
+    private static final int ACTION_FONT_SIZE = 20;
+
+    // Buttons
+    private static final int BUTTON_WIDTH = Kiosk.WIDTH / 8;
+    private static final int BUTTON_HEIGHT = Kiosk.HEIGHT / 6;
+    private static final int BUTTON_RADIUS = Kiosk.WIDTH / 8;
+    private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
+    private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+    private static final int BUTTON_X_PADDING = 20;
+    private static final int BUTTON_Y = Kiosk.HEIGHT * 7 / 12;
+
     private final PromptSceneModel model;
     private final ButtonControl[] buttons;
-    private Image penguinImage;
-
-    private float penguinX = 0;
-    private float penguinRotation = 0;
-    private PFont spookyFont = null;
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;
@@ -30,37 +44,39 @@ public class PromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        int width = sketch.width;
-        int height = sketch.height;
-        // Add 4 to the length so the buttons aren't a tight fit
-        int buttonWidth = width / (this.buttons.length + 4);
-        int buttonHeight = 50;
-        // Add 1 to the length to account for both the left and right sides of the buttons
-        int buttonPadding = (width - buttonWidth * this.buttons.length) / (this.buttons.length + 1);
-
-        int y = height * 3 / 4;
-        int x = buttonPadding;
+        // Start the X on the far left so we simply need to add
+        // button width and padding to get the next X
+        int x = Kiosk.WIDTH / 2
+                - (BUTTON_WIDTH * this.buttons.length
+                + BUTTON_X_PADDING * (this.buttons.length - 1)) / 2;
         for (int i = 0; i < this.model.answers.length; i++) {
             ButtonModel model = this.model.answers[i];
-            var button = new ButtonControl(model, x, y, buttonWidth, buttonHeight);
+
+            int width;
+            int height;
+
+            if (model.isCircle) {
+                width = BUTTON_RADIUS;
+                height = BUTTON_RADIUS;
+            } else {
+                width = BUTTON_WIDTH;
+                height = BUTTON_HEIGHT;
+            }
+
+            // Modify the image so it fits inside the button
+            if (model.image != null) {
+                model.image.width = BUTTON_IMAGE_WIDTH;
+                model.image.height = BUTTON_IMAGE_HEIGHT;
+            }
+
+            var button = new ButtonControl(model, x, BUTTON_Y, width, height);
+            button.init(sketch);
 
             sketch.hookControl(button);
             this.buttons[i] = button;
 
-            x += buttonWidth + buttonPadding;
+            x += BUTTON_WIDTH + BUTTON_X_PADDING;
         }
-
-        // Spooky font
-        try {
-            File file = new File("assets/spooky.ttf");
-            this.spookyFont = new PFont(Font.createFont(Font.TRUETYPE_FONT, file), true);
-        } catch (FontFormatException | IOException exception) {
-            // TODO: Find a graceful way to load fonts w/ fallback fonts so we can avoid null checks
-            throw new RuntimeException("Font could not be loaded: " + exception.getMessage());
-        }
-
-        // Penguin
-        this.penguinImage = Image.createImage(sketch, new ImageModel("assets/penguin.png", 64, 64));
     }
 
     @Override
@@ -70,30 +86,41 @@ public class PromptScene implements Scene {
                 sceneGraph.pushScene(button.getTarget());
             }
         }
-
-        // Penguin
-        this.penguinX += 35 * dt;
-        this.penguinRotation += (Math.PI / 2) * dt;
     }
 
     @Override
     public void draw(Kiosk sketch) {
-        // TODO: Set the font
-        sketch.rectMode(PConstants.CORNER);
+        final int centerX = Kiosk.WIDTH / 2;
+
+        // Draw bubble background
+        Graphics.drawBubbleBackground(sketch);
+
+        // Draw the white foreground box
+        sketch.fill(255);
+        Graphics.drawRoundedRectangle(sketch,
+                FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
+                FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
+                FOREGROUND_CURVE_RADIUS);
+
+        // Draw text
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+        sketch.fill(0);
 
-        sketch.background(this.model.invertedColors ? 255 : 0);
-        sketch.fill(this.model.invertedColors ? 0 : 255);
-        sketch.textFont(this.spookyFont, 24);
-        sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
+        // Title
+        Graphics.useSerif(sketch, TITLE_FONT_SIZE);
+        sketch.text(this.model.title, centerX, TITLE_Y);
 
+        // Prompt
+        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE, false);
+        sketch.text(this.model.prompt, centerX, PROMPT_Y);
+
+        // Action
+        Graphics.useSansSerif(sketch, ACTION_FONT_SIZE, true);
+        sketch.text(this.model.actionPhrase, centerX, ACTION_Y);
+
+        // Draw buttons
         for (ButtonControl button : this.buttons) {
-            button.drawRectangle(sketch);
+            button.draw(sketch);
         }
-
-        // Penguin
-        final float penguinY = (float) (Math.sin(this.penguinX * 0.1) * 20 + 20);
-        this.penguinImage.rotate(this.penguinRotation);
-        this.penguinImage.draw(sketch, this.penguinX, penguinY);
     }
 }

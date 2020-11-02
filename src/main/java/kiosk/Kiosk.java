@@ -12,6 +12,9 @@ import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
+    public static final int WIDTH = 960;
+    public static final int HEIGHT = 540;
+
     protected final SceneGraph sceneGraph;
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
@@ -33,13 +36,14 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        size(640, 360);
+        size(WIDTH, HEIGHT);
     }
 
     @Override
     public void setup() {
         super.setup();
         this.lastMillis = millis();
+        Graphics.loadFonts();
     }
 
     @Override
@@ -67,7 +71,7 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
-        if(currentSceneMillis > this.timeoutMillis) {
+        if (currentSceneMillis > this.timeoutMillis) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
