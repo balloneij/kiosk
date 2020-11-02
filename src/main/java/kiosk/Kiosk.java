@@ -1,10 +1,15 @@
 package kiosk;
 
-import java.io.File;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.SceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -16,13 +21,14 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private int timeoutMillis = 30000; //TODO replace with info from settings xml
+    private Settings settings;
     private int newSceneMillis;
 
     /**
      * Draws scenes.
      */
     public Kiosk() {
+        this.settings = Settings.readSettings();
         this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
         this.mouseListeners = new LinkedHashMap<>();
 
@@ -67,7 +73,7 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
-        if(currentSceneMillis > this.timeoutMillis) {
+        if(currentSceneMillis > settings.getTimeoutMillis()) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
