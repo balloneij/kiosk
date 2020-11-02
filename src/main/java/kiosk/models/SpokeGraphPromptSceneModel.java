@@ -9,12 +9,14 @@ public class SpokeGraphPromptSceneModel implements SceneModel {
     public final String headerTitle;
     public final String headerBody;
     public final String[] careerOptions;
+    public final int[] careerWeights;
 
     public SpokeGraphPromptSceneModel(String headerTitle, String headerBody, String[] careerOptions,
-              String id) {
+              int[] careerWeights, String id) {
         this.headerTitle = headerTitle;
         this.headerBody = headerBody;
         this.careerOptions = careerOptions;
+        this.careerWeights = careerWeights;
         this.id = id;
     }
 
@@ -31,6 +33,6 @@ public class SpokeGraphPromptSceneModel implements SceneModel {
     @Override
     public SceneModel deepCopy() {
         return new SpokeGraphPromptSceneModel(this.headerTitle, this.headerBody, this.careerOptions,
-                this.id);
+            this.careerWeights, this.id);
     }
 }

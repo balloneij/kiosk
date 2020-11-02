@@ -34,6 +34,7 @@ public class Kiosk extends PApplet {
                     "Mechanical\nEngineer,", "Architect", "Urban\nPlanner", "Construction\n& Traces",
                     "Communications", "Public\nPolicy\nLeader", "Data\nScientist"
                 },
+                new int[] {2, 3, 2, 2, 5, 2, 4, 2, 2, 3},
                 "WeightedSpokeGraph"
         ));
         this.mouseListeners = new LinkedHashMap<>();
