@@ -2,7 +2,13 @@ package kiosk.models;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +123,11 @@ public class LoadedSurveyModel implements Serializable {
         adultButton.target = "introscene3";
         adultButton.isCircle = true;
         adultButton.rgb = new int[] { 244, 80, 50 };
-        agePrompt.answers = new ButtonModel[] { gradeSchoolButton, middleSchoolButton, adultButton };
+        agePrompt.answers = new ButtonModel[] {
+            gradeSchoolButton,
+            middleSchoolButton,
+            adultButton
+        };
 
         PromptSceneModel pathPrompt = new PromptSceneModel();
         pathPrompt.id = "introscene3";
@@ -150,7 +160,12 @@ public class LoadedSurveyModel implements Serializable {
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
         spaceButton.image = new ImageModel("assets/space.png", 80, 80);
-        pathPrompt.answers = new ButtonModel[] { humanButton, natureButton, smartMachinesButton, spaceButton };
+        pathPrompt.answers = new ButtonModel[] {
+            humanButton,
+            natureButton,
+            smartMachinesButton,
+            spaceButton
+        };
 
         var initialScenes = new ArrayList<SceneModel>();
         initialScenes.add(titleScreen);

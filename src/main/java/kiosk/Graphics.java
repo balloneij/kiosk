@@ -22,6 +22,9 @@ public class Graphics {
 
     }
 
+    /**
+     * Loads fonts so they are ready for use.
+     */
     public static void loadFonts() {
         if (Graphics.fontsLoaded) {
             System.err.println("FontManager.loadFonts should only be called once");
@@ -32,9 +35,12 @@ public class Graphics {
             File strongSansSerifFile = new File(STRONG_SANS_SERIF_PATH);
 
             try {
-                Graphics.serif = new PFont(Font.createFont(Font.TRUETYPE_FONT, serifFile), true);
-                Graphics.sansSerif = new PFont(Font.createFont(Font.TRUETYPE_FONT, sansSerifFile), true);
-                Graphics.strongSansSerif = new PFont(Font.createFont(Font.TRUETYPE_FONT, strongSansSerifFile), true);
+                Graphics.serif = new PFont(
+                        Font.createFont(Font.TRUETYPE_FONT, serifFile), true);
+                Graphics.sansSerif = new PFont(
+                        Font.createFont(Font.TRUETYPE_FONT, sansSerifFile), true);
+                Graphics.strongSansSerif = new PFont(
+                        Font.createFont(Font.TRUETYPE_FONT, strongSansSerifFile), true);
             } catch (FontFormatException | IOException exception) {
                 throw new IllegalStateException("Could not load fonts");
             }
@@ -55,6 +61,12 @@ public class Graphics {
         useSansSerif(sketch, 48, false);
     }
 
+    /**
+     * Use sanserif font and bold if desired.
+     * @param sketch sketch to apply the font to
+     * @param fontSize size of the font
+     * @param strong true to bold, false otherwise
+     */
     public static void useSansSerif(Kiosk sketch, int fontSize, boolean strong) {
         if (strong) {
             sketch.textFont(strongSansSerif, fontSize);
@@ -72,7 +84,8 @@ public class Graphics {
      * @param h height of the rectangle
      * @param r radius of the curve
      */
-    public static void drawRoundedRectangle(Kiosk sketch, float x, float y, float w, float h, float r) {
+    public static void drawRoundedRectangle(Kiosk sketch, float x, float y,
+                                            float w, float h, float r) {
         float d = r * 2;
 
         sketch.ellipseMode(PConstants.CORNER);

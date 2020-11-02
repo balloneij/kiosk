@@ -3,7 +3,10 @@ package kiosk.scenes;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
-import kiosk.*;
+import kiosk.EventListener;
+import kiosk.Graphics;
+import kiosk.InputEvent;
+import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
@@ -41,12 +44,21 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
     }
 
+    /**
+     * Initialize the button for loading images.
+     * @param sketch to load images to
+     */
     public void init(Kiosk sketch) {
         if (this.model.image != null) {
             this.image = Image.createImage(sketch, model.image);
         }
     }
 
+    /**
+     * Draw's the appropriate button to the sketch using
+     * coordinates and information provided upon initialization.
+     * @param sketch to draw to
+     */
     public void draw(Kiosk sketch) {
         if (this.model.isCircle) {
             this.drawCircle(sketch);

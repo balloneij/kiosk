@@ -71,7 +71,7 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
-        if(currentSceneMillis > this.timeoutMillis) {
+        if (currentSceneMillis > this.timeoutMillis) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }

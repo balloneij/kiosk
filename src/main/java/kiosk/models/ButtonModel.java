@@ -9,6 +9,10 @@ public final class ButtonModel {
     // Optional. Null is a valid value
     public ImageModel image;
 
+    /**
+     * Create a new button model with default values.
+     * They will need to overwritten
+     */
     public ButtonModel() {
         this.text = "null";
         this.target = "null";
@@ -27,6 +31,12 @@ public final class ButtonModel {
         this.target = target;
     }
 
+    /**
+     * Create a deep copy of the button model. There should
+     * be zero shared references between the copy and the original.
+     * It can modified as pleased.
+     * @return copy of the current button model
+     */
     public ButtonModel deepCopy() {
         ButtonModel newButton = new ButtonModel();
         newButton.target = this.target;
