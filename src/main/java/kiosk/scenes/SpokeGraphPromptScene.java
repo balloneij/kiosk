@@ -58,10 +58,10 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.width * .05f,
             sketch.height * .25f,
             1.f,
-            "Build\nResilient\nCities",
+            model.careerCenterText,
             model.careerOptions,
             model.careerWeights,
-                null
+            null
         );
     }
 }

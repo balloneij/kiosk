@@ -29,12 +29,16 @@ public class Kiosk extends PApplet {
         this.sceneGraph.pushScene(new SpokeGraphPromptSceneModel(
                 "Now for a few questions about you.",
                 "You can go back and change your answers. If you want to.",
+                "Build\nResilian\nCities",
                 new String[] {
                     "Civil\nEngineer", "Environmental\nEngineer", "Structural\nEngineer",
                     "Mechanical\nEngineer,", "Architect", "Urban\nPlanner", "Construction\n& Traces",
                     "Communications", "Public\nPolicy\nLeader", "Data\nScientist"
                 },
                 new int[] {2, 3, 2, 2, 5, 2, 4, 2, 2, 3},
+                "How much do you\nlove to play\nwith numbers?",
+                new String[]{"I love\nplaying\nwith\nnumbers!", "Math is fun\nand\nuseful.",
+                        "Math is not\nreally my\nthing."},
                 "WeightedSpokeGraph"
         ));
         this.mouseListeners = new LinkedHashMap<>();
