@@ -17,7 +17,7 @@ public class ButtonControl implements Control<MouseEvent> {
     // Radius of the rounded edge on rectangle buttons
     private static final int RADIUS = 20;
     // Negative will make the color darker on click
-    private static final int COLOR_DELTA_ON_CLICK = -10;
+    private static final int COLOR_DELTA_ON_CLICK = -25;
 
     private final ButtonModel model;
     private final Rectangle rect;
