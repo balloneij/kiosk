@@ -4,5 +4,11 @@
   <void property="timeoutMillis">
    <int>30000</int>
   </void>
+  <void property="screenW">
+   <int>640</int>
+  </void>
+  <void property="screenH">
+   <int>360</int>
+  </void>
  </object>
 </java>

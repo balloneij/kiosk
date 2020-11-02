@@ -1,7 +1,5 @@
 package kiosk;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -39,7 +37,7 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        size(640, 360);
+        size(settings.getScreenW(), settings.getScreenH());
     }
 
     @Override
@@ -165,6 +163,10 @@ public class Kiosk extends PApplet {
         for (var listener : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
+    }
+
+    public Settings getSettings() {
+        return this.settings;
     }
 
     public void run() {

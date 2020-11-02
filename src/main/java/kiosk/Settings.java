@@ -6,7 +6,10 @@ import java.io.*;
 
 public class Settings {
 
+    //TODO other settings here
     private int timeoutMillis;
+    private int screenW;
+    private int screenH;
 
     /**
      * Default Constructor. This is used whenever
@@ -18,14 +21,32 @@ public class Settings {
      */
     public Settings() {
         timeoutMillis = 30001;
+        screenW = 641;
+        screenH = 361;
     }
 
     public int getTimeoutMillis() {
-        return timeoutMillis;
+        return this.timeoutMillis;
     }
 
     public void setTimeoutMillis(int millis) {
         this.timeoutMillis = millis;
+    }
+
+    public int getScreenW() {
+        return this.screenW;
+    }
+
+    public void setScreenW(int width) {
+        this.screenW = width;
+    }
+
+    public int getScreenH() {
+        return this.screenH;
+    }
+
+    public void setScreenH(int height) {
+        this.screenH = height;
     }
 
     //TODO I think this only gets used in the editor
