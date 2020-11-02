@@ -4,8 +4,6 @@ import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 
-import java.util.Arrays;
-
 public class SpokeGraphScene implements Scene {
 
     private final SpokeGraphSceneModel model;
@@ -26,6 +24,6 @@ public class SpokeGraphScene implements Scene {
     @Override
     public void draw(Kiosk sketch) {
         GraphicsUtil.spokeGraph(sketch, model.size, model.xpos, model.ypos,
-                model.padding, model.centerText, model.options);
+                model.padding, model.centerText, model.options, model.colors);
     }
 }

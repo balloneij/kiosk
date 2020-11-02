@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.SpokeGraphPromptSceneModel;
 import kiosk.models.WeightedSpokeGraphSceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
@@ -25,14 +26,14 @@ public class Kiosk extends PApplet {
      */
     public Kiosk() {
         this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
-        this.sceneGraph.pushScene(new WeightedSpokeGraphSceneModel(
-                "Center Text",
-                0,
-                0,
-                new String[] {"Text A", "Text B", "Text C", "Text D", "Text E", "Text F", "Text G"},
-                new int[]{1, 2, 1, 3, 1, 5, 1},
-                350,
-                2,
+        this.sceneGraph.pushScene(new SpokeGraphPromptSceneModel(
+                "Now for a few questions about you.",
+                "You can go back and change your answers. If you want to.",
+                new String[] {
+                    "Civil\nEngineer", "Environmental\nEngineer", "Structural\nEngineer",
+                    "Mechanical\nEngineer,", "Architect", "Urban\nPlanner", "Construction\n& Traces",
+                    "Communications", "Public\nPolicy\nLeader", "Data\nScientist"
+                },
                 "WeightedSpokeGraph"
         ));
         this.mouseListeners = new LinkedHashMap<>();

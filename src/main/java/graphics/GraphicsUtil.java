@@ -1,7 +1,7 @@
 package graphics;
 
-import kiosk.Kiosk;
 import java.util.Arrays;
+import kiosk.Kiosk;
 
 public class GraphicsUtil {
 
@@ -19,10 +19,10 @@ public class GraphicsUtil {
      * @param options The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-          String centerText, String[] options) {
+          String centerText, String[] options, int[] colors) {
         var weights = new int[options.length];
         Arrays.fill(weights, 1);
-        spokeGraph(sketch, size, x, y, padding, centerText, options, weights);
+        spokeGraph(sketch, size, x, y, padding, centerText, options, weights, colors);
     }
 
     /**
@@ -38,7 +38,7 @@ public class GraphicsUtil {
      * @param weights The relative ratio and weight of each option.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-            String centerText, String[] options, int[] weights) {
+            String centerText, String[] options, int[] weights, int[] colors) {
         var bigCircleDiameter = size / 4.f;
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
@@ -46,6 +46,8 @@ public class GraphicsUtil {
         sketch.fill(0);
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
         var textWidth = sketch.textWidth(centerText);
+        sketch.stroke(256, 256, 256);
+        sketch.fill(256, 256, 256);
         sketch.text(centerText, centerX - (textWidth / 2), centerY);
 
         var totalWeight = (float) Arrays.stream(weights).sum();
@@ -78,7 +80,7 @@ public class GraphicsUtil {
                 (float) Math.sin(Math.toRadians(deg)) * .5f * size + centerY
             );
 
-            var colorSelection = getColor(weight, totalWeight, sketch);
+            var colorSelection = colors != null ? colors[i] : getColor(weight, totalWeight, sketch);
             sketch.stroke(colorSelection);
             sketch.fill(colorSelection);
 
@@ -104,18 +106,6 @@ public class GraphicsUtil {
             }
         }
         return largestLineSize;
-    }
-
-    private static float calculateSmallCircleDiameter(float size, int spokeCount, float padding) {
-        if (spokeCount <= 5) {
-            return size * .33f;
-        }
-        var boxRad = size / 2;
-        var theta = Math.toRadians(180.f / (float) spokeCount);
-        var numerator = boxRad * Math.sin(theta);
-        var denominator = (1 + Math.sin(theta));
-        var radius = numerator / denominator;
-        return (float) radius * 2.f - padding;
     }
 
     private static int getColor(float weight, float totalWeight, Kiosk sketch) {

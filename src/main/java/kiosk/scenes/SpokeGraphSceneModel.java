@@ -11,6 +11,7 @@ public class SpokeGraphSceneModel implements SceneModel {
     public final float padding;
     public final String centerText;
     public final String[] options;
+    public final int[] colors;
 
     /**
      * Creates a new spoke graph Scene Model.
@@ -21,9 +22,10 @@ public class SpokeGraphSceneModel implements SceneModel {
      * @param padding The extra spacing between circles.
      * @param centerText The text in the center circle.
      * @param options The list of text appearing on the outer circles.
+     * @param colors The colors each outer circle will be filled in with.
      */
     public SpokeGraphSceneModel(String id, float x, float y, float size, float padding,
-            String centerText, String[] options) {
+            String centerText, String[] options, int[] colors) {
         this.id = id;
         this.xpos = x;
         this.ypos = y;
@@ -31,6 +33,7 @@ public class SpokeGraphSceneModel implements SceneModel {
         this.padding = padding;
         this.centerText = centerText;
         this.options = options;
+        this.colors = colors;
     }
 
     @Override
@@ -45,7 +48,7 @@ public class SpokeGraphSceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        return new SpokeGraphSceneModel(this.id, this.xpos, this.ypos,
-                this.size, this.padding, this.centerText, this.options);
+        return new SpokeGraphSceneModel(this.id, this.xpos, this.ypos, this.size,
+                this.padding, this.centerText, this.options, this.colors);
     }
 }

@@ -26,7 +26,7 @@ public class WeightedSpokeGraphScene implements Scene {
     public void draw(Kiosk sketch) {
         GraphicsUtil.spokeGraph(
             sketch, model.size, model.centerX, model.centerY, model.padding,
-            model.centerText, model.options, model.weights
+            model.centerText, model.options, model.weights, null
         );
     }
 }
