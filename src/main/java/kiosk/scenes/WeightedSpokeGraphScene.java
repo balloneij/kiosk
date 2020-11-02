@@ -90,6 +90,12 @@ public class WeightedSpokeGraphScene implements Scene {
             sketch.ellipse((float) smX, (float) smY, (float) smRad * 2, (float) smRad * 2);
             deg += degOffSet;
 
+            sketch.stroke(256, 256, 256);
+            sketch.fill(256, 256, 256);
+
+            textWidth = sketch.textWidth(text);
+            sketch.textSize(2 * (float) smRad / (GraphicsUtil.TextRatioEstimate * largestTextLine(text)));
+            sketch.text(text, (float) smX - (textWidth / 2), (float) smY);
         }
     }
     private static int largestTextLine(String text) {

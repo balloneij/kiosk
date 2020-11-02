@@ -4,7 +4,7 @@ import kiosk.Kiosk;
 
 public class GraphicsUtil {
 
-    public static final float TextRatioEstimate = 1.7f;
+    public static final float TextRatioEstimate = 1.2f; // 1.7
 
     /**
      * Draws a new spoke graph. Draws a large circle in the middle with text and smaller circles
