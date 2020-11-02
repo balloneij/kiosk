@@ -10,6 +10,28 @@ import processing.core.PConstants;
 
 public class PromptScene implements Scene {
 
+    // White foreground
+    private static final int FOREGROUND_WIDTH = Kiosk.WIDTH * 2 / 3;
+    private static final int FOREGROUND_HEIGHT = Kiosk.HEIGHT * 3 / 4;
+    private static final int FOREGROUND_X_PADDING = Kiosk.WIDTH / 6;
+    private static final int FOREGROUND_Y_PADDING = Kiosk.HEIGHT / 8;
+    private static final int FOREGROUND_CURVE_RADIUS = 50;
+
+    // Text
+    private static final int TITLE_Y = Kiosk.HEIGHT / 4;
+    private static final int TITLE_FONT_SIZE = 24;
+    private static final int PROMPT_Y = Kiosk.HEIGHT * 3 / 8;
+    private static final int PROMPT_FONT_SIZE = 16;
+    private static final int ACTION_Y = Kiosk.HEIGHT / 2;
+    private static final int ACTION_FONT_SIZE = 20;
+
+    // Buttons
+    private static final int BUTTON_WIDTH = Kiosk.WIDTH / 8;
+    private static final int BUTTON_HEIGHT = Kiosk.HEIGHT / 6;
+    private static final int BUTTON_RADIUS = Kiosk.WIDTH / 8;
+    private static final int BUTTON_X_PADDING = 20;
+    private static final int BUTTON_Y = Kiosk.HEIGHT * 7 / 12;
+
     private final PromptSceneModel model;
     private final ButtonControl[] buttons;
 
@@ -20,25 +42,30 @@ public class PromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        int width = sketch.width;
-        int height = sketch.height;
-        // Add 4 to the length so the buttons aren't a tight fit
-        int buttonWidth = width / (this.buttons.length + 4);
-        int buttonHeight = 30;
-        // Add 1 to the length to account for both the left and right sides of the buttons
-        int buttonPadding = (width - buttonWidth * this.buttons.length) / (this.buttons.length + 1);
-
-        float y = (height / 5f) * (1f / 3) + // Box height
-                ((height * 4 / 5f) * (2f / 3)); // Box y
-        int x = buttonPadding;
+        // Start the X on the far left so we simply need to add
+        // button width and padding to get the next X
+        int x = Kiosk.WIDTH / 2
+                - (BUTTON_WIDTH * this.buttons.length
+                + BUTTON_X_PADDING * (this.buttons.length - 1)) / 2;
         for (int i = 0; i < this.model.answers.length; i++) {
             ButtonModel model = this.model.answers[i];
-            var button = new ButtonControl(model, x, (int)y, buttonWidth, buttonHeight);
+
+            int width, height;
+
+            if (model.isCircle) {
+                width = BUTTON_RADIUS;
+                height = BUTTON_RADIUS;
+            } else {
+                width = BUTTON_WIDTH;
+                height = BUTTON_HEIGHT;
+            }
+
+            var button = new ButtonControl(model, x, BUTTON_Y, width, height);
 
             sketch.hookControl(button);
             this.buttons[i] = button;
 
-            x += buttonWidth + buttonPadding;
+            x += BUTTON_WIDTH + BUTTON_X_PADDING;
         }
     }
 
@@ -53,60 +80,37 @@ public class PromptScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        final int width = sketch.width;
-        final int height = sketch.height;
+        final int centerX = Kiosk.WIDTH / 2;
 
+        // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
         // Draw the white foreground box
-        final int curveRadius = 50;
-        float boxX = width * 1f / 8;
-        float boxWidth = width * 3f / 4;
-        float boxY = height / 5f;
-        float boxHeight = (height - boxY) * 2 / 3;
-
-
         sketch.fill(255);
-        Graphics.drawRoundedRectangle(sketch, boxX, boxY, boxWidth, boxHeight, curveRadius);
+        Graphics.drawRoundedRectangle(sketch,
+                FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
+                FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
+                FOREGROUND_CURVE_RADIUS);
 
+        // Draw text
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(0);
 
-        Graphics.useSerif(sketch, 24);
-        sketch.text(this.model.title, boxX + boxWidth / 2, boxY + boxHeight / 5);
+        // Title
+        Graphics.useSerif(sketch, TITLE_FONT_SIZE);
+        sketch.text(this.model.title, centerX, TITLE_Y);
 
-        float textY = boxY + boxHeight * 1 / 3;
-        Graphics.useSansSerif(sketch, 16, false);
+        // Prompt
+        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE, false);
+        sketch.text(this.model.prompt, centerX, PROMPT_Y);
 
-        String[] lines = this.model.prompt.split("\n");
-        if (lines.length != 3) {
-            // TODO: Make lines than or greater than 3 fit nicely on :/
-            lines = new String[] { "Only", "three lines", "look good for now" };
-        }
-        for (String line : lines) {
-            sketch.text(line, boxX + boxWidth / 2, textY);
-            textY += 18;
-        }
+        // Action
+        Graphics.useSansSerif(sketch, ACTION_FONT_SIZE, true);
+        sketch.text(this.model.actionPhrase, centerX, ACTION_Y);
 
-        Graphics.useSansSerif(sketch, 20, true);
-        sketch.text(this.model.actionPhrase, boxX + boxWidth / 2, textY);
-
-//        sketch.rectMode(PConstants.CORNER);
-//        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-//
-//        sketch.background(this.model.invertedColors ? 255 : 0);
-//        sketch.fill(this.model.invertedColors ? 0 : 255);
-//
-//        FontManager.useSerif(sketch);
-//        sketch.text(this.model.question, sketch.width / 2.0f, sketch.height / 4.0f);
-//
+        // Draw buttons
         for (ButtonControl button : this.buttons) {
             button.draw(sketch);
         }
-//
-//        // Penguin
-//        final float penguinY = (float) (Math.sin(this.penguinX * 0.1) * 20 + 20);
-//        this.penguinImage.rotate(this.penguinRotation);
-//        this.penguinImage.draw(sketch, this.penguinX, penguinY);
     }
 }

@@ -11,6 +11,9 @@ import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
+    public static final int WIDTH = 960;
+    public static final int HEIGHT = 540;
+
     protected final SceneGraph sceneGraph;
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
@@ -31,7 +34,7 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        size(640, 360);
+        size(WIDTH, HEIGHT);
     }
 
     @Override

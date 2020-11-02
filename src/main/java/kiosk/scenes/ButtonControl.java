@@ -10,6 +10,12 @@ import processing.event.MouseEvent;
 
 public class ButtonControl implements Control<MouseEvent> {
 
+    private static final int FONT_SIZE = 20;
+    // Radius of the rounded edge on rectangle buttons
+    private static final int RADIUS = 20;
+    // Negative will make the color darker on click
+    private static final int COLOR_DELTA_ON_CLICK = -10;
+
     private final ButtonModel model;
     private final Rectangle rect;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
@@ -34,7 +40,7 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     public void draw(Kiosk sketch) {
-        if (this.model.isRound) {
+        if (this.model.isCircle) {
             this.drawCircle(sketch);
         } else {
             this.drawRectangle(sketch);
@@ -46,27 +52,26 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param sketch to draw to
      */
     private void drawRectangle(Kiosk sketch) {
-        // Constants
-        final int buttonRadius = 10;
-        final int textSize = 20;
-        final boolean textBold = true;
-
         // Draw modifiers
         sketch.rectMode(PConstants.CORNER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        // Draw rectangle
+        // Set the color and draw the shape
         if (this.isPressed) {
-            sketch.fill(100, 168, 71);
+            int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
+            int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
+            int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
+
+            sketch.fill(r, g, b);
         } else {
-            sketch.fill(112, 191, 76);
+            sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
         }
         Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                this.rect.width, this.rect.height, buttonRadius);
+                this.rect.width, this.rect.height, RADIUS);
 
         // Draw text
         sketch.fill(255);
-        Graphics.useSansSerif(sketch, textSize, textBold);
+        Graphics.useSansSerif(sketch, FONT_SIZE, true);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());
@@ -81,18 +86,21 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.ellipseMode(PConstants.CORNER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        // Draw circle
+        // Set the color and draw the shape
         if (this.isPressed) {
-            sketch.fill(100, 168, 71);
-        } else {
-            sketch.fill(112, 191, 76);
-        }
+            int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
+            int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
+            int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
 
+            sketch.fill(r, g, b);
+        } else {
+            sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+        }
         sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
         // Draw text
         sketch.fill(255);
-        Graphics.useSansSerif(sketch, textSize, textBold);
+        Graphics.useSansSerif(sketch, FONT_SIZE, true);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());
@@ -136,5 +144,9 @@ public class ButtonControl implements Control<MouseEvent> {
             this.wasClicked = true;
         }
         this.isPressed = false;
+    }
+
+    private static int clampColor(int c) {
+        return Math.max(Math.min(c, 255), 0);
     }
 }

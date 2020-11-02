@@ -37,7 +37,7 @@ public final class PromptSceneModel implements SceneModel {
         ButtonModel[] buttonsCopy = new ButtonModel[this.answers.length];
         for (int i = 0; i < buttonsCopy.length; i++) {
             ButtonModel button = this.answers[i];
-            buttonsCopy[i] = new ButtonModel(button.text, button.target);
+            buttonsCopy[i] = button.deepCopy();
         }
 
         PromptSceneModel copy = new PromptSceneModel();
