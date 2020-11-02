@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LoadedSurveyModel implements Serializable {
@@ -73,51 +72,5 @@ public class LoadedSurveyModel implements Serializable {
             errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
             return errorSurvey;
         }
-    }
-
-    /**
-     * Creates a sample survey full of cats, dogs, coffee, yogurt, and caps.
-     * @return a survey
-     */
-    public static LoadedSurveyModel createSampleSurvey() {
-        var catsOrDogs = new PromptSceneModel("Which do you prefer?", new ButtonModel[]{
-            new ButtonModel("Cats", "0"),
-            new ButtonModel("Dogs", "0")
-        }, false);
-
-        var coffee = new PromptSceneModel("How do you like your coffee?", new ButtonModel[]{
-            new ButtonModel("Black", "1"),
-            new ButtonModel("Blacker", "1")
-        }, true);
-
-        var yogurt = new PromptSceneModel("Are you supposed to stir greek yogurt?",
-            new ButtonModel[]{
-                new ButtonModel("No", "2")
-            }, false);
-
-        var caps = new PromptSceneModel("Caps! Caps for sale!", new ButtonModel[]{
-            new ButtonModel("Fifty", "3"),
-            new ButtonModel("cents", "3"),
-            new ButtonModel("a", "3"),
-            new ButtonModel("cap", "3"),
-            new ButtonModel("!", "3")
-        }, true);
-
-        var transitionToCoffee = new WaveTransitionSceneModel(coffee.getId(), false, "0");
-        var transitionToYogurt = new WaveTransitionSceneModel(yogurt.getId(), true, "1");
-        var transitionToCaps = new WaveTransitionSceneModel(caps.getId(), false, "2");
-        var transitionToCatsOrDogs = new WaveTransitionSceneModel(catsOrDogs.getId(), true, "3");
-
-        var initialScenes = new ArrayList<SceneModel>();
-        initialScenes.add(caps);
-        initialScenes.add(transitionToYogurt);
-        initialScenes.add(yogurt);
-        initialScenes.add(transitionToCoffee);
-        initialScenes.add(coffee);
-        initialScenes.add(transitionToCatsOrDogs);
-        initialScenes.add(catsOrDogs);
-        initialScenes.add(transitionToCaps);
-
-        return new LoadedSurveyModel(initialScenes);
     }
 }
