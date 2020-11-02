@@ -19,6 +19,25 @@ public class GraphicsUtil {
      * @param options The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
+          String centerText, String[] options) {
+        var weights = new int[options.length];
+        Arrays.fill(weights, 1);
+        spokeGraph(sketch, size, x, y, padding, centerText, options, weights);
+    }
+
+    /**
+     * Draws a new spoke graph. Draws a large circle in the middle with text and smaller circles
+     * on the outside with the options in each one.
+     * @param sketch The graphics context used to draw the spoke graph.
+     * @param size The side length of the square the graph will fit into.
+     * @param x The x location of the upper left-hand corner.
+     * @param y The y location of the upper left-hand corner.
+     * @param padding The gap space between each outer circle.
+     * @param centerText The text that appears in the center circle.
+     * @param options The text that appears in each outer circle.
+     * @param weights The relative ratio and weight of each option.
+     */
+    public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
             String centerText, String[] options, int[] weights) {
         var bigCircleDiameter = size / 4.f;
         var centerX = x + size / 2.f;
