@@ -83,7 +83,6 @@ public class GraphicsUtil {
             sketch.fill(colorSelection);
 
             sketch.ellipse((float) smX, (float) smY, (float) smRad * 2, (float) smRad * 2);
-            deg += degOffSet;
 
             sketch.stroke(256, 256, 256);
             sketch.fill(256, 256, 256);
@@ -91,6 +90,7 @@ public class GraphicsUtil {
             textWidth = sketch.textWidth(text);
             sketch.textSize(2.f * (float) smRad / (TextRatioEstimate * largestTextLine(text)));
             sketch.text(text, (float) smX - (textWidth / 2), (float) smY);
+            deg += degOffSet;
         }
         sketch.textSize(18);
     }
@@ -118,7 +118,7 @@ public class GraphicsUtil {
         return (float) radius * 2.f - padding;
     }
 
-    private static float getColor(float weight, float totalWeight, Kiosk sketch) {
+    private static int getColor(float weight, float totalWeight, Kiosk sketch) {
         var percentage = weight / totalWeight;
         var from = sketch.color(212, 177, 0);
         var to = sketch.color(0, 79, 0);
