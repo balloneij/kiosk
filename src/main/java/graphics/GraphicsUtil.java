@@ -42,8 +42,8 @@ public class GraphicsUtil {
         var bigCircleDiameter = size / 4.f;
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
+        sketch.fill(0, 0, 0);
         sketch.ellipse(centerX, centerY, bigCircleDiameter, bigCircleDiameter);
-        sketch.fill(0);
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
         var textWidth = sketch.textWidth(centerText);
         sketch.stroke(256, 256, 256);

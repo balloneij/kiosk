@@ -26,6 +26,7 @@ public class SpokeGraphPromptScene implements Scene {
     public void draw(Kiosk sketch) {
         drawHeader(sketch);
         drawCareerGraph(sketch);
+        drawPromptGraph(sketch);
     }
 
     private void drawHeader(Kiosk sketch) {
@@ -62,6 +63,19 @@ public class SpokeGraphPromptScene implements Scene {
             model.careerOptions,
             model.careerWeights,
             null
+        );
+    }
+
+    private void drawPromptGraph(Kiosk sketch) {
+        GraphicsUtil.spokeGraph(
+            sketch,
+            sketch.width * .43f,
+            sketch.width * .05f + 2 * sketch.width / 5.f,
+            sketch.height * .25f,
+            1.f,
+            model.promptText,
+            model.promptOptions,
+            model.optionColors
         );
     }
 }

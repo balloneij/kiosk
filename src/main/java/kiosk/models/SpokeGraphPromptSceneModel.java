@@ -12,11 +12,12 @@ public class SpokeGraphPromptSceneModel implements SceneModel {
     public final int[] careerWeights;
     public final String promptText;
     public final String[] promptOptions;
+    public final int[] optionColors;
     private final String id;
 
-    public SpokeGraphPromptSceneModel(String headerTitle, String headerBody, String careerCenterText,
-              String[] careerOptions, int[] careerWeights,
-              String promptText, String[] prompOptions, String id) {
+    public SpokeGraphPromptSceneModel(String headerTitle, String headerBody,
+            String careerCenterText, String[] careerOptions, int[] careerWeights,
+            String promptText, String[] prompOptions, int[] optionColors, String id) {
         this.headerTitle = headerTitle;
         this.headerBody = headerBody;
         this.careerCenterText = careerCenterText;
@@ -24,6 +25,7 @@ public class SpokeGraphPromptSceneModel implements SceneModel {
         this.careerWeights = careerWeights;
         this.promptText = promptText;
         this.promptOptions = prompOptions;
+        this.optionColors = optionColors;
         this.id = id;
     }
 
@@ -39,7 +41,8 @@ public class SpokeGraphPromptSceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        return new SpokeGraphPromptSceneModel(this.headerTitle, this.headerBody, this.careerCenterText,
-            this.careerOptions, this.careerWeights, this.promptText, this.promptOptions, this.id);
+        return new SpokeGraphPromptSceneModel(this.headerTitle, this.headerBody,
+            this.careerCenterText, this.careerOptions, this.careerWeights, this.promptText,
+            this.promptOptions, this.optionColors, this.id);
     }
 }

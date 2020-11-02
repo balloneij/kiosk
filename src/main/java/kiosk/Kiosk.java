@@ -39,6 +39,11 @@ public class Kiosk extends PApplet {
                 "How much do you\nlove to play\nwith numbers?",
                 new String[]{"I love\nplaying\nwith\nnumbers!", "Math is fun\nand\nuseful.",
                         "Math is not\nreally my\nthing."},
+                new int[]{
+                    this.color(214, 0, 0),
+                    this.color(100, 117, 31),
+                    this.color(176, 0, 207)
+                },
                 "WeightedSpokeGraph"
         ));
         this.mouseListeners = new LinkedHashMap<>();
