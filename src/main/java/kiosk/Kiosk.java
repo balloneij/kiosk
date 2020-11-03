@@ -3,10 +3,7 @@ package kiosk;
 import java.io.File;
 import java.util.*;
 
-import kiosk.models.ButtonModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
+import kiosk.models.*;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -28,14 +25,8 @@ public class Kiosk extends PApplet {
         if(!surveyPath.isEmpty()){
             this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
         } else {
-            // TODO replace the jar name with the final jar name
-            String defaultText = "Press F2 to open the file-chooser and select a survey file. \nThe program can also " +
-                    "be started from the command line with the command \n\"java -jar kiosk-1.0-SNAPSHOT.jar <survey " +
-                    "file>\"\nwhere <survey file> is the path to the survey file.";
-
             List<SceneModel> defaultScenes = new ArrayList<>();
-            ButtonModel[] buttons = new ButtonModel[0]; // Empty array because we don't actually want any buttons
-            defaultScenes.add(new PromptSceneModel(defaultText, buttons, true, "default scene"));
+            defaultScenes.add(new DefaultSceneModel());
 
             this.sceneGraph = new SceneGraph(new LoadedSurveyModel(defaultScenes));
         }
