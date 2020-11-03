@@ -26,4 +26,8 @@ public final class ImageModel {
         this.width = width;
         this.height = height;
     }
+
+    public ImageModel deepCopy() {
+        return new ImageModel(path, width, height);
+    }
 }

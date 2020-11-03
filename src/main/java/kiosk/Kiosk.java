@@ -1,9 +1,11 @@
 package kiosk;
 
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
-import kiosk.models.*;
+import kiosk.models.DefaultSceneModel;
+import kiosk.models.LoadedSurveyModel;
+import kiosk.models.SceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -15,13 +17,15 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private int timeoutMillis = 30000; //TODO replace with info from settings xml
+    private static Settings settings;
     private int newSceneMillis;
 
     /**
      * Draws scenes.
      */
     public Kiosk(String surveyPath) {
+        settings = Settings.readSettings();
+
         if(!surveyPath.isEmpty()){
             this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
         } else {
@@ -40,13 +44,14 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        size(640, 360);
+        size(settings.getScreenW(), settings.getScreenH());
     }
 
     @Override
     public void setup() {
         super.setup();
         this.lastMillis = millis();
+        Graphics.loadFonts();
     }
 
     @Override
@@ -74,7 +79,8 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
-        if(currentSceneMillis > this.timeoutMillis) {
+
+        if(currentSceneMillis > settings.getTimeoutMillis()) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
@@ -166,6 +172,10 @@ public class Kiosk extends PApplet {
         for (var listener : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
+    }
+
+    public static Settings getSettings() {
+        return settings;
     }
 
     public void run() {
