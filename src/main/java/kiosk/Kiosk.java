@@ -1,8 +1,12 @@
 package kiosk;
 
-import java.io.*;
-import java.util.*;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
@@ -26,7 +30,7 @@ public class Kiosk extends PApplet {
     public Kiosk(String surveyPath) {
         settings = Settings.readSettings();
 
-        if(!surveyPath.isEmpty()){
+        if (!surveyPath.isEmpty()) {
             this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
         } else {
             List<SceneModel> defaultScenes = new ArrayList<>();
@@ -80,7 +84,7 @@ public class Kiosk extends PApplet {
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
 
-        if(currentSceneMillis > settings.getTimeoutMillis()) {
+        if (currentSceneMillis > settings.getTimeoutMillis()) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
