@@ -1,10 +1,12 @@
 package kiosk;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+
+import kiosk.models.ButtonModel;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PromptSceneModel;
+import kiosk.models.SceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -22,14 +24,21 @@ public class Kiosk extends PApplet {
     /**
      * Draws scenes.
      */
-    public Kiosk(String surveyPath) { // TODO would there ever be reason to load more than one survey? If so this could be changed to array
+    public Kiosk(String surveyPath) {
         if(!surveyPath.isEmpty()){
             this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
         } else {
-            // TODO should this come from a default file?
-            this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
-        }
+            // TODO replace the jar name with the final jar name
+            String defaultText = "Press F2 to open the file-chooser and select a survey file. \nThe program can also " +
+                    "be started from the command line with the command \n\"java -jar kiosk-1.0-SNAPSHOT.jar <survey " +
+                    "file>\"\nwhere <survey file> is the path to the survey file.";
 
+            List<SceneModel> defaultScenes = new ArrayList<>();
+            ButtonModel[] buttons = new ButtonModel[0]; // Empty array because we don't actually want any buttons
+            defaultScenes.add(new PromptSceneModel(defaultText, buttons, true, "default scene"));
+
+            this.sceneGraph = new SceneGraph(new LoadedSurveyModel(defaultScenes));
+        }
 
         this.mouseListeners = new LinkedHashMap<>();
 
