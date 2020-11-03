@@ -19,14 +19,14 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private Settings settings;
+    private static Settings settings;
     private int newSceneMillis;
 
     /**
      * Draws scenes.
      */
     public Kiosk() {
-        this.settings = Settings.readSettings();
+        settings = Settings.readSettings();
         this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
         this.mouseListeners = new LinkedHashMap<>();
 
@@ -167,8 +167,8 @@ public class Kiosk extends PApplet {
         }
     }
 
-    public Settings getSettings() {
-        return this.settings;
+    public static Settings getSettings() {
+        return settings;
     }
 
     public void run() {
