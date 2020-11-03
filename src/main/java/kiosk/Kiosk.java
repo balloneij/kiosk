@@ -1,10 +1,13 @@
 package kiosk;
 
-import java.io.File;
+import java.io.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.SceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -12,20 +15,18 @@ import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
-    public static final int WIDTH = 960;
-    public static final int HEIGHT = 540;
-
     protected final SceneGraph sceneGraph;
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private int timeoutMillis = 30000; //TODO replace with info from settings xml
+    private Settings settings;
     private int newSceneMillis;
 
     /**
      * Draws scenes.
      */
     public Kiosk() {
+        this.settings = Settings.readSettings();
         this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
         this.mouseListeners = new LinkedHashMap<>();
 
@@ -36,7 +37,7 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        size(WIDTH, HEIGHT);
+        size(settings.getScreenW(), settings.getScreenH());
     }
 
     @Override
@@ -71,7 +72,8 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
-        if (currentSceneMillis > this.timeoutMillis) {
+
+        if(currentSceneMillis > settings.getTimeoutMillis()) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
@@ -163,6 +165,10 @@ public class Kiosk extends PApplet {
         for (var listener : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
+    }
+
+    public Settings getSettings() {
+        return this.settings;
     }
 
     public void run() {
