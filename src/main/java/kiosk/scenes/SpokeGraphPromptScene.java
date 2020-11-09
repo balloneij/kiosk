@@ -1,6 +1,7 @@
 package kiosk.scenes;
 
 import graphics.GraphicsUtil;
+import kiosk.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.SpokeGraphPromptSceneModel;
@@ -24,6 +25,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
+        Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
         drawCareerGraph(sketch);
         drawPromptGraph(sketch);

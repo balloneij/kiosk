@@ -2,6 +2,7 @@ package graphics;
 
 import java.util.Arrays;
 import kiosk.Kiosk;
+import processing.core.PConstants;
 
 public class GraphicsUtil {
 
@@ -43,7 +44,8 @@ public class GraphicsUtil {
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
         sketch.fill(0, 0, 0);
-        sketch.ellipse(centerX, centerY, bigCircleDiameter, bigCircleDiameter);
+        sketch.stroke(0, 0, 0);
+        sketch.ellipse(centerX - .5f * bigCircleDiameter, centerY - .5f * bigCircleDiameter, bigCircleDiameter, bigCircleDiameter);
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
         var textWidth = sketch.textWidth(centerText);
         sketch.stroke(256, 256, 256);
