@@ -1,11 +1,12 @@
 package kiosk.models;
 
+import java.io.Serializable;
 import kiosk.scenes.Scene;
 
 /**
  * A model containing any data necessary to create a Scene instance.
  */
-public interface SceneModel {
+public interface SceneModel extends Serializable {
     /**
      * Creates a new scene. Presumably uses data from the model.
      * @return a new Scene

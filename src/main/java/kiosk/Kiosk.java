@@ -1,12 +1,14 @@
 package kiosk;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import kiosk.models.DefaultSceneModel;
 import kiosk.models.LoadedSurveyModel;
-import kiosk.models.SpokeGraphPromptSceneModel;
-import kiosk.models.WeightedSpokeGraphSceneModel;
+import kiosk.models.SceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -18,34 +20,24 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private final int timeoutMillis = 30000; //TODO replace with info from settings xml
+    private static Settings settings;
     private int newSceneMillis;
 
     /**
      * Draws scenes.
      */
-    public Kiosk() {
-        this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File("survey.xml")));
-        this.sceneGraph.pushScene(new SpokeGraphPromptSceneModel(
-                "Now for a few questions about you.",
-                "You can go back and change your answers. If you want to.",
-                "Build\nResilian\nCities",
-                new String[] {
-                    "Civil\nEngineer", "Environmental\nEngineer", "Structural\nEngineer",
-                    "Mechanical\nEngineer,", "Architect", "Urban\nPlanner", "Construction\n& Traces",
-                    "Communications", "Public\nPolicy\nLeader", "Data\nScientist"
-                },
-                new int[] {2, 3, 2, 2, 5, 2, 4, 2, 2, 3},
-                "How much do you\nlove to play\nwith numbers?",
-                new String[]{"I love\nplaying\nwith\nnumbers!", "Math is fun\nand\nuseful.",
-                        "Math is not\nreally my\nthing."},
-                new int[]{
-                    this.color(214, 0, 0),
-                    this.color(100, 117, 31),
-                    this.color(176, 0, 207)
-                },
-                "WeightedSpokeGraph"
-        ));
+    public Kiosk(String surveyPath) {
+        settings = Settings.readSettings();
+
+        if (!surveyPath.isEmpty()) {
+            this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
+        } else {
+            List<SceneModel> defaultScenes = new ArrayList<>();
+            defaultScenes.add(new DefaultSceneModel());
+
+            this.sceneGraph = new SceneGraph(new LoadedSurveyModel(defaultScenes));
+        }
+
         this.mouseListeners = new LinkedHashMap<>();
 
         for (InputEvent e : InputEvent.values()) {
@@ -55,13 +47,14 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        size(640, 360);
+        size(settings.getScreenW(), settings.getScreenH());
     }
 
     @Override
     public void setup() {
         super.setup();
         this.lastMillis = millis();
+        Graphics.loadFonts();
     }
 
     @Override
@@ -89,7 +82,8 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
-        if (currentSceneMillis > this.timeoutMillis) {
+
+        if (currentSceneMillis > settings.getTimeoutMillis()) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
@@ -181,6 +175,10 @@ public class Kiosk extends PApplet {
         for (var listener : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
+    }
+
+    public static Settings getSettings() {
+        return settings;
     }
 
     public void run() {
