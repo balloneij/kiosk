@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="15.0" class="java.beans.XMLDecoder">
+<java version="15.0.1" class="java.beans.XMLDecoder">
  <object class="kiosk.models.LoadedSurveyModel" id="LoadedSurveyModel0">
   <void class="kiosk.models.LoadedSurveyModel" method="getField">
    <string>scenes</string>
    <void method="set">
     <object idref="LoadedSurveyModel0"/>
-    <array class="kiosk.models.SceneModel" length="4">
+    <array class="kiosk.models.SceneModel" length="6">
      <void index="0">
       <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel0">
        <void class="kiosk.models.PromptSceneModel" method="getField">
@@ -488,6 +488,41 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
+     <void index="4">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel0">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>dumb</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>careerCenterText</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>promptText</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>spokeGraph01</string>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="5">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel"/>
+     </void>
     </array>
    </void>
   </void>
@@ -495,15 +530,15 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
  <string>rgb</string>
  <void id="intArray0" method="get">
-  <object idref="ButtonModel6"/>
+  <object idref="ButtonModel4"/>
   <void index="1">
-   <int>108</int>
+   <int>80</int>
   </void>
   <void index="2">
-   <int>103</int>
+   <int>50</int>
   </void>
   <void index="0">
-   <int>51</int>
+   <int>244</int>
   </void>
  </void>
 </void>
@@ -511,22 +546,6 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field1" method="getField">
  <string>rgb</string>
  <void id="intArray1" method="get">
-  <object idref="ButtonModel5"/>
-  <void index="1">
-   <int>33</int>
-  </void>
-  <void index="2">
-   <int>107</int>
-  </void>
-  <void index="0">
-   <int>152</int>
-  </void>
- </void>
-</void>
-<void idref="intArray1"/>
-<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
- <string>rgb</string>
- <void id="intArray2" method="get">
   <object idref="ButtonModel3"/>
   <void index="1">
    <int>117</int>
@@ -536,6 +555,22 @@ You can always go back and begin again</string>
   </void>
   <void index="0">
    <int>244</int>
+  </void>
+ </void>
+</void>
+<void idref="intArray1"/>
+<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
+ <string>rgb</string>
+ <void id="intArray2" method="get">
+  <object idref="ButtonModel2"/>
+  <void index="1">
+   <int>153</int>
+  </void>
+  <void index="2">
+   <int>29</int>
+  </void>
+  <void index="0">
+   <int>248</int>
   </void>
  </void>
 </void>
@@ -559,15 +594,15 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field4" method="getField">
  <string>rgb</string>
  <void id="intArray4" method="get">
-  <object idref="ButtonModel2"/>
+  <object idref="ButtonModel6"/>
   <void index="1">
-   <int>153</int>
+   <int>108</int>
   </void>
   <void index="2">
-   <int>29</int>
+   <int>103</int>
   </void>
   <void index="0">
-   <int>248</int>
+   <int>51</int>
   </void>
  </void>
 </void>
@@ -575,22 +610,6 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field5" method="getField">
  <string>rgb</string>
  <void id="intArray5" method="get">
-  <object idref="ButtonModel4"/>
-  <void index="1">
-   <int>80</int>
-  </void>
-  <void index="2">
-   <int>50</int>
-  </void>
-  <void index="0">
-   <int>244</int>
-  </void>
- </void>
-</void>
-<void idref="intArray5"/>
-<void class="kiosk.models.ButtonModel" id="Field6" method="getField">
- <string>rgb</string>
- <void id="intArray6" method="get">
   <object idref="ButtonModel8"/>
   <void index="1">
    <int>97</int>
@@ -600,6 +619,22 @@ You can always go back and begin again</string>
   </void>
   <void index="0">
    <int>21</int>
+  </void>
+ </void>
+</void>
+<void idref="intArray5"/>
+<void class="kiosk.models.ButtonModel" id="Field6" method="getField">
+ <string>rgb</string>
+ <void id="intArray6" method="get">
+  <object idref="ButtonModel5"/>
+  <void index="1">
+   <int>33</int>
+  </void>
+  <void index="2">
+   <int>107</int>
+  </void>
+  <void index="0">
+   <int>152</int>
   </void>
  </void>
 </void>
