@@ -3,30 +3,32 @@ package kiosk.models;
 import kiosk.scenes.Scene;
 import kiosk.scenes.SpokeGraphPromptScene;
 
-public class SpokeGraphPromptSceneModel implements SceneModel {
+public final class SpokeGraphPromptSceneModel implements SceneModel {
 
-    public final String headerTitle;
-    public final String headerBody;
-    public final String careerCenterText;
-    public final String[] careerOptions;
-    public final int[] careerWeights;
-    public final String promptText;
-    public final String[] promptOptions;
-    public final int[] optionColors;
-    private final String id;
+    public String headerTitle;
+    public String headerBody;
+    public String careerCenterText;
+    public String[] careerOptions;
+    public int[] careerWeights;
+    public String promptText;
+    public String[] promptOptions;
+    public int[] optionColors;
+    public String id;
 
-    public SpokeGraphPromptSceneModel(String headerTitle, String headerBody,
-            String careerCenterText, String[] careerOptions, int[] careerWeights,
-            String promptText, String[] prompOptions, int[] optionColors, String id) {
-        this.headerTitle = headerTitle;
-        this.headerBody = headerBody;
-        this.careerCenterText = careerCenterText;
-        this.careerOptions = careerOptions;
-        this.careerWeights = careerWeights;
-        this.promptText = promptText;
-        this.promptOptions = prompOptions;
-        this.optionColors = optionColors;
-        this.id = id;
+    public SpokeGraphPromptSceneModel() {
+        this.headerTitle = "Now for a few questions about you.";
+        this.headerBody = "You can go back and change your answers, if you want to.";
+        this.careerCenterText = "Build Resilient Cities";
+        this.careerOptions = new String[]{"Civil\nEngineer", "Environmental\nEngineer", "Structural\nEngineer",
+                "Mechanical\nEngineer", "Architect", "Urban\nPlanner", "Construction\n& Traces",
+                "Communications", "Public\nPolicy\nLeader", "Data\nScientist"
+        };
+        this.careerWeights = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        this.promptText = "How much do you love to play with numbers?";
+        this.promptOptions = new String[]{"I love playing with numbers!", "Math is fun and useful.",
+                "Math is not really my thing."};
+        this.optionColors = new int[]{0, 1, 2};
+        this.id = "spokeGraphId";
     }
 
     @Override
@@ -36,13 +38,21 @@ public class SpokeGraphPromptSceneModel implements SceneModel {
 
     @Override
     public String getId() {
-        return this.id;
+        return id;
     }
 
     @Override
     public SceneModel deepCopy() {
-        return new SpokeGraphPromptSceneModel(this.headerTitle, this.headerBody,
-            this.careerCenterText, this.careerOptions, this.careerWeights, this.promptText,
-            this.promptOptions, this.optionColors, this.id);
+        var copy = new SpokeGraphPromptSceneModel();
+        copy.headerTitle = this.headerTitle;
+        copy.headerTitle = this.headerTitle;
+        copy.careerCenterText = this.careerCenterText;
+        copy.careerOptions = this.careerOptions;
+        copy.careerWeights = this.careerWeights;
+        copy.promptText = this.promptText;
+        copy.promptOptions = this.promptOptions;
+        copy.optionColors = this.optionColors;
+        copy.id = this.id;
+        return copy;
     }
 }
