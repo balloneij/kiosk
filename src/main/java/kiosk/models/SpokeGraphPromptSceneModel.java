@@ -16,19 +16,15 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String id;
 
     public SpokeGraphPromptSceneModel() {
-        this.headerTitle = "Now for a few questions about you.";
-        this.headerBody = "You can go back and change your answers, if you want to.";
-        this.careerCenterText = "Build Resilient Cities";
-        this.careerOptions = new String[]{"Civil\nEngineer", "Environmental\nEngineer", "Structural\nEngineer",
-                "Mechanical\nEngineer", "Architect", "Urban\nPlanner", "Construction\n& Traces",
-                "Communications", "Public\nPolicy\nLeader", "Data\nScientist"
-        };
-        this.careerWeights = new int[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        this.promptText = "How much do you love to play with numbers?";
-        this.promptOptions = new String[]{"I love playing with numbers!", "Math is fun and useful.",
-                "Math is not really my thing."};
-        this.optionColors = new int[]{0, 1, 2};
-        this.id = "spokeGraphId";
+        this.headerTitle = "";
+        this.headerBody = "";
+        this.careerCenterText = "";
+        this.careerOptions = new String[]{ };
+        this.careerWeights = new int[]{ };
+        this.promptText = "";
+        this.promptOptions = new String[]{ };
+        this.optionColors = new int[]{ };
+        this.id = "";
     }
 
     @Override
