@@ -1,14 +1,12 @@
 package kiosk;
 
-import javax.swing.*;
-
 public class Main {
 
     /**
      * Program entry point.
      * @param args The path to a survey file to be loaded.
      */
-    public static void main(String[] args) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+    public static void main(String[] args) {
         if (System.getProperty("java.version").length() < 3) {
             System.setProperty("java.version", System.getProperty("java.version") + ".0");
         }
