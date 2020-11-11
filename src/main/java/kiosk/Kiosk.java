@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JFileChooser;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.LoadedSurveyModel;
@@ -30,7 +30,8 @@ public class Kiosk extends PApplet {
     /**
      * Draws scenes.
      */
-    public Kiosk(String surveyPath) {
+    public Kiosk(String surveyPath) throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         settings = Settings.readSettings();
 
         if (!surveyPath.isEmpty()) {
