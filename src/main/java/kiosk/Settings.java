@@ -2,14 +2,20 @@ package kiosk;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 public class Settings {
 
-    //TODO other settings here
-    private int timeoutMillis;
-    private int screenW;
-    private int screenH;
+    public static final String DEFAULT_SAVE_PATH = "settings.xml";
+
+    public int timeoutMillis;
+    public int screenW;
+    public int screenH;
 
     /**
      * Default Constructor. This is used whenever
@@ -20,39 +26,18 @@ public class Settings {
      * to be written out in the xml file.
      */
     public Settings() {
-        timeoutMillis = 30001;
-        screenW = 641;
-        screenH = 361;
+        timeoutMillis = 30000;
+        screenW = 1920 / 2;
+        screenH = 1080 / 2;
     }
 
-    public int getTimeoutMillis() {
-        return this.timeoutMillis;
-    }
-
-    public void setTimeoutMillis(int millis) {
-        this.timeoutMillis = millis;
-    }
-
-    public int getScreenW() {
-        return this.screenW;
-    }
-
-    public void setScreenW(int width) {
-        this.screenW = width;
-    }
-
-    public int getScreenH() {
-        return this.screenH;
-    }
-
-    public void setScreenH(int height) {
-        this.screenH = height;
-    }
-
-    //TODO I think this only gets used in the editor
+    /**
+     * Writes settings to XML. Meant to be used in the editor
+     * @return true if successful
+     */
     public boolean writeSettings() {
         try (XMLEncoder encoder = new XMLEncoder(
-                new BufferedOutputStream(new FileOutputStream(new File("settings.xml"))))) {
+                new BufferedOutputStream(new FileOutputStream(new File(DEFAULT_SAVE_PATH))))) {
             encoder.writeObject(this);
             return true;
         } catch (FileNotFoundException exc) {
@@ -66,19 +51,11 @@ public class Settings {
      * @return a valid settings object (i.e. never null)
      */
     public static Settings readSettings() {
-        //TODO should the pathname be hardcoded?
-        try (XMLDecoder decoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(new File("settings.xml"))))) {
-            Object settingsObject = decoder.readObject();
-            if (!(settingsObject instanceof Settings)) {
-                Settings settings = new Settings(); //TODO I think this should be the fallback
-                return settings;
-            }
-            return (Settings) settingsObject;
-        } catch (FileNotFoundException exc) {
-            //TODO for the survey, an error creates an errorScene. What
-            //TODO should be done here?
-            Settings settings = new Settings(); //TODO I think this should be the fallback
-            return settings;
+        try (XMLDecoder decoder = new XMLDecoder(
+                new BufferedInputStream(new FileInputStream(new File(DEFAULT_SAVE_PATH))))) {
+            return (Settings) decoder.readObject();
+        } catch (FileNotFoundException | ClassCastException exc) {
+            return new Settings();
         }
     }
 }

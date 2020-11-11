@@ -48,7 +48,7 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        size(settings.getScreenW(), settings.getScreenH());
+        size(settings.screenW, settings.screenH);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class Kiosk extends PApplet {
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
 
-        if (currentSceneMillis > settings.getTimeoutMillis()) {
+        if (currentSceneMillis > settings.timeoutMillis) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }

@@ -11,31 +11,33 @@ import processing.core.PConstants;
 public class PromptScene implements Scene {
 
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().getScreenW() * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().getScreenH() * 3 / 4;
-    private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().getScreenW() / 6;
-    private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().getScreenH() / 8;
+    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
+    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
+    private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
+    private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
     private static final int FOREGROUND_CURVE_RADIUS = 50;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().getScreenH() / 4;
+    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
     private static final int TITLE_FONT_SIZE = 24;
-    private static final int PROMPT_Y = Kiosk.getSettings().getScreenH() * 3 / 8;
+    private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 8;
     private static final int PROMPT_FONT_SIZE = 16;
-    private static final int ACTION_Y = Kiosk.getSettings().getScreenH() / 2;
+    private static final int ACTION_Y = Kiosk.getSettings().screenH / 2;
     private static final int ACTION_FONT_SIZE = 20;
 
     // Buttons
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().getScreenW() / 8;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().getScreenH() / 6;
-    private static final int BUTTON_RADIUS = Kiosk.getSettings().getScreenW() / 8;
+    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+    private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
     private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_X_PADDING = 20;
-    private static final int BUTTON_Y = Kiosk.getSettings().getScreenH() * 7 / 12;
+    private static final int BUTTON_PADDING = 20;
+    private static final int BUTTON_Y = Kiosk.getSettings().screenH * 7 / 12;
 
     private final PromptSceneModel model;
     private final ButtonControl[] buttons;
+    private ButtonControl homeButton;
+    private ButtonControl backButton;
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;
@@ -44,11 +46,13 @@ public class PromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
+        final int sketchHeight = Kiosk.getSettings().screenH;
+
         // Start the X on the far left so we simply need to add
         // button width and padding to get the next X
-        int x = Kiosk.getSettings().getScreenW() / 2
+        int x = Kiosk.getSettings().screenW / 2
                 - (BUTTON_WIDTH * this.buttons.length
-                + BUTTON_X_PADDING * (this.buttons.length - 1)) / 2;
+                + BUTTON_PADDING * (this.buttons.length - 1)) / 2;
         for (int i = 0; i < this.model.answers.length; i++) {
             ButtonModel model = this.model.answers[i];
 
@@ -75,8 +79,21 @@ public class PromptScene implements Scene {
             sketch.hookControl(button);
             this.buttons[i] = button;
 
-            x += BUTTON_WIDTH + BUTTON_X_PADDING;
+            x += BUTTON_WIDTH + BUTTON_PADDING;
         }
+
+        var homeButtonModel = new ButtonModel();
+        homeButtonModel.text = "Home";
+        this.homeButton = new ButtonControl(homeButtonModel,
+                BUTTON_PADDING, BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+        sketch.hookControl(this.homeButton);
+        var backButtonModel = new ButtonModel();
+        backButtonModel.text = "Back";
+        this.backButton = new ButtonControl(backButtonModel,
+                BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+        sketch.hookControl(this.backButton);
     }
 
     @Override
@@ -86,11 +103,17 @@ public class PromptScene implements Scene {
                 sceneGraph.pushScene(button.getTarget());
             }
         }
+
+        if (this.homeButton.wasClicked()) {
+            sceneGraph.reset();
+        } else if (this.backButton.wasClicked()) {
+            sceneGraph.popScene();
+        }
     }
 
     @Override
     public void draw(Kiosk sketch) {
-        final int centerX = Kiosk.getSettings().getScreenW() / 2;
+        final int centerX = Kiosk.getSettings().screenW / 2;
 
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
@@ -122,5 +145,8 @@ public class PromptScene implements Scene {
         for (ButtonControl button : this.buttons) {
             button.draw(sketch);
         }
+
+        homeButton.draw(sketch);
+        backButton.draw(sketch);
     }
 }
