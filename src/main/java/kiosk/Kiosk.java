@@ -1,12 +1,13 @@
 package kiosk;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
@@ -15,9 +16,6 @@ import kiosk.scenes.Scene;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Kiosk extends PApplet {
 
@@ -146,14 +144,15 @@ public class Kiosk extends PApplet {
         if (event.getKeyCode() == 113) { //F2 Key Press
             System.out.println("Opening the file explorer...");
             final JFileChooser fc = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("XML file (*.xml)", "xml", "XML");
+            FileNameExtensionFilter filter =
+                    new FileNameExtensionFilter("XML file (*.xml)", "xml", "XML");
             fc.setFileFilter(filter);
             fc.setAcceptAllFileFilterUsed(false);
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                fc.getSelectedFile();
                 surveyFile = fc.getSelectedFile().getPath();
-                System.out.println("Getting " + surveyFile + " in the background for the next refresh\n");
+                System.out.println(
+                        "Getting " + surveyFile + " in the background for the next refresh\n");
             } else {
                 System.out.println("There was an error getting the file.\n");
             }
