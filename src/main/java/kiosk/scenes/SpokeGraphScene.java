@@ -3,6 +3,7 @@ package kiosk.scenes;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
+import kiosk.models.SpokeGraphSceneModel;
 
 public class SpokeGraphScene implements Scene {
 

@@ -1,7 +1,5 @@
 package kiosk;
 
-import java.util.Arrays;
-
 public class Main {
 
     /**

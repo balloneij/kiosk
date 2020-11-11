@@ -4,7 +4,7 @@ import kiosk.Kiosk;
 
 public class GraphicsUtil {
 
-    public static final float TextRatioEstimate = 1.7f;
+    public static final float TEXT_RATIO_ESTIMATE = 1.7f;
 
     /**
      * Draws a new spoke graph. Draws a large circle in the middle with text and smaller circles
@@ -28,7 +28,8 @@ public class GraphicsUtil {
         var centerY = y + size / 2.f;
         sketch.ellipse(centerX, centerY, bigCircleDiameter, bigCircleDiameter);
         sketch.fill(0);
-        sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
+        sketch.textSize(2 * bigCircleDiameter
+                / (TEXT_RATIO_ESTIMATE * largestTextLine(centerText)));
         var textWidth = sketch.textWidth(centerText);
         sketch.text(centerText, centerX - (textWidth / 2), centerY);
         var degreeShift = 360.f / options.length;
@@ -54,7 +55,7 @@ public class GraphicsUtil {
             sketch.line(lineStartX, lineStartY, lineEndX, lineEndY);
             sketch.fill(0);
             sketch.textSize(2 * smallCircleDiameter
-                    / (TextRatioEstimate * largestTextLine(options[i])));
+                    / (TEXT_RATIO_ESTIMATE * largestTextLine(options[i])));
             textWidth = sketch.textWidth(options[i]);
             sketch.text(options[i], smallCircleCenterX - (textWidth / 2), smallCircleCenterY);
         }
