@@ -51,7 +51,8 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.text(model.headerTitle, boxCenterX - (.5f * headerWidth), boxCenterY);
 
         var bodyWidth = sketch.textWidth(model.headerBody);
-        sketch.text(model.headerBody, boxCenterX - (.5f * bodyWidth), boxCenterY + sketch.textAscent());
+        sketch.text(model.headerBody, boxCenterX - (.5f * bodyWidth),
+                boxCenterY + sketch.textAscent());
     }
 
     private void drawCareerGraph(Kiosk sketch) {

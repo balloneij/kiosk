@@ -15,6 +15,13 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public int[] optionColors;
     public String id;
 
+    /**
+     * Creates a new prompt scene model.
+     * Composed of:
+     * - Title
+     * - Unweighted spoke graph on the right
+     * - Weighted spoke graph on the left
+     */
     public SpokeGraphPromptSceneModel() {
         this.headerTitle = "";
         this.headerBody = "";

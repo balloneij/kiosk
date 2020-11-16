@@ -1,7 +1,5 @@
 package kiosk.scenes;
 
-import java.util.Arrays;
-
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
