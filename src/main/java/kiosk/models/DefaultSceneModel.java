@@ -9,9 +9,10 @@ import kiosk.scenes.Scene;
  * a survey.
  */
 public class DefaultSceneModel implements SceneModel {
-    public String message = "Press F2 to open the file-chooser and select a survey file. \nThe "
-            + "program can also be started from the command line with the command \n\"java -jar "
-            + "kiosk.jar <survey file>\"\nwhere <survey file> is the path to the survey file.";
+    public String message = "Press F2 to open the file-chooser and select a survey file.\n"
+            + "Afterwards, press F5 to refresh the view. \nThe program can also be started "
+            + "from the command line with the command \n\"java -jar kiosk.jar <survey file>\"\n"
+            + "where <survey file> is the path to the survey file.";
     public String id;
 
     public DefaultSceneModel() {

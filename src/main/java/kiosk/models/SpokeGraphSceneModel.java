@@ -1,6 +1,7 @@
-package kiosk.scenes;
+package kiosk.models;
 
-import kiosk.models.SceneModel;
+import kiosk.scenes.Scene;
+import kiosk.scenes.SpokeGraphScene;
 
 public class SpokeGraphSceneModel implements SceneModel {
 

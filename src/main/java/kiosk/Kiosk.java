@@ -6,18 +6,24 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFileChooser;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
-    protected final SceneGraph sceneGraph;
+    protected SceneGraph sceneGraph;
     private Scene lastScene;
+    private String surveyFile = "";
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
     private static Settings settings;
@@ -27,9 +33,17 @@ public class Kiosk extends PApplet {
      * Draws scenes.
      */
     public Kiosk(String surveyPath) {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException | InstantiationException
+                | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            System.err.println("Could not set the UI for the file chooser");
+        }
+
         settings = Settings.readSettings();
 
         if (!surveyPath.isEmpty()) {
+            surveyFile = surveyPath;
             this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
         } else {
             List<SceneModel> defaultScenes = new ArrayList<>();
@@ -45,9 +59,26 @@ public class Kiosk extends PApplet {
         }
     }
 
+    /**
+     * Draws scenes.
+     */
+    public void updateSurveyPath(String surveyPath) {
+        settings = Settings.readSettings();
+
+        if (!surveyPath.isEmpty()) {
+            surveyFile = surveyPath;
+            this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
+        } else {
+            List<SceneModel> defaultScenes = new ArrayList<>();
+            defaultScenes.add(new DefaultSceneModel());
+
+            this.sceneGraph = new SceneGraph(new LoadedSurveyModel(defaultScenes));
+        }
+    }
+
     @Override
     public void settings() {
-        size(settings.getScreenW(), settings.getScreenH());
+        size(settings.screenW, settings.screenH);
     }
 
     @Override
@@ -83,7 +114,7 @@ public class Kiosk extends PApplet {
         // Check for timeout (since the current scene has been loaded)
         int currentSceneMillis = millis() - this.newSceneMillis;
 
-        if (currentSceneMillis > settings.getTimeoutMillis()) {
+        if (currentSceneMillis > settings.timeoutMillis) {
             // Reset the kiosk
             this.sceneGraph.reset();
         }
@@ -103,11 +134,47 @@ public class Kiosk extends PApplet {
      * Hook a Control's event listeners to the sketch.
      * @param control with event listeners.
      */
-    public void hookControl(Control<MouseEvent> control) {
-        var newListeners = control.getEventListeners();
+    public void hookControl(Control control) {
+        Map<InputEvent, EventListener> newListeners = control.getEventListeners();
 
         for (InputEvent key : newListeners.keySet()) {
             this.mouseListeners.get(key).push(newListeners.get(key));
+        }
+    }
+
+    /**
+     * Event handler for when any key is pressed. Only certain keys have responses...
+     * F2 - Open JFileChooser to select (only) an XML file
+     * F5 - Refresh the current view to reflect the chosen file's paths
+     * @param event args passed to the listener
+     */
+    @Override
+    public void keyPressed(KeyEvent event) {
+        if (event.getKeyCode() == 113) { //F2 Key Press
+            System.out.println("Opening the file explorer...");
+            final JFileChooser fc = new JFileChooser();
+            FileNameExtensionFilter filter =
+                    new FileNameExtensionFilter("XML file (*.xml)", "xml", "XML");
+            fc.setFileFilter(filter);
+            fc.setAcceptAllFileFilterUsed(false);
+            int returnVal = fc.showOpenDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                surveyFile = fc.getSelectedFile().getPath();
+                System.out.println(
+                        "Getting " + surveyFile + " in the background for the next refresh\n");
+            } else {
+                System.out.println("There was an error getting the file.\n");
+            }
+        } else if (event.getKeyCode() == 116) { //F5 Key Press
+            System.out.println("Refreshing the view...\n");
+            try {
+                updateSurveyPath(surveyFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        for (EventListener listener : this.mouseListeners.get(InputEvent.KeyPressed)) {
+            listener.invoke(event);
         }
     }
 
