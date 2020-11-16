@@ -50,7 +50,10 @@ public class GraphicsUtil {
         var textWidth = sketch.textWidth(centerText);
         sketch.stroke(256, 256, 256);
         sketch.fill(256, 256, 256);
-        sketch.text(centerText, centerX - (textWidth / 2), centerY);
+        sketch.text(centerText, centerX + .5f * bigCircleDiameter - (textWidth / 2), centerY);
+
+        sketch.fill(256);
+        sketch.rect(x, y, size, size);
 
         var totalWeight = (float) Arrays.stream(weights).sum();
 
@@ -71,8 +74,8 @@ public class GraphicsUtil {
             }
             smRad -= padding;
 
-            var smX = (-smRad + size * .5f) * Math.cos(Math.toRadians(deg)) + centerX;
-            var smY = (-smRad + size * .5f) * Math.sin(Math.toRadians(deg)) + centerY;
+            var smX = centerX + (.5f * size - smRad) * Math.cos(Math.toRadians(deg)) - smRad;
+            var smY = centerY + (.5f * size - smRad) * Math.sin(Math.toRadians(deg)) - smRad;
 
             sketch.stroke(0, 0, 0);
             sketch.line(

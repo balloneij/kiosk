@@ -71,7 +71,7 @@ public class SpokeGraphPromptScene implements Scene {
     private void drawPromptGraph(Kiosk sketch) {
         GraphicsUtil.spokeGraph(
             sketch,
-            sketch.width * .43f,
+            sketch.width * .4f,
             sketch.width * .05f + 2 * sketch.width / 5.f,
             sketch.height * .25f,
             1.f,
