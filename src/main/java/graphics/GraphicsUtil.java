@@ -40,6 +40,7 @@ public class GraphicsUtil {
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
             String centerText, String[] options, int[] weights, int[] colors) {
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         var bigCircleDiameter = size / 4.f;
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
@@ -50,10 +51,7 @@ public class GraphicsUtil {
         var textWidth = sketch.textWidth(centerText);
         sketch.stroke(256, 256, 256);
         sketch.fill(256, 256, 256);
-        sketch.text(centerText, centerX + .5f * bigCircleDiameter - (textWidth / 2), centerY);
-
-        sketch.fill(256);
-        sketch.rect(x, y, size, size);
+        sketch.text(centerText, centerX, centerY);
 
         var totalWeight = (float) Arrays.stream(weights).sum();
 
@@ -96,7 +94,7 @@ public class GraphicsUtil {
 
             textWidth = sketch.textWidth(text);
             sketch.textSize(2.f * (float) smRad / (TextRatioEstimate * largestTextLine(text)));
-            sketch.text(text, (float) smX - (textWidth / 2), (float) smY);
+            sketch.text(text, (float) (smX + smRad), (float) (smY + smRad));
             deg += degOffSet;
         }
         sketch.textSize(18);
