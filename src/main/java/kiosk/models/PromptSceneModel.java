@@ -5,34 +5,21 @@ import kiosk.scenes.Scene;
 
 public final class PromptSceneModel implements SceneModel {
 
-    public String question;
-    public ButtonModel[] answers;
-    public boolean invertedColors;
     public String id;
+    public String title;
+    public String prompt;
+    public String actionPhrase;
+    public ButtonModel[] answers;
 
     /**
      * Creates an empty PromptSceneModel.
      */
     public PromptSceneModel() {
-        this.question = "null";
-        this.answers = new ButtonModel[]{};
-        this.invertedColors = false;
         this.id = IdGenerator.getInstance().getNextId();
-    }
-
-    /**
-     * Constructs a prompt scene model.
-     * @param question to ask
-     * @param answers buttons with the answers and targets
-     * @param invertedColors set to true for white primary, black secondary
-     * @param id The unique id of the prompt scene model.
-     */
-    public PromptSceneModel(String question, ButtonModel[] answers,
-            boolean invertedColors, String id) {
-        this.question = question;
-        this.answers = answers;
-        this.invertedColors = invertedColors;
-        this.id = id;
+        this.title = "";
+        this.prompt = "\n\n";
+        this.actionPhrase = "";
+        this.answers = new ButtonModel[]{};
     }
 
     @Override
@@ -50,8 +37,16 @@ public final class PromptSceneModel implements SceneModel {
         ButtonModel[] buttonsCopy = new ButtonModel[this.answers.length];
         for (int i = 0; i < buttonsCopy.length; i++) {
             ButtonModel button = this.answers[i];
-            buttonsCopy[i] = new ButtonModel(button.text, button.target);
+            buttonsCopy[i] = button.deepCopy();
         }
-        return new PromptSceneModel(question, buttonsCopy, invertedColors, id);
+
+        PromptSceneModel copy = new PromptSceneModel();
+        copy.id = this.id;
+        copy.title = this.title;
+        copy.prompt = this.prompt;
+        copy.actionPhrase = this.actionPhrase;
+        copy.answers = buttonsCopy;
+
+        return copy;
     }
 }

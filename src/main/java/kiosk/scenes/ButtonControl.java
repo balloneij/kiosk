@@ -4,17 +4,25 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 import kiosk.EventListener;
+import kiosk.Graphics;
 import kiosk.InputEvent;
+import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
-import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
 public class ButtonControl implements Control<MouseEvent> {
 
+    private static final int FONT_SIZE = 20;
+    // Radius of the rounded edge on rectangle buttons
+    private static final int RADIUS = 20;
+    // Negative will make the color darker on click
+    private static final int COLOR_DELTA_ON_CLICK = -25;
+
     private final ButtonModel model;
     private final Rectangle rect;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
+    private Image image;
     private boolean isPressed;
     private boolean wasClicked;
 
@@ -29,6 +37,7 @@ public class ButtonControl implements Control<MouseEvent> {
     public ButtonControl(ButtonModel model, int x, int y, int w, int h) {
         this.model = model;
         this.rect = new Rectangle(x, y, w, h);
+        this.image = null;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -36,21 +45,82 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     /**
+     * Initialize the button for loading images.
+     * @param sketch to load images to
+     */
+    public void init(Kiosk sketch) {
+        if (this.model.image != null) {
+            this.image = Image.createImage(sketch, model.image);
+        }
+    }
+
+    /**
+     * Draw's the appropriate button to the sketch using
+     * coordinates and information provided upon initialization.
+     * @param sketch to draw to
+     */
+    public void draw(Kiosk sketch) {
+        if (this.model.isCircle) {
+            this.drawCircle(sketch);
+        } else {
+            this.drawRectangle(sketch);
+        }
+        if (this.model.image != null) {
+            sketch.imageMode(PConstants.CENTER);
+            this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+        }
+    }
+
+    /**
      * Draw the button as a rectangle.
      * @param sketch to draw to
      */
-    public void drawRectangle(PApplet sketch) {
-        // TODO: Set the font
+    private void drawRectangle(Kiosk sketch) {
+        // Draw modifiers
         sketch.rectMode(PConstants.CORNER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        // Draw button
-        sketch.fill(0);
-        sketch.stroke(0);
-        sketch.rect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+        // Set the color and draw the shape
+        if (this.isPressed) {
+            int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
+            int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
+            int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
+
+            sketch.fill(r, g, b);
+        } else {
+            sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+        }
+        Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
+                this.rect.width, this.rect.height, RADIUS);
 
         // Draw text
         sketch.fill(255);
+        Graphics.useSansSerif(sketch, FONT_SIZE, true);
+        sketch.text(this.model.text,
+                (float) this.rect.getCenterX(),
+                (float) this.rect.getCenterY());
+    }
+
+    private void drawCircle(Kiosk sketch) {
+        // Draw modifiers
+        sketch.ellipseMode(PConstants.CORNER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+
+        // Set the color and draw the shape
+        if (this.isPressed) {
+            int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
+            int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
+            int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
+
+            sketch.fill(r, g, b);
+        } else {
+            sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+        }
+        sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+
+        // Draw text
+        sketch.fill(255);
+        Graphics.useSansSerif(sketch, FONT_SIZE, true);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());
@@ -94,5 +164,9 @@ public class ButtonControl implements Control<MouseEvent> {
             this.wasClicked = true;
         }
         this.isPressed = false;
+    }
+
+    private static int clampColor(int c) {
+        return Math.max(Math.min(c, 255), 0);
     }
 }

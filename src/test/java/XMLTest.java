@@ -14,8 +14,12 @@ public class XMLTest {
             new ButtonModel("Go to Prompt0", "Prompt0"),
             new ButtonModel("Go to Prompt1", "Prompt1")
         };
-        var prompt0 = new PromptSceneModel("Prompt 0", buttons, false, "Prompt0");
-        var prompt1 = new PromptSceneModel("Prompt 1", buttons, false, "Prompt1");
+        var prompt0 = new PromptSceneModel();
+        prompt0.id = "prompt0";
+        prompt0.answers = buttons;
+        var prompt1 = new PromptSceneModel();
+        prompt1.id = "prompt1";
+        prompt0.answers = buttons;
 
         var scenes = new SceneModel[]{ prompt0, prompt1 };
         var survey = new LoadedSurveyModel();
