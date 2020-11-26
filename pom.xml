@@ -48,8 +48,8 @@
     </build>
 
     <dependencies>
-        <!-- Local dependency version of Processing -->
-        <!-- TODO add note explaining why we use it -->
+        <!-- Local dependency version of Processing. Local version Used because it is modified to
+        expose some methods not normally available (allows the editor to work). -->
         <!-- TODO fix IDs and version -->
         <dependency>
             <groupId>org.processing</groupId>

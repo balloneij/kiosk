@@ -7,6 +7,9 @@ import processing.javafx.PSurfaceFX;
 
 public class Editor extends Kiosk {
 
+    /**
+     * Instantiates the editor and starts the sketch.
+     */
     public Editor() {
         // TODO hardcoding for now, needs to be dynamic later
         super("survey.xml");

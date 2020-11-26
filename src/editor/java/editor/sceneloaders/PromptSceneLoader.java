@@ -36,7 +36,6 @@ public class PromptSceneLoader {
         var textArea = new TextField(model.prompt);
 
         textArea.textProperty().addListener((observable, oldvalue, newValue) -> {
-            // TODO is there a way to do this without the type cast?
             PromptSceneModel newModel = (PromptSceneModel) model.deepCopy();
             newModel.prompt = newValue;
             graph.registerSceneModel(newModel);
@@ -59,7 +58,6 @@ public class PromptSceneLoader {
 
             var index = i;
             textField.textProperty().addListener((observable, oldVal, newVal) -> {
-                // TODO is there a way to do this without the type cast?
                 var newModel = (PromptSceneModel) model.deepCopy();
                 newModel.answers[index] = new ButtonModel(newVal, answer.target);
                 graph.registerSceneModel(newModel);
