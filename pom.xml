@@ -48,12 +48,18 @@
     </build>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.processing/core -->
+        <!-- Local dependency version of Processing -->
+        <!-- TODO add note explaining why we use it -->
+        <!-- TODO fix IDs and version -->
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
             <version>3.3.7</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/core.jar</systemPath>
         </dependency>
+
+        <!-- Testing dependencies -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -66,6 +72,20 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.4.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- JavaFX dependencies -->
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>15.0.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>15.0.1</version>
         </dependency>
     </dependencies>
 </project>

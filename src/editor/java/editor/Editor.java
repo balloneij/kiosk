@@ -8,7 +8,8 @@ import processing.javafx.PSurfaceFX;
 public class Editor extends Kiosk {
 
     public Editor() {
-        super();
+        // TODO hardcoding for now, needs to be dynamic later
+        super("survey.xml");
         runSketch();
     }
 

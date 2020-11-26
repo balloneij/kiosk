@@ -23,25 +23,22 @@ public class PromptSceneLoader {
         editorPane.getChildren().clear();
 
         var questionBox = getQuestionBox(model, graph);
-        var invertColorBox = getInvertColorBox(model, graph);
         var answersBox = getButtonBox(model, graph);
         var vbox = new VBox();
 
-        vbox.getChildren().addAll(questionBox, invertColorBox, answersBox);
+        vbox.getChildren().addAll(questionBox, answersBox);
         editorPane.getChildren().add(vbox);
     }
 
     private static HBox getQuestionBox(PromptSceneModel model, SceneGraph graph) {
         var hbox = new HBox();
         var questionLabel = new Label("Primary Question: ");
-        var textArea = new TextField(model.question);
+        var textArea = new TextField(model.prompt);
 
         textArea.textProperty().addListener((observable, oldvalue, newValue) -> {
-            var newModel = new PromptSceneModel(
-                    newValue,
-                    model.answers,
-                    model.invertedColors, model.getId()
-            );
+            // TODO is there a way to do this without the type cast?
+            PromptSceneModel newModel = (PromptSceneModel) model.deepCopy();
+            newModel.prompt = newValue;
             graph.registerSceneModel(newModel);
         });
 
@@ -50,26 +47,6 @@ public class PromptSceneLoader {
         hbox.getChildren().add(mainContent);
         hbox.setPadding(new Insets(10, 0, 0, 10));
         return hbox;
-    }
-
-    private static Node getInvertColorBox(PromptSceneModel model, SceneGraph graph) {
-        var invertCheckBox = new CheckBox("Invert Colors: ");
-        invertCheckBox.setSelected(model.invertedColors);
-
-        invertCheckBox.selectedProperty().addListener((observable, oldVal, newVal) -> {
-            var newModel = new PromptSceneModel(
-                    model.question,
-                    model.answers,
-                    newVal,
-                    model.getId()
-            );
-            graph.registerSceneModel(newModel);
-        });
-
-        var box = new HBox();
-        box.getChildren().add(invertCheckBox);
-        box.setPadding(new Insets(10,  0, 0, 10));
-        return box;
     }
 
     private static Node getButtonBox(PromptSceneModel model, SceneGraph graph) {
@@ -82,13 +59,9 @@ public class PromptSceneLoader {
 
             var index = i;
             textField.textProperty().addListener((observable, oldVal, newVal) -> {
-                model.answers[index] = new ButtonModel(newVal, answer.target);
-                var newModel = new PromptSceneModel(
-                        model.question,
-                        model.answers,
-                        model.invertedColors,
-                        model.getId()
-                );
+                // TODO is there a way to do this without the type cast?
+                var newModel = (PromptSceneModel) model.deepCopy();
+                newModel.answers[index] = new ButtonModel(newVal, answer.target);
                 graph.registerSceneModel(newModel);
             });
         }
