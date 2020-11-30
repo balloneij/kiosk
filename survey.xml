@@ -637,13 +637,13 @@ thing.</string>
          <object idref="SpokeGraphPromptSceneModel0"/>
          <array class="int" length="3">
           <void index="0">
-           <int>1</int>
+           <int>-4390912</int>
           </void>
           <void index="1">
-           <int>2</int>
+           <int>-9699180</int>
           </void>
           <void index="2">
-           <int>3</int>
+           <int>-16729597</int>
           </void>
          </array>
         </void>

@@ -68,8 +68,8 @@ public class GraphicsUtil {
 
     private static void drawInnerCircle(Kiosk sketch, float centerX, float centerY,
             float bigCircleDiameter, String centerText) {
-        sketch.fill(0, 0, 0);
-        sketch.stroke(0, 0, 0);
+        sketch.fill(212, 131, 0);
+        sketch.stroke(212, 131, 0);
         sketch.ellipse(centerX - .5f * bigCircleDiameter, centerY - .5f * bigCircleDiameter,
                 bigCircleDiameter, bigCircleDiameter);
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
