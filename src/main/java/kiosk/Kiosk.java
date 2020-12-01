@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
+import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -28,6 +29,7 @@ public class Kiosk extends PApplet {
     private int lastMillis = 0;
     private static Settings settings;
     private int newSceneMillis;
+    private boolean timeoutActive = false;
 
     /**
      * Draws scenes.
@@ -102,6 +104,12 @@ public class Kiosk extends PApplet {
         if (currentScene != this.lastScene) {
             this.clearEventListeners();
             currentScene.init(this);
+            //TODO this isn't working; timeoutActive never gets reset...
+            //TODO also, this.lastScene is apparently not Null when initialized
+            if(this.lastScene != null && this.lastScene.getClass().equals(TimeoutSceneModel.class)) {
+                // This means the TimeoutSceneModel was just switched off of
+                timeoutActive = false;
+            }
             this.lastScene = currentScene;
             // Record when a new scene is loaded
             this.newSceneMillis = millis();
@@ -111,12 +119,22 @@ public class Kiosk extends PApplet {
         currentScene.update(dt, this.sceneGraph);
         currentScene.draw(this);
 
-        // Check for timeout (since the current scene has been loaded)
+
         int currentSceneMillis = millis() - this.newSceneMillis;
 
+        // Check for timeout (since the current scene has been loaded)
         if (currentSceneMillis > settings.timeoutMillis) {
-            // Reset the kiosk
-            this.sceneGraph.reset();
+            if(timeoutActive) {
+                this.sceneGraph.reset();
+                // timeoutActive flag gets reset when the next scene is initialized
+            } else {
+                // Create pop-up
+                // note that it gets drawn in the next draw() call
+                this.sceneGraph.pushScene(new TimeoutSceneModel());
+
+                // Set the timeoutActive flag so this doesn't get called twice
+                timeoutActive = true;
+            }
         }
     }
 
