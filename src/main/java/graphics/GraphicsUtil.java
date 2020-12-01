@@ -2,6 +2,9 @@ package graphics;
 
 import java.nio.channels.SelectionKey;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 import kiosk.Kiosk;
 import processing.core.PConstants;
 
@@ -47,7 +50,18 @@ public class GraphicsUtil {
         drawInnerCircle(sketch, centerX, centerY, size / 4.f, centerText);
 
         float deg = 0.f;
-        var totalWeight = (float) Arrays.stream(weights).sum();
+        float totalWeight = weights[0];
+        float maxValue = weights[0];
+
+        for (int i = 1; i < weights.length; i++) {
+            var nextWeight = weights[i];
+            totalWeight += nextWeight;
+            if (nextWeight > maxValue) {
+                maxValue = nextWeight;
+            }
+        }
+
+        var maxRatio = maxValue / totalWeight;
 
         for (var i = 0; i < options.length; i++) {
             var degOffSet = 180 * weights[i] / totalWeight;
@@ -56,7 +70,7 @@ public class GraphicsUtil {
                 / (1 + (float) Math.sin(Math.toRadians(degOffSet)));
             var colorSelection = colors != null
                     ? colors[i]
-                    : getColor(weights[i], totalWeight, sketch);
+                    : getColor(weights[i], totalWeight, maxRatio, sketch);
 
             smRad = Math.min(smRad, maxRad) - padding; // Make sure circle is small enough to fit
             deg += degOffSet;
@@ -115,10 +129,10 @@ public class GraphicsUtil {
         return largestLineSize;
     }
 
-    private static int getColor(float weight, float totalWeight, Kiosk sketch) {
+    private static int getColor(float weight, float totalWeight, float maxRatio, Kiosk sketch) {
         var percentage = weight / totalWeight;
         var from = sketch.color(212, 177, 0);
         var to = sketch.color(0, 79, 0);
-        return sketch.lerpColor(from, to, percentage);
+        return sketch.lerpColor(from, to, percentage / maxRatio);
     }
 }
