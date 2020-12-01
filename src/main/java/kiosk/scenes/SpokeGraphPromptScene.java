@@ -25,6 +25,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
+        Graphics.useSerif(sketch);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
         drawCareerGraph(sketch);
@@ -40,7 +41,7 @@ public class SpokeGraphPromptScene implements Scene {
         var boxWidth = sketch.width - (sketch.width / 5.f);
         var boxHeight = sketch.height - .8f * sketch.height;
 
-        sketch.rect(boxX, boxY, boxWidth, boxHeight);
+        Graphics.drawRoundedRectangle(sketch, boxX, boxY, boxWidth, boxHeight, 25);
         sketch.fill(0, 0, 0);
         sketch.stroke(0, 0, 0);
 
@@ -48,11 +49,11 @@ public class SpokeGraphPromptScene implements Scene {
         var boxCenterY = (boxY + boxHeight * .5f);
         var headerWidth = sketch.textWidth(model.headerTitle);
         sketch.textAscent();
-        sketch.text(model.headerTitle, boxCenterX - (.5f * headerWidth), boxCenterY);
+        sketch.textSize(52);
+        sketch.text(model.headerTitle, boxCenterX, boxCenterY - boxHeight / 3);
 
-        var bodyWidth = sketch.textWidth(model.headerBody);
-        sketch.text(model.headerBody, boxCenterX - (.5f * bodyWidth),
-                boxCenterY + sketch.textAscent());
+        sketch.textSize(34);
+        sketch.text(model.headerBody, boxCenterX,boxCenterY + boxHeight / 4f);
     }
 
     private void drawCareerGraph(Kiosk sketch) {

@@ -48,7 +48,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public SceneModel deepCopy() {
         var copy = new SpokeGraphPromptSceneModel();
         copy.headerTitle = this.headerTitle;
-        copy.headerTitle = this.headerTitle;
+        copy.headerBody = this.headerBody;
         copy.careerCenterText = this.careerCenterText;
         copy.careerOptions = this.careerOptions;
         copy.careerWeights = this.careerWeights;
