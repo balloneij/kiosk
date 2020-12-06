@@ -26,13 +26,24 @@ public class Kiosk extends PApplet {
     private String surveyFile = "";
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
-    private static Settings settings;
+    protected static Settings settings;
     private int newSceneMillis;
 
     /**
-     * Draws scenes.
+     * Create a Kiosk and loads the survey specified in the path provided.
+     * @param surveyPath to load from
      */
     public Kiosk(String surveyPath) {
+        this(surveyPath, Settings.readSettings());
+    }
+
+    /**
+     * For use in the editor when the width and height of the kiosk
+     * needs to be different than what's specified in the settings file.
+     * @param surveyPath the path of the survey XML
+     * @param settings the settings to use
+     */
+    public Kiosk(String surveyPath, Settings settings) {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException
@@ -40,7 +51,7 @@ public class Kiosk extends PApplet {
             System.err.println("Could not set the UI for the file chooser");
         }
 
-        settings = Settings.readSettings();
+        Kiosk.settings = settings;
 
         if (!surveyPath.isEmpty()) {
             surveyFile = surveyPath;
