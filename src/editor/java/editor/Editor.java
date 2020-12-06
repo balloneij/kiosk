@@ -22,7 +22,7 @@ public class Editor extends Kiosk {
     /**
      * Width of the side toolbar.
      */
-    public static final int SIDEBAR_WIDTH = 320;
+    public static final int TOOLBAR_WIDTH = 320;
 
     /**
      * Instantiates the editor and starts the sketch.

@@ -17,7 +17,7 @@ public class App extends Application {
         Parent root = loader.load();
         Controller.stage = primaryStage;
         Scene scene = new Scene(root,
-                Editor.PREVIEW_WIDTH + Editor.SIDEBAR_WIDTH,
+                Editor.PREVIEW_WIDTH + Editor.TOOLBAR_WIDTH,
                 (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO));
 
         primaryStage.setTitle("Kiosk Editor 3000");

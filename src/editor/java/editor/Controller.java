@@ -29,7 +29,7 @@ public class Controller implements Initializable {
     @FXML
     AnchorPane rootPane;
     @FXML
-    AnchorPane editorPane;
+    AnchorPane toolbarPane;
     @FXML
     StackPane surveyPreviewPane;
     @FXML
@@ -53,15 +53,15 @@ public class Controller implements Initializable {
         // Calculate the divider location for the split pane based off of the width
         // of the preview window and the width of the editor toolbar
         splitPane.setDividerPosition(0,
-                (double) Editor.SIDEBAR_WIDTH / (Editor.SIDEBAR_WIDTH + Editor.PREVIEW_WIDTH));
+                (double) Editor.TOOLBAR_WIDTH / (Editor.TOOLBAR_WIDTH + Editor.PREVIEW_WIDTH));
 
         // The split pane will respect max widths, so by assigning these, the divider
         // cannot be moved
         // TODO: There is a better way of doing this. Using CSS-like JavaFX styling
         // you can hide the cursor so the divider cannot be moved. I could not get that to work.
         // - Isaac
-        editorPane.maxWidthProperty().setValue(Editor.SIDEBAR_WIDTH);
-        editorPane.minWidthProperty().setValue(Editor.SIDEBAR_WIDTH);
+        toolbarPane.maxWidthProperty().setValue(Editor.TOOLBAR_WIDTH);
+        toolbarPane.minWidthProperty().setValue(Editor.TOOLBAR_WIDTH);
         surveyPreviewPane.maxWidthProperty().setValue(Editor.PREVIEW_WIDTH);
         surveyPreviewPane.minWidthProperty().setValue(Editor.PREVIEW_WIDTH);
     }
@@ -69,7 +69,7 @@ public class Controller implements Initializable {
     private void rebuildEditor(SceneModel model) {
         previousId = model.getId();
         if (model instanceof PromptSceneModel) {
-            PromptSceneLoader.loadScene((PromptSceneModel) model, editorPane, sceneGraph);
+            PromptSceneLoader.loadScene((PromptSceneModel) model, toolbarPane, sceneGraph);
         }
     }
 
