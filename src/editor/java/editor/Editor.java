@@ -2,23 +2,38 @@ package editor;
 
 import javafx.application.Application;
 import kiosk.Kiosk;
+import kiosk.Settings;
 import processing.core.PSurface;
 import processing.javafx.PSurfaceFX;
 
 public class Editor extends Kiosk {
 
     /**
+     * Aspect ratio of the preview window.
+     */
+    public static final double PREVIEW_ASPECT_RATIO = 16.0 / 9;
+
+    /**
+     * Width of the preview window. Height is calculated based off of
+     * the preview window
+     */
+    public static final int PREVIEW_WIDTH = 1280;
+
+    /**
+     * Width of the side toolbar.
+     */
+    public static final int TOOLBAR_WIDTH = 320;
+
+    /**
      * Instantiates the editor and starts the sketch.
      */
-    public Editor() {
-        // TODO hardcoding for now, needs to be dynamic later
-        super("survey.xml");
-        runSketch();
+    public Editor(String surveyPath, Settings settings) {
+        super(surveyPath, settings);
     }
 
     @Override
     public void settings() {
-        size(640, 360, FX2D);
+        size(settings.screenW, settings.screenH, FX2D);
     }
 
     @Override
@@ -46,7 +61,17 @@ public class Editor extends Kiosk {
         return surface;
     }
 
+    /**
+     * Starts the editor.
+     * @param args unused
+     */
     public static void main(String[] args) {
-        new Editor();
+        Settings settings = new Settings();
+
+        settings.screenW = Editor.PREVIEW_WIDTH;
+        settings.screenH = (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO);
+
+        Editor editor = new Editor("survey.xml", settings);
+        editor.runSketch();
     }
 }
