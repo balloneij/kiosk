@@ -124,4 +124,20 @@ public class SceneGraph {
     public Scene getCurrentScene() {
         return currentScene;
     }
+
+    /**
+     * Get the most recently pushed scene's model.
+     * @return The current sceneModel.
+     */
+    public SceneModel getCurrentSceneModel() {
+        return this.history.peek();
+    }
+
+    /**
+     * Get the root scene's model
+     * @return The root sceneModel
+     */
+    public SceneModel getRootSceneModel() {
+        return this.root;
+    }
 }
