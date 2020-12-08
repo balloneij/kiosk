@@ -13,7 +13,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
+import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
+import kiosk.scenes.DefaultScene;
+import kiosk.scenes.EmptyScene;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
@@ -28,6 +31,7 @@ public class Kiosk extends PApplet {
     private int lastMillis = 0;
     protected static Settings settings;
     private int newSceneMillis;
+    private boolean timeoutActive = false;
 
     /**
      * Create a Kiosk and loads the survey specified in the path provided.
@@ -106,28 +110,48 @@ public class Kiosk extends PApplet {
         float dt = (float) (currMillis - this.lastMillis) / 1000;
         this.lastMillis = currMillis;
 
-        // Get the current scene
+        // Get the current scene and sceneModel
         Scene currentScene = this.sceneGraph.getCurrentScene();
+        SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
 
         // Initialize the current scene if it hasn't been
         if (currentScene != this.lastScene) {
             this.clearEventListeners();
             currentScene.init(this);
-            this.lastScene = currentScene;
+
+            if(lastScene!= null && lastScene.getClass().getName().contains("TimeoutScene")){
+                timeoutActive = false;
+            }
+
             // Record when a new scene is loaded
-            this.newSceneMillis = millis();
+            this.newSceneMillis = currMillis;
+
+            this.lastScene = currentScene;
         }
 
         // Update and draw the scene
         currentScene.update(dt, this.sceneGraph);
         currentScene.draw(this);
 
-        // Check for timeout (since the current scene has been loaded)
-        int currentSceneMillis = millis() - this.newSceneMillis;
+        int currentSceneMillis = currMillis - this.newSceneMillis;
 
-        if (currentSceneMillis > settings.timeoutMillis) {
-            // Reset the kiosk
-            this.sceneGraph.reset();
+        // Check for timeout (since the current scene has been loaded)
+        // Make sure it's not the intro scene though first
+        if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())
+                && currentSceneMillis > settings.timeoutMillis) {
+            if(timeoutActive) {
+                // Clear the timeoutActive flag
+                // Needed here because a sceneGraph reset doesn't clear the flag automatically
+                timeoutActive = false;
+                this.sceneGraph.reset();
+            } else {
+                // Create pop-up
+                // note that it gets drawn in the next draw() call
+                this.sceneGraph.pushScene(new TimeoutSceneModel());
+
+                // Set the timeoutActive flag so this doesn't get called twice
+                timeoutActive = true;
+            }
         }
     }
 
