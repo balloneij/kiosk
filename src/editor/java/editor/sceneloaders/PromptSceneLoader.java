@@ -36,9 +36,8 @@ public class PromptSceneLoader {
         var textArea = new TextField(model.prompt);
 
         textArea.textProperty().addListener((observable, oldvalue, newValue) -> {
-            PromptSceneModel newModel = (PromptSceneModel) model.deepCopy();
-            newModel.prompt = newValue;
-            graph.registerSceneModel(newModel);
+            model.prompt = newValue;
+            graph.registerSceneModel(model);
         });
 
         var mainContent = new VBox();
@@ -58,9 +57,8 @@ public class PromptSceneLoader {
 
             var index = i;
             textField.textProperty().addListener((observable, oldVal, newVal) -> {
-                var newModel = (PromptSceneModel) model.deepCopy();
-                newModel.answers[index] = new ButtonModel(newVal, answer.target);
-                graph.registerSceneModel(newModel);
+                model.answers[index] = new ButtonModel(newVal, answer.target);
+                graph.registerSceneModel(model);
             });
         }
         return hbox;

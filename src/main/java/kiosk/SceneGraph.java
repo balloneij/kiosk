@@ -113,7 +113,7 @@ public class SceneGraph {
 
     private void onSceneChange(SceneModel nextScene) {
         for (EventListener<SceneModel> sceneChangeCallback : sceneChangeCallbacks) {
-            sceneChangeCallback.invoke(nextScene.deepCopy());
+            sceneChangeCallback.invoke(nextScene);
         }
     }
 
