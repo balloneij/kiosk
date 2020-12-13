@@ -52,8 +52,7 @@ public class GraphicsUtil {
         float deg = 0.f;
         var totalWeight = (float) Arrays.stream(weights).sum();
         var maxValue = (float) Arrays.stream(weights).max().getAsInt();
-
-        var maxRatio = maxValue / totalWeight;
+        var minValue = (float) Arrays.stream(weights).min().getAsInt();
 
         for (var i = 0; i < options.length; i++) {
             var degOffSet = 180 * weights[i] / totalWeight;
@@ -62,7 +61,7 @@ public class GraphicsUtil {
                 / (1 + (float) Math.sin(Math.toRadians(degOffSet)));
             var colorSelection = colors != null
                     ? colors[i]
-                    : getColor(weights[i], totalWeight, maxRatio, sketch);
+                    : getColor(weights[i], maxValue, minValue, sketch);
 
             smRad = Math.min(smRad, maxRad) - padding; // Make sure circle is small enough to fit
             deg += degOffSet;
@@ -75,8 +74,8 @@ public class GraphicsUtil {
     //TODO: Scale up circle based on scale
     public static void drawInnerCircle(Kiosk sketch, float centerX, float centerY,
             float bigCircleDiameter, String centerText) {
-        sketch.fill(212, 131, 0);
-        sketch.stroke(212, 131, 0);
+        sketch.fill(246, 139, 31);
+        sketch.stroke(246, 139, 31);
         sketch.ellipse(centerX - .5f * bigCircleDiameter, centerY - .5f * bigCircleDiameter,
                 bigCircleDiameter, bigCircleDiameter);
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
@@ -126,10 +125,10 @@ public class GraphicsUtil {
         return largestLineSize;
     }
 
-    private static int getColor(float weight, float totalWeight, float maxRatio, Kiosk sketch) {
-        var percentage = weight / totalWeight;
-        var from = sketch.color(212, 177, 0);
-        var to = sketch.color(0, 79, 0);
-        return sketch.lerpColor(from, to, percentage / maxRatio);
+    private static int getColor(float weight, float maxValue, float minValue, Kiosk sketch) {
+        var percentage = (weight - minValue) / (maxValue - minValue);
+        var from = sketch.color(252, 177, 22);
+        var to = sketch.color(57, 160, 91);
+        return sketch.lerpColor(from, to, percentage);
     }
 }
