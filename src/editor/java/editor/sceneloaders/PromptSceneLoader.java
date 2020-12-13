@@ -12,7 +12,7 @@ import kiosk.models.PromptSceneModel;
 
 public class PromptSceneLoader {
     // The default padding to space the editing Nodes
-    static final Insets PADDING = new Insets(15, 0, 0, 10);
+    static final Insets PADDING = new Insets(10, 0, 0, 10);
 
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
@@ -22,12 +22,30 @@ public class PromptSceneLoader {
      */
     public static void loadScene(PromptSceneModel model, AnchorPane editorPane, SceneGraph graph) {
         // Get the editing Nodes for the PromptSceneModel properties
-        var promptBox = getPromptBox(model, graph);
-        var answersBox = getAnswersBox(model, graph);
+        VBox vbox = new VBox(
+                getTitleBox(model, graph),
+                getPromptBox(model, graph),
+                getActionBox(model, graph),
+                getAnswersBox(model, graph)
+        );
 
         // Clear the editor pane and re-populate with the new Nodes
         editorPane.getChildren().clear();
-        editorPane.getChildren().add(new VBox(promptBox, answersBox));
+        editorPane.getChildren().add(vbox);
+    }
+
+    private static Node getTitleBox(PromptSceneModel model, SceneGraph graph) {
+        var titleField = new TextField(model.title);
+
+        // Listener to update the title
+        titleField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.title = newValue;
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        var vbox = new VBox(new Label("Title:"), titleField);
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 
     private static Node getPromptBox(PromptSceneModel model, SceneGraph graph) {
@@ -40,6 +58,20 @@ public class PromptSceneLoader {
         });
 
         var vbox = new VBox(new Label("Prompt:"), promptField);
+        vbox.setPadding(PADDING);
+        return vbox;
+    }
+
+    private static Node getActionBox(PromptSceneModel model, SceneGraph graph) {
+        var actionField = new TextField(model.actionPhrase);
+
+        // Listener to update the action phrase
+        actionField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.actionPhrase = newValue;
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        var vbox = new VBox(new Label("Action Phrase:"), actionField);
         vbox.setPadding(PADDING);
         return vbox;
     }
