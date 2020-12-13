@@ -113,8 +113,10 @@ public class ButtonControl implements Control<MouseEvent> {
             int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
 
             sketch.fill(r, g, b);
+            sketch.stroke(r, g, b);
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+            sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
         }
         sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
