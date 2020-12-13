@@ -2,65 +2,64 @@ package editor.sceneloaders;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.PromptSceneModel;
 
 public class PromptSceneLoader {
+    // The default padding to space the editing Nodes
+    static final Insets PADDING = new Insets(15, 0, 0, 10);
+
     /**
-     * Loads the scene from the model. Sets up the editor pane by getting properties from the graph.
+     * Populates the editor pane with fields for editing the provided SceneModel.
      * @param model The current scene model we want to modify.
      * @param editorPane The main editor view.
      * @param graph The scene graph used to manage application state.
      */
     public static void loadScene(PromptSceneModel model, AnchorPane editorPane, SceneGraph graph) {
+        // Get the editing Nodes for the PromptSceneModel properties
+        var promptBox = getPromptBox(model, graph);
+        var answersBox = getAnswersBox(model, graph);
+
+        // Clear the editor pane and re-populate with the new Nodes
         editorPane.getChildren().clear();
-
-        var questionBox = getQuestionBox(model, graph);
-        var answersBox = getButtonBox(model, graph);
-        var vbox = new VBox();
-
-        vbox.getChildren().addAll(questionBox, answersBox);
-        editorPane.getChildren().add(vbox);
+        editorPane.getChildren().add(new VBox(promptBox, answersBox));
     }
 
-    private static HBox getQuestionBox(PromptSceneModel model, SceneGraph graph) {
-        var hbox = new HBox();
-        var questionLabel = new Label("Primary Question: ");
-        var textArea = new TextField(model.prompt);
+    private static Node getPromptBox(PromptSceneModel model, SceneGraph graph) {
+        var promptField = new TextField(model.prompt);
 
-        textArea.textProperty().addListener((observable, oldvalue, newValue) -> {
+        // Listener to update the prompt
+        promptField.textProperty().addListener((observable, oldValue, newValue) -> {
             model.prompt = newValue;
-            graph.registerSceneModel(model);
+            graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var mainContent = new VBox();
-        mainContent.getChildren().addAll(questionLabel, textArea);
-        hbox.getChildren().add(mainContent);
-        hbox.setPadding(new Insets(10, 0, 0, 10));
-        return hbox;
+        var vbox = new VBox(new Label("Prompt:"), promptField);
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 
-    private static Node getButtonBox(PromptSceneModel model, SceneGraph graph) {
-        var hbox = new HBox();
-        hbox.getChildren().add(new Label("Answers:"));
-        for (int i = 0; i < model.answers.length; i++) {
-            var answer = model.answers[i];
-            var textField = new TextField(answer.text);
-            hbox.getChildren().add(textField);
+    private static Node getAnswersBox(PromptSceneModel model, SceneGraph graph) {
+        var vbox = new VBox(new Label("Answers:"));
 
-            var index = i;
-            textField.textProperty().addListener((observable, oldVal, newVal) -> {
-                model.answers[index] = new ButtonModel(newVal, answer.target);
-                graph.registerSceneModel(model);
+        // Create fields for each answer (and add them to the Node)
+        for (ButtonModel answer : model.answers) {
+            var answerField = new TextField(answer.text);
+            vbox.getChildren().add(answerField);
+
+            // Listener to update the answer
+            answerField.textProperty().addListener((observable, oldValue, newValue) -> {
+                answer.text = newValue;
+                graph.registerSceneModel(model); // Re-register the model to update the scene
             });
         }
-        return hbox;
+
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 }
