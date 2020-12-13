@@ -50,16 +50,8 @@ public class GraphicsUtil {
         drawInnerCircle(sketch, centerX, centerY, size / 4.f, centerText);
 
         float deg = 0.f;
-        float totalWeight = weights[0];
-        float maxValue = weights[0];
-
-        for (int i = 1; i < weights.length; i++) {
-            var nextWeight = weights[i];
-            totalWeight += nextWeight;
-            if (nextWeight > maxValue) {
-                maxValue = nextWeight;
-            }
-        }
+        var totalWeight = (float) Arrays.stream(weights).sum();
+        var maxValue = (float) Arrays.stream(weights).max().getAsInt();
 
         var maxRatio = maxValue / totalWeight;
 
@@ -80,7 +72,8 @@ public class GraphicsUtil {
         sketch.textSize(18);
     }
 
-    private static void drawInnerCircle(Kiosk sketch, float centerX, float centerY,
+    //TODO: Scale up circle based on scale
+    public static void drawInnerCircle(Kiosk sketch, float centerX, float centerY,
             float bigCircleDiameter, String centerText) {
         sketch.fill(212, 131, 0);
         sketch.stroke(212, 131, 0);
@@ -92,9 +85,7 @@ public class GraphicsUtil {
         sketch.text(centerText, centerX, centerY);
     }
 
-    private static void drawOuterCircle(Kiosk sketch, float centerX, float centerY, float smRad,
-            float size, float deg, int color, String optionText) {
-        // Create the line from the edge of the inner circle to the center of the outer circle
+    public static void drawSpoke(Kiosk sketch, float size, float centerX, float centerY, float deg) {
         sketch.fill(0, 0, 0);
         sketch.stroke(0, 0, 0);
         sketch.line(
@@ -103,6 +94,12 @@ public class GraphicsUtil {
             (float) Math.cos(Math.toRadians(deg)) * .5f * size + centerX,
             (float) Math.sin(Math.toRadians(deg)) * .5f * size + centerY
         );
+    }
+
+    private static void drawOuterCircle(Kiosk sketch, float centerX, float centerY, float smRad,
+            float size, float deg, int color, String optionText) {
+        // Create the line from the edge of the inner circle to the center of the outer circle
+        drawSpoke(sketch, size, centerX, centerY, deg);
 
         // Draw the outer circle
         sketch.stroke(color);

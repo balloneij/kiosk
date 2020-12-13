@@ -1,5 +1,6 @@
 package kiosk.models;
 
+import kiosk.scenes.ButtonControl;
 import kiosk.scenes.Scene;
 import kiosk.scenes.SpokeGraphPromptScene;
 
@@ -13,6 +14,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String promptText;
     public String[] promptOptions;
     public int[] optionColors;
+    public ButtonControl[] answerButtons;
     public String id;
 
     /**
@@ -31,6 +33,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         this.promptText = "";
         this.promptOptions = new String[]{ };
         this.optionColors = new int[]{ };
+        this.answerButtons = new ButtonControl[]{};
         this.id = "";
     }
 
@@ -55,6 +58,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         copy.promptText = this.promptText;
         copy.promptOptions = this.promptOptions;
         copy.optionColors = this.optionColors;
+        copy.answerButtons = this.answerButtons;
         copy.id = this.id;
         return copy;
     }

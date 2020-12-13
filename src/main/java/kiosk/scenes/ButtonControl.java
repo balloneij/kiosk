@@ -152,6 +152,10 @@ public class ButtonControl implements Control<MouseEvent> {
         return this.model.target;
     }
 
+    public ButtonModel getModel() {
+        return this.model;
+    }
+
     private void onMousePressed(MouseEvent event) {
         if (this.rect.contains(event.getX(), event.getY())) {
             this.isPressed = true;
