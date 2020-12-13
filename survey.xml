@@ -566,7 +566,7 @@ Scientist</string>
          <object idref="SpokeGraphPromptSceneModel0"/>
          <array class="int" length="10">
           <void index="0">
-           <int>1</int>
+           <int>2</int>
           </void>
           <void index="1">
            <int>2</int>
@@ -575,25 +575,25 @@ Scientist</string>
            <int>3</int>
           </void>
           <void index="3">
-           <int>4</int>
+           <int>2</int>
           </void>
           <void index="4">
-           <int>5</int>
+           <int>1</int>
           </void>
           <void index="5">
-           <int>6</int>
+           <int>1</int>
           </void>
           <void index="6">
-           <int>7</int>
+           <int>2</int>
           </void>
           <void index="7">
-           <int>8</int>
+           <int>3</int>
           </void>
           <void index="8">
-           <int>9</int>
+           <int>2</int>
           </void>
           <void index="9">
-           <int>10</int>
+           <int>3</int>
           </void>
          </array>
         </void>
@@ -621,7 +621,7 @@ numbers!</string>
           <void index="1">
            <string>Math is fun
 and
-useful</string>
+useful.</string>
           </void>
           <void index="2">
            <string>Math is not
@@ -637,13 +637,13 @@ thing.</string>
          <object idref="SpokeGraphPromptSceneModel0"/>
          <array class="int" length="3">
           <void index="0">
-           <int>-4390912</int>
+           <int>-9388212</int>
           </void>
           <void index="1">
-           <int>-9699180</int>
+           <int>-6807189</int>
           </void>
           <void index="2">
-           <int>-16729597</int>
+           <int>-3657935</int>
           </void>
          </array>
         </void>

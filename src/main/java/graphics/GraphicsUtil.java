@@ -52,6 +52,7 @@ public class GraphicsUtil {
         float deg = 0.f;
         float totalWeight = weights[0];
         float maxValue = weights[0];
+        float minValue = weights[0];
 
         for (int i = 1; i < weights.length; i++) {
             var nextWeight = weights[i];
@@ -59,9 +60,10 @@ public class GraphicsUtil {
             if (nextWeight > maxValue) {
                 maxValue = nextWeight;
             }
+            if (nextWeight < minValue) {
+                minValue = nextWeight;
+            }
         }
-
-        var maxRatio = maxValue / totalWeight;
 
         for (var i = 0; i < options.length; i++) {
             var degOffSet = 180 * weights[i] / totalWeight;
@@ -70,7 +72,7 @@ public class GraphicsUtil {
                 / (1 + (float) Math.sin(Math.toRadians(degOffSet)));
             var colorSelection = colors != null
                     ? colors[i]
-                    : getColor(weights[i], totalWeight, maxRatio, sketch);
+                    : getColor(weights[i], maxValue, minValue, sketch);
 
             smRad = Math.min(smRad, maxRad) - padding; // Make sure circle is small enough to fit
             deg += degOffSet;
@@ -82,8 +84,8 @@ public class GraphicsUtil {
 
     private static void drawInnerCircle(Kiosk sketch, float centerX, float centerY,
             float bigCircleDiameter, String centerText) {
-        sketch.fill(212, 131, 0);
-        sketch.stroke(212, 131, 0);
+        sketch.fill(246, 139, 31);
+        sketch.stroke(246, 139, 31);
         sketch.ellipse(centerX - .5f * bigCircleDiameter, centerY - .5f * bigCircleDiameter,
                 bigCircleDiameter, bigCircleDiameter);
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
@@ -95,8 +97,8 @@ public class GraphicsUtil {
     private static void drawOuterCircle(Kiosk sketch, float centerX, float centerY, float smRad,
             float size, float deg, int color, String optionText) {
         // Create the line from the edge of the inner circle to the center of the outer circle
-        sketch.fill(0, 0, 0);
-        sketch.stroke(0, 0, 0);
+        sketch.fill(255, 255, 255);
+        sketch.stroke(255, 255, 255);
         sketch.line(
             centerX + size * .125f * (float) Math.cos(Math.toRadians(deg)),
             centerY + size * .125f * (float) Math.sin(Math.toRadians(deg)),
@@ -129,10 +131,10 @@ public class GraphicsUtil {
         return largestLineSize;
     }
 
-    private static int getColor(float weight, float totalWeight, float maxRatio, Kiosk sketch) {
-        var percentage = weight / totalWeight;
-        var from = sketch.color(212, 177, 0);
-        var to = sketch.color(0, 79, 0);
-        return sketch.lerpColor(from, to, percentage / maxRatio);
+    private static int getColor(float weight, float maxValue, float minValue, Kiosk sketch) {
+        var percentage = (weight - minValue) / (maxValue - minValue);
+        var from = sketch.color(252, 177, 22);
+        var to = sketch.color(57, 160, 91);
+        return sketch.lerpColor(from, to, percentage);
     }
 }
