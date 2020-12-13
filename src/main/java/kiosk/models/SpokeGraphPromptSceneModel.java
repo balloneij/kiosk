@@ -14,7 +14,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String promptText;
     public String[] promptOptions;
     public int[] optionColors;
-    public ButtonControl[] answerButtons;
+    public ButtonModel[] answerButtons;
     public String id;
 
     /**
@@ -25,7 +25,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
      * - Weighted spoke graph on the left
      */
     public SpokeGraphPromptSceneModel() {
-        this.headerTitle = "";
+        this.headerTitle = IdGenerator.getInstance().getNextId();
         this.headerBody = "";
         this.careerCenterText = "";
         this.careerOptions = new String[]{ };
@@ -33,7 +33,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         this.promptText = "";
         this.promptOptions = new String[]{ };
         this.optionColors = new int[]{ };
-        this.answerButtons = new ButtonControl[]{};
+        this.answerButtons = new ButtonModel[]{};
         this.id = "";
     }
 

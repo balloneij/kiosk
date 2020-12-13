@@ -7,6 +7,7 @@ import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 
+import java.io.File;
 import java.util.Arrays;
 
 public class SpokeGraphPromptScene implements Scene {
@@ -18,6 +19,7 @@ public class SpokeGraphPromptScene implements Scene {
     private float centerX;
     private float centerY;
     private int[] buttonLocations;
+    private ButtonControl[] answerButtons;
 
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
@@ -30,6 +32,7 @@ public class SpokeGraphPromptScene implements Scene {
         y = sketch.height * .25f;
         centerX = (size / 2) + x;
         centerY = (size / 2) + y;
+        this.answerButtons = new ButtonControl[model.answerButtons.length];
 
         initializeButtons(model, sketch, size, centerX, centerY);
     }
@@ -38,37 +41,30 @@ public class SpokeGraphPromptScene implements Scene {
             float centerX, float centerY) {
         var degrees = 0.f;
         var radius = .25 * size;
-
-        //TODO: Remove this line
-        model.answerButtons = new ButtonControl[model.promptOptions.length];
         buttonLocations = new int[2 * model.promptOptions.length];
 
         // for each answer find the degrees and position
-//TODO: Restore this functionality
-//        for (var i = 0; i < model.answerButtons.length; i++) {
-        for (var i = 0; i < model.promptOptions.length; i++) {
-//            var btnModel = model.answerButtons[i].getModel();
-            var btnModel = new ButtonModel();
+        for (var i = 0; i < model.answerButtons.length; i++) {
+            var btnModel = model.answerButtons[i];
             var colorSelection = model.optionColors[i % model.optionColors.length];
             btnModel.isCircle = true;
             btnModel.rgb = new int[]{colorSelection >> 16 & 0xFF, colorSelection >> 8 & 0xFF, colorSelection & 0xFF};
-            btnModel.target = "introscene1";
 
             var upperLeftX = centerX + (.62 * size - radius) * Math.cos(Math.toRadians(degrees));
             var upperLeftY = centerY + (.62 * size - radius) * Math.sin(Math.toRadians(degrees));
             buttonLocations[2 * i] = (int) upperLeftX;
             buttonLocations[2 * i + 1] = (int) upperLeftY;
 
-            model.answerButtons[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
+            this.answerButtons[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
                 (int) (upperLeftY - .125 * size), (int) radius, (int) radius);
             degrees += 120;
-            sketch.hookControl(model.answerButtons[i]);
+            sketch.hookControl(this.answerButtons[i]);
         }
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.model.answerButtons) {
+        for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
@@ -126,7 +122,7 @@ public class SpokeGraphPromptScene implements Scene {
         for (int i = 0; i < model.answerButtons.length; i++) {
             sketch.stroke(0, 0, 0);
             sketch.line(centerX, centerY, buttonLocations[2 * i], buttonLocations[2 * i + 1]);
-            model.answerButtons[i].draw(sketch);
+            this.answerButtons[i].draw(sketch);
         }
         GraphicsUtil.drawInnerCircle(sketch, centerX, centerY, size / 4.f, model.promptText);
     }
