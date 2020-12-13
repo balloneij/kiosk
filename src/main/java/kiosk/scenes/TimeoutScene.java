@@ -57,14 +57,17 @@ public class TimeoutScene implements Scene {
         var backButtonModel = new ButtonModel();
         backButtonModel.text = "I'm still here!";
         this.backButton = new ButtonControl(backButtonModel,
-                sketchWidth - BUTTON_HEIGHT - BUTTON_PADDING - BUTTON_WIDTH * 2, sketchHeight - BUTTON_PADDING * 5,
+                sketchWidth - BUTTON_HEIGHT - BUTTON_PADDING - BUTTON_WIDTH * 2,
+                sketchHeight - BUTTON_PADDING * 5,
                 BUTTON_WIDTH * 2, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.backButton);
 
         this.model.title = "Are You Still There?";
-        this.model.prompt = "\n\n\n If you no longer wish to complete the survey, click \n \"Take me back " +
-                "to the beginning!\" \n Careful, if you don't choose an option, \n the survey will " +
-                "automatically reset \n after a little while!";
+        this.model.prompt = "\n\n\n If you no longer wish to complete the survey, click "
+                + "\n \"Take me back to the beginning!\" "
+                + "\n Careful, if you don't choose an option, "
+                + "\n the survey will automatically reset "
+                + "\n after a little while!";
     }
 
     @Override

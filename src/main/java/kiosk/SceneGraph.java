@@ -134,7 +134,7 @@ public class SceneGraph {
     }
 
     /**
-     * Get the root scene's model
+     * Get the root scene's model.
      * @return The root sceneModel
      */
     public SceneModel getRootSceneModel() {
