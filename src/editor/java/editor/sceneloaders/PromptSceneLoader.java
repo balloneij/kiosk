@@ -38,6 +38,7 @@ public class PromptSceneLoader {
         editorPane.getChildren().add(vbox);
     }
 
+    // Adds a Node containing a text field for editing the title.
     private static Node getTitleBox(PromptSceneModel model, SceneGraph graph) {
         var titleField = new TextField(model.title);
 
@@ -52,6 +53,7 @@ public class PromptSceneLoader {
         return vbox;
     }
 
+    // Adds a Node containing a text field for editing the prompt.
     private static Node getPromptBox(PromptSceneModel model, SceneGraph graph) {
         var promptField = new TextField(model.prompt);
 
@@ -66,6 +68,7 @@ public class PromptSceneLoader {
         return vbox;
     }
 
+    // Adds a Node containing a text field for editing the actionPhrase.
     private static Node getActionBox(PromptSceneModel model, SceneGraph graph) {
         var actionField = new TextField(model.actionPhrase);
 
