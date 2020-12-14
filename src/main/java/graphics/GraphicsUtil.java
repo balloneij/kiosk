@@ -10,7 +10,8 @@ import processing.core.PConstants;
 
 public class GraphicsUtil {
 
-    public static final float TextRatioEstimate = 1.2f; // 1.7
+    public static final float TextRatioEstimate = 1.5f; // 1.7
+    public static final float InnerOuterCircleRatio = 4.f;
 
     /**
      * Draws a new spoke graph. Draws a large circle in the middle with text and smaller circles
@@ -47,7 +48,7 @@ public class GraphicsUtil {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
-        drawInnerCircle(sketch, centerX, centerY, size / 4.f, centerText);
+        drawInnerCircle(sketch, centerX, centerY, size / InnerOuterCircleRatio, centerText);
 
         float deg = 0.f;
         var totalWeight = (float) Arrays.stream(weights).sum();
@@ -81,6 +82,7 @@ public class GraphicsUtil {
         sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
         sketch.stroke(256, 256, 256);
         sketch.fill(256, 256, 256);
+        sketch.textLeading(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)) * 1.15f);
         sketch.text(centerText, centerX, centerY);
     }
 
@@ -110,7 +112,23 @@ public class GraphicsUtil {
         // Draw text on top of circle
         sketch.stroke(256, 256, 256);
         sketch.fill(256, 256, 256);
-        sketch.textSize(2.f * (float) smRad / (TextRatioEstimate * largestTextLine(optionText)));
+
+        // Figure out the optimal size of the text to fit in the circles
+        boolean sizeFlag = true;
+        float buffer = 1.f;
+        float textSize = 0;
+        while (sizeFlag) {
+            sketch.textSize(buffer * smRad / (TextRatioEstimate * largestTextLine(optionText)));
+            float width = sketch.textWidth(optionText);
+            if (((width / smRad) < 1.30) && ((width / smRad) > 1.20)) {
+                textSize = (buffer * smRad / (TextRatioEstimate * largestTextLine(optionText)));
+                sizeFlag = false;
+            } else {
+                buffer += 0.05f;
+            }
+        }
+        //Set the spacing between lines to fit nicely
+        sketch.textLeading(textSize * 0.95f);
         sketch.text(optionText, (float) (smX + smRad), (float) (smY + smRad));
     }
 
