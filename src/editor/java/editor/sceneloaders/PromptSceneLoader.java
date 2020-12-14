@@ -5,11 +5,13 @@ import java.util.Arrays;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.PromptSceneModel;
@@ -17,6 +19,7 @@ import kiosk.models.PromptSceneModel;
 public class PromptSceneLoader {
     // The default padding to space the editing Nodes
     static final Insets PADDING = new Insets(10, 0, 0, 10);
+    static final int COLOR_RANGE = 255; // The range the colors can be set to
 
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
@@ -139,6 +142,19 @@ public class PromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
+        // Setup the color picker for changing the answer color
+        Color initialColor = Color.rgb(answer.rgb[0], answer.rgb[1], answer.rgb[2]);
+        ColorPicker colorPicker = new ColorPicker(initialColor);
+        colorPicker.setOnAction(event -> {
+            // Set the answer color to the new color
+            var newColor = colorPicker.getValue();
+            answer.rgb[0] = (int) (newColor.getRed() * COLOR_RANGE);
+            answer.rgb[1] = (int) (newColor.getGreen() * COLOR_RANGE);
+            answer.rgb[2] = (int) (newColor.getBlue() * COLOR_RANGE);
+
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
         // Setup the button for removing an answer
         Button removeButton = new Button("x");
         removeButton.setOnAction(event -> {
@@ -152,7 +168,7 @@ public class PromptSceneLoader {
             answersContainer.getChildren().remove(answerHbox);
         });
 
-        answerHbox.getChildren().addAll(answerField, removeButton);
+        answerHbox.getChildren().addAll(answerField, colorPicker, removeButton);
         return answerHbox;
     }
 }
