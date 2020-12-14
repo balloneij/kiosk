@@ -155,6 +155,16 @@ public class PromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
+        // Setup button for changing answer shape
+        // (may need to convert to a combo-box if more shapes are added)
+        Button shapeButton = new Button(answer.isCircle ? "■" : "⬤");
+        shapeButton.setOnAction(event -> {
+            answer.isCircle = !answer.isCircle;
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+
+            shapeButton.setText(answer.isCircle ? "■" : "⬤"); // Update the button symbol
+        });
+
         // Setup the button for removing an answer
         Button removeButton = new Button("x");
         removeButton.setOnAction(event -> {
@@ -168,7 +178,7 @@ public class PromptSceneLoader {
             answersContainer.getChildren().remove(answerHbox);
         });
 
-        answerHbox.getChildren().addAll(answerField, colorPicker, removeButton);
+        answerHbox.getChildren().addAll(answerField, colorPicker, shapeButton, removeButton);
         return answerHbox;
     }
 }
