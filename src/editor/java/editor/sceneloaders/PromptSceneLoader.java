@@ -143,7 +143,9 @@ public class PromptSceneLoader {
     }
 
     /**
-     * Creates a Node containing all the controls for editing an answer button, including... TODO.
+     * Creates a Node containing all the controls for editing an answer button, including a field
+     * to adjust the text, a color picker, buttons to change the shape and image, a drop down for
+     * selecting the target, and a button to remove the answer.
      * @param answersContainer The VBox that will contain the controls for all the answers.
      * @param answer The ButtonModel for the answer controls being created.
      * @param model The PromptSceneModel being edited.
