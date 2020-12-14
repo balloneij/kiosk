@@ -2,6 +2,7 @@ package kiosk;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
@@ -139,5 +140,13 @@ public class SceneGraph {
      */
     public SceneModel getRootSceneModel() {
         return this.root;
+    }
+
+    /**
+     * Returns the set of the scene Ids currently in the SceneGraph.
+     * @return The set of the scene Ids currently in the SceneGraph.
+     */
+    public Set<String> getSceneIds() {
+        return sceneModels.keySet();
     }
 }

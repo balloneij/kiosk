@@ -3,11 +3,14 @@ package editor.sceneloaders;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -22,7 +25,7 @@ import kiosk.models.PromptSceneModel;
 public class PromptSceneLoader {
     // The default padding to space the editing Nodes
     static final Insets PADDING = new Insets(0, 0, 10, 10);
-    static final Insets ANSWER_PADDING = new Insets(0, 0, 5, 0);
+    static final Insets ANSWER_PADDING = new Insets(15, 0, 15, 0);
     static final int COLOR_RANGE = 255; // The range the colors can be set to
     static final FileChooser imageFileChooser = new FileChooser();
 
@@ -108,7 +111,10 @@ public class PromptSceneLoader {
      *         answers.
      */
     private static Node getAnswersBox(PromptSceneModel model, SceneGraph graph) {
-        var vbox = new VBox(new Label("Answers:"));
+        // Add a separator to separate the "Answers:" label from the answer sections
+        Separator separator = new Separator();
+        separator.setPadding(new Insets(0, 0, 10, 0));
+        var vbox = new VBox(new Label("Answers:"), separator);
 
         // Create controls for each answer (and add them to the Node)
         for (ButtonModel answer : model.answers) {
@@ -216,9 +222,26 @@ public class PromptSceneLoader {
             answersContainer.getChildren().remove(answerVbox);
         });
 
+        // Setup the combo-box for choosing the answers target scene
+        ArrayList<String> sceneIds = new ArrayList<>(graph.getSceneIds());
+        ComboBox<String> targetComboBox = new ComboBox<>(FXCollections.observableList(sceneIds));
+        targetComboBox.setValue(answer.target); // Set initial value to match the answer's target
+        targetComboBox.setOnAction(event -> {
+            answer.target = targetComboBox.getValue();
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        // Create an HBox with a "Target: " label and the combo-box
+        HBox targetsBox = new HBox(new Label("Target: "), targetComboBox);
+        targetsBox.setPadding(new Insets(0, 0, 0, 5));
+
+        // Add a separator so answers are visually separated
+        Separator separator = new Separator();
+        separator.setPadding(ANSWER_PADDING);
+
+        // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
-        answerVbox.getChildren().addAll(answerField, editingControls);
-        answerVbox.setPadding(ANSWER_PADDING);
+        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
         return answerVbox;
     }
 }
