@@ -1,5 +1,6 @@
 package editor.sceneloaders;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.geometry.Insets;
@@ -12,8 +13,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
+import kiosk.models.ImageModel;
 import kiosk.models.PromptSceneModel;
 
 public class PromptSceneLoader {
@@ -21,6 +24,7 @@ public class PromptSceneLoader {
     static final Insets PADDING = new Insets(0, 0, 10, 10);
     static final Insets ANSWER_PADDING = new Insets(0, 0, 5, 0);
     static final int COLOR_RANGE = 255; // The range the colors can be set to
+    static final FileChooser imageFileChooser = new FileChooser();
 
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
@@ -40,6 +44,14 @@ public class PromptSceneLoader {
         // Clear the editor pane and re-populate with the new Nodes
         editorPane.getChildren().clear();
         editorPane.getChildren().add(vbox);
+
+        // Add extension filters to the image file chooser
+        imageFileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg", "*.jpeg"),
+                new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                new FileChooser.ExtensionFilter("Any", "*.*")
+        );
     }
 
     // Adds a Node containing a text field for editing the title.
@@ -164,6 +176,31 @@ public class PromptSceneLoader {
             shapeButton.setText(answer.isCircle ? "■" : "⬤"); // Update the button symbol
         });
 
+        // Setup the button for adding an image to the answer
+        Button imageChooseButton = new Button("Image");
+        imageChooseButton.setOnAction(event -> {
+            // Open the image file chooser
+            var file = imageFileChooser.showOpenDialog(null);
+
+            // If null, no file was chosen
+            if (file != null) {
+                // Set the chooser to open in the same directory next time
+                String imagePath = file.getPath();
+                String directoryPath =
+                        imagePath.substring(0, imagePath.lastIndexOf(File.separator));
+                imageFileChooser.setInitialDirectory(new File(directoryPath));
+
+                // Create an image if the answer does not already have one
+                if (answer.image == null) {
+                    answer.image = new ImageModel();
+                }
+
+                // Set the new image path
+                answer.image.path = imagePath;
+                graph.registerSceneModel(model); // Re-register the model to update the scene
+            }
+        });
+
         var answerVbox = new VBox(); // Contains all the editing controls for this answer
 
         // Setup the button for removing an answer
@@ -179,7 +216,7 @@ public class PromptSceneLoader {
             answersContainer.getChildren().remove(answerVbox);
         });
 
-        HBox editingControls = new HBox(colorPicker, shapeButton, removeButton);
+        HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
         answerVbox.getChildren().addAll(answerField, editingControls);
         answerVbox.setPadding(ANSWER_PADDING);
         return answerVbox;
