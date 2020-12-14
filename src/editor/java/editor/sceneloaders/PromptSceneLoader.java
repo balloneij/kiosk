@@ -18,7 +18,8 @@ import kiosk.models.PromptSceneModel;
 
 public class PromptSceneLoader {
     // The default padding to space the editing Nodes
-    static final Insets PADDING = new Insets(10, 0, 0, 10);
+    static final Insets PADDING = new Insets(0, 0, 10, 10);
+    static final Insets ANSWER_PADDING = new Insets(0, 0, 5, 0);
     static final int COLOR_RANGE = 255; // The range the colors can be set to
 
     /**
@@ -133,10 +134,8 @@ public class PromptSceneLoader {
      */
     private static Node createAnswerNode(ButtonModel answer, VBox answersContainer,
                                          PromptSceneModel model, SceneGraph graph) {
-        var answerHbox = new HBox(); // Contains all the editing controls for this answer
+        // Setup the text field for editing the answer
         var answerField = new TextField(answer.text);
-
-        // Listener to update the answer
         answerField.textProperty().addListener((observable, oldValue, newValue) -> {
             answer.text = newValue;
             graph.registerSceneModel(model); // Re-register the model to update the scene
@@ -165,6 +164,8 @@ public class PromptSceneLoader {
             shapeButton.setText(answer.isCircle ? "■" : "⬤"); // Update the button symbol
         });
 
+        var answerVbox = new VBox(); // Contains all the editing controls for this answer
+
         // Setup the button for removing an answer
         Button removeButton = new Button("x");
         removeButton.setOnAction(event -> {
@@ -175,10 +176,12 @@ public class PromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Remove the editing controls for this answer from the parent container
-            answersContainer.getChildren().remove(answerHbox);
+            answersContainer.getChildren().remove(answerVbox);
         });
 
-        answerHbox.getChildren().addAll(answerField, colorPicker, shapeButton, removeButton);
-        return answerHbox;
+        HBox editingControls = new HBox(colorPicker, shapeButton, removeButton);
+        answerVbox.getChildren().addAll(answerField, editingControls);
+        answerVbox.setPadding(ANSWER_PADDING);
+        return answerVbox;
     }
 }
