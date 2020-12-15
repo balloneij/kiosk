@@ -44,7 +44,7 @@ public class Kiosk extends PApplet {
 
         if (!surveyPath.isEmpty()) {
             surveyFile = surveyPath;
-            loadedSurveyModel = LoadedSurveyModel.readFromFile(new File(surveyPath));
+            var loadedSurveyModel = LoadedSurveyModel.readFromFile(new File(surveyPath));
             this.sceneGraph = new SceneGraph(loadedSurveyModel);
         } else {
             List<SceneModel> defaultScenes = new ArrayList<>();
@@ -59,7 +59,6 @@ public class Kiosk extends PApplet {
             this.mouseListeners.put(e, new LinkedList<>());
         }
     }
-    public static LoadedSurveyModel loadedSurveyModel;
 
     /**
      * Draws scenes.
