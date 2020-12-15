@@ -113,14 +113,13 @@ public class Kiosk extends PApplet {
 
         // Get the current scene and sceneModel
         Scene currentScene = this.sceneGraph.getCurrentScene();
-        SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
 
         // Initialize the current scene if it hasn't been
         if (currentScene != this.lastScene) {
             this.clearEventListeners();
             currentScene.init(this);
 
-            if(lastScene!= null && lastScene.getClass().getName().contains("TimeoutScene")){
+            if (lastScene != null && lastScene.getClass().getName().contains("TimeoutScene")) {
                 timeoutActive = false;
             }
 
@@ -138,9 +137,10 @@ public class Kiosk extends PApplet {
 
         // Check for timeout (since the current scene has been loaded)
         // Make sure it's not the intro scene though first
+        SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
         if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())
                 && currentSceneMillis > settings.timeoutMillis) {
-            if(timeoutActive) {
+            if (timeoutActive) {
                 // Clear the timeoutActive flag
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
                 timeoutActive = false;
