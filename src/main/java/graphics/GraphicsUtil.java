@@ -1,10 +1,6 @@
 package graphics;
 
-import java.nio.channels.SelectionKey;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-
 import kiosk.Kiosk;
 import processing.core.PConstants;
 
@@ -72,28 +68,44 @@ public class GraphicsUtil {
         sketch.textSize(18);
     }
 
-    //TODO: Scale up circle based on scale
+    /**
+     * Draws a circle with text inside of it.
+     * @param sketch The graphics context to draw with.
+     * @param centerX The x coordinate of the center of the circle.
+     * @param centerY The y coordinate of the center of the circle.
+     * @param diameter The diameter of the circle.
+     * @param text The text which will be rendered inside of the circle.
+     */
     public static void drawInnerCircle(Kiosk sketch, float centerX, float centerY,
-            float bigCircleDiameter, String centerText) {
+            float diameter, String text) {
         sketch.fill(246, 139, 31);
         sketch.stroke(246, 139, 31);
-        sketch.ellipse(centerX - .5f * bigCircleDiameter, centerY - .5f * bigCircleDiameter,
-                bigCircleDiameter, bigCircleDiameter);
-        sketch.textSize(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)));
+        sketch.ellipse(centerX - .5f * diameter, centerY - .5f * diameter,
+                diameter, diameter);
+        sketch.textSize(2 * diameter / (TextRatioEstimate * largestTextLine(text)));
         sketch.stroke(256, 256, 256);
         sketch.fill(256, 256, 256);
-        sketch.textLeading(2 * bigCircleDiameter / (TextRatioEstimate * largestTextLine(centerText)) * 1.15f);
-        sketch.text(centerText, centerX, centerY);
+        sketch.textLeading(2 * diameter / (TextRatioEstimate * largestTextLine(text)) * 1.15f);
+        sketch.text(text, centerX, centerY);
     }
 
-    public static void drawSpoke(Kiosk sketch, float size, float centerX, float centerY, float deg) {
+    /**
+     * Draws a line from (centerX, centerY) to the specified length pointing in the given direction.
+     * @param sketch The graphics context we are drawing with.
+     * @param length The length of the line we are drawing.
+     * @param centerX The x coordinate of the start of the line.
+     * @param centerY The y coordinate of the start of the line.
+     * @param angle The direction in degrees of the line to be drawn. (0 = Right, 90 = Down, ect.)
+     */
+    public static void drawSpoke(Kiosk sketch, float length,
+            float centerX, float centerY, float angle) {
         sketch.fill(0, 0, 0);
         sketch.stroke(0, 0, 0);
         sketch.line(
-            centerX + size * .125f * (float) Math.cos(Math.toRadians(deg)),
-            centerY + size * .125f * (float) Math.sin(Math.toRadians(deg)),
-            (float) Math.cos(Math.toRadians(deg)) * .5f * size + centerX,
-            (float) Math.sin(Math.toRadians(deg)) * .5f * size + centerY
+            centerX + length * .125f * (float) Math.cos(Math.toRadians(angle)),
+            centerY + length * .125f * (float) Math.sin(Math.toRadians(angle)),
+            (float) Math.cos(Math.toRadians(angle)) * .5f * length + centerX,
+            (float) Math.sin(Math.toRadians(angle)) * .5f * length + centerY
         );
     }
 

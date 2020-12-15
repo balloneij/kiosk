@@ -4,18 +4,13 @@ import graphics.GraphicsUtil;
 import kiosk.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.models.ButtonModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 
-import java.io.File;
-import java.util.Arrays;
 
 public class SpokeGraphPromptScene implements Scene {
 
     private final SpokeGraphPromptSceneModel model;
     private float size;
-    private float x;
-    private float y;
     private float centerX;
     private float centerY;
     private int[] buttonLocations;
@@ -28,8 +23,8 @@ public class SpokeGraphPromptScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         size = sketch.width * .4f;
-        x = sketch.width * .05f + 2 * sketch.width / 5.f;
-        y = sketch.height * .25f;
+        var x = sketch.width * .05f + 2 * sketch.width / 5.f;
+        var y = sketch.height * .25f;
         centerX = (size / 2) + x;
         centerY = (size / 2) + y;
         this.answerButtons = new ButtonControl[model.answerButtons.length];
@@ -48,7 +43,11 @@ public class SpokeGraphPromptScene implements Scene {
             var btnModel = model.answerButtons[i];
             var colorSelection = model.optionColors[i % model.optionColors.length];
             btnModel.isCircle = true;
-            btnModel.rgb = new int[]{colorSelection >> 16 & 0xFF, colorSelection >> 8 & 0xFF, colorSelection & 0xFF};
+            // Colors represented as a single int have their RGB values spread along an int.
+            btnModel.rgb = new int[]{
+                colorSelection >> 16 & 0xFF,    // Shift 16 bits for Red
+                colorSelection >> 8 & 0xFF,     // Shift 8 Bits for Blue
+                colorSelection & 0xFF};         // Shift 0 bits for Green
 
             var upperLeftX = centerX + (.62 * size - radius) * Math.cos(Math.toRadians(degrees));
             var upperLeftY = centerY + (.62 * size - radius) * Math.sin(Math.toRadians(degrees));
