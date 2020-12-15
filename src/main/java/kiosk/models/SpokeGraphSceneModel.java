@@ -5,14 +5,14 @@ import kiosk.scenes.SpokeGraphScene;
 
 public class SpokeGraphSceneModel implements SceneModel {
 
-    public final String id;
-    public final float xpos;
-    public final float ypos;
-    public final float size;
-    public final float padding;
-    public final String centerText;
-    public final String[] options;
-    public final int[] colors;
+    public String id;
+    public float xpos;
+    public float ypos;
+    public float size;
+    public float padding;
+    public String centerText;
+    public String[] options;
+    public int[] colors;
 
     /**
      * Creates a new spoke graph Scene Model.
