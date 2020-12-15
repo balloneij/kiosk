@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="15.0" class="java.beans.XMLDecoder">
+<java version="15.0.1" class="java.beans.XMLDecoder">
  <object class="kiosk.models.LoadedSurveyModel" id="LoadedSurveyModel0">
   <void class="kiosk.models.LoadedSurveyModel" method="getField">
    <string>scenes</string>
    <void method="set">
     <object idref="LoadedSurveyModel0"/>
-    <array class="kiosk.models.SceneModel" length="4">
+    <array class="kiosk.models.SceneModel" length="5">
      <void index="0">
       <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel0">
        <void class="kiosk.models.PromptSceneModel" method="getField">
@@ -140,7 +140,7 @@ What big problem do you want to help solve?</string>
          <object idref="PromptSceneModel2"/>
          <string>Are you in Grade School, Middle School, or
 High School? Or are you an adult?
- </string>
+         </string>
         </void>
        </void>
        <void class="kiosk.models.PromptSceneModel" method="getField">
@@ -488,120 +488,353 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
+     <void index="4">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel0">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>Now for a few questions about you.</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>You can go back and change your answers, if you want to.</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>Build
+Resilient
+Cities</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerOptions</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="java.lang.String" length="10">
+          <void index="0">
+           <string>Civil
+Engineer</string>
+          </void>
+          <void index="1">
+           <string>Environmental
+Engineer</string>
+          </void>
+          <void index="2">
+           <string>Structural
+Engineer</string>
+          </void>
+          <void index="3">
+           <string>Mechanical
+Engineer</string>
+          </void>
+          <void index="4">
+           <string>Architect</string>
+          </void>
+          <void index="5">
+           <string>Urban
+Planner</string>
+          </void>
+          <void index="6">
+           <string>Construction
+&amp; Traces</string>
+          </void>
+          <void index="7">
+           <string>Communications</string>
+          </void>
+          <void index="8">
+           <string>Public
+Safety
+Leader</string>
+          </void>
+          <void index="9">
+           <string>Data
+Scientist</string>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerWeights</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="int" length="10">
+          <void index="0">
+           <int>2</int>
+          </void>
+          <void index="1">
+           <int>2</int>
+          </void>
+          <void index="2">
+           <int>3</int>
+          </void>
+          <void index="3">
+           <int>2</int>
+          </void>
+          <void index="4">
+           <int>1</int>
+          </void>
+          <void index="5">
+           <int>1</int>
+          </void>
+          <void index="6">
+           <int>2</int>
+          </void>
+          <void index="7">
+           <int>3</int>
+          </void>
+          <void index="8">
+           <int>2</int>
+          </void>
+          <void index="9">
+           <int>3</int>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>How much do you
+love to play
+with numbers?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptOptions</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="java.lang.String" length="3">
+          <void index="0">
+           <string>I love
+playing
+with
+numbers!</string>
+          </void>
+          <void index="1">
+           <string>Math is fun
+and
+useful.</string>
+          </void>
+          <void index="2">
+           <string>Math is not
+really my
+thing.</string>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>optionColors</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="int" length="3">
+          <void index="0">
+           <int>-9388212</int>
+          </void>
+          <void index="1">
+           <int>-6807189</int>
+          </void>
+          <void index="2">
+           <int>-3657935</int>
+          </void>
+         </array>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answerButtons</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel9">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel9"/>
+              <string>I love
+               playing
+               with
+               numbers!</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel9"/>
+              <string>introscene1</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel10">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel10"/>
+              <string>Math is fun
+               and
+               useful.
+              </string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel10"/>
+              <string>introscene1</string>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel11">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel11"/>
+              <string>Math is not
+really my
+thing.
+              </string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel11"/>
+              <string>introscene1</string>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
     </array>
    </void>
   </void>
  </object>
-<void class="kiosk.models.ButtonModel" id="Field0" method="getField">
- <string>rgb</string>
- <void id="intArray0" method="get">
-  <object idref="ButtonModel6"/>
-  <void index="1">
-   <int>108</int>
-  </void>
-  <void index="2">
-   <int>103</int>
-  </void>
-  <void index="0">
-   <int>51</int>
-  </void>
- </void>
-</void>
-<void idref="intArray0"/>
-<void class="kiosk.models.ButtonModel" id="Field1" method="getField">
- <string>rgb</string>
- <void id="intArray1" method="get">
-  <object idref="ButtonModel5"/>
-  <void index="1">
-   <int>33</int>
-  </void>
-  <void index="2">
-   <int>107</int>
-  </void>
-  <void index="0">
-   <int>152</int>
+ <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
+  <string>rgb</string>
+  <void id="intArray0" method="get">
+   <object idref="ButtonModel4"/>
+   <void index="1">
+    <int>80</int>
+   </void>
+   <void index="2">
+    <int>50</int>
+   </void>
+   <void index="0">
+    <int>244</int>
+   </void>
   </void>
  </void>
-</void>
-<void idref="intArray1"/>
-<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
- <string>rgb</string>
- <void id="intArray2" method="get">
-  <object idref="ButtonModel3"/>
-  <void index="1">
-   <int>117</int>
-  </void>
-  <void index="2">
-   <int>33</int>
-  </void>
-  <void index="0">
-   <int>244</int>
-  </void>
- </void>
-</void>
-<void idref="intArray2"/>
-<void class="kiosk.models.ButtonModel" id="Field3" method="getField">
- <string>rgb</string>
- <void id="intArray3" method="get">
-  <object idref="ButtonModel7"/>
-  <void index="1">
-   <int>98</int>
-  </void>
-  <void index="2">
-   <int>38</int>
-  </void>
-  <void index="0">
-   <int>219</int>
+ <void idref="intArray0"/>
+ <void class="kiosk.models.ButtonModel" id="Field1" method="getField">
+  <string>rgb</string>
+  <void id="intArray1" method="get">
+   <object idref="ButtonModel8"/>
+   <void index="1">
+    <int>97</int>
+   </void>
+   <void index="2">
+    <int>157</int>
+   </void>
+   <void index="0">
+    <int>21</int>
+   </void>
   </void>
  </void>
-</void>
-<void idref="intArray3"/>
-<void class="kiosk.models.ButtonModel" id="Field4" method="getField">
- <string>rgb</string>
- <void id="intArray4" method="get">
-  <object idref="ButtonModel2"/>
-  <void index="1">
-   <int>153</int>
-  </void>
-  <void index="2">
-   <int>29</int>
-  </void>
-  <void index="0">
-   <int>248</int>
-  </void>
- </void>
-</void>
-<void idref="intArray4"/>
-<void class="kiosk.models.ButtonModel" id="Field5" method="getField">
- <string>rgb</string>
- <void id="intArray5" method="get">
-  <object idref="ButtonModel4"/>
-  <void index="1">
-   <int>80</int>
-  </void>
-  <void index="2">
-   <int>50</int>
-  </void>
-  <void index="0">
-   <int>244</int>
+ <void idref="intArray1"/>
+ <void class="kiosk.models.ButtonModel" id="Field2" method="getField">
+  <string>rgb</string>
+  <void id="intArray2" method="get">
+   <object idref="ButtonModel2"/>
+   <void index="1">
+    <int>153</int>
+   </void>
+   <void index="2">
+    <int>29</int>
+   </void>
+   <void index="0">
+    <int>248</int>
+   </void>
   </void>
  </void>
-</void>
-<void idref="intArray5"/>
-<void class="kiosk.models.ButtonModel" id="Field6" method="getField">
- <string>rgb</string>
- <void id="intArray6" method="get">
-  <object idref="ButtonModel8"/>
-  <void index="1">
-   <int>97</int>
-  </void>
-  <void index="2">
-   <int>157</int>
-  </void>
-  <void index="0">
-   <int>21</int>
+ <void idref="intArray2"/>
+ <void class="kiosk.models.ButtonModel" id="Field3" method="getField">
+  <string>rgb</string>
+  <void id="intArray3" method="get">
+   <object idref="ButtonModel5"/>
+   <void index="1">
+    <int>33</int>
+   </void>
+   <void index="2">
+    <int>107</int>
+   </void>
+   <void index="0">
+    <int>152</int>
+   </void>
   </void>
  </void>
-</void>
-<void idref="intArray6"/>
+ <void idref="intArray3"/>
+ <void class="kiosk.models.ButtonModel" id="Field4" method="getField">
+  <string>rgb</string>
+  <void id="intArray4" method="get">
+   <object idref="ButtonModel3"/>
+   <void index="1">
+    <int>117</int>
+   </void>
+   <void index="2">
+    <int>33</int>
+   </void>
+   <void index="0">
+    <int>244</int>
+   </void>
+  </void>
+ </void>
+ <void idref="intArray4"/>
+ <void class="kiosk.models.ButtonModel" id="Field5" method="getField">
+  <string>rgb</string>
+  <void id="intArray5" method="get">
+   <object idref="ButtonModel6"/>
+   <void index="1">
+    <int>108</int>
+   </void>
+   <void index="2">
+    <int>103</int>
+   </void>
+   <void index="0">
+    <int>51</int>
+   </void>
+  </void>
+ </void>
+ <void idref="intArray5"/>
+ <void class="kiosk.models.ButtonModel" id="Field6" method="getField">
+  <string>rgb</string>
+  <void id="intArray6" method="get">
+   <object idref="ButtonModel7"/>
+   <void index="1">
+    <int>98</int>
+   </void>
+   <void index="2">
+    <int>38</int>
+   </void>
+   <void index="0">
+    <int>219</int>
+   </void>
+  </void>
+ </void>
+ <void idref="intArray6"/>
 </java>
