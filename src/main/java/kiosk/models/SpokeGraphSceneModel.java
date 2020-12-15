@@ -5,7 +5,7 @@ import kiosk.scenes.SpokeGraphScene;
 
 public class SpokeGraphSceneModel implements SceneModel {
 
-    public final String id;
+    public String id;
     public final float xpos;
     public final float ypos;
     public final float size;
@@ -48,8 +48,18 @@ public class SpokeGraphSceneModel implements SceneModel {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         return new SpokeGraphSceneModel(this.id, this.xpos, this.ypos, this.size,
                 this.padding, this.centerText, this.options, this.colors);
+    }
+
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 }

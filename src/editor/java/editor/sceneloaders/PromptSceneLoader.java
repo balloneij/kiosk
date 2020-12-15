@@ -1,5 +1,6 @@
 package editor.sceneloaders;
 
+import editor.Controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +13,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -21,6 +21,7 @@ import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
 import kiosk.models.PromptSceneModel;
+import kiosk.models.SceneModel;
 
 public class PromptSceneLoader {
     // The default padding to space the editing Nodes
@@ -32,21 +33,25 @@ public class PromptSceneLoader {
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
      * @param model The current scene model we want to modify.
-     * @param editorPane The main editor view.
+     * @param toolbarBox The main editor view.
      * @param graph The scene graph used to manage application state.
      */
-    public static void loadScene(PromptSceneModel model, AnchorPane editorPane, SceneGraph graph) {
+    public static void loadScene(Controller controller,
+                                 PromptSceneModel model, VBox toolbarBox, SceneGraph graph) {
+        toolbarBox.getChildren().clear();
+
         // Get the editing Nodes for the PromptSceneModel properties
         VBox vbox = new VBox(
+                getIdBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getPromptBox(model, graph),
                 getActionBox(model, graph),
-                getAnswersBox(model, graph)
+                getAnswersBox(controller, model, graph)
         );
 
         // Clear the editor pane and re-populate with the new Nodes
-        editorPane.getChildren().clear();
-        editorPane.getChildren().add(vbox);
+        toolbarBox.getChildren().clear();
+        toolbarBox.getChildren().add(vbox);
 
         // Add extension filters to the image file chooser
         imageFileChooser.getExtensionFilters().addAll(
@@ -55,6 +60,23 @@ public class PromptSceneLoader {
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
                 new FileChooser.ExtensionFilter("Any", "*.*")
         );
+    }
+
+    private static Node getIdBox(Controller controller, SceneModel model, SceneGraph graph) {
+        var idField = new TextField(model.getId());
+        var idApplyButton = new Button("Apply");
+
+        // When the id is updated as the user types, weird stuff can happen.
+        // ID changes should be deliberate, so I think having an apply button is
+        // appropriate
+        idApplyButton.setOnAction(e -> {
+            graph.reassignSceneModel(model.getId(), idField.getText());
+            controller.rebuildSceneGraphTreeView();
+        });
+
+        var vbox = new VBox(new Label("ID:"), new HBox(idField, idApplyButton));
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 
     // Adds a Node containing a text field for editing the title.
@@ -110,7 +132,8 @@ public class PromptSceneLoader {
      * @return A Node with editing controls for all the answers and a button to add additional
      *         answers.
      */
-    private static Node getAnswersBox(PromptSceneModel model, SceneGraph graph) {
+    private static Node getAnswersBox(Controller controller,
+                                      PromptSceneModel model, SceneGraph graph) {
         // Add a separator to separate the "Answers:" label from the answer sections
         Separator separator = new Separator();
         separator.setPadding(new Insets(0, 0, 10, 0));
@@ -118,7 +141,7 @@ public class PromptSceneLoader {
 
         // Create controls for each answer (and add them to the Node)
         for (ButtonModel answer : model.answers) {
-            vbox.getChildren().add(createAnswerNode(answer, vbox, model, graph));
+            vbox.getChildren().add(createAnswerNode(controller, answer, vbox, model, graph));
         }
 
         // Setup the button for adding answers
@@ -134,7 +157,8 @@ public class PromptSceneLoader {
 
             // Add editing controls for the new answer
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
-            vbox.getChildren().add(index, createAnswerNode(newAnswer, vbox, model, graph));
+            vbox.getChildren().add(index,
+                    createAnswerNode(controller, newAnswer, vbox, model, graph));
         });
 
         vbox.getChildren().add(addButton);
@@ -152,7 +176,8 @@ public class PromptSceneLoader {
      * @param graph The SceneGraph of the current survey being edited.
      * @return A Node containing all the controls for editing an answer button
      */
-    private static Node createAnswerNode(ButtonModel answer, VBox answersContainer,
+    private static Node createAnswerNode(Controller controller,
+                                         ButtonModel answer, VBox answersContainer,
                                          PromptSceneModel model, SceneGraph graph) {
         // Setup the text field for editing the answer
         var answerField = new TextField(answer.text);
@@ -226,11 +251,18 @@ public class PromptSceneLoader {
 
         // Setup the combo-box for choosing the answers target scene
         ArrayList<String> sceneIds = new ArrayList<>(graph.getSceneIds());
+        sceneIds.remove(model.id); // Prevent a scene from navigating to itself
         ComboBox<String> targetComboBox = new ComboBox<>(FXCollections.observableList(sceneIds));
         targetComboBox.setValue(answer.target); // Set initial value to match the answer's target
         targetComboBox.setOnAction(event -> {
-            answer.target = targetComboBox.getValue();
-            graph.registerSceneModel(model); // Re-register the model to update the scene
+            String target = targetComboBox.getValue();
+            if (!target.equals(model.getId())) {
+                answer.target = target;
+                graph.registerSceneModel(model); // Re-register the model to update the scene
+
+                // Update the scene graph view
+                controller.rebuildSceneGraphTreeView();
+            }
         });
 
         // Create an HBox with a "Target: " label and the combo-box

@@ -6,7 +6,7 @@ import kiosk.scenes.WeightedSpokeGraphScene;
 public class WeightedSpokeGraphSceneModel
         implements SceneModel {
 
-    public final String id;
+    public String id;
     public final int centerX;
     public final int centerY;
     public final String centerText;
@@ -46,8 +46,18 @@ public class WeightedSpokeGraphSceneModel
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         return new WeightedSpokeGraphSceneModel(this.centerText, this.centerX, this.centerY,
             this.options, this.weights, this.size, this.padding, this.id);
+    }
+
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 }

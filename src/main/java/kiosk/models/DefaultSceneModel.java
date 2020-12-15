@@ -30,7 +30,17 @@ public class DefaultSceneModel implements SceneModel {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         return new DefaultSceneModel();
+    }
+
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 }

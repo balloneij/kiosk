@@ -2,12 +2,18 @@ package kiosk.scenes;
 
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
+import kiosk.models.EmptySceneModel;
 import processing.core.PConstants;
 
 public class EmptyScene implements Scene {
 
+    private final EmptySceneModel model;
     private float textX;
     private float textY;
+
+    public EmptyScene(EmptySceneModel model) {
+        this.model = model;
+    }
 
     @Override
     public void init(Kiosk sketch) {
@@ -28,6 +34,6 @@ public class EmptyScene implements Scene {
 
         sketch.background(0);
         sketch.text("Empty scene", this.textX, this.textY);
-        sketch.text("How did you get here?", this.textX, this.textY + 32);
+        sketch.text(this.model.message, this.textX, this.textY + 32);
     }
 }

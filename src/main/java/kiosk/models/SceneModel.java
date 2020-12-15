@@ -20,8 +20,16 @@ public interface SceneModel extends Serializable {
     String getId();
 
     /**
+     * Set this models unique ID.
+     * @param id to set
+     */
+    void setId(String id);
+
+    /**
      * Creates a deep copy of the current SceneModel.
      * @return new copy of the same type
      */
     SceneModel deepCopy();
+
+    String[] getTargets();
 }

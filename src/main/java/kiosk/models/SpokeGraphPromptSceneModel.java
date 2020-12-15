@@ -1,6 +1,5 @@
 package kiosk.models;
 
-import kiosk.scenes.ButtonControl;
 import kiosk.scenes.Scene;
 import kiosk.scenes.SpokeGraphPromptScene;
 
@@ -48,6 +47,11 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         var copy = new SpokeGraphPromptSceneModel();
         copy.headerTitle = this.headerTitle;
@@ -61,5 +65,10 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         copy.answerButtons = this.answerButtons;
         copy.id = this.id;
         return copy;
+    }
+
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 }
