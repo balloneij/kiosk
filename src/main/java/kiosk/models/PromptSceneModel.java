@@ -33,6 +33,11 @@ public final class PromptSceneModel implements SceneModel {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         ButtonModel[] buttonsCopy = new ButtonModel[this.answers.length];
         for (int i = 0; i < buttonsCopy.length; i++) {
@@ -48,5 +53,21 @@ public final class PromptSceneModel implements SceneModel {
         copy.answers = buttonsCopy;
 
         return copy;
+    }
+
+    @Override
+    public String[] getTargets() {
+        String[] ids = new String[this.answers.length];
+
+        for (int i = 0; i < this.answers.length; i++) {
+            ids[i] = this.answers[i].target;
+        }
+
+        return ids;
+    }
+
+    @Override
+    public String toString() {
+        return "Prompt Scene";
     }
 }

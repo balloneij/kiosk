@@ -33,7 +33,17 @@ public final class ResetSceneModel implements SceneModel {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         return new ResetSceneModel(id);
+    }
+
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 }

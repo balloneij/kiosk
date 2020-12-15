@@ -1,6 +1,5 @@
 package kiosk.models;
 
-import kiosk.scenes.PromptScene;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
 
@@ -30,6 +29,11 @@ public final class TimeoutSceneModel implements SceneModel {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         TimeoutSceneModel copy = new TimeoutSceneModel();
         copy.id = this.id;
@@ -37,5 +41,10 @@ public final class TimeoutSceneModel implements SceneModel {
         copy.prompt = this.prompt;
 
         return copy;
+    }
+
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 }

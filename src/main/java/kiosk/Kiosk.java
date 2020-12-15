@@ -15,8 +15,6 @@ import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
-import kiosk.scenes.DefaultScene;
-import kiosk.scenes.EmptyScene;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
 import processing.event.KeyEvent;

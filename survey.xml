@@ -319,6 +319,13 @@ You can always go back and begin again</string>
               </object>
              </void>
             </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel5"/>
+              <string>introscene4</string>
+             </void>
+            </void>
            </object>
           </void>
           <void index="1">
@@ -371,6 +378,13 @@ You can always go back and begin again</string>
                 </void>
                </void>
               </object>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel6"/>
+              <string>introscene4</string>
              </void>
             </void>
            </object>
@@ -427,6 +441,13 @@ You can always go back and begin again</string>
               </object>
              </void>
             </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel7"/>
+              <string>introscene4</string>
+             </void>
+            </void>
            </object>
           </void>
           <void index="3">
@@ -481,6 +502,13 @@ You can always go back and begin again</string>
               </object>
              </void>
             </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel8"/>
+              <string>introscene4</string>
+             </void>
+            </void>
            </object>
           </void>
          </array>
@@ -490,6 +518,13 @@ You can always go back and begin again</string>
      </void>
      <void index="4">
       <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel0">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <string>introscene4</string>
+        </void>
+       </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
