@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,9 +50,6 @@ public class LoadedSurveyModel implements Serializable {
     public static LoadedSurveyModel readFromFile(File file) {
         try (XMLDecoder decoder = new XMLDecoder(
                 new BufferedInputStream(new FileInputStream(file)))) {
-            decoder.setExceptionListener(ex -> {
-                throw new RuntimeException("Malformed XML Dataset");
-            });
             Object surveyObject = decoder.readObject();
             if (!(surveyObject instanceof LoadedSurveyModel)) {
                 String errorMsg = "Successfully loaded the survey XML, but\n"
@@ -66,13 +62,6 @@ public class LoadedSurveyModel implements Serializable {
         } catch (FileNotFoundException exc) {
             String errorMsg = "Could not read from survey at '" + file.getPath()
                     + "':\n" + exc.getMessage();
-            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
-            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
-            return errorSurvey;
-        } catch (RuntimeException e) {
-            String errorMsg = "Could not read from survey at '" + file.getPath()
-                    + "'\nThe XML is probably deformed in some way."
-                    + "\nRefer to the console for more specific details.";
             LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
             errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
             return errorSurvey;
