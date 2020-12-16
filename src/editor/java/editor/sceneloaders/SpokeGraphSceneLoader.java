@@ -17,6 +17,7 @@ import kiosk.models.SpokeGraphSceneModel;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class SpokeGraphSceneLoader {
     // The default padding to space the editing Nodes
@@ -71,19 +72,20 @@ public class SpokeGraphSceneLoader {
         });
 
         yposField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                model.ypos = Float.parseFloat(newValue);
-                graph.registerSceneModel(model); // Re-register the model to update the scene
-            } catch (NumberFormatException ex) {
-                yposField.setText(oldValue);
+            //TODO is this better than the xposField logic?
+            if (!newValue.matches("\\d*")) {
+                yposField.setText(newValue.replaceAll("[^\\d]", ""));
             }
+            model.ypos = Float.parseFloat(newValue);
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+
             });
 
 
-        var vbox = new VBox(new Label("Title:"), titleField);
+        vbox.getChildren().add(addButton);
         vbox.setPadding(PADDING);
         return vbox;
-    }
+    }2
 
     private static Node getSizeBox(SpokeGraphSceneModel model, SceneGraph graph) {
 
@@ -101,50 +103,7 @@ public class SpokeGraphSceneLoader {
 
     }
 
-    // Adds a Node containing a text field for editing the title.
-    private static Node getTitleBox(SpokeGraphSceneModel model, SceneGraph graph) {
-        var titleField = new TextField(model.title);
 
-        // Listener to update the title
-        titleField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.title = newValue;
-            graph.registerSceneModel(model); // Re-register the model to update the scene
-        });
-
-        var vbox = new VBox(new Label("Title:"), titleField);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
-
-    // Adds a Node containing a text field for editing the prompt.
-    private static Node getPromptBox(SpokeGraphSceneModel model, SceneGraph graph) {
-        var promptField = new TextField(model.prompt);
-
-        // Listener to update the prompt
-        promptField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.prompt = newValue;
-            graph.registerSceneModel(model); // Re-register the model to update the scene
-        });
-
-        var vbox = new VBox(new Label("Prompt:"), promptField);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
-
-    // Adds a Node containing a text field for editing the actionPhrase.
-    private static Node getActionBox(SpokeGraphSceneModel model, SceneGraph graph) {
-        var actionField = new TextField(model.actionPhrase);
-
-        // Listener to update the action phrase
-        actionField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.actionPhrase = newValue;
-            graph.registerSceneModel(model); // Re-register the model to update the scene
-        });
-
-        var vbox = new VBox(new Label("Action Phrase:"), actionField);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
 
     /**
      * Creates a Node with editing controls for all the answers, as well as a button to add
