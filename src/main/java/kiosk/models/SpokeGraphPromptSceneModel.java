@@ -6,6 +6,7 @@ import kiosk.scenes.SpokeGraphPromptScene;
 
 public final class SpokeGraphPromptSceneModel implements SceneModel {
 
+    public String id;
     public String headerTitle;
     public String headerBody;
     public String careerCenterText;
@@ -15,7 +16,6 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String[] promptOptions;
     public int[] optionColors;
     public ButtonModel[] answerButtons;
-    public String id;
 
     /**
      * Creates a new prompt scene model.
