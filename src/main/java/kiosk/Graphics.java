@@ -9,14 +9,12 @@ import processing.core.PFont;
 
 public class Graphics {
 
-    private static final String SERIF_PATH = "assets/Acme-Regular.ttf";
-    private static final String SANS_SERIF_PATH = "assets/OpenSans-Regular.ttf";
-    private static final String STRONG_SANS_SERIF_PATH = "assets/OpenSans-SemiBold.ttf";
+    private static final String GOTHIC_PATH = "assets/CenturyGothic.ttf";
+    private static final String GOTHIC_BOLD_PATH = "assets/CenturyGothicBold.ttf";
 
     private static boolean fontsLoaded = false;
-    private static PFont serif = null;
-    private static PFont sansSerif = null;
-    private static PFont strongSansSerif = null;
+    private static PFont gothic = null;
+    private static PFont gothicBold = null;
 
     private Graphics() {
 
@@ -29,18 +27,14 @@ public class Graphics {
         if (Graphics.fontsLoaded) {
             System.err.println("FontManager.loadFonts should only be called once");
         } else {
-
-            File serifFile = new File(SERIF_PATH);
-            File sansSerifFile = new File(SANS_SERIF_PATH);
-            File strongSansSerifFile = new File(STRONG_SANS_SERIF_PATH);
+            File gothicFile = new File(GOTHIC_PATH);
+            File gothicBoldFile = new File(GOTHIC_BOLD_PATH);
 
             try {
-                Graphics.serif = new PFont(
-                        Font.createFont(Font.TRUETYPE_FONT, serifFile), true);
-                Graphics.sansSerif = new PFont(
-                        Font.createFont(Font.TRUETYPE_FONT, sansSerifFile), true);
-                Graphics.strongSansSerif = new PFont(
-                        Font.createFont(Font.TRUETYPE_FONT, strongSansSerifFile), true);
+                Graphics.gothic = new PFont(
+                        Font.createFont(Font.TRUETYPE_FONT, gothicFile), true);
+                Graphics.gothicBold = new PFont(
+                        Font.createFont(Font.TRUETYPE_FONT, gothicBoldFile), true);
             } catch (FontFormatException | IOException exception) {
                 throw new IllegalStateException("Could not load fonts");
             }
@@ -49,29 +43,19 @@ public class Graphics {
         }
     }
 
-    public static void useSerif(Kiosk sketch) {
-        useSerif(sketch, 48);
+    public static void useGothic(Kiosk sketch) {
+        useGothic(sketch, 48, false);
     }
 
-    public static void useSerif(Kiosk sketch, int fontSize) {
-        sketch.textFont(serif, fontSize);
+    public static void useGothic(Kiosk sketch, int fontSize) {
+        useGothic(sketch, fontSize, false);
     }
 
-    public static void useSansSerif(Kiosk sketch) {
-        useSansSerif(sketch, 48, false);
-    }
-
-    /**
-     * Use sanserif font and bold if desired.
-     * @param sketch sketch to apply the font to
-     * @param fontSize size of the font
-     * @param strong true to bold, false otherwise
-     */
-    public static void useSansSerif(Kiosk sketch, int fontSize, boolean strong) {
-        if (strong) {
-            sketch.textFont(strongSansSerif, fontSize);
+    public static void useGothic(Kiosk sketch, int fontSize, boolean bold) {
+        if (bold) {
+            sketch.textFont(gothicBold, fontSize);
         } else {
-            sketch.textFont(sansSerif, fontSize);
+            sketch.textFont(gothic, fontSize);
         }
     }
 

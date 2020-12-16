@@ -9,6 +9,9 @@ import kiosk.models.SpokeGraphPromptSceneModel;
 
 public class SpokeGraphPromptScene implements Scene {
 
+    private static final int TITLE_FONT_SIZE = 24;
+    private static final int PROMPT_FONT_SIZE = 16;
+
     private final SpokeGraphPromptSceneModel model;
     private float size;
     private float centerX;
@@ -72,7 +75,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.useSerif(sketch);
+        Graphics.useGothic(sketch);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
         drawCareerGraph(sketch);
@@ -96,10 +99,10 @@ public class SpokeGraphPromptScene implements Scene {
         var boxCenterY = (boxY + boxHeight * .5f);
         var headerWidth = sketch.textWidth(model.headerTitle);
         sketch.textAscent();
-        sketch.textSize(52);
+        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
         sketch.text(model.headerTitle, boxCenterX, boxCenterY - boxHeight / 3);
 
-        sketch.textSize(34);
+        Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
         sketch.text(model.headerBody, boxCenterX, boxCenterY + boxHeight / 4f);
     }
 

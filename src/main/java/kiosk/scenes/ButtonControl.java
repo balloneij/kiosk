@@ -14,6 +14,7 @@ import processing.event.MouseEvent;
 public class ButtonControl implements Control<MouseEvent> {
 
     private static final int FONT_SIZE = 20;
+    private static boolean FONT_SIZE_OVERWRITTEN = false;
     // Radius of the rounded edge on rectangle buttons
     private static final int RADIUS = 20;
     // Negative will make the color darker on click
@@ -44,6 +45,14 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
     }
 
+    public void setColor(int r, int g, int b) {
+        if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
+            this.model.rgb[0] = r;
+            this.model.rgb[1] = g;
+            this.model.rgb[2] = b;
+        }
+    }
+
     /**
      * Initialize the button for loading images.
      * @param sketch to load images to
@@ -60,6 +69,10 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param sketch to draw to
      */
     public void draw(Kiosk sketch) {
+        if (!FONT_SIZE_OVERWRITTEN) {
+            Graphics.useGothic(sketch, FONT_SIZE, true);
+        }
+        FONT_SIZE_OVERWRITTEN = false;
         if (this.model.isCircle) {
             this.drawCircle(sketch);
         } else {
@@ -69,6 +82,12 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.imageMode(PConstants.CENTER);
             this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
         }
+    }
+
+    public void draw(Kiosk sketch, float multiplier) {
+        Graphics.useGothic(sketch, (int) (FONT_SIZE * multiplier), true);
+        FONT_SIZE_OVERWRITTEN = true;
+        draw(sketch);
     }
 
     /**
@@ -98,7 +117,6 @@ public class ButtonControl implements Control<MouseEvent> {
         // Draw text
         sketch.fill(255);
         sketch.stroke(255);
-        Graphics.useSansSerif(sketch, FONT_SIZE, true);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());
@@ -126,7 +144,6 @@ public class ButtonControl implements Control<MouseEvent> {
         // Draw text
         sketch.fill(255);
         sketch.stroke(255);
-        Graphics.useSansSerif(sketch, FONT_SIZE, true);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());

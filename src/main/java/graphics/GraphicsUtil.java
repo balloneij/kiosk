@@ -1,6 +1,8 @@
 package graphics;
 
 import java.util.Arrays;
+
+import kiosk.Graphics;
 import kiosk.Kiosk;
 import processing.core.PConstants;
 
@@ -65,7 +67,8 @@ public class GraphicsUtil {
             drawOuterCircle(sketch, centerX, centerY, smRad, size, deg, colorSelection, options[i]);
             deg += degOffSet;
         }
-        sketch.textSize(18);
+        //sketch.textSize(18);
+        Graphics.useGothic(sketch, 18, true);
     }
 
     /**
@@ -82,10 +85,10 @@ public class GraphicsUtil {
         sketch.stroke(246, 139, 31);
         sketch.ellipse(centerX - .5f * diameter, centerY - .5f * diameter,
                 diameter, diameter);
-        sketch.textSize(2 * diameter / (TextRatioEstimate * largestTextLine(text)));
         sketch.stroke(256, 256, 256);
         sketch.fill(256, 256, 256);
         sketch.textLeading(2 * diameter / (TextRatioEstimate * largestTextLine(text)) * 1.15f);
+        Graphics.useGothic(sketch, (int)(2 * diameter / (TextRatioEstimate * largestTextLine(text))), true);
         sketch.text(text, centerX, centerY);
     }
 
@@ -141,6 +144,7 @@ public class GraphicsUtil {
         }
         //Set the spacing between lines to fit nicely
         sketch.textLeading(textSize * 0.95f);
+        Graphics.useGothic(sketch, (int)textSize, true);
         sketch.text(optionText, (float) (smX + smRad), (float) (smY + smRad));
     }
 

@@ -83,13 +83,13 @@ public class PromptScene implements Scene {
         }
 
         var homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "Home";
+        homeButtonModel.text = "⌂";
         this.homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING, BUTTON_PADDING,
                 BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.homeButton);
         var backButtonModel = new ButtonModel();
-        backButtonModel.text = "Back";
+        backButtonModel.text = "← Back";
         this.backButton = new ButtonControl(backButtonModel,
                 BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
                 BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
@@ -130,15 +130,15 @@ public class PromptScene implements Scene {
         sketch.fill(0);
 
         // Title
-        Graphics.useSerif(sketch, TITLE_FONT_SIZE);
+        Graphics.useGothic(sketch, TITLE_FONT_SIZE);
         sketch.text(this.model.title, centerX, TITLE_Y);
 
         // Prompt
-        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE, false);
+        Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
         sketch.text(this.model.prompt, centerX, PROMPT_Y);
 
         // Action
-        Graphics.useSansSerif(sketch, ACTION_FONT_SIZE, true);
+        Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
         sketch.text(this.model.actionPhrase, centerX, ACTION_Y);
 
         // Draw buttons
@@ -146,7 +146,9 @@ public class PromptScene implements Scene {
             button.draw(sketch);
         }
 
-        homeButton.draw(sketch);
+        homeButton.setColor(138, 37, 93);
+        homeButton.draw(sketch, 2);
+        backButton.setColor(59, 58, 57);
         backButton.draw(sketch);
     }
 }
