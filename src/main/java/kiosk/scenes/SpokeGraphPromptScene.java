@@ -36,7 +36,7 @@ public class SpokeGraphPromptScene implements Scene {
             float centerX, float centerY) {
         var degrees = 0.f;
         var radius = .25 * size;
-        buttonLocations = new int[2 * model.promptOptions.length];
+        buttonLocations = new int[2 * model.answerButtons.length];
 
         // for each answer find the degrees and position
         for (var i = 0; i < model.answerButtons.length; i++) {

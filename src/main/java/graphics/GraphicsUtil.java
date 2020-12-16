@@ -48,8 +48,13 @@ public class GraphicsUtil {
 
         float deg = 0.f;
         var totalWeight = (float) Arrays.stream(weights).sum();
-        var maxValue = (float) Arrays.stream(weights).max().getAsInt();
-        var minValue = (float) Arrays.stream(weights).min().getAsInt();
+        var maxValue = 0f;
+        var minValue = 0f;
+
+        if (weights.length > 0) {
+            maxValue = (float) Arrays.stream(weights).max().getAsInt();
+            minValue = (float) Arrays.stream(weights).min().getAsInt();
+        }
 
         for (var i = 0; i < options.length; i++) {
             var degOffSet = 180 * weights[i] / totalWeight;
