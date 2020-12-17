@@ -2,7 +2,6 @@ package editor;
 
 import editor.sceneloaders.PromptSceneLoader;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -30,12 +29,6 @@ import processing.javafx.PSurfaceFX;
 
 
 public class Controller implements Initializable {
-
-    /**
-     * Depth of the tree view will display. Limiting
-     * the depth is necessary for recursive scenes
-     */
-    public static final int TREE_VIEW_DEPTH = 25;
 
     public static PSurfaceFX surface;
     public static SceneGraph sceneGraph;
@@ -153,7 +146,7 @@ public class Controller implements Initializable {
      * specified by TREE_VIEW_DEPTH.
      */
     public void rebuildSceneGraphTreeView() {
-        Set<String> goodChildren = new HashSet<>();
+        Set<String> nonOrphanChildren = new HashSet<>();
 
         // All treeviews must have a root. This root is hidden, so it's
         // impossible for the user to modify it. Under the hidden root
@@ -162,69 +155,84 @@ public class Controller implements Initializable {
 
         // Create the survey subtree
         SceneModel rootScene = sceneGraph.getRootSceneModel();
-        TreeItem<String> realRoot =
-                rebuildSceneGraphTreeView(TREE_VIEW_DEPTH, rootScene, goodChildren);
-        hiddenRoot.getChildren().add(realRoot);
+        rebuildSceneGraphTreeView(hiddenRoot, rootScene, nonOrphanChildren);
 
-        // Good children have parents
-        Set<String> nonOrphanChildren = new HashSet<>();
-        for (SceneModel scene : sceneGraph.getAllSceneModels()) {
-            nonOrphanChildren.addAll(Arrays.asList(scene.getTargets().clone()));
-        }
+        // Start with all the children, remove the children
+        // who have parents, and you are left with orphaned children
         Set<String> orphanChildren = new HashSet<>(sceneGraph.getAllIds());
         orphanChildren.removeAll(nonOrphanChildren);
-        orphanChildren.remove(sceneGraph.getRootSceneModel().getId());
+        orphanChildren.remove(rootScene.getId());
 
         // Create subtrees for the orphan children
+        Set<String> orphansAccountedFor = new HashSet<>();
+        Set<String> orphanRoots = new HashSet<>();
         for (String childId : orphanChildren) {
-            SceneModel childScene = sceneGraph.getSceneById(childId);
+            if (!orphansAccountedFor.contains(childId)) {
+                // Create new root node
+                Set<String> newOrphansAccountedFor = new HashSet<>();
+                SceneModel childScene = sceneGraph.getSceneById(childId);
+                rebuildSceneGraphTreeView(hiddenRoot, childScene, newOrphansAccountedFor);
 
-            if (childScene instanceof EmptySceneModel) {
-                // Simply delete orphaned empty scene models
-                sceneGraph.unregisterSceneModel(childScene);
-            } else {
-                // The results of this set aren't used because we already know the orphaned children
-                Set<String> ignoredSet = new HashSet<>();
+                // Add its children to the accounted for
+                orphansAccountedFor.addAll(newOrphansAccountedFor);
 
-                TreeItem<String> childRoot =
-                        rebuildSceneGraphTreeView(TREE_VIEW_DEPTH, childScene, ignoredSet);
+                // Check if the new root subsumes previous roots by performing
+                // an intersection on the orphan roots and new accounted for
+                Set<String> subsumedIds = new HashSet<>(orphanRoots);
+                subsumedIds.retainAll(newOrphansAccountedFor);
+                for (String subsumedId : subsumedIds) {
+                    // Remove from the tree view because its no longer needed
+                    hiddenRoot.getChildren().removeIf(node -> node.getValue().equals(subsumedId));
+                    orphanRoots.remove(subsumedId);
+                }
 
-                hiddenRoot.getChildren().add(childRoot);
+                // A new root was made, so add it to the set
+                orphanRoots.add(childId);
             }
         }
 
         this.sceneGraphTreeView.setRoot(hiddenRoot);
     }
 
-    private TreeItem<String> rebuildSceneGraphTreeView(int depth,
-                                                       SceneModel model, Set<String> goodChildren) {
-        TreeItem<String> node = new TreeItem<>(model.getId());
-        String[] childrenIds = model.getTargets();
+    private void rebuildSceneGraphTreeView(TreeItem<String> parent,
+                                           SceneModel model, Set<String> nonOrphanChildren) {
+        // Add node to parent
+        String modelId = model.getId();
+        TreeItem<String> node = new TreeItem<>(modelId);
+        parent.getChildren().add(node);
 
-        if (depth > 0) {
-            for (String id : childrenIds) {
-                SceneModel scene;
-                if (sceneGraph.containsScene(id)) {
-                    // The child scene exists
-                    scene = sceneGraph.getSceneById(id);
-                } else {
-                    // The child scene does not exist, put an empty scene in its
-                    // place and register it with the scene graph
-                    scene = new EmptySceneModel(id,
-                            "This scene is empty! Change the scene type on the left side");
-                    sceneGraph.registerSceneModel(scene);
-                }
-
-                // This child has parents
-                goodChildren.add(id);
-
-                TreeItem<String> childNode =
-                        rebuildSceneGraphTreeView(depth - 1, scene, goodChildren);
-                node.getChildren().add(childNode);
+        // Walk through the new node's parents. If it's recursive,
+        // return early instead of adding its children
+        TreeItem<String> parentWalker = parent;
+        while (parentWalker != null) {
+            if (parentWalker.getValue().equals(modelId)) {
+                return;
             }
+            parentWalker = parentWalker.getParent();
         }
 
-        return node;
+        // Check children
+        String[] childrenIds = model.getTargets();
+
+        for (String id : childrenIds) {
+            SceneModel scene;
+            if (sceneGraph.containsScene(id)) {
+                // The child scene exists
+                scene = sceneGraph.getSceneById(id);
+            } else {
+                // The child scene does not exist, put an empty scene in its
+                // place and register it with the scene graph
+                scene = new EmptySceneModel(id,
+                        "This scene is empty! Change the scene type on the left side");
+                sceneGraph.registerSceneModel(scene);
+            }
+
+            // This child has parents
+            nonOrphanChildren.add(id);
+
+            // Add child to node
+            rebuildSceneGraphTreeView(node, scene, nonOrphanChildren);
+        }
     }
 
     private class EditorSceneChangeCallback implements EventListener<SceneModel> {
