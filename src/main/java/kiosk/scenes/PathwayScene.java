@@ -5,11 +5,11 @@ import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.SpokeGraphSceneModel;
 
-public class SpokeGraphScene implements Scene {
+public class PathwayScene implements Scene {
 
     private final SpokeGraphSceneModel model;
 
-    public SpokeGraphScene(SpokeGraphSceneModel model) {
+    public PathwayScene(SpokeGraphSceneModel model) {
         this.model = model;
     }
 
@@ -25,6 +25,6 @@ public class SpokeGraphScene implements Scene {
     @Override
     public void draw(Kiosk sketch) {
         GraphicsUtil.spokeGraph(sketch, model.size, model.xpos, model.ypos,
-                model.padding, model.centerText, model.options, model.colors);
+                model.padding, model.centerText, model.answers);
     }
 }

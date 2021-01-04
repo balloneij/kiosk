@@ -1,7 +1,7 @@
 package kiosk.models;
 
 import kiosk.scenes.Scene;
-import kiosk.scenes.SpokeGraphScene;
+import kiosk.scenes.PathwayScene;
 
 public class SpokeGraphSceneModel implements SceneModel {
 
@@ -11,8 +11,7 @@ public class SpokeGraphSceneModel implements SceneModel {
     public float size;
     public float padding;
     public String centerText;
-    public String[] options;
-    public int[] colors;
+    public ButtonModel[] answers;
 
     /**
      * Creates a new spoke graph Scene Model.
@@ -26,20 +25,19 @@ public class SpokeGraphSceneModel implements SceneModel {
      * @param colors The colors each outer circle will be filled in with.
      */
     public SpokeGraphSceneModel(String id, float x, float y, float size, float padding,
-            String centerText, String[] options, int[] colors) {
+            String centerText, ButtonModel[] answers) {
         this.id = id;
         this.xpos = x;
         this.ypos = y;
         this.size = size;
         this.padding = padding;
         this.centerText = centerText;
-        this.options = options;
-        this.colors = colors;
+        this.answers = new ButtonModel[]{};
     }
 
     @Override
     public Scene createScene() {
-        return new SpokeGraphScene(this);
+        return new PathwayScene(this);
     }
 
     @Override
@@ -50,6 +48,6 @@ public class SpokeGraphSceneModel implements SceneModel {
     @Override
     public SceneModel deepCopy() {
         return new SpokeGraphSceneModel(this.id, this.xpos, this.ypos, this.size,
-                this.padding, this.centerText, this.options, this.colors);
+                this.padding, this.centerText, this.answers);
     }
 }

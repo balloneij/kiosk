@@ -111,7 +111,7 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.height * .25f,
             1.f,
             model.careerCenterText,
-            model.careerOptions,
+            model.answers,
             model.careerWeights,
             null
         );

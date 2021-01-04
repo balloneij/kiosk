@@ -13,9 +13,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String[] careerOptions;
     public int[] careerWeights;
     public String promptText;
-    public String[] promptOptions;
-    public int[] optionColors;
-    public ButtonModel[] answerButtons;
+    public ButtonModel[] answers;
 
     /**
      * Creates a new prompt scene model.
@@ -31,9 +29,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         this.careerOptions = new String[]{ };
         this.careerWeights = new int[]{ };
         this.promptText = "";
-        this.promptOptions = new String[]{ };
-        this.optionColors = new int[]{ };
-        this.answerButtons = new ButtonModel[]{};
+        this.answers = new ButtonModel[]{};
         this.id = "";
     }
 
@@ -56,9 +52,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         copy.careerOptions = this.careerOptions;
         copy.careerWeights = this.careerWeights;
         copy.promptText = this.promptText;
-        copy.promptOptions = this.promptOptions;
-        copy.optionColors = this.optionColors;
-        copy.answerButtons = this.answerButtons;
+        copy.answers = this.answers;
         copy.id = this.id;
         return copy;
     }

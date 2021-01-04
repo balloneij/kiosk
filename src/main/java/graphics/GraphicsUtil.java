@@ -2,6 +2,7 @@ package graphics;
 
 import java.util.Arrays;
 import kiosk.Kiosk;
+import kiosk.models.ButtonModel;
 import processing.core.PConstants;
 
 public class GraphicsUtil {
@@ -18,13 +19,13 @@ public class GraphicsUtil {
      * @param y The y location of the upper left-hand corner.
      * @param padding The gap space between each outer circle.
      * @param centerText The text that appears in the center circle.
-     * @param options The text that appears in each outer circle.
+     * @param answers The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-          String centerText, String[] options, int[] colors) {
-        var weights = new int[options.length];
+          String centerText, ButtonModel[] answers) {
+        var weights = new int[answers.length];
         Arrays.fill(weights, 1);
-        spokeGraph(sketch, size, x, y, padding, centerText, options, weights, colors);
+        spokeGraph(sketch, size, x, y, padding, centerText, answers, weights);
     }
 
     /**
@@ -36,11 +37,11 @@ public class GraphicsUtil {
      * @param y The y location of the upper left-hand corner.
      * @param padding The gap space between each outer circle.
      * @param centerText The text that appears in the center circle.
-     * @param options The text that appears in each outer circle.
+     * @param answers The text that appears in each outer circle.
      * @param weights The relative ratio and weight of each option.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-            String centerText, String[] options, int[] weights, int[] colors) {
+            String centerText, ButtonModel[] answers, int[] weights) {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
@@ -51,18 +52,18 @@ public class GraphicsUtil {
         var maxValue = (float) Arrays.stream(weights).max().getAsInt();
         var minValue = (float) Arrays.stream(weights).min().getAsInt();
 
-        for (var i = 0; i < options.length; i++) {
+        for (var i = 0; i < answers.length; i++) {
             var degOffSet = 180 * weights[i] / totalWeight;
             var maxRad = .125f * size;
             var smRad = .5f * size * (float) Math.sin(Math.toRadians(degOffSet))
                 / (1 + (float) Math.sin(Math.toRadians(degOffSet)));
-            var colorSelection = colors != null
-                    ? colors[i]
+            int[] colorSelection = answers[i].rgb != null
+                    ? answers[i].rgb
                     : getColor(weights[i], maxValue, minValue, sketch);
 
             smRad = Math.min(smRad, maxRad) - padding; // Make sure circle is small enough to fit
             deg += degOffSet;
-            drawOuterCircle(sketch, centerX, centerY, smRad, size, deg, colorSelection, options[i]);
+            drawOuterCircle(sketch, centerX, centerY, smRad, size, deg, colorSelection, answers[i].text);
             deg += degOffSet;
         }
         sketch.textSize(18);
@@ -110,13 +111,14 @@ public class GraphicsUtil {
     }
 
     private static void drawOuterCircle(Kiosk sketch, float centerX, float centerY, float smRad,
-            float size, float deg, int color, String optionText) {
+            float size, float deg, int[] color, String optionText) {
         // Create the line from the edge of the inner circle to the center of the outer circle
         drawSpoke(sketch, size, centerX, centerY, deg);
 
         // Draw the outer circle
-        sketch.stroke(color);
-        sketch.fill(color);
+        int color_single = color[0] << 16 + color[1] << 8 + color[2];
+        sketch.stroke(color_single);
+        sketch.fill(color_single);
         var smX = centerX + (.5f * size - smRad) * (float) Math.cos(Math.toRadians(deg)) - smRad;
         var smY = centerY + (.5f * size - smRad) * (float) Math.sin(Math.toRadians(deg)) - smRad;
         sketch.ellipse(smX, smY, (float) smRad * 2, (float) smRad * 2);
@@ -155,10 +157,15 @@ public class GraphicsUtil {
         return largestLineSize;
     }
 
-    private static int getColor(float weight, float maxValue, float minValue, Kiosk sketch) {
+    private static int[] getColor(float weight, float maxValue, float minValue, Kiosk sketch) {
         var percentage = (weight - minValue) / (maxValue - minValue);
         var from = sketch.color(252, 177, 22);
         var to = sketch.color(57, 160, 91);
-        return sketch.lerpColor(from, to, percentage);
+        int color_single = sketch.lerpColor(from, to, percentage);
+        int[] toReturn = new int[3];
+        toReturn[0] = (color_single & 0xFF0000) >> 16;
+        toReturn[1] = (color_single & 0x00FF00) >> 8;
+        toReturn[2] = color_single & 0x0000FF;
+        return toReturn;
     }
 }

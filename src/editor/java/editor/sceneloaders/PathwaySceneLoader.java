@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class SpokeGraphSceneLoader {
+public class PathwaySceneLoader {
     // The default padding to space the editing Nodes
     static final Insets PADDING = new Insets(0, 0, 10, 10);
     static final Insets ANSWER_PADDING = new Insets(15, 0, 15, 0);
