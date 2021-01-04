@@ -20,9 +20,10 @@ public class Main {
             System.out.println("Starting kiosk with " + args[0]);
             kiosk = new Kiosk(args[0]);
         } else {
-            System.out.println("No survey file specified. A survey file can be specified "
-                    + "by including its filepath after the command to start the kiosk.");
-            kiosk = new Kiosk("");
+            System.out.println("No survey file specified, \"survey.xml\" will be used. A survey "
+                    + "file can be specified by including its filepath after the command to start"
+                    + " the kiosk.");
+            kiosk = new Kiosk("survey.xml");
         }
 
         kiosk.run();
