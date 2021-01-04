@@ -19,6 +19,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private static final int RADIUS = 20;
     // Negative will make the color darker on click
     private static final int COLOR_DELTA_ON_CLICK = -25;
+    private static float TEXT_SIZE_MULTIPLIER = 1;
 
     private final ButtonModel model;
     private final Rectangle rect;
@@ -71,6 +72,7 @@ public class ButtonControl implements Control<MouseEvent> {
     public void draw(Kiosk sketch) {
         if (!FONT_SIZE_OVERWRITTEN) {
             Graphics.useGothic(sketch, FONT_SIZE, true);
+            TEXT_SIZE_MULTIPLIER = 1;
         }
         FONT_SIZE_OVERWRITTEN = false;
         if (this.model.isCircle) {
@@ -87,6 +89,7 @@ public class ButtonControl implements Control<MouseEvent> {
     public void draw(Kiosk sketch, float multiplier) {
         Graphics.useGothic(sketch, (int) (FONT_SIZE * multiplier), true);
         FONT_SIZE_OVERWRITTEN = true;
+        TEXT_SIZE_MULTIPLIER = multiplier;
         draw(sketch);
     }
 
@@ -119,7 +122,7 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.stroke(255);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
-                (float) this.rect.getCenterY());
+                (float) this.rect.getCenterY()-((TEXT_SIZE_MULTIPLIER - 1) * (FONT_SIZE / 2f)));
     }
 
     private void drawCircle(Kiosk sketch) {

@@ -660,9 +660,9 @@ thing.</string>
              <void method="set">
               <object idref="ButtonModel9"/>
               <string>I love
-               playing
-               with
-               numbers!</string>
+playing
+with
+numbers!</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
@@ -681,8 +681,8 @@ thing.</string>
              <void method="set">
               <object idref="ButtonModel10"/>
               <string>Math is fun
-               and
-               useful.
+and
+useful.
               </string>
              </void>
             </void>

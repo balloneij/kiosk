@@ -4,6 +4,7 @@ import graphics.GraphicsUtil;
 import kiosk.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
+import kiosk.models.ButtonModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 
 
@@ -12,12 +13,19 @@ public class SpokeGraphPromptScene implements Scene {
     private static final int TITLE_FONT_SIZE = 24;
     private static final int PROMPT_FONT_SIZE = 16;
 
+    // Buttons
+    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+    private static final int COMMON_BUTTON_HEIGHT = Kiosk.getSettings().screenH / 10;
+    private static final int BUTTON_PADDING = 20;
+
     private final SpokeGraphPromptSceneModel model;
     private float size;
     private float centerX;
     private float centerY;
     private int[] buttonLocations;
     private ButtonControl[] answerButtons;
+    private ButtonControl homeButton;
+    private ButtonControl backButton;
 
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
@@ -33,6 +41,20 @@ public class SpokeGraphPromptScene implements Scene {
         this.answerButtons = new ButtonControl[model.answerButtons.length];
 
         initializeButtons(model, sketch, size, centerX, centerY);
+
+        final int sketchHeight = Kiosk.getSettings().screenH;
+        var homeButtonModel = new ButtonModel();
+        homeButtonModel.text = "⌂";
+        this.homeButton = new ButtonControl(homeButtonModel,
+                BUTTON_PADDING, BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+        sketch.hookControl(this.homeButton);
+        var backButtonModel = new ButtonModel();
+        backButtonModel.text = "← Back";
+        this.backButton = new ButtonControl(backButtonModel,
+                BUTTON_PADDING, sketchHeight - (COMMON_BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+        sketch.hookControl(this.backButton);
     }
 
     private void initializeButtons(SpokeGraphPromptSceneModel model, Kiosk sketch, float size,
@@ -71,6 +93,12 @@ public class SpokeGraphPromptScene implements Scene {
                 sceneGraph.pushScene(button.getTarget());
             }
         }
+
+        if (this.homeButton.wasClicked()) {
+            sceneGraph.reset();
+        } else if (this.backButton.wasClicked()) {
+            sceneGraph.popScene();
+        }
     }
 
     @Override
@@ -80,6 +108,11 @@ public class SpokeGraphPromptScene implements Scene {
         drawHeader(sketch);
         drawCareerGraph(sketch);
         drawPromptGraph(sketch);
+
+        homeButton.setColor(138, 37, 93);
+        homeButton.draw(sketch, 2);
+        backButton.setColor(59, 58, 57);
+        backButton.draw(sketch);
     }
 
     private void drawHeader(Kiosk sketch) {

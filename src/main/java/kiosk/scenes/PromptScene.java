@@ -15,7 +15,7 @@ public class PromptScene implements Scene {
     private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
     private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
     private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-    private static final int FOREGROUND_CURVE_RADIUS = 50;
+    private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
     private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
@@ -29,6 +29,7 @@ public class PromptScene implements Scene {
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
     private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
     private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
+    private static final int COMMON_BUTTON_HEIGHT = Kiosk.getSettings().screenH / 10;
     private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_PADDING = 20;
@@ -86,13 +87,13 @@ public class PromptScene implements Scene {
         homeButtonModel.text = "⌂";
         this.homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING, BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+                BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.homeButton);
         var backButtonModel = new ButtonModel();
         backButtonModel.text = "← Back";
         this.backButton = new ButtonControl(backButtonModel,
-                BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+                BUTTON_PADDING, sketchHeight - (COMMON_BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.backButton);
     }
 
