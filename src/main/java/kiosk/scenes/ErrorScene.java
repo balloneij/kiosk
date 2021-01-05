@@ -1,6 +1,6 @@
 package kiosk.scenes;
 
-import kiosk.Graphics;
+import graphics.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ErrorSceneModel;
@@ -43,7 +43,7 @@ public class ErrorScene implements Scene {
             default -> sketch.background(0);
         }
 
-        Graphics.useSansSerif(sketch, 16, true);
+        Graphics.useSansSerifBold(sketch, 16);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.text(this.model.errorMsg, sketch.width / 2f, sketch.height / 2f);
     }

@@ -1,13 +1,35 @@
 package kiosk.scenes;
 
-import graphics.GraphicsUtil;
-import kiosk.Graphics;
+import graphics.Graphics;
+import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
+import kiosk.Settings;
 import kiosk.models.SpokeGraphPromptSceneModel;
 
 
 public class SpokeGraphPromptScene implements Scene {
+
+    // Pull constants from the settings
+    private static final int SCREEN_W = Settings.readSettings().screenW;
+    private static final int SCREEN_H = Settings.readSettings().screenH;
+
+    // Header
+    private static final float HEADER_W = SCREEN_W * 3f / 4;
+    private static final float HEADER_H = SCREEN_H / 6f;
+    private static final float HEADER_X = (SCREEN_W - HEADER_W) / 2;
+    private static final float HEADER_Y = SCREEN_H / 32f;
+    private static final float HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
+    private static final float HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
+    private static final int HEADER_CURVE_RADIUS = 25;
+
+    // Header title
+    private static final int HEADER_TITLE_FONT_SIZE = 24;
+    private static final float HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
+
+    // Header body
+    private static final int HEADER_BODY_FONT_SIZE = 16;
+    private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final SpokeGraphPromptSceneModel model;
     private float size;
@@ -72,7 +94,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.useSerif(sketch);
+        Graphics.useSansSerifBold(sketch, 48);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
         drawCareerGraph(sketch);
@@ -80,31 +102,26 @@ public class SpokeGraphPromptScene implements Scene {
     }
 
     private void drawHeader(Kiosk sketch) {
-        sketch.textSize(18.f);
-        sketch.fill(256, 256, 256);
-        sketch.stroke(256, 256, 256);
-        var boxX = sketch.width / 8.f;
-        var boxY = sketch.height / 32.f;
-        var boxWidth = sketch.width - (sketch.width / 5.f);
-        var boxHeight = sketch.height - .8f * sketch.height;
+        // Draw the white header box
+        sketch.fill(255);
+        sketch.stroke(255);
 
-        Graphics.drawRoundedRectangle(sketch, boxX, boxY, boxWidth, boxHeight, 25);
-        sketch.fill(0, 0, 0);
-        sketch.stroke(0, 0, 0);
+        Graphics.drawRoundedRectangle(sketch,
+                HEADER_X, HEADER_Y, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
 
-        var boxCenterX = (boxX + boxWidth * .5f);
-        var boxCenterY = (boxY + boxHeight * .5f);
-        var headerWidth = sketch.textWidth(model.headerTitle);
-        sketch.textAscent();
-        sketch.textSize(52);
-        sketch.text(model.headerTitle, boxCenterX, boxCenterY - boxHeight / 3);
+        // Draw the title and body
+        sketch.fill(0);
+        sketch.stroke(0);
 
-        sketch.textSize(34);
-        sketch.text(model.headerBody, boxCenterX, boxCenterY + boxHeight / 4f);
+        Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y);
+
+        Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
+        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y);
     }
 
     private void drawCareerGraph(Kiosk sketch) {
-        GraphicsUtil.spokeGraph(
+        SpokeUtil.spokeGraph(
             sketch,
             sketch.width / 3.f,
             sketch.width * .05f,
@@ -119,10 +136,10 @@ public class SpokeGraphPromptScene implements Scene {
 
     private void drawPromptGraph(Kiosk sketch) {
         for (int i = 0; i < model.answerButtons.length; i++) {
-            sketch.stroke(0, 0, 0);
+            sketch.stroke(255);
             sketch.line(centerX, centerY, buttonLocations[2 * i], buttonLocations[2 * i + 1]);
             this.answerButtons[i].draw(sketch);
         }
-        GraphicsUtil.drawInnerCircle(sketch, centerX, centerY, size / 4.f, model.promptText);
+        SpokeUtil.drawInnerCircle(sketch, centerX, centerY, size / 4.f, model.promptText);
     }
 }

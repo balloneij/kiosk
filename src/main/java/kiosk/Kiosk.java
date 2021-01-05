@@ -1,5 +1,7 @@
 package kiosk;
 
+import graphics.Color;
+import graphics.Graphics;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -71,6 +73,8 @@ public class Kiosk extends PApplet {
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.put(e, new LinkedList<>());
         }
+
+        Color.setSketch(this);
     }
 
     /**
