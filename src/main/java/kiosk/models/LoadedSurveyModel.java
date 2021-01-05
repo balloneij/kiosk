@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,14 +70,6 @@ public class LoadedSurveyModel implements Serializable {
                     + "\nThe program can also be started from the command line with the command "
                     + "\n\"java -jar kiosk.jar <survey file>\""
                     + "\nwhere <survey file> is the path to the survey file.";
-            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
-            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
-            return errorSurvey;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            String errorMsg = "Could not read from survey at '" + file.getPath()
-                    + "'\nThe XML is probably deformed in some way."
-                    + "\nRefer to the console for more specific details.";
             LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
             errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
             return errorSurvey;
