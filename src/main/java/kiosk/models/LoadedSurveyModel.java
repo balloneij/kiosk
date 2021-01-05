@@ -70,6 +70,7 @@ public class LoadedSurveyModel implements Serializable {
             errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
             return errorSurvey;
         } catch (RuntimeException e) {
+            e.printStackTrace();
             String errorMsg = "Could not read from survey at '" + file.getPath()
                     + "'\nThe XML is probably deformed in some way."
                     + "\nRefer to the console for more specific details.";
