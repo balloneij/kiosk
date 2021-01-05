@@ -1,10 +1,10 @@
 package kiosk.scenes;
 
+import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 import kiosk.EventListener;
-import kiosk.Graphics;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
@@ -98,7 +98,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // Draw text
         sketch.fill(255);
         sketch.stroke(255);
-        Graphics.useSansSerif(sketch, FONT_SIZE, true);
+        Graphics.useSansSerifBold(sketch, FONT_SIZE);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());
@@ -126,7 +126,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // Draw text
         sketch.fill(255);
         sketch.stroke(255);
-        Graphics.useSansSerif(sketch, FONT_SIZE, true);
+        Graphics.useSansSerifBold(sketch, FONT_SIZE);
         sketch.text(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY());
