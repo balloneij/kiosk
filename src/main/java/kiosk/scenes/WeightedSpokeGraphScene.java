@@ -1,6 +1,6 @@
 package kiosk.scenes;
 
-import graphics.GraphicsUtil;
+import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.WeightedSpokeGraphSceneModel;
@@ -22,7 +22,7 @@ public class WeightedSpokeGraphScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        GraphicsUtil.spokeGraph(
+        SpokeUtil.spokeGraph(
             sketch, model.size, model.centerX, model.centerY, model.padding,
             model.centerText, model.options, model.weights, null
         );

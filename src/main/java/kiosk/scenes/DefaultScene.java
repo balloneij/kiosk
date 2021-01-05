@@ -1,6 +1,6 @@
 package kiosk.scenes;
 
-import kiosk.Graphics;
+import graphics.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.DefaultSceneModel;
@@ -32,7 +32,7 @@ public class DefaultScene implements Scene {
         sketch.background(99, 144, 197);
         sketch.fill(255);
 
-        Graphics.useSansSerif(sketch, 16, false);
+        Graphics.useSansSerif(sketch, 16);
         sketch.textSize(16);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.text(this.model.message, sketch.width / 2f, sketch.height / 2f);
