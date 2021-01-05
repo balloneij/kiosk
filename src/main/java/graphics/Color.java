@@ -51,6 +51,11 @@ public class Color {
         dwGreen = sketch.color(DW_GREEN_RGB[0], DW_GREEN_RGB[1], DW_GREEN_RGB[2]);
     }
 
+    /**
+     * Gets instance of the color, it's the singleton.
+     * It relies on sketch
+     * @return Color instance
+     */
     public static Color getInstance() {
         if (Color.sketch == null) {
             throw new IllegalStateException("Color needs a sketch in order to interpolate colors. "

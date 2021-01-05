@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,6 +82,7 @@ public class LoadedSurveyModel implements Serializable {
             errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
             return errorSurvey;
         } catch (Exception exc) {
+            exc.printStackTrace();
             String errorMsg = "Could not read from survey at '" + file.getPath()
                     + "'\nThe XML is probably deformed in some way."
                     + "\nRefer to the console for more specific details.";
