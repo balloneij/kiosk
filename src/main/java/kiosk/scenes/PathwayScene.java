@@ -3,13 +3,13 @@ package kiosk.scenes;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.models.SpokeGraphSceneModel;
+import kiosk.models.PathwaySceneModel;
 
 public class PathwayScene implements Scene {
 
-    private final SpokeGraphSceneModel model;
+    private final PathwaySceneModel model;
 
-    public PathwayScene(SpokeGraphSceneModel model) {
+    public PathwayScene(PathwaySceneModel model) {
         this.model = model;
     }
 

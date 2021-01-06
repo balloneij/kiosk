@@ -1,5 +1,6 @@
 package kiosk.models;
 
+import kiosk.scenes.ButtonControl;
 import kiosk.scenes.Scene;
 import kiosk.scenes.WeightedSpokeGraphScene;
 
@@ -12,26 +13,26 @@ public class WeightedSpokeGraphSceneModel
     public final String centerText;
     public final int size;
     public final int padding;
-    public final String[] options;
+    public final ButtonControl[] answers;
     public final int[] weights;
 
     /**
      * Creates a new weighted spoke graph scene model. The outer text circles are going
      * to be larger or smaller depending on their weights.
      * @param centerText Text in the center circle.
-     * @param options Text appearing in outer circles.
+     * @param answers Text appearing in outer circles.
      * @param weights Governs how large circles are relative to each other.
      * @param id The unique id of the scene.
      */
     public WeightedSpokeGraphSceneModel(String centerText, int centerX, int centerY,
-            String[] options, int[] weights, int size, int padding, String id) {
+            ButtonControl[] answers, int[] weights, int size, int padding, String id) {
         this.id = id;
         this.centerX = centerX;
         this.centerY = centerY;
         this.centerText = centerText;
         this.size = size;
         this.padding = padding;
-        this.options = options;
+        this.answers = answers;
         this.weights = weights;
     }
 
@@ -48,6 +49,6 @@ public class WeightedSpokeGraphSceneModel
     @Override
     public SceneModel deepCopy() {
         return new WeightedSpokeGraphSceneModel(this.centerText, this.centerX, this.centerY,
-            this.options, this.weights, this.size, this.padding, this.id);
+            this.answers, this.weights, this.size, this.padding, this.id);
     }
 }

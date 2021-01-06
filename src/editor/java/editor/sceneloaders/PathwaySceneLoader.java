@@ -39,7 +39,7 @@ public class PathwaySceneLoader {
                 getSizeBox(model, graph),
                 getPaddingBox(model, graph),
                 getCenterTextBox(model, graph),
-                getOptionsBox(model, graph) //TODO hopefully to be buttons :)
+                getOptionsBox(model, graph)
         );
 
         // Clear the editor pane and re-populate with the new Nodes
@@ -94,7 +94,7 @@ public class PathwaySceneLoader {
 
         // Listeners to update the position
         sizeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try { //todo use the better method
+            try { //todo use the better method (decided in getPositionBoxes)
                 model.size = Float.parseFloat(newValue);
                 graph.registerSceneModel(model); // Re-register the model to update the scene
             } catch (NumberFormatException ex) {

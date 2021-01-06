@@ -3,7 +3,7 @@ package kiosk.models;
 import kiosk.scenes.Scene;
 import kiosk.scenes.PathwayScene;
 
-public class SpokeGraphSceneModel implements SceneModel {
+public class PathwaySceneModel implements SceneModel {
 
     public String id;
     public float xpos;
@@ -21,11 +21,10 @@ public class SpokeGraphSceneModel implements SceneModel {
      * @param size The scene is drawn in a square, this is the size of all sides.
      * @param padding The extra spacing between circles.
      * @param centerText The text in the center circle.
-     * @param options The list of text appearing on the outer circles.
-     * @param colors The colors each outer circle will be filled in with.
+     * @param answers The list of text appearing on the outer circles.
      */
-    public SpokeGraphSceneModel(String id, float x, float y, float size, float padding,
-            String centerText, ButtonModel[] answers) {
+    public PathwaySceneModel(String id, float x, float y, float size, float padding,
+                             String centerText, ButtonModel[] answers) {
         this.id = id;
         this.xpos = x;
         this.ypos = y;
@@ -47,7 +46,7 @@ public class SpokeGraphSceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        return new SpokeGraphSceneModel(this.id, this.xpos, this.ypos, this.size,
+        return new PathwaySceneModel(this.id, this.xpos, this.ypos, this.size,
                 this.padding, this.centerText, this.answers);
     }
 }

@@ -3,6 +3,7 @@ package graphics;
 import java.util.Arrays;
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
+import kiosk.scenes.ButtonControl;
 import processing.core.PConstants;
 
 public class GraphicsUtil {
@@ -22,10 +23,10 @@ public class GraphicsUtil {
      * @param answers The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-          String centerText, ButtonModel[] answers) {
+          String centerText, ButtonControl[] answers) {
         var weights = new int[answers.length];
         Arrays.fill(weights, 1);
-        spokeGraph(sketch, size, x, y, padding, centerText, answers, weights);
+        spokeGraph(sketch, size, x, y, padding, centerText, answers);
     }
 
     /**
@@ -40,8 +41,8 @@ public class GraphicsUtil {
      * @param answers The text that appears in each outer circle.
      * @param weights The relative ratio and weight of each option.
      */
-    public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-            String centerText, ButtonModel[] answers, int[] weights) {
+    public static void weightedSpokeGraph(Kiosk sketch, float size, float x, float y, float padding,
+            String centerText, ButtonControl[] answers, int[] weights) {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         var centerX = x + size / 2.f;
         var centerY = y + size / 2.f;
@@ -57,13 +58,10 @@ public class GraphicsUtil {
             var maxRad = .125f * size;
             var smRad = .5f * size * (float) Math.sin(Math.toRadians(degOffSet))
                 / (1 + (float) Math.sin(Math.toRadians(degOffSet)));
-            int[] colorSelection = answers[i].rgb != null
-                    ? answers[i].rgb
-                    : getColor(weights[i], maxValue, minValue, sketch);
 
             smRad = Math.min(smRad, maxRad) - padding; // Make sure circle is small enough to fit
             deg += degOffSet;
-            drawOuterCircle(sketch, centerX, centerY, smRad, size, deg, colorSelection, answers[i].text);
+            drawOuterCircle(sketch, centerX, centerY, smRad, size, deg, answers[i]);
             deg += degOffSet;
         }
         sketch.textSize(18);
@@ -111,12 +109,13 @@ public class GraphicsUtil {
     }
 
     private static void drawOuterCircle(Kiosk sketch, float centerX, float centerY, float smRad,
-            float size, float deg, int[] color, String optionText) {
+            float size, float deg, ButtonControl answer) {
         // Create the line from the edge of the inner circle to the center of the outer circle
         drawSpoke(sketch, size, centerX, centerY, deg);
 
         // Draw the outer circle
         int color_single = color[0] << 16 + color[1] << 8 + color[2];
+        answer.
         sketch.stroke(color_single);
         sketch.fill(color_single);
         var smX = centerX + (.5f * size - smRad) * (float) Math.cos(Math.toRadians(deg)) - smRad;
