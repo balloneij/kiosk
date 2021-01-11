@@ -25,6 +25,6 @@ public class SpokeGraphScene implements Scene {
     @Override
     public void draw(Kiosk sketch) {
         GraphicsUtil.spokeGraph(sketch, model.size, model.xpos, model.ypos,
-                model.padding, model.centerText, model.options, model.colors);
+                model.padding, model.centerText, model.options, model.colors, null, 1, 1);
     }
 }

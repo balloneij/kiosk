@@ -24,8 +24,12 @@ public class SpokeGraphPromptScene implements Scene {
     private float centerY;
     private int[] buttonLocations;
     private ButtonControl[] answerButtons;
+    private float degreeOffset = 210;
+    private float spokeScale = 1.85f;
     private ButtonControl homeButton;
     private ButtonControl backButton;
+
+    public static final float TextRatioEstimate = 1.5f;
 
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
@@ -33,11 +37,9 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        size = sketch.width * .4f;
-        var x = sketch.width * .05f + 2 * sketch.width / 5.f;
-        var y = sketch.height * .25f;
-        centerX = (size / 2) + x;
-        centerY = (size / 2) + y;
+        size = sketch.width / 3.f;
+        centerX = sketch.width * 0.5f;
+        centerY = sketch.height * .4f;
         this.answerButtons = new ButtonControl[model.answerButtons.length];
 
         initializeButtons(model, sketch, size, centerX, centerY);
@@ -59,9 +61,11 @@ public class SpokeGraphPromptScene implements Scene {
 
     private void initializeButtons(SpokeGraphPromptSceneModel model, Kiosk sketch, float size,
             float centerX, float centerY) {
-        var degrees = 0.f;
-        var radius = .25 * size;
+        var degrees = degreeOffset + 60;
+        var radius = .229 * size;
         buttonLocations = new int[2 * model.promptOptions.length];
+        centerX = centerX + size / 2.f;
+        centerY = centerY + size / 2.f;
 
         // for each answer find the degrees and position
         for (var i = 0; i < model.answerButtons.length; i++) {
@@ -74,13 +78,15 @@ public class SpokeGraphPromptScene implements Scene {
                 colorSelection >> 8 & 0xFF,     // Shift 8 Bits for Blue
                 colorSelection & 0xFF};         // Shift 0 bits for Green
 
-            var upperLeftX = centerX + (.62 * size - radius) * Math.cos(Math.toRadians(degrees));
-            var upperLeftY = centerY + (.62 * size - radius) * Math.sin(Math.toRadians(degrees));
+//            var radius = .5f * size * spokeScale * (float) Math.sin(Math.toRadians(degrees))
+//                    / (1 + (float) Math.sin(Math.toRadians(degrees))) - 1.f;
+            var upperLeftX = centerX + (.5f * size * spokeScale - radius) * (float) Math.cos(Math.toRadians(degrees)) / (float) Math.sqrt(spokeScale) - radius;
+            var upperLeftY = centerY + (.5f * size * spokeScale - radius) * (float) Math.sin(Math.toRadians(degrees)) / (float) Math.sqrt(spokeScale) - radius;
             buttonLocations[2 * i] = (int) upperLeftX;
             buttonLocations[2 * i + 1] = (int) upperLeftY;
 
-            this.answerButtons[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
-                (int) (upperLeftY - .125 * size), (int) radius, (int) radius);
+            this.answerButtons[i] = new ButtonControl(btnModel, (int) (upperLeftX),
+                (int) (upperLeftY), (int) radius * 2, (int) radius * 2);
             degrees += 120;
             sketch.hookControl(this.answerButtons[i]);
         }
@@ -149,16 +155,29 @@ public class SpokeGraphPromptScene implements Scene {
             model.careerCenterText,
             model.careerOptions,
             model.careerWeights,
-            null
+            null,
+                0,
+                1
         );
     }
 
     private void drawPromptGraph(Kiosk sketch) {
+        float[] textSizes = GraphicsUtil.spokeGraph(
+                sketch,
+                size,
+                centerX,
+                centerY,
+                1.f,
+                model.promptText,
+                model.promptOptions,
+                new int[]{sketch.color(105, 183, 77), sketch.color(138, 37, 93), sketch.color(183, 48, 52)},
+                degreeOffset,
+                spokeScale
+        );
+
         for (int i = 0; i < model.answerButtons.length; i++) {
-            sketch.stroke(0, 0, 0);
-            sketch.line(centerX, centerY, buttonLocations[2 * i], buttonLocations[2 * i + 1]);
-            this.answerButtons[i].draw(sketch);
+            this.answerButtons[i].draw(sketch, textSizes[i] / ButtonControl.FONT_SIZE);
         }
-        GraphicsUtil.drawInnerCircle(sketch, centerX, centerY, size / 4.f, model.promptText);
+
     }
 }

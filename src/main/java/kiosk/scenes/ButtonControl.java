@@ -13,7 +13,7 @@ import processing.event.MouseEvent;
 
 public class ButtonControl implements Control<MouseEvent> {
 
-    private static final int FONT_SIZE = 20;
+    public static final int FONT_SIZE = 20;
     private static boolean FONT_SIZE_OVERWRITTEN = false;
     // Radius of the rounded edge on rectangle buttons
     private static final int RADIUS = 20;
