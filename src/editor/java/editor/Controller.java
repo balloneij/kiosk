@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
+import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
@@ -89,7 +90,8 @@ public class Controller implements Initializable {
 
         // Add scene type options for user seletion
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
-                new PromptSceneModel()
+                new PromptSceneModel(),
+                new DetailsSceneModel()
         ));
 
         // Handler for changing the type of scene via the combo box
