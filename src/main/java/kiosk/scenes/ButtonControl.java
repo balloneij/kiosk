@@ -15,12 +15,13 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private static final int FONT_SIZE = 20;
     // Radius of the rounded edge on rectangle buttons
-    private static final int RADIUS = 20;
+    private static final int DEFAULT_RADIUS = 20;
     // Negative will make the color darker on click
     private static final int COLOR_DELTA_ON_CLICK = -25;
 
     private final ButtonModel model;
     private final Rectangle rect;
+    private final int r;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
     private Image image;
     private boolean isPressed;
@@ -37,6 +38,27 @@ public class ButtonControl implements Control<MouseEvent> {
     public ButtonControl(ButtonModel model, int x, int y, int w, int h) {
         this.model = model;
         this.rect = new Rectangle(x, y, w, h);
+        this.r = DEFAULT_RADIUS;
+        this.image = null;
+
+        this.eventListeners = new HashMap<>();
+        this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
+        this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
+    }
+
+    /**
+     * Button UI control. Visual representation of a ButtonModel.
+     * @param model with button data
+     * @param x of the top-right corner
+     * @param y of the top-right corner
+     * @param w width
+     * @param h height
+     * @param r radius (in circular case)
+     */
+    public ButtonControl(ButtonModel model, int x, int y, int w, int h, int r) {
+        this.model = model;
+        this.rect = new Rectangle(x, y, w, h);
+        this.r = r;
         this.image = null;
 
         this.eventListeners = new HashMap<>();
@@ -93,7 +115,7 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
         }
         Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                this.rect.width, this.rect.height, RADIUS);
+                this.rect.width, this.rect.height, r);
 
         // Draw text
         sketch.fill(255);
