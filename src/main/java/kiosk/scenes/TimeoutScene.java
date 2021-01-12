@@ -1,10 +1,9 @@
 package kiosk.scenes;
 
-import kiosk.Graphics;
+import graphics.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.PromptSceneModel;
 import kiosk.models.TimeoutSceneModel;
 import processing.core.PConstants;
 
@@ -98,11 +97,11 @@ public class TimeoutScene implements Scene {
         sketch.fill(0);
 
         // Title
-        Graphics.useSerif(sketch, TITLE_FONT_SIZE);
+        Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
         sketch.text(this.model.title, centerX, TITLE_Y);
 
         // Prompt
-        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE, false);
+        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE);
         sketch.text(this.model.prompt, centerX, PROMPT_Y);
 
         homeButton.draw(sketch);

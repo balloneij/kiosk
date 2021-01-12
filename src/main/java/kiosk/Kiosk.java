@@ -1,5 +1,7 @@
 package kiosk;
 
+import graphics.Color;
+import graphics.Graphics;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,8 +17,6 @@ import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
-import kiosk.scenes.DefaultScene;
-import kiosk.scenes.EmptyScene;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
@@ -73,6 +73,8 @@ public class Kiosk extends PApplet {
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.put(e, new LinkedList<>());
         }
+
+        Color.setSketch(this);
     }
 
     /**
@@ -196,21 +198,28 @@ public class Kiosk extends PApplet {
             int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 surveyFile = fc.getSelectedFile().getPath();
-                System.out.println(
-                        "Getting " + surveyFile + " in the background for the next refresh\n");
+                System.out.println("Getting " + surveyFile + "\n");
+                refresh(); // Refresh the survey view with the new file
             } else {
                 System.out.println("There was an error getting the file.\n");
             }
         } else if (event.getKeyCode() == 116) { //F5 Key Press
-            System.out.println("Refreshing the view...\n");
-            try {
-                updateSurveyPath(surveyFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            refresh(); // Refresh the survey view
         }
         for (EventListener listener : this.mouseListeners.get(InputEvent.KeyPressed)) {
             listener.invoke(event);
+        }
+    }
+
+    /**
+     * Reloads the current file and updates the survey view.
+     */
+    private void refresh() {
+        System.out.println("Refreshing the view...\n");
+        try {
+            updateSurveyPath(surveyFile);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

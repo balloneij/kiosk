@@ -36,11 +36,10 @@ public class SpokeGraphPromptScene implements Scene {
     private float centerX;
     private float centerY;
     private int[] buttonLocations;
-    private ButtonControl[] buttons;
+    private ButtonControl[] answerButtons;
 
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
-        this.buttons = new ButtonControl[this.model.answers.length];
     }
 
     @Override
@@ -50,6 +49,7 @@ public class SpokeGraphPromptScene implements Scene {
         var y = sketch.height * .25f;
         centerX = (size / 2) + x;
         centerY = (size / 2) + y;
+        this.answerButtons = new ButtonControl[model.answerButtons.length];
 
         initializeButtons(model, sketch, size, centerX, centerY);
     }
@@ -58,28 +58,34 @@ public class SpokeGraphPromptScene implements Scene {
             float centerX, float centerY) {
         var degrees = 0.f;
         var radius = .25 * size;
-        buttonLocations = new int[2 * model.answers.length];
+        buttonLocations = new int[2 * model.promptOptions.length];
 
         // for each answer find the degrees and position
-        for (var i = 0; i < model.answers.length; i++) {
-            var btnModel = model.answers[i];
+        for (var i = 0; i < model.answerButtons.length; i++) {
+            var btnModel = model.answerButtons[i];
+            var colorSelection = model.optionColors[i % model.optionColors.length];
             btnModel.isCircle = true;
+            // Colors represented as a single int have their RGB values spread along an int.
+            btnModel.rgb = new int[]{
+                colorSelection >> 16 & 0xFF,    // Shift 16 bits for Red
+                colorSelection >> 8 & 0xFF,     // Shift 8 Bits for Blue
+                colorSelection & 0xFF};         // Shift 0 bits for Green
 
             var upperLeftX = centerX + (.62 * size - radius) * Math.cos(Math.toRadians(degrees));
             var upperLeftY = centerY + (.62 * size - radius) * Math.sin(Math.toRadians(degrees));
             buttonLocations[2 * i] = (int) upperLeftX;
             buttonLocations[2 * i + 1] = (int) upperLeftY;
 
-            this.buttons[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
+            this.answerButtons[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
                 (int) (upperLeftY - .125 * size), (int) radius, (int) radius);
             degrees += 120;
-            sketch.hookControl(this.buttons[i]);
+            sketch.hookControl(this.answerButtons[i]);
         }
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.buttons) {
+        for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
@@ -122,20 +128,17 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.height * .25f,
             1.f,
             model.careerCenterText,
-            buttons
+            model.careerOptions,
+            model.careerWeights,
+            null
         );
     }
 
     private void drawPromptGraph(Kiosk sketch) {
-<<<<<<< HEAD
-        for (int i = 0; i < model.answers.length; i++) {
-            sketch.stroke(0, 0, 0);
-=======
         for (int i = 0; i < model.answerButtons.length; i++) {
             sketch.stroke(255);
->>>>>>> 9c1e2bf314320e0a99f73d1be3111c29c7cc133d
             sketch.line(centerX, centerY, buttonLocations[2 * i], buttonLocations[2 * i + 1]);
-            this.buttons[i].draw(sketch);
+            this.answerButtons[i].draw(sketch);
         }
         SpokeUtil.drawInnerCircle(sketch, centerX, centerY, size / 4.f, model.promptText);
     }

@@ -50,6 +50,9 @@ public class LoadedSurveyModel implements Serializable {
     public static LoadedSurveyModel readFromFile(File file) {
         try (XMLDecoder decoder = new XMLDecoder(
                 new BufferedInputStream(new FileInputStream(file)))) {
+            decoder.setExceptionListener(ex -> {
+                throw new RuntimeException("Malformed XML Dataset");
+            });
             Object surveyObject = decoder.readObject();
             if (!(surveyObject instanceof LoadedSurveyModel)) {
                 String errorMsg = "Successfully loaded the survey XML, but\n"
@@ -61,11 +64,25 @@ public class LoadedSurveyModel implements Serializable {
             return (LoadedSurveyModel) surveyObject;
         } catch (FileNotFoundException exc) {
             String errorMsg = "Could not read from survey at '" + file.getPath()
-                    + "':\n" + exc.getMessage();
+                    + "':\n" + exc.getMessage()
+                    + "\n\nPress F2 to open the file-chooser and select a survey file. Press F5 "
+                    + "to refresh the view. "
+                    + "\nThe program can also be started from the command line with the command "
+                    + "\n\"java -jar kiosk.jar <survey file>\""
+                    + "\nwhere <survey file> is the path to the survey file.";
+            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
+            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+            return errorSurvey;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            String errorMsg = "Could not read from survey at '" + file.getPath()
+                    + "'\nThe XML is probably deformed in some way."
+                    + "\nRefer to the console for more specific details.";
             LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
             errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
             return errorSurvey;
         } catch (Exception exc) {
+            exc.printStackTrace();
             String errorMsg = "Could not read from survey at '" + file.getPath()
                     + "'\nThe XML is probably deformed in some way."
                     + "\nRefer to the console for more specific details.";

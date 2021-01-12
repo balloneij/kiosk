@@ -6,7 +6,7 @@ import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
 import processing.core.PConstants;
 
-public class GraphicsUtil {
+public class SpokeUtil {
 
     public static final float TextRatioEstimate = 1.5f; // 1.7
     public static final float InnerOuterCircleRatio = 4.f;
@@ -98,8 +98,8 @@ public class GraphicsUtil {
      */
     public static void drawSpoke(Kiosk sketch, float length,
             float centerX, float centerY, float angle) {
-        sketch.fill(0, 0, 0);
-        sketch.stroke(0, 0, 0);
+        sketch.fill(255);
+        sketch.stroke(255);
         sketch.line(
             centerX + length * .125f * (float) Math.cos(Math.toRadians(angle)),
             centerY + length * .125f * (float) Math.sin(Math.toRadians(angle)),

@@ -1,6 +1,7 @@
 package kiosk.scenes;
 
-import kiosk.Graphics;
+import graphics.Color;
+import graphics.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
@@ -84,12 +85,14 @@ public class PromptScene implements Scene {
 
         var homeButtonModel = new ButtonModel();
         homeButtonModel.text = "Home";
+        homeButtonModel.rgb = Color.DW_BLACK_RGB;
         this.homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING, BUTTON_PADDING,
                 BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.homeButton);
         var backButtonModel = new ButtonModel();
         backButtonModel.text = "Back";
+        backButtonModel.rgb = Color.DW_BLACK_RGB;
         this.backButton = new ButtonControl(backButtonModel,
                 BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
                 BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
@@ -130,15 +133,15 @@ public class PromptScene implements Scene {
         sketch.fill(0);
 
         // Title
-        Graphics.useSerif(sketch, TITLE_FONT_SIZE);
+        Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
         sketch.text(this.model.title, centerX, TITLE_Y);
 
         // Prompt
-        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE, false);
+        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE);
         sketch.text(this.model.prompt, centerX, PROMPT_Y);
 
         // Action
-        Graphics.useSansSerif(sketch, ACTION_FONT_SIZE, true);
+        Graphics.useSansSerifBold(sketch, ACTION_FONT_SIZE);
         sketch.text(this.model.actionPhrase, centerX, ACTION_Y);
 
         // Draw buttons
