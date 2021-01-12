@@ -59,8 +59,8 @@ public class DetailsScene implements Scene {
 
         this.nextButton = new ButtonControl(
             this.model.button,
-            sketchWidth / 2,
-            sketchHeight / 2,
+                (sketchWidth / 2) - (BUTTON_WIDTH * 3 / 8),
+            FOREGROUND_Y_PADDING + (FOREGROUND_HEIGHT / 2),
             BUTTON_WIDTH * 3 / 4,
             BUTTON_HEIGHT * 3 / 4
         );
@@ -98,6 +98,7 @@ public class DetailsScene implements Scene {
 
         // Title
         Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
+        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.text(this.model.title, centerX, TITLE_Y);
 
         this.nextButton.draw(sketch);
