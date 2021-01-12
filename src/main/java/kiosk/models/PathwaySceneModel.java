@@ -1,5 +1,6 @@
 package kiosk.models;
 
+import kiosk.Settings;
 import kiosk.scenes.Scene;
 import kiosk.scenes.PathwayScene;
 
@@ -14,23 +15,19 @@ public class PathwaySceneModel implements SceneModel {
     public ButtonModel[] answers;
 
     /**
-     * Creates a new spoke graph Scene Model.
-     * @param id The unique id of the scene.
-     * @param x The upper left-hand x position of the Scene.
-     * @param y The upper left-hand y position of the Scene.
-     * @param size The scene is drawn in a square, this is the size of all sides.
-     * @param padding The extra spacing between circles.
-     * @param centerText The text in the center circle.
-     * @param answers The list of text appearing on the outer circles.
+     * Creates a new pathway scene model.
+     * Composed of:
+     * - Title
+     * - Unweighted spoke graph on the right
+     * - Weighted spoke graph on the left
      */
-    public PathwaySceneModel(String id, float x, float y, float size, float padding,
-                             String centerText, ButtonModel[] answers) {
-        this.id = id;
-        this.xpos = x;
-        this.ypos = y;
-        this.size = size;
-        this.padding = padding;
-        this.centerText = centerText;
+    public PathwaySceneModel() {
+        this.id = IdGenerator.getInstance().getNextId();
+        this.xpos = 0;
+        this.ypos = 0;
+        this.size = 50;
+        this.padding = 20;
+        this.centerText = "";
         this.answers = new ButtonModel[]{};
     }
 
@@ -49,11 +46,23 @@ public class PathwaySceneModel implements SceneModel {
         this.id = id;
     }
 
-
     @Override
     public SceneModel deepCopy() {
-        return new PathwaySceneModel(this.id, this.xpos, this.ypos, this.size,
-                this.padding, this.centerText, this.answers);
+        ButtonModel[] answersCopy = new ButtonModel[this.answers.length];
+        for (int i = 0; i < answersCopy.length; i++) {
+            ButtonModel answer = this.answers[i];
+            answersCopy[i] = answer.deepCopy();
+        }
+
+        var copy = new PathwaySceneModel();
+        copy.id = this.id;
+        copy.xpos = this.xpos;
+        copy.ypos = this.ypos;
+        copy.size = this.size;
+        copy.padding = this.padding;
+        copy.centerText = this.centerText;
+        copy.answers = answersCopy;
+        return copy;
     }
 
     @Override

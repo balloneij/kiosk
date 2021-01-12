@@ -1,6 +1,8 @@
 package editor;
 
 import editor.sceneloaders.PromptSceneLoader;
+import editor.sceneloaders.SpokeGraphPromptSceneLoader;
+import editor.sceneloaders.PathwaySceneLoader;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -22,9 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
-import kiosk.models.EmptySceneModel;
-import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
+import kiosk.models.*;
 import processing.javafx.PSurfaceFX;
 
 
@@ -89,7 +89,7 @@ public class Controller implements Initializable {
 
         // Add scene type options for user seletion
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
-                new PromptSceneModel()
+                new PromptSceneModel(), new SpokeGraphPromptSceneModel(), new PathwaySceneModel()
         ));
 
         // Handler for changing the type of scene via the combo box
@@ -136,6 +136,10 @@ public class Controller implements Initializable {
         previousId = model.getId();
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof SpokeGraphPromptSceneModel) {
+            SpokeGraphPromptSceneLoader.loadScene(this, (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof PathwaySceneModel) {
+            PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else {
             toolbarBox.getChildren().clear();
         }
