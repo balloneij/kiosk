@@ -24,12 +24,7 @@ public class PathwayScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-<<<<<<< HEAD:src/main/java/kiosk/scenes/PathwayScene.java
-        GraphicsUtil.spokeGraph(sketch, model.size, model.xpos, model.ypos,
-                model.padding, model.centerText, model.answers);
-=======
         SpokeUtil.spokeGraph(sketch, model.size, model.xpos, model.ypos,
-                model.padding, model.centerText, model.options, model.colors);
->>>>>>> 9c1e2bf314320e0a99f73d1be3111c29c7cc133d:src/main/java/kiosk/scenes/SpokeGraphScene.java
+                model.padding, model.centerText, model.answers);
     }
 }

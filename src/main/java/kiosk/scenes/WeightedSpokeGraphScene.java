@@ -22,13 +22,9 @@ public class WeightedSpokeGraphScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-<<<<<<< HEAD
-        GraphicsUtil.weightedSpokeGraph(
-=======
         SpokeUtil.spokeGraph(
->>>>>>> 9c1e2bf314320e0a99f73d1be3111c29c7cc133d
             sketch, model.size, model.centerX, model.centerY, model.padding,
-            model.centerText, model.answers, model.weights
+            model.centerText, model.answers
         );
     }
 }

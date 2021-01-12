@@ -13,7 +13,7 @@ public class WeightedSpokeGraphSceneModel
     public final String centerText;
     public final int size;
     public final int padding;
-    public final ButtonControl[] answers;
+    public final ButtonModel[] answers;
     public final int[] weights;
 
     /**
@@ -25,7 +25,7 @@ public class WeightedSpokeGraphSceneModel
      * @param id The unique id of the scene.
      */
     public WeightedSpokeGraphSceneModel(String centerText, int centerX, int centerY,
-            ButtonControl[] answers, int[] weights, int size, int padding, String id) {
+            ButtonModel[] answers, int[] weights, int size, int padding, String id) {
         this.id = id;
         this.centerX = centerX;
         this.centerY = centerY;

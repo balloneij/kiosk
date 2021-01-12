@@ -36,11 +36,11 @@ public class SpokeGraphPromptScene implements Scene {
     private float centerX;
     private float centerY;
     private int[] buttonLocations;
-    private ButtonControl[] buttons;
+    private ButtonControl[] answerButtons;
 
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
-        this.buttons = new ButtonControl[this.model.answers.length];
+        this.answerButtons = new ButtonControl[this.model.answers.length];
     }
 
     @Override
@@ -50,6 +50,7 @@ public class SpokeGraphPromptScene implements Scene {
         var y = sketch.height * .25f;
         centerX = (size / 2) + x;
         centerY = (size / 2) + y;
+        this.answerButtons = new ButtonControl[this.model.answers.length];
 
         initializeButtons(model, sketch, size, centerX, centerY);
     }
@@ -70,16 +71,16 @@ public class SpokeGraphPromptScene implements Scene {
             buttonLocations[2 * i] = (int) upperLeftX;
             buttonLocations[2 * i + 1] = (int) upperLeftY;
 
-            this.buttons[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
+            this.answerButtons[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
                 (int) (upperLeftY - .125 * size), (int) radius, (int) radius);
             degrees += 120;
-            sketch.hookControl(this.buttons[i]);
+            sketch.hookControl(this.answerButtons[i]);
         }
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.buttons) {
+        for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
@@ -122,20 +123,15 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.height * .25f,
             1.f,
             model.careerCenterText,
-            buttons
+            answerButtons
         );
     }
 
     private void drawPromptGraph(Kiosk sketch) {
-<<<<<<< HEAD
         for (int i = 0; i < model.answers.length; i++) {
-            sketch.stroke(0, 0, 0);
-=======
-        for (int i = 0; i < model.answerButtons.length; i++) {
             sketch.stroke(255);
->>>>>>> 9c1e2bf314320e0a99f73d1be3111c29c7cc133d
             sketch.line(centerX, centerY, buttonLocations[2 * i], buttonLocations[2 * i + 1]);
-            this.buttons[i].draw(sketch);
+            this.answerButtons[i].draw(sketch);
         }
         SpokeUtil.drawInnerCircle(sketch, centerX, centerY, size / 4.f, model.promptText);
     }

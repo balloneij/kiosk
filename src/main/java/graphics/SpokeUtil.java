@@ -23,7 +23,7 @@ public class SpokeUtil {
      * @param answers The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-          String centerText, ButtonControl[] answers) {
+          String centerText, ButtonModel[] answers) {
         var weights = new int[answers.length];
         Arrays.fill(weights, 1);
         spokeGraph(sketch, size, x, y, padding, centerText, answers);
@@ -114,8 +114,8 @@ public class SpokeUtil {
         drawSpoke(sketch, size, centerX, centerY, deg);
 
         // Draw the outer circle
+        int[] color = answer.getModel().rgb;
         int color_single = color[0] << 16 + color[1] << 8 + color[2];
-        answer.
         sketch.stroke(color_single);
         sketch.fill(color_single);
         var smX = centerX + (.5f * size - smRad) * (float) Math.cos(Math.toRadians(deg)) - smRad;
@@ -127,6 +127,7 @@ public class SpokeUtil {
         sketch.fill(256, 256, 256);
 
         // Figure out the optimal size of the text to fit in the circles
+        String optionText = answer.getModel().text;
         boolean sizeFlag = true;
         float buffer = 1.f;
         float textSize = 0;

@@ -45,8 +45,19 @@ public class PathwaySceneModel implements SceneModel {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    @Override
     public SceneModel deepCopy() {
         return new PathwaySceneModel(this.id, this.xpos, this.ypos, this.size,
                 this.padding, this.centerText, this.answers);
+    }
+
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 }

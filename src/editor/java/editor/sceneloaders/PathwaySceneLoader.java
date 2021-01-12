@@ -1,23 +1,13 @@
 package editor.sceneloaders;
 
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import kiosk.SceneGraph;
-import kiosk.models.ButtonModel;
-import kiosk.models.ImageModel;
-import kiosk.models.SpokeGraphSceneModel;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 
 public class PathwaySceneLoader {
     // The default padding to space the editing Nodes
