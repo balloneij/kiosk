@@ -18,7 +18,6 @@ public class DetailsScene implements Scene {
 
     // Buttons
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
     private static final int BUTTON_PADDING = 20;
 
     // White foreground
@@ -46,23 +45,23 @@ public class DetailsScene implements Scene {
         homeButtonModel.rgb = Color.DW_BLACK_RGB;
         homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING, BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+                BUTTON_WIDTH * 3 / 4, BUTTON_WIDTH * 3 / 4);
         sketch.hookControl(this.homeButton);
 
         var backButtonModel = new ButtonModel();
         backButtonModel.text = "Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         this.backButton = new ButtonControl(backButtonModel,
-                BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+                BUTTON_PADDING, sketchHeight - (BUTTON_WIDTH * 3 / 4) - BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, BUTTON_WIDTH * 3 / 4);
         sketch.hookControl(this.backButton);
 
         this.nextButton = new ButtonControl(
             this.model.button,
-                (sketchWidth / 2) - (BUTTON_WIDTH * 3 / 8),
-            FOREGROUND_Y_PADDING + (FOREGROUND_HEIGHT / 2),
-            BUTTON_WIDTH * 3 / 4,
-            BUTTON_HEIGHT * 3 / 4
+            (sketchWidth / 2) - (BUTTON_WIDTH * 3 / 8),
+            FOREGROUND_Y_PADDING + (FOREGROUND_HEIGHT * 3 / 4),
+                BUTTON_WIDTH * 3 / 4,
+                BUTTON_WIDTH * 3 / 4
         );
         this.nextButton.init(sketch);
         sketch.hookControl(this.nextButton);

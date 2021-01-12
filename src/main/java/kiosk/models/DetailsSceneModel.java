@@ -9,11 +9,13 @@ public class DetailsSceneModel implements SceneModel {
 
     public String id;
     public String title;
+    public String body;
     public ButtonModel button;
 
     public DetailsSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
         this.title = "";
+        this.body = "";
         this.button = new ButtonModel();
     }
 

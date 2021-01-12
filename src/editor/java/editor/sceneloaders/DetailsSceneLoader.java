@@ -151,17 +151,14 @@ public class DetailsSceneLoader {
             }
         });
 
-        Separator separator = new Separator();
-        separator.setPadding(ANSWER_PADDING);
-
         // Create an HBox with a "Target: " label and the combo-box
         HBox targetsBox = new HBox(new Label("Target: "), targetComboBox);
         targetsBox.setPadding(new Insets(0, 0, 0, 5));
 
         var answerVbox = new VBox(); // Contains all the editing controls for this answer
         // Put all the answer controls together
-        HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, separator, targetsBox);
-        answerVbox.getChildren().addAll(answerField, editingControls);
+        HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton);
+        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox);
         return answerVbox;
     }
 }
