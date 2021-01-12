@@ -2,12 +2,15 @@ package kiosk;
 
 import graphics.Color;
 import graphics.Graphics;
+import java.awt.Component;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -33,6 +36,8 @@ public class Kiosk extends PApplet {
     private int newSceneMillis;
     private boolean timeoutActive = false;
 
+    private static JFileChooser fileChooser;
+
     /**
      * Create a Kiosk and loads the survey specified in the path provided.
      * @param surveyPath to load from
@@ -48,12 +53,29 @@ public class Kiosk extends PApplet {
      * @param settings the settings to use
      */
     public Kiosk(String surveyPath, Settings settings) {
+        // Configure fileChooser style
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException
                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
             System.err.println("Could not set the UI for the file chooser");
         }
+
+        // Create the fileChooser (default it to the working directory) and make it always-on-top
+        String initialDirectory = System.getProperty("user.dir");
+        fileChooser = new JFileChooser(new File(initialDirectory)) {
+            @Override
+            protected JDialog createDialog(Component parent) throws HeadlessException {
+                JDialog dialog = super.createDialog(parent);
+                dialog.setAlwaysOnTop(true); // keeps the dialog from being behind the window
+                return dialog;
+            }
+        };
+
+        // Only allow xml files
+        fileChooser.setFileFilter(
+                new FileNameExtensionFilter("XML file (*.xml)", "xml"));
+        fileChooser.setAcceptAllFileFilterUsed(false);
 
         Kiosk.settings = settings;
 
@@ -189,20 +211,7 @@ public class Kiosk extends PApplet {
     @Override
     public void keyPressed(KeyEvent event) {
         if (event.getKeyCode() == 113) { //F2 Key Press
-            System.out.println("Opening the file explorer...");
-            final JFileChooser fc = new JFileChooser();
-            FileNameExtensionFilter filter =
-                    new FileNameExtensionFilter("XML file (*.xml)", "xml", "XML");
-            fc.setFileFilter(filter);
-            fc.setAcceptAllFileFilterUsed(false);
-            int returnVal = fc.showOpenDialog(null);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                surveyFile = fc.getSelectedFile().getPath();
-                System.out.println("Getting " + surveyFile + "\n");
-                refresh(); // Refresh the survey view with the new file
-            } else {
-                System.out.println("There was an error getting the file.\n");
-            }
+            openFileChooser();
         } else if (event.getKeyCode() == 116) { //F5 Key Press
             refresh(); // Refresh the survey view
         }
@@ -212,13 +221,28 @@ public class Kiosk extends PApplet {
     }
 
     /**
+     * Opens the file chooser for the Kiosk and refreshes the view with the selected survey file.
+     */
+    public void openFileChooser() {
+        int returnVal = fileChooser.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            surveyFile = fileChooser.getSelectedFile().getPath();
+            System.out.println("Getting " + surveyFile);
+            refresh(); // Refresh the survey view with the new file
+        } else if (returnVal == JFileChooser.ERROR_OPTION) {
+            System.err.println("There was an error getting the file.");
+        }
+    }
+
+    /**
      * Reloads the current file and updates the survey view.
      */
     private void refresh() {
-        System.out.println("Refreshing the view...\n");
         try {
             updateSurveyPath(surveyFile);
+            System.out.println("View refreshed.");
         } catch (Exception e) {
+            System.err.println("There was a problem refreshing the view:");
             e.printStackTrace();
         }
     }
