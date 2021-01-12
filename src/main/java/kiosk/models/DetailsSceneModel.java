@@ -40,6 +40,7 @@ public class DetailsSceneModel implements SceneModel {
         copy.id = this.id;
         copy.title = title;
         copy.button = this.button.deepCopy();
+        copy.body = this.body;
 
         return copy;
     }

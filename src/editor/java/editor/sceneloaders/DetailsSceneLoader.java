@@ -34,6 +34,7 @@ public class DetailsSceneLoader {
         VBox vbox = new VBox(
                 getIdBox(controller, model, graph),
                 getTitleBox(model, graph),
+                getDescriptionBox(model, graph),
                 createButton(model, graph, controller)
         );
         toolbarBox.getChildren().add(vbox);
@@ -73,6 +74,21 @@ public class DetailsSceneLoader {
         });
 
         var vbox = new VBox(new Label("Title:"), titleField);
+        vbox.setPadding(PADDING);
+        return vbox;
+    }
+
+    private static Node getDescriptionBox(DetailsSceneModel model, SceneGraph graph) {
+        var bodyField = new TextArea(model.title);
+        bodyField.setMaxHeight(5);
+
+        // Listener to update the title
+        bodyField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.body = newValue;
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        var vbox = new VBox(new Label("Title:"), bodyField);
         vbox.setPadding(PADDING);
         return vbox;
     }
@@ -161,4 +177,5 @@ public class DetailsSceneLoader {
         answerVbox.getChildren().addAll(answerField, editingControls, targetsBox);
         return answerVbox;
     }
+
 }

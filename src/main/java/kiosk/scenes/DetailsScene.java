@@ -29,7 +29,9 @@ public class DetailsScene implements Scene {
 
     // Text
     private static final int TITLE_Y = Kiosk.getSettings().screenH / 5;
+    private static final int BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
     private static final int TITLE_FONT_SIZE = 36;
+    private static final int BODY_FONT_SIZE = 30;
 
     public DetailsScene(DetailsSceneModel model) {
         this.model = model;
@@ -99,6 +101,11 @@ public class DetailsScene implements Scene {
         Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.text(this.model.title, centerX, TITLE_Y);
+
+        // Body
+        Graphics.useSansSerif(sketch, BODY_FONT_SIZE);
+        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+        sketch.text(this.model.body, centerX, BODY_Y);
 
         this.nextButton.draw(sketch);
 
