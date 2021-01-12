@@ -1,5 +1,6 @@
 package kiosk.models;
 
+import graphics.Color;
 import kiosk.scenes.ButtonControl;
 import kiosk.scenes.DetailsScene;
 import kiosk.scenes.Image;
@@ -17,6 +18,7 @@ public class DetailsSceneModel implements SceneModel {
         this.title = "";
         this.body = "";
         this.button = new ButtonModel();
+        button.rgb = Color.DW_GREEN_RGB;
     }
 
     @Override
