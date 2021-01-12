@@ -100,11 +100,13 @@ public class DetailsScene implements Scene {
         // Title
         Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+        sketch.textLeading(30);
         sketch.text(this.model.title, centerX, TITLE_Y);
 
         // Body
         Graphics.useSansSerif(sketch, BODY_FONT_SIZE);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+        sketch.textLeading(25);
         sketch.text(this.model.body, centerX, BODY_Y);
 
         this.nextButton.draw(sketch);
