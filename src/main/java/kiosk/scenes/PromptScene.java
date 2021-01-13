@@ -42,7 +42,7 @@ public class PromptScene implements Scene {
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;
-        this.buttons = new ButtonControl[this.model.answers.length];
+        this.buttons = new ButtonControl[this.model.careers.length];
     }
 
     @Override
@@ -54,8 +54,8 @@ public class PromptScene implements Scene {
         int x = Kiosk.getSettings().screenW / 2
                 - (BUTTON_WIDTH * this.buttons.length
                 + BUTTON_PADDING * (this.buttons.length - 1)) / 2;
-        for (int i = 0; i < this.model.answers.length; i++) {
-            ButtonModel model = this.model.answers[i];
+        for (int i = 0; i < this.model.careers.length; i++) {
+            ButtonModel model = this.model.careers[i];
 
             int width;
             int height;

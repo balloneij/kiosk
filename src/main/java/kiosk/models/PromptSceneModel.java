@@ -9,7 +9,7 @@ public final class PromptSceneModel implements SceneModel {
     public String title;
     public String prompt;
     public String actionPhrase;
-    public ButtonModel[] answers;
+    public ButtonModel[] careers;
 
     /**
      * Creates an empty PromptSceneModel.
@@ -19,7 +19,7 @@ public final class PromptSceneModel implements SceneModel {
         this.title = "";
         this.prompt = "\n\n";
         this.actionPhrase = "";
-        this.answers = new ButtonModel[]{};
+        this.careers = new ButtonModel[]{};
     }
 
     @Override
@@ -39,9 +39,9 @@ public final class PromptSceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        ButtonModel[] buttonsCopy = new ButtonModel[this.answers.length];
+        ButtonModel[] buttonsCopy = new ButtonModel[this.careers.length];
         for (int i = 0; i < buttonsCopy.length; i++) {
-            ButtonModel button = this.answers[i];
+            ButtonModel button = this.careers[i];
             buttonsCopy[i] = button.deepCopy();
         }
 
@@ -50,17 +50,17 @@ public final class PromptSceneModel implements SceneModel {
         copy.title = this.title;
         copy.prompt = this.prompt;
         copy.actionPhrase = this.actionPhrase;
-        copy.answers = buttonsCopy;
+        copy.careers = buttonsCopy;
 
         return copy;
     }
 
     @Override
     public String[] getTargets() {
-        String[] ids = new String[this.answers.length];
+        String[] ids = new String[this.careers.length];
 
-        for (int i = 0; i < this.answers.length; i++) {
-            ids[i] = this.answers[i].target;
+        for (int i = 0; i < this.careers.length; i++) {
+            ids[i] = this.careers[i].target;
         }
 
         return ids;
