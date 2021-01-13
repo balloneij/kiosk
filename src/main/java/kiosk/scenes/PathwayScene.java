@@ -90,7 +90,27 @@ public class PathwayScene implements Scene {
     public void draw(Kiosk sketch) {
         Graphics.useSansSerifBold(sketch, 48);
         Graphics.drawBubbleBackground(sketch);
+        drawHeader(sketch);
         drawPathwayGraph(sketch);
+    }
+
+    private void drawHeader(Kiosk sketch) {
+        // Draw the white header box
+        sketch.fill(255);
+        sketch.stroke(255);
+
+        Graphics.drawRoundedRectangle(sketch,
+                HEADER_X, HEADER_Y, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
+
+        // Draw the title and body
+        sketch.fill(0);
+        sketch.stroke(0);
+
+        Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y);
+
+        Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
+        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y);
     }
 
     private void drawPathwayGraph(Kiosk sketch) {
