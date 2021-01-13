@@ -63,6 +63,8 @@ public class PathwaySceneLoader {
         // Get the editing Nodes for the PathwaySceneModel properties
         VBox vbox = new VBox(
                 getIdBox(controller, model, graph),
+                getHeaderTitleBox(model, graph),
+                getHeaderBodyBox(model, graph),
                 getPositionBoxes(model, graph),
                 getSizeBox(model, graph),
                 getPaddingBox(model, graph),
@@ -96,6 +98,36 @@ public class PathwaySceneLoader {
         });
 
         var vbox = new VBox(new Label("ID:"), new HBox(idField, idApplyButton));
+        vbox.setPadding(PADDING);
+        return vbox;
+    }
+
+    // Adds a Node containing a text field for editing the header title.
+    private static Node getHeaderTitleBox(PathwaySceneModel model, SceneGraph graph) {
+        var titleField = new TextField(model.headerTitle);
+
+        // Listener to update the title
+        titleField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.headerTitle = newValue;
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        var vbox = new VBox(new Label("Header Title:"), titleField);
+        vbox.setPadding(PADDING);
+        return vbox;
+    }
+
+    // Adds a Node containing a text field for editing the header body.
+    private static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
+        var bodyField = new TextField(model.headerBody);
+
+        // Listener to update the body
+        bodyField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.headerBody = newValue;
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        var vbox = new VBox(new Label("Header Body:"), bodyField);
         vbox.setPadding(PADDING);
         return vbox;
     }

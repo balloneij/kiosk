@@ -7,6 +7,8 @@ import kiosk.scenes.PathwayScene;
 public class PathwaySceneModel implements SceneModel {
 
     public String id;
+    public String headerTitle;
+    public String headerBody;
     public float xpos;
     public float ypos;
     public float size;
@@ -23,6 +25,8 @@ public class PathwaySceneModel implements SceneModel {
      */
     public PathwaySceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
+        this.headerTitle = "";
+        this.headerBody = "";
         this.xpos = 0;
         this.ypos = 0;
         this.size = 50;
@@ -56,6 +60,8 @@ public class PathwaySceneModel implements SceneModel {
 
         var copy = new PathwaySceneModel();
         copy.id = this.id;
+        copy.headerTitle = this.headerTitle;
+        copy.headerBody = this.headerBody;
         copy.xpos = this.xpos;
         copy.ypos = this.ypos;
         copy.size = this.size;
