@@ -20,6 +20,7 @@ import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.ImageModel;
+import org.w3c.dom.Text;
 
 public class DetailsSceneLoader {
     // The default padding to space the editing Nodes
@@ -97,7 +98,7 @@ public class DetailsSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Title:"), bodyField);
+        var vbox = new VBox(new Label("Body:"), bodyField);
         vbox.setPadding(PADDING);
         return vbox;
     }
@@ -107,7 +108,9 @@ public class DetailsSceneLoader {
         ButtonModel answer = model.button;
 
         // Setup the text field for editing the answer
-        var answerField = new TextField(answer.text);
+        var answerLabel = new Label("Button Text:");
+        var answerField = new TextArea(answer.text);
+        answerField.setMaxHeight(5);
         answerField.textProperty().addListener((observable, oldValue, newValue) -> {
             answer.text = newValue;
             graph.registerSceneModel(model); // Re-register the model to update the scene
@@ -142,7 +145,7 @@ public class DetailsSceneLoader {
             // Open the image file chooser
             var file = imageFileChooser.showOpenDialog(null);
 
-            // If null, no file was chosen
+            // If null, no file was chosenA
             if (file != null) {
                 // Set the chooser to open in the same directory next time
                 String imagePath = file.getPath();
@@ -184,7 +187,8 @@ public class DetailsSceneLoader {
         var answerVbox = new VBox(); // Contains all the editing controls for this answer
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton);
-        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox);
+        answerVbox.getChildren().addAll(answerLabel, answerField, editingControls, targetsBox);
+        answerVbox.setPadding(PADDING);
         return answerVbox;
     }
 

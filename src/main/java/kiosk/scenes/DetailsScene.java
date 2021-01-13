@@ -30,7 +30,7 @@ public class DetailsScene implements Scene {
 
     // Text
     private static final int TITLE_Y = Kiosk.getSettings().screenH / 5;
-    private static final int BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
+    private static final int BODY_Y = Kiosk.getSettings().screenH * 3 / 9;
     private static final int TITLE_FONT_SIZE = 36;
     private static final int BODY_FONT_SIZE = 30;
 
@@ -65,10 +65,11 @@ public class DetailsScene implements Scene {
 
         this.centerButton = new ButtonControl(
             this.model.button,
-            (sketchWidth / 2) - (BUTTON_WIDTH * 3 / 8),
-            FOREGROUND_Y_PADDING + (FOREGROUND_HEIGHT * 3 / 4),
-                BUTTON_WIDTH * 3 / 4,
-                BUTTON_WIDTH * 3 / 4
+            (sketchWidth / 2) - (BUTTON_WIDTH * 5 / 8),
+            FOREGROUND_Y_PADDING + FOREGROUND_HEIGHT
+                - (BUTTON_WIDTH * 5 / 4 + BUTTON_PADDING),
+                BUTTON_WIDTH * 5 / 4,
+                BUTTON_WIDTH * 5 / 4
         );
         this.centerButton.init(sketch);
         sketch.hookControl(this.centerButton);
