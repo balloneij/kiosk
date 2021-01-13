@@ -1,6 +1,5 @@
 package kiosk.models;
 
-import kiosk.Settings;
 import kiosk.scenes.Scene;
 import kiosk.scenes.PathwayScene;
 
@@ -14,7 +13,7 @@ public class PathwaySceneModel implements SceneModel {
     public float size;
     public float padding;
     public String centerText;
-    public ButtonModel[] answers;
+    public ButtonModel[] careers;
 
     /**
      * Creates a new pathway scene model.
@@ -32,7 +31,7 @@ public class PathwaySceneModel implements SceneModel {
         this.size = 50;
         this.padding = 20;
         this.centerText = "";
-        this.answers = new ButtonModel[]{};
+        this.careers = new ButtonModel[]{};
     }
 
     @Override
@@ -52,9 +51,9 @@ public class PathwaySceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        ButtonModel[] answersCopy = new ButtonModel[this.answers.length];
+        ButtonModel[] answersCopy = new ButtonModel[this.careers.length];
         for (int i = 0; i < answersCopy.length; i++) {
-            ButtonModel answer = this.answers[i];
+            ButtonModel answer = this.careers[i];
             answersCopy[i] = answer.deepCopy();
         }
 
@@ -67,7 +66,7 @@ public class PathwaySceneModel implements SceneModel {
         copy.size = this.size;
         copy.padding = this.padding;
         copy.centerText = this.centerText;
-        copy.answers = answersCopy;
+        copy.careers = answersCopy;
         return copy;
     }
 

@@ -16,10 +16,10 @@ public class XMLTest {
         };
         var prompt0 = new PromptSceneModel();
         prompt0.id = "prompt0";
-        prompt0.careers = buttons;
+        prompt0.answers = buttons;
         var prompt1 = new PromptSceneModel();
         prompt1.id = "prompt1";
-        prompt0.careers = buttons;
+        prompt0.answers = buttons;
 
         var scenes = new SceneModel[]{ prompt0, prompt1 };
         var survey = new LoadedSurveyModel();
@@ -39,9 +39,9 @@ public class XMLTest {
             var expectedPrompt = (PromptSceneModel) survey.scenes[i];
             var prompt = (PromptSceneModel) loadedSurvey.scenes[i];
 
-            for (int a = 0; a < expectedPrompt.careers.length; a++) {
-                assertEquals(expectedPrompt.careers[a].target, prompt.careers[a].target);
-                assertEquals(expectedPrompt.careers[a].text, prompt.careers[a].text);
+            for (int a = 0; a < expectedPrompt.answers.length; a++) {
+                assertEquals(expectedPrompt.answers[a].target, prompt.answers[a].target);
+                assertEquals(expectedPrompt.answers[a].text, prompt.answers[a].text);
             }
         }
     }

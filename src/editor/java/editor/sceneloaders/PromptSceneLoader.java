@@ -140,7 +140,7 @@ public class PromptSceneLoader {
         var vbox = new VBox(new Label("Answers:"), separator);
 
         // Create controls for each answer (and add them to the Node)
-        for (ButtonModel answer : model.careers) {
+        for (ButtonModel answer : model.answers) {
             vbox.getChildren().add(createAnswerNode(controller, answer, vbox, model, graph));
         }
 
@@ -150,9 +150,9 @@ public class PromptSceneLoader {
             ButtonModel newAnswer = new ButtonModel();
 
             // Add the new answer to the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
             answersList.add(newAnswer);
-            model.careers = answersList.toArray(ButtonModel[]::new);
+            model.answers = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Add editing controls for the new answer
@@ -240,9 +240,9 @@ public class PromptSceneLoader {
         Button removeButton = new Button("x");
         removeButton.setOnAction(event -> {
             // Remove the answer from the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
             answersList.remove(answer);
-            model.careers = answersList.toArray(ButtonModel[]::new);
+            model.answers = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Remove the editing controls for this answer from the parent container

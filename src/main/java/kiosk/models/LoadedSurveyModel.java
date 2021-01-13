@@ -106,7 +106,7 @@ public class LoadedSurveyModel implements Serializable {
         ButtonModel titleScreenButton = new ButtonModel();
         titleScreenButton.text = "Let's go";
         titleScreenButton.target = "introscene1";
-        titleScreen.careers = new ButtonModel[]{ titleScreenButton };
+        titleScreen.answers = new ButtonModel[]{ titleScreenButton };
 
         PromptSceneModel challengePrompt = new PromptSceneModel();
         challengePrompt.id = "introscene1";
@@ -118,7 +118,7 @@ public class LoadedSurveyModel implements Serializable {
         ButtonModel challengeYesButton = new ButtonModel();
         challengeYesButton.text = "Yes!";
         challengeYesButton.target = "introscene2";
-        challengePrompt.careers = new ButtonModel[] { challengeYesButton };
+        challengePrompt.answers = new ButtonModel[] { challengeYesButton };
 
         PromptSceneModel agePrompt = new PromptSceneModel();
         agePrompt.id = "introscene2";
@@ -140,7 +140,7 @@ public class LoadedSurveyModel implements Serializable {
         adultButton.target = "introscene3";
         adultButton.isCircle = true;
         adultButton.rgb = new int[] { 244, 80, 50 };
-        agePrompt.careers = new ButtonModel[] {
+        agePrompt.answers = new ButtonModel[] {
             gradeSchoolButton,
             middleSchoolButton,
             adultButton
@@ -177,7 +177,7 @@ public class LoadedSurveyModel implements Serializable {
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
         spaceButton.image = new ImageModel("assets/space.png", 80, 80);
-        pathPrompt.careers = new ButtonModel[] {
+        pathPrompt.answers = new ButtonModel[] {
             humanButton,
             natureButton,
             smartMachinesButton,

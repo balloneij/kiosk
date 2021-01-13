@@ -39,7 +39,7 @@ public class PathwayScene implements Scene {
 
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        this.careerOptions = new ButtonControl[this.model.answers.length];
+        this.careerOptions = new ButtonControl[this.model.careers.length];
     }
 
     @Override
@@ -49,7 +49,7 @@ public class PathwayScene implements Scene {
         var y = sketch.height * .25f;
         centerX = (size / 2) + x;
         centerY = (size / 2) + y;
-        this.careerOptions = new ButtonControl[this.model.answers.length];
+        this.careerOptions = new ButtonControl[this.model.careers.length];
 
         initializeButtons(model, sketch, size, centerX, centerY);
     }
@@ -58,11 +58,11 @@ public class PathwayScene implements Scene {
                                    float centerX, float centerY) {
         var degrees = 0.f;
         var radius = .25 * size;
-        buttonLocations = new int[2 * model.answers.length];
+        buttonLocations = new int[2 * model.careers.length];
 
         // for each answer find the degrees and position
-        for (var i = 0; i < model.answers.length; i++) {
-            var btnModel = model.answers[i];
+        for (var i = 0; i < model.careers.length; i++) {
+            var btnModel = model.careers[i];
             btnModel.isCircle = true;
 
             var upperLeftX = centerX + (.62 * size - radius) * Math.cos(Math.toRadians(degrees));
@@ -114,7 +114,7 @@ public class PathwayScene implements Scene {
     }
 
     private void drawPathwayGraph(Kiosk sketch) {
-        for (int i = 0; i < model.answers.length; i++) {
+        for (int i = 0; i < model.careers.length; i++) {
             sketch.stroke(255);
             sketch.line(centerX, centerY, buttonLocations[2 * i], buttonLocations[2 * i + 1]);
             this.careerOptions[i].draw(sketch);

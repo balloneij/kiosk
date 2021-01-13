@@ -2,8 +2,6 @@ package editor.sceneloaders;
 
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -14,37 +12,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
 import kiosk.models.SceneModel;
-import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
-import kiosk.SceneGraph;
-import kiosk.models.ButtonModel;
-import kiosk.models.ImageModel;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PathwaySceneLoader {
     // The default padding to space the editing Nodes
@@ -232,7 +209,7 @@ public class PathwaySceneLoader {
         var vbox = new VBox(new Label("Answers:"), separator);
 
         // Create controls for each answer (and add them to the Node)
-        for (ButtonModel answer : model.answers) {
+        for (ButtonModel answer : model.careers) {
             vbox.getChildren().add(createAnswerNode(controller, answer, vbox, model, graph));
         }
 
@@ -242,9 +219,9 @@ public class PathwaySceneLoader {
             ButtonModel newAnswer = new ButtonModel();
 
             // Add the new answer to the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
             answersList.add(newAnswer);
-            model.answers = answersList.toArray(ButtonModel[]::new);
+            model.careers = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Add editing controls for the new answer
@@ -332,9 +309,9 @@ public class PathwaySceneLoader {
         Button removeButton = new Button("x");
         removeButton.setOnAction(event -> {
             // Remove the answer from the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
             answersList.remove(answer);
-            model.answers = answersList.toArray(ButtonModel[]::new);
+            model.careers = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Remove the editing controls for this answer from the parent container
