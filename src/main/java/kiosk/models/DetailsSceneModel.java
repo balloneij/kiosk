@@ -1,9 +1,7 @@
 package kiosk.models;
 
 import graphics.Color;
-import kiosk.scenes.ButtonControl;
 import kiosk.scenes.DetailsScene;
-import kiosk.scenes.Image;
 import kiosk.scenes.Scene;
 
 public class DetailsSceneModel implements SceneModel {
@@ -13,6 +11,11 @@ public class DetailsSceneModel implements SceneModel {
     public String body;
     public ButtonModel button;
 
+    /**
+     * Stores all relevant information needed for the Details Scene.
+     * Which is composed of an ID, main title, body of text, and a button
+     * at the bottom.
+     */
     public DetailsSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
         this.title = "";

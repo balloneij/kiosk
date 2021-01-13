@@ -141,8 +141,8 @@ public class Controller implements Initializable {
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
-            DetailsSceneLoader.loadScene(this, (DetailsSceneModel)model, toolbarBox, sceneGraph);
-        }else {
+            DetailsSceneLoader.loadScene(this, (DetailsSceneModel) model, toolbarBox, sceneGraph);
+        } else {
             toolbarBox.getChildren().clear();
         }
     }

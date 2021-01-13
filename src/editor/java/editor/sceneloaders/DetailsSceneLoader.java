@@ -1,22 +1,25 @@
 package editor.sceneloaders;
 
 import editor.Controller;
+import java.io.File;
+import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import kiosk.SceneGraph;
-import kiosk.models.*;
-import kiosk.scenes.ButtonControl;
-import kiosk.scenes.DetailsScene;
-import kiosk.scenes.Scene;
-
-import java.io.File;
-import java.util.ArrayList;
+import kiosk.models.ButtonModel;
+import kiosk.models.DetailsSceneModel;
+import kiosk.models.ImageModel;
 
 public class DetailsSceneLoader {
     // The default padding to space the editing Nodes
@@ -26,8 +29,14 @@ public class DetailsSceneLoader {
 
     static final FileChooser imageFileChooser = new FileChooser();
 
+    /**
+     * Populates the editor pane with fields for editing the provided DetailsScene.
+     * @param model The current scene model we want to modify.
+     * @param toolbarBox The main editor view.
+     * @param graph The scene graph used to manage application state.
+     */
     public static void loadScene(Controller controller,
-            DetailsSceneModel model, VBox toolbarBox, SceneGraph graph) {
+                                 DetailsSceneModel model, VBox toolbarBox, SceneGraph graph) {
         toolbarBox.getChildren().clear();
 
         // Get the editing Nodes for the PromptSceneModel properties
@@ -93,7 +102,8 @@ public class DetailsSceneLoader {
         return vbox;
     }
 
-    private static Node createButton(DetailsSceneModel model, SceneGraph graph, Controller controller) {
+    private static Node createButton(DetailsSceneModel model,
+                                     SceneGraph graph, Controller controller) {
         ButtonModel answer = model.button;
 
         // Setup the text field for editing the answer

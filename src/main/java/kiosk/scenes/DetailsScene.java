@@ -12,6 +12,7 @@ import processing.core.PConstants;
 public class DetailsScene implements Scene {
 
     private final DetailsSceneModel model;
+    private ButtonControl centerButton;
     private ButtonControl nextButton;
     private ButtonControl homeButton;
     private ButtonControl backButton;
@@ -33,6 +34,10 @@ public class DetailsScene implements Scene {
     private static final int TITLE_FONT_SIZE = 36;
     private static final int BODY_FONT_SIZE = 30;
 
+    /**
+     * Detials Scene show a title, body of text, and a button at the bottom.
+     * @param model The model object where we get our information.
+     */
     public DetailsScene(DetailsSceneModel model) {
         this.model = model;
     }
@@ -58,12 +63,26 @@ public class DetailsScene implements Scene {
                 BUTTON_WIDTH * 3 / 4, BUTTON_WIDTH * 3 / 4);
         sketch.hookControl(this.backButton);
 
-        this.nextButton = new ButtonControl(
+        this.centerButton = new ButtonControl(
             this.model.button,
             (sketchWidth / 2) - (BUTTON_WIDTH * 3 / 8),
             FOREGROUND_Y_PADDING + (FOREGROUND_HEIGHT * 3 / 4),
                 BUTTON_WIDTH * 3 / 4,
                 BUTTON_WIDTH * 3 / 4
+        );
+        this.centerButton.init(sketch);
+        sketch.hookControl(this.centerButton);
+
+        var nextButtonModel = new ButtonModel();
+        nextButtonModel.rgb = Color.DW_GREEN_RGB;
+        nextButtonModel.text = "Go!";
+
+        this.nextButton = new ButtonControl(
+            nextButtonModel,
+            FOREGROUND_X_PADDING + FOREGROUND_WIDTH + BUTTON_PADDING,
+            sketchHeight - (BUTTON_WIDTH * 3 / 4) - BUTTON_PADDING,
+            BUTTON_WIDTH * 3 / 4,
+            BUTTON_WIDTH * 3 / 4
         );
         this.nextButton.init(sketch);
         sketch.hookControl(this.nextButton);
@@ -75,8 +94,10 @@ public class DetailsScene implements Scene {
             sceneGraph.reset();
         } else if (this.backButton.wasClicked()) {
             sceneGraph.popScene();
+        } else if (this.centerButton.wasClicked()) {
+            sceneGraph.pushScene(this.centerButton.getTarget());
         } else if (this.nextButton.wasClicked()) {
-            sceneGraph.pushScene(this.nextButton.getTarget());
+            sceneGraph.pushScene(this.centerButton.getTarget());
         }
     }
 
@@ -100,18 +121,18 @@ public class DetailsScene implements Scene {
         // Title
         Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.textLeading(30);
+        sketch.textLeading(33);
         sketch.text(this.model.title, centerX, TITLE_Y);
 
         // Body
         Graphics.useSansSerif(sketch, BODY_FONT_SIZE);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.textLeading(25);
+        sketch.textLeading(40);
         sketch.text(this.model.body, centerX, BODY_Y);
 
+        this.centerButton.draw(sketch);
+        this.homeButton.draw(sketch);
+        this.backButton.draw(sketch);
         this.nextButton.draw(sketch);
-
-        homeButton.draw(sketch);
-        backButton.draw(sketch);
     }
 }
