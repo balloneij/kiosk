@@ -11,6 +11,16 @@
             <items>
             <VBox prefHeight="798.0" prefWidth="411.0">
                <children>
+                  <MenuBar>
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#loadSurvey" text="Load survey" />
+                              <MenuItem mnemonicParsing="false" onAction="#saveSurvey" text="Save survey" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
                   <TreeView fx:id="sceneGraphTreeView" prefHeight="238.0" prefWidth="380.0" />
                   <VBox prefHeight="39.0" prefWidth="380.0">
                      <children>

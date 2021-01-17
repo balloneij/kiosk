@@ -14,15 +14,65 @@ import java.util.List;
 
 public class LoadedSurveyModel implements Serializable {
 
+    public String rootSceneId;
     public SceneModel[] scenes;
 
+    /**
+     * Creates a survey with a single, error scene.
+     * This constructor should never be used directly. It is meant to
+     * make programmer errors easy to find because the XML parser will
+     * use the default constructor.
+     */
     public LoadedSurveyModel() {
-        scenes = new SceneModel[]{};
+        this.scenes = new SceneModel[]{
+            new ErrorSceneModel("Default, empty loaded survey model")
+        };
+        this.rootSceneId = this.scenes[0].getId();
     }
 
-    public LoadedSurveyModel(List<SceneModel> initialScenes) {
-        this.scenes = new SceneModel[initialScenes.size()];
-        this.scenes = initialScenes.toArray(scenes);
+    /**
+     * Create a survey model from a list of sceneModels.
+     * CAREFUL!! The root scene will be automatically set to the first item
+     * in the list. If this is not desired, specify the rootSceneId in the
+     * other constructor.
+     * @param sceneModels to create a survey using. First sceneModel is set to the root
+     */
+    public LoadedSurveyModel(List<SceneModel> sceneModels) {
+        if (sceneModels.isEmpty()) {
+            throw new IllegalArgumentException("A LoadedSurveyModel must have at least one scene");
+        }
+
+        this.rootSceneId = sceneModels.get(0).getId();
+        this.scenes = new SceneModel[sceneModels.size()];
+        this.scenes = sceneModels.toArray(scenes);
+    }
+
+    /**
+     * Creates a survey model from a list of sceneModels with a specific
+     * root.
+     * @param rootSceneId id of the root scene
+     * @param sceneModels that make up a survey
+     */
+    public LoadedSurveyModel(String rootSceneId, List<SceneModel> sceneModels) {
+        if (sceneModels.isEmpty()) {
+            throw new IllegalArgumentException("A LoadedSurveyModel must have at least one scene");
+        }
+        // Protect the survey from a bad state. A survey _must_ have a root
+        // that exists within the scene list. This allows us to safely assume
+        // there is always a root, and it decreases the complexity of editor code.
+        boolean rootFound = false;
+        for (int i = 0; !rootFound && i < sceneModels.size(); i++) {
+            if (sceneModels.get(i).getId().equals(rootSceneId)) {
+                rootFound = true;
+            }
+        }
+        if (!rootFound) {
+            throw new IllegalArgumentException("A LoadedSurveyModel cannot exist without a root");
+        }
+
+        this.rootSceneId = rootSceneId;
+        this.scenes = new SceneModel[sceneModels.size()];
+        this.scenes = sceneModels.toArray(scenes);
     }
 
     /**
@@ -190,6 +240,6 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(agePrompt);
         initialScenes.add(pathPrompt);
 
-        return new LoadedSurveyModel(initialScenes);
+        return new LoadedSurveyModel(titleScreen.id, initialScenes);
     }
 }

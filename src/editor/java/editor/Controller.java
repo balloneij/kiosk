@@ -1,6 +1,7 @@
 package editor;
 
 import editor.sceneloaders.PromptSceneLoader;
+import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -23,6 +24,8 @@ import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.models.EmptySceneModel;
+import kiosk.models.ErrorSceneModel;
+import kiosk.models.LoadedSurveyModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import processing.javafx.PSurfaceFX;
@@ -267,5 +270,55 @@ public class Controller implements Initializable {
         // Add as to the tree view as an orphan child
         TreeItem<String> hiddenRoot = sceneGraphTreeView.getRoot();
         hiddenRoot.getChildren().add(new TreeItem<>(model.getId()));
+    }
+
+    @FXML
+    private void loadSurvey(ActionEvent event) {
+        // Ask user for a survey file
+        File file = Editor.showFileOpener();
+
+        // If they chose a file that exists, try to load it
+        if (file != null && file.exists()) {
+            LoadedSurveyModel survey;
+            try {
+                // Attempt to load from file
+                survey = LoadedSurveyModel.readFromFile(file);
+            } catch (Exception exception) {
+                // Survey could not be created, so make an error survey
+                String errorMsg = "Could not read from survey at '" + file.getPath()
+                        + "'\nThe XML is probably deformed in some way."
+                        + "\nRefer to the console for more specific details.";
+                survey = new LoadedSurveyModel();
+                survey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+
+                exception.printStackTrace();
+            }
+
+            // Update the scene graph, reattach the editor callback, refresh the editor
+            // Note: rebuildToolbar() is invoked on sceneGraph.reset(), but we must explicitly
+            // rebuild the tree view.
+            sceneGraph.loadSurvey(survey);
+            sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
+            sceneGraph.reset();
+            rebuildSceneGraphTreeView();
+        }
+    }
+
+    @FXML
+    private void saveSurvey(ActionEvent event) {
+        File file = Editor.showFileSaver();
+        if (file != null) {
+            LoadedSurveyModel survey = sceneGraph.exportSurvey();
+            try {
+                survey.writeToFile(file);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                String errorMsg = "Could not save survey to '" + file.getPath()
+                        + "\nRefer to the console for more specific details.";
+                LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
+                errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+                sceneGraph.loadSurvey(errorSurvey);
+            }
+        }
     }
 }
