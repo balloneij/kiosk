@@ -20,6 +20,11 @@
                                   <KeyCodeCombination alt="UP" code="F2" control="UP" meta="UP" shift="UP" shortcut="UP" />
                               </accelerator>
                           </MenuItem>
+                            <MenuItem mnemonicParsing="false" onAction="#reloadSurvey" text="Reload survey">
+                                <accelerator>
+                                    <KeyCodeCombination alt="UP" code="F5" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                                </accelerator>
+                            </MenuItem>
                               <MenuItem mnemonicParsing="false" onAction="#saveSurveyAs" text="Save survey as...">
                                   <accelerator>
                                       <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />

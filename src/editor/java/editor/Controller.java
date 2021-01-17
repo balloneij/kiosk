@@ -292,6 +292,12 @@ public class Controller implements Initializable {
     }
 
     @FXML
+    private void reloadSurvey(ActionEvent event) {
+        sceneGraph.reset();
+        rebuildSceneGraphTreeView();
+    }
+
+    @FXML
     private void saveSurveyAs(ActionEvent event) {
         // Prompt user for a file path to save to
         File file = Editor.showFileSaver();
