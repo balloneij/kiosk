@@ -38,6 +38,7 @@ public class Controller implements Initializable {
     protected static Stage stage;
 
     private String previousId;
+    private File surveyFile = null;
 
     @FXML
     AnchorPane rootPane;
@@ -238,21 +239,6 @@ public class Controller implements Initializable {
         }
     }
 
-    private class EditorSceneChangeCallback implements EventListener<SceneModel> {
-        private final Controller controller;
-
-        public EditorSceneChangeCallback(Controller controller) {
-            this.controller = controller;
-        }
-
-        @Override
-        public void invoke(SceneModel arg) {
-            if (!arg.getId().equals(previousId)) {
-                controller.rebuildToolbar(arg);
-            }
-        }
-    }
-
     @FXML
     private void deleteCurrentScene(ActionEvent event) {
         sceneGraph.unregisterSceneModel(sceneGraph.getCurrentSceneModel());
@@ -283,6 +269,7 @@ public class Controller implements Initializable {
             try {
                 // Attempt to load from file
                 survey = LoadedSurveyModel.readFromFile(file);
+                this.surveyFile = file;
             } catch (Exception exception) {
                 // Survey could not be created, so make an error survey
                 String errorMsg = "Could not read from survey at '" + file.getPath()
@@ -305,19 +292,60 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void saveSurvey(ActionEvent event) {
+    private void saveSurveyAs(ActionEvent event) {
+        // Prompt user for a file path to save to
         File file = Editor.showFileSaver();
+
         if (file != null) {
+            // Add a .xml extension if it's missing one
+            if (!file.getName().endsWith(".xml")) {
+                file = new File(file.getPath() + ".xml");
+            }
+
             LoadedSurveyModel survey = sceneGraph.exportSurvey();
             try {
                 survey.writeToFile(file);
+                surveyFile = file;
             } catch (Exception exception) {
-                exception.printStackTrace();
-                String errorMsg = "Could not save survey to '" + file.getPath()
+                // Push temporary scene describing error
+                String errorMsg = "Could not save survey to '" + surveyFile.getPath()
                         + "\nRefer to the console for more specific details.";
-                LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
-                errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
-                sceneGraph.loadSurvey(errorSurvey);
+                sceneGraph.pushScene(new ErrorSceneModel(errorMsg));
+
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void saveSurvey(ActionEvent event) {
+        if (surveyFile == null) {
+            this.saveSurveyAs(event);
+        } else {
+            try {
+                sceneGraph.exportSurvey().writeToFile(surveyFile);
+            } catch (Exception exception) {
+                // Push temporary scene describing error
+                String errorMsg = "Could not save survey to '" + surveyFile.getPath()
+                        + "\nRefer to the console for more specific details.";
+                sceneGraph.pushScene(new ErrorSceneModel(errorMsg));
+
+                exception.printStackTrace();
+            }
+        }
+    }
+
+    private class EditorSceneChangeCallback implements EventListener<SceneModel> {
+        private final Controller controller;
+
+        public EditorSceneChangeCallback(Controller controller) {
+            this.controller = controller;
+        }
+
+        @Override
+        public void invoke(SceneModel arg) {
+            if (!arg.getId().equals(previousId)) {
+                controller.rebuildToolbar(arg);
             }
         }
     }
