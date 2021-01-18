@@ -198,6 +198,16 @@ public class ButtonControl implements Control<MouseEvent> {
         this.isPressed = false;
     }
 
+    /**
+     * Moves the button to the specified Coordinates.
+     * @param x The X Location from the left of the screen.
+     * @param y The Y Location from the top of the screen.
+     */
+    public void setLocation(int x, int y) {
+        this.rect.x = x;
+        this.rect.y = y;
+    }
+
     private static int clampColor(int c) {
         return Math.max(Math.min(c, 255), 0);
     }

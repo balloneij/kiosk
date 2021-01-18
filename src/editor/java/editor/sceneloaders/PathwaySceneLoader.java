@@ -33,7 +33,6 @@ public class PathwaySceneLoader {
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
      * @param model The current scene model we want to modify.
-     * @param editorPane The main editor view.
      * @param graph The scene graph used to manage application state.
      */
     public static void loadScene(Controller controller, PathwaySceneModel model, VBox toolbarBox, SceneGraph graph) {
@@ -42,9 +41,6 @@ public class PathwaySceneLoader {
                 getIdBox(controller, model, graph),
                 getHeaderTitleBox(model, graph),
                 getHeaderBodyBox(model, graph),
-                getPositionBoxes(model, graph),
-                getSizeBox(model, graph),
-                getPaddingBox(model, graph),
                 getCenterTextBox(model, graph),
                 getAnswersBox(controller, model, graph)
         );
@@ -105,75 +101,6 @@ public class PathwaySceneLoader {
         });
 
         var vbox = new VBox(new Label("Header Body:"), bodyField);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
-
-    private static Node getPositionBoxes(PathwaySceneModel model, SceneGraph graph) {
-        var xposField = new TextField(String.valueOf(model.xpos));
-        var yposField = new TextField(String.valueOf(model.ypos));
-
-        // Listeners to update the position
-        xposField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                model.xpos = Float.parseFloat(newValue);
-                graph.registerSceneModel(model); // Re-register the model to update the scene
-            } catch (NumberFormatException ex) {
-                xposField.setText(oldValue);
-            }
-        });
-
-        yposField.textProperty().addListener((observable, oldValue, newValue) -> {
-            //TODO is this better than the xposField logic?
-            if (!newValue.matches("\\d*")) {
-                yposField.setText(newValue.replaceAll("[^\\d]", ""));
-            }
-            model.ypos = Float.parseFloat(newValue);
-            graph.registerSceneModel(model); // Re-register the model to update the scene
-
-            });
-
-        var hboxx = new HBox(new Label("X Pos:"), xposField);
-        var hboxy = new HBox(new Label("Y Pos:"), yposField);
-
-        var vbox = new VBox();
-        vbox.getChildren().addAll(hboxx, hboxy);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
-
-    private static Node getSizeBox(PathwaySceneModel model, SceneGraph graph) {
-        var sizeField = new TextField(String.valueOf(model.size));
-
-        // Listeners to update the position
-        sizeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try { //todo use the better method (decided in getPositionBoxes)
-                model.size = Float.parseFloat(newValue);
-                graph.registerSceneModel(model); // Re-register the model to update the scene
-            } catch (NumberFormatException ex) {
-                sizeField.setText(oldValue);
-            }
-        });
-
-        var vbox = new VBox(new Label("Size:"), sizeField);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
-
-    private static Node getPaddingBox(PathwaySceneModel model, SceneGraph graph) {
-        var paddingField = new TextField(String.valueOf(model.padding));
-
-        // Listeners to update the position
-        paddingField.textProperty().addListener((observable, oldValue, newValue) -> {
-            try { //todo use the better method
-                model.padding = Float.parseFloat(newValue);
-                graph.registerSceneModel(model); // Re-register the model to update the scene
-            } catch (NumberFormatException ex) {
-                paddingField.setText(oldValue);
-            }
-        });
-
-        var vbox = new VBox(new Label("Padding:"), paddingField);
         vbox.setPadding(PADDING);
         return vbox;
     }
