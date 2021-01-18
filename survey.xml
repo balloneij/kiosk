@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="15.0.1" class="java.beans.XMLDecoder">
+<java version="15" class="java.beans.XMLDecoder">
  <object class="kiosk.models.LoadedSurveyModel" id="LoadedSurveyModel0">
   <void class="kiosk.models.LoadedSurveyModel" method="getField">
    <string>rootSceneId</string>
@@ -12,7 +12,7 @@
    <string>scenes</string>
    <void method="set">
     <object idref="LoadedSurveyModel0"/>
-    <array class="kiosk.models.SceneModel" length="6">
+    <array class="kiosk.models.SceneModel" length="5">
      <void index="0">
       <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel0">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
@@ -197,13 +197,6 @@ thing.</string>
               <string>introscene1</string>
              </void>
             </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>isCircle</string>
-             <void method="set">
-              <object idref="ButtonModel0"/>
-              <boolean>true</boolean>
-             </void>
-            </void>
            </object>
           </void>
           <void index="1">
@@ -225,13 +218,6 @@ thing.</string>
               <string>introscene1</string>
              </void>
             </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>isCircle</string>
-             <void method="set">
-              <object idref="ButtonModel1"/>
-              <boolean>true</boolean>
-             </void>
-            </void>
            </object>
           </void>
           <void index="2">
@@ -251,13 +237,6 @@ thing.
              <void method="set">
               <object idref="ButtonModel2"/>
               <string>introscene1</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>isCircle</string>
-             <void method="set">
-              <object idref="ButtonModel2"/>
-              <boolean>true</boolean>
              </void>
             </void>
            </object>
@@ -324,7 +303,7 @@ You can always go back and begin again</string>
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel3"/>
-              <string>DetailsScene1</string>
+              <string>introscene4</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
@@ -378,7 +357,7 @@ You can always go back and begin again</string>
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel4"/>
-              <string>DetailsScene1</string>
+              <string>introscene4</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
@@ -432,7 +411,7 @@ You can always go back and begin again</string>
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel5"/>
-              <string>DetailsScene1</string>
+              <string>introscene4</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
@@ -486,7 +465,7 @@ You can always go back and begin again</string>
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel6"/>
-              <string>DetailsScene1</string>
+              <string>introscene4</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
@@ -756,32 +735,6 @@ attention. Maybe a fun animation or something?</string>
        </void>
       </object>
      </void>
-     <void index="5">
-      <object class="kiosk.models.DetailsSceneModel" id="DetailsSceneModel0">
-       <void class="kiosk.models.DetailsSceneModel" method="getField">
-        <string>id</string>
-        <void method="set">
-         <object idref="DetailsSceneModel0"/>
-         <string>DetailsScene1</string>
-        </void>
-       </void>
-       <void class="kiosk.models.DetailsSceneModel" method="getField">
-        <string>title</string>
-        <void method="set">
-         <object idref="DetailsSceneModel0"/>
-         <string>Nice!</string>
-        </void>
-       </void>
-       <void class="kiosk.models.DetailsSceneModel" method="getField">
-        <string>body</string>
-        <void method="set">
-         <object idref="DetailsSceneModel0"/>
-         <string>Humans Are pretty great. Here are a few challenges
-that human beings are facing now.</string>
-        </void>
-       </void>
-      </object>
-     </void>
     </array>
    </void>
   </void>
@@ -789,62 +742,20 @@ that human beings are facing now.</string>
 <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
  <string>rgb</string>
  <void id="intArray0" method="get">
-  <void class="kiosk.models.DetailsSceneModel" id="Field1" method="getField">
-   <string>button</string>
-   <void id="ButtonModel12" method="get">
-    <object idref="DetailsSceneModel0"/>
-    <void class="kiosk.models.ButtonModel" method="getField">
-     <string>text</string>
-     <void method="set">
-      <object idref="ButtonModel12"/>
-      <string></string>
-     </void>
-    </void>
-    <void class="kiosk.models.ButtonModel" method="getField">
-     <string>target</string>
-     <void method="set">
-      <object idref="ButtonModel12"/>
-      <string>introscene4</string>
-     </void>
-    </void>
-    <void class="kiosk.models.ButtonModel" method="getField">
-     <string>isCircle</string>
-     <void method="set">
-      <object idref="ButtonModel12"/>
-      <boolean>true</boolean>
-     </void>
-    </void>
-    <void class="kiosk.models.ButtonModel" method="getField">
-     <string>image</string>
-     <void method="set">
-      <object idref="ButtonModel12"/>
-      <object class="kiosk.models.ImageModel" id="ImageModel4">
-       <void class="kiosk.models.ImageModel" method="getField">
-        <string>path</string>
-        <void method="set">
-         <object idref="ImageModel4"/>
-         <string>assets/human.png</string>
-        </void>
-       </void>
-      </object>
-     </void>
-    </void>
-   </void>
-  </void>
-  <object idref="ButtonModel12"/>
+  <object idref="ButtonModel6"/>
   <void index="1">
-   <int>0</int>
+   <int>97</int>
   </void>
   <void index="2">
-   <int>128</int>
+   <int>157</int>
   </void>
   <void index="0">
-   <int>128</int>
+   <int>21</int>
   </void>
  </void>
 </void>
 <void idref="intArray0"/>
-<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
+<void class="kiosk.models.ButtonModel" id="Field1" method="getField">
  <string>rgb</string>
  <void id="intArray1" method="get">
   <object idref="ButtonModel9"/>
@@ -860,41 +771,9 @@ that human beings are facing now.</string>
  </void>
 </void>
 <void idref="intArray1"/>
-<void class="kiosk.models.ButtonModel" id="Field3" method="getField">
+<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
  <string>rgb</string>
  <void id="intArray2" method="get">
-  <object idref="ButtonModel3"/>
-  <void index="1">
-   <int>33</int>
-  </void>
-  <void index="2">
-   <int>107</int>
-  </void>
-  <void index="0">
-   <int>152</int>
-  </void>
- </void>
-</void>
-<void idref="intArray2"/>
-<void class="kiosk.models.ButtonModel" id="Field4" method="getField">
- <string>rgb</string>
- <void id="intArray3" method="get">
-  <object idref="ButtonModel2"/>
-  <void index="1">
-   <int>47</int>
-  </void>
-  <void index="2">
-   <int>49</int>
-  </void>
-  <void index="0">
-   <int>200</int>
-  </void>
- </void>
-</void>
-<void idref="intArray3"/>
-<void class="kiosk.models.ButtonModel" id="Field5" method="getField">
- <string>rgb</string>
- <void id="intArray4" method="get">
   <object idref="ButtonModel7"/>
   <void index="1">
    <int>153</int>
@@ -907,27 +786,11 @@ that human beings are facing now.</string>
   </void>
  </void>
 </void>
-<void idref="intArray4"/>
-<void class="kiosk.models.ButtonModel" id="Field6" method="getField">
+<void idref="intArray2"/>
+<void class="kiosk.models.ButtonModel" id="Field3" method="getField">
  <string>rgb</string>
- <void id="intArray5" method="get">
-  <object idref="ButtonModel5"/>
-  <void index="1">
-   <int>98</int>
-  </void>
-  <void index="2">
-   <int>38</int>
-  </void>
-  <void index="0">
-   <int>219</int>
-  </void>
- </void>
-</void>
-<void idref="intArray5"/>
-<void class="kiosk.models.ButtonModel" id="Field7" method="getField">
- <string>rgb</string>
- <void id="intArray6" method="get">
-  <object idref="ButtonModel1"/>
+ <void id="intArray3" method="get">
+  <object idref="ButtonModel3"/>
   <void index="1">
    <int>33</int>
   </void>
@@ -939,26 +802,10 @@ that human beings are facing now.</string>
   </void>
  </void>
 </void>
-<void idref="intArray6"/>
-<void class="kiosk.models.ButtonModel" id="Field8" method="getField">
+<void idref="intArray3"/>
+<void class="kiosk.models.ButtonModel" id="Field4" method="getField">
  <string>rgb</string>
- <void id="intArray7" method="get">
-  <object idref="ButtonModel6"/>
-  <void index="1">
-   <int>97</int>
-  </void>
-  <void index="2">
-   <int>157</int>
-  </void>
-  <void index="0">
-   <int>21</int>
-  </void>
- </void>
-</void>
-<void idref="intArray7"/>
-<void class="kiosk.models.ButtonModel" id="Field9" method="getField">
- <string>rgb</string>
- <void id="intArray8" method="get">
+ <void id="intArray4" method="get">
   <object idref="ButtonModel4"/>
   <void index="1">
    <int>108</int>
@@ -971,10 +818,10 @@ that human beings are facing now.</string>
   </void>
  </void>
 </void>
-<void idref="intArray8"/>
-<void class="kiosk.models.ButtonModel" id="Field10" method="getField">
+<void idref="intArray4"/>
+<void class="kiosk.models.ButtonModel" id="Field5" method="getField">
  <string>rgb</string>
- <void id="intArray9" method="get">
+ <void id="intArray5" method="get">
   <object idref="ButtonModel8"/>
   <void index="1">
    <int>117</int>
@@ -987,5 +834,21 @@ that human beings are facing now.</string>
   </void>
  </void>
 </void>
-<void idref="intArray9"/>
+<void idref="intArray5"/>
+<void class="kiosk.models.ButtonModel" id="Field6" method="getField">
+ <string>rgb</string>
+ <void id="intArray6" method="get">
+  <object idref="ButtonModel5"/>
+  <void index="1">
+   <int>98</int>
+  </void>
+  <void index="2">
+   <int>38</int>
+  </void>
+  <void index="0">
+   <int>219</int>
+  </void>
+ </void>
+</void>
+<void idref="intArray6"/>
 </java>
