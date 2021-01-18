@@ -2,17 +2,21 @@ package kiosk;
 
 import graphics.Color;
 import graphics.Graphics;
+import java.awt.Component;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.DefaultSceneModel;
+import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
@@ -26,12 +30,14 @@ public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private Scene lastScene;
-    private String surveyFile = "";
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
     protected static Settings settings;
     private int newSceneMillis;
     private boolean timeoutActive = false;
+    private boolean hotkeysEnabled = true;
+
+    private static JFileChooser fileChooser;
 
     /**
      * Create a Kiosk and loads the survey specified in the path provided.
@@ -48,17 +54,33 @@ public class Kiosk extends PApplet {
      * @param settings the settings to use
      */
     public Kiosk(String surveyPath, Settings settings) {
+        // Configure fileChooser style
         try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | InstantiationException
                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
             System.err.println("Could not set the UI for the file chooser");
         }
 
+        // Create the fileChooser (default it to the working directory) and make it always-on-top
+        String initialDirectory = System.getProperty("user.dir");
+        fileChooser = new JFileChooser(new File(initialDirectory)) {
+            @Override
+            protected JDialog createDialog(Component parent) throws HeadlessException {
+                JDialog dialog = super.createDialog(parent);
+                dialog.setAlwaysOnTop(true); // keeps the dialog from being behind the window
+                return dialog;
+            }
+        };
+
+        // Only allow xml files
+        fileChooser.setFileFilter(
+                new FileNameExtensionFilter("XML file (*.xml)", "xml"));
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
         Kiosk.settings = settings;
 
         if (!surveyPath.isEmpty()) {
-            surveyFile = surveyPath;
             var loadedSurveyModel = LoadedSurveyModel.readFromFile(new File(surveyPath));
             this.sceneGraph = new SceneGraph(loadedSurveyModel);
         } else {
@@ -78,20 +100,35 @@ public class Kiosk extends PApplet {
     }
 
     /**
-     * Draws scenes.
+     * Load a survey from the file specified. If the file cannot be loaded,
+     * a survey is constructed with an error scene to notify the user.
+     * @param file to try loading from
      */
-    public void updateSurveyPath(String surveyPath) {
-        settings = Settings.readSettings();
+    public void loadSurveyFile(File file) {
+        LoadedSurveyModel survey;
+        try {
+            // Load the survey
+            survey = LoadedSurveyModel.readFromFile(file);
+        } catch (Exception exception) {
 
-        if (!surveyPath.isEmpty()) {
-            surveyFile = surveyPath;
-            this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
-        } else {
-            List<SceneModel> defaultScenes = new ArrayList<>();
-            defaultScenes.add(new DefaultSceneModel());
+            // Create an error survey
+            String errorMsg = "Could not read from survey at '" + file.getPath()
+                    + "'\nThe XML is probably deformed in some way."
+                    + "\nRefer to the console for more specific details.";
+            survey = new LoadedSurveyModel();
+            survey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
 
-            this.sceneGraph = new SceneGraph(new LoadedSurveyModel(defaultScenes));
+            // Unhandled exception when creating the survey file
+            exception.printStackTrace();
         }
+
+        // Update the scene graph
+        sceneGraph.loadSurvey(survey);
+        sceneGraph.reset();
+    }
+
+    public void reloadSettings() {
+        settings = Settings.readSettings();
     }
 
     @Override
@@ -188,39 +225,47 @@ public class Kiosk extends PApplet {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-        if (event.getKeyCode() == 113) { //F2 Key Press
-            System.out.println("Opening the file explorer...");
-            final JFileChooser fc = new JFileChooser();
-            FileNameExtensionFilter filter =
-                    new FileNameExtensionFilter("XML file (*.xml)", "xml", "XML");
-            fc.setFileFilter(filter);
-            fc.setAcceptAllFileFilterUsed(false);
-            int returnVal = fc.showOpenDialog(null);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                surveyFile = fc.getSelectedFile().getPath();
-                System.out.println("Getting " + surveyFile + "\n");
-                refresh(); // Refresh the survey view with the new file
-            } else {
-                System.out.println("There was an error getting the file.\n");
+        if (this.hotkeysEnabled) {
+            if (event.getKeyCode() == 113) {
+                // F2 Key Press
+                File file = showFileOpener();
+                if (file != null) {
+                    reloadSettings();
+                    loadSurveyFile(file);
+                }
+            } else if (event.getKeyCode() == 116) {
+                // F5 Key Press
+                this.sceneGraph.reset();
             }
-        } else if (event.getKeyCode() == 116) { //F5 Key Press
-            refresh(); // Refresh the survey view
         }
+
         for (EventListener listener : this.mouseListeners.get(InputEvent.KeyPressed)) {
             listener.invoke(event);
         }
     }
 
     /**
-     * Reloads the current file and updates the survey view.
+     * Opens the file chooser for the user to select a file.
+     * @return the File selected, or null
      */
-    private void refresh() {
-        System.out.println("Refreshing the view...\n");
-        try {
-            updateSurveyPath(surveyFile);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static File showFileOpener() {
+        int userSelection = fileChooser.showOpenDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
         }
+        return null;
+    }
+
+    /**
+     * Opens the file chooser for finding a location to save a file.
+     * @return File selected, or null
+     */
+    public static File showFileSaver() {
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
+        }
+        return null;
     }
 
     @Override
@@ -295,5 +340,9 @@ public class Kiosk extends PApplet {
 
     public void run() {
         this.runSketch();
+    }
+
+    protected void setHotkeysEnabled(boolean hotkeysEnabled) {
+        this.hotkeysEnabled = hotkeysEnabled;
     }
 }
