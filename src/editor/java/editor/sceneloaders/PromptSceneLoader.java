@@ -55,6 +55,7 @@ public class PromptSceneLoader {
 
         // Add extension filters to the image file chooser
         imageFileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif"),
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg", "*.jpeg"),
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
