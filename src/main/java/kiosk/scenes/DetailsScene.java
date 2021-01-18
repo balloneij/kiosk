@@ -31,10 +31,10 @@ public class DetailsScene implements Scene {
     private static final int FOREGROUND_CURVE_RADIUS = 50;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 5;
-    private static final int BODY_Y = Kiosk.getSettings().screenH * 3 / 9;
-    private static final int TITLE_FONT_SIZE = 36;
-    private static final int BODY_FONT_SIZE = 30;
+    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
+    private static final int BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
+    private static final int TITLE_FONT_SIZE = 24;
+    private static final int BODY_FONT_SIZE = 16;
 
     // Button Image Props
     private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
@@ -140,7 +140,7 @@ public class DetailsScene implements Scene {
         // Body
         Graphics.useSansSerif(sketch, BODY_FONT_SIZE);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.textLeading(40);
+        sketch.textLeading(25);
         sketch.text(this.model.body, centerX, BODY_Y);
 
         this.centerButton.draw(sketch);
