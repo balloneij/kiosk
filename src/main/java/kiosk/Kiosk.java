@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.DefaultSceneModel;
+import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
@@ -29,12 +30,12 @@ public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private Scene lastScene;
-    private String surveyFile = "";
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
     protected static Settings settings;
     private int newSceneMillis;
     private boolean timeoutActive = false;
+    private boolean hotkeysEnabled = true;
 
     private static JFileChooser fileChooser;
 
@@ -80,7 +81,6 @@ public class Kiosk extends PApplet {
         Kiosk.settings = settings;
 
         if (!surveyPath.isEmpty()) {
-            surveyFile = surveyPath;
             var loadedSurveyModel = LoadedSurveyModel.readFromFile(new File(surveyPath));
             this.sceneGraph = new SceneGraph(loadedSurveyModel);
         } else {
@@ -100,20 +100,35 @@ public class Kiosk extends PApplet {
     }
 
     /**
-     * Draws scenes.
+     * Load a survey from the file specified. If the file cannot be loaded,
+     * a survey is constructed with an error scene to notify the user.
+     * @param file to try loading from
      */
-    public void updateSurveyPath(String surveyPath) {
-        settings = Settings.readSettings();
+    public void loadSurveyFile(File file) {
+        LoadedSurveyModel survey;
+        try {
+            // Load the survey
+            survey = LoadedSurveyModel.readFromFile(file);
+        } catch (Exception exception) {
 
-        if (!surveyPath.isEmpty()) {
-            surveyFile = surveyPath;
-            this.sceneGraph = new SceneGraph(LoadedSurveyModel.readFromFile(new File(surveyPath)));
-        } else {
-            List<SceneModel> defaultScenes = new ArrayList<>();
-            defaultScenes.add(new DefaultSceneModel());
+            // Create an error survey
+            String errorMsg = "Could not read from survey at '" + file.getPath()
+                    + "'\nThe XML is probably deformed in some way."
+                    + "\nRefer to the console for more specific details.";
+            survey = new LoadedSurveyModel();
+            survey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
 
-            this.sceneGraph = new SceneGraph(new LoadedSurveyModel(defaultScenes));
+            // Unhandled exception when creating the survey file
+            exception.printStackTrace();
         }
+
+        // Update the scene graph
+        sceneGraph.loadSurvey(survey);
+        sceneGraph.reset();
+    }
+
+    public void reloadSettings() {
+        settings = Settings.readSettings();
     }
 
     @Override
@@ -210,41 +225,47 @@ public class Kiosk extends PApplet {
      */
     @Override
     public void keyPressed(KeyEvent event) {
-        if (event.getKeyCode() == 113) { //F2 Key Press
-            openFileChooser();
-        } else if (event.getKeyCode() == 116) { //F5 Key Press
-            refresh(); // Refresh the survey view
+        if (this.hotkeysEnabled) {
+            if (event.getKeyCode() == 113) {
+                // F2 Key Press
+                File file = showFileOpener();
+                if (file != null) {
+                    reloadSettings();
+                    loadSurveyFile(file);
+                }
+            } else if (event.getKeyCode() == 116) {
+                // F5 Key Press
+                this.sceneGraph.reset();
+            }
         }
+
         for (EventListener listener : this.mouseListeners.get(InputEvent.KeyPressed)) {
             listener.invoke(event);
         }
     }
 
     /**
-     * Opens the file chooser for the Kiosk and refreshes the view with the selected survey file.
+     * Opens the file chooser for the user to select a file.
+     * @return the File selected, or null
      */
-    public void openFileChooser() {
-        int returnVal = fileChooser.showOpenDialog(null);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            surveyFile = fileChooser.getSelectedFile().getPath();
-            System.out.println("Getting " + surveyFile);
-            refresh(); // Refresh the survey view with the new file
-        } else if (returnVal == JFileChooser.ERROR_OPTION) {
-            System.err.println("There was an error getting the file.");
+    public static File showFileOpener() {
+        int userSelection = fileChooser.showOpenDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
         }
+        return null;
     }
 
     /**
-     * Reloads the current file and updates the survey view.
+     * Opens the file chooser for finding a location to save a file.
+     * @return File selected, or null
      */
-    private void refresh() {
-        try {
-            updateSurveyPath(surveyFile);
-            System.out.println("View refreshed.");
-        } catch (Exception e) {
-            System.err.println("There was a problem refreshing the view:");
-            e.printStackTrace();
+    public static File showFileSaver() {
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            return fileChooser.getSelectedFile();
         }
+        return null;
     }
 
     @Override
@@ -319,5 +340,9 @@ public class Kiosk extends PApplet {
 
     public void run() {
         this.runSketch();
+    }
+
+    protected void setHotkeysEnabled(boolean hotkeysEnabled) {
+        this.hotkeysEnabled = hotkeysEnabled;
     }
 }
