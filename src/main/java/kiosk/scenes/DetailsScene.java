@@ -34,6 +34,11 @@ public class DetailsScene implements Scene {
     private static final int TITLE_FONT_SIZE = 36;
     private static final int BODY_FONT_SIZE = 30;
 
+    // Button Image Props
+    private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
+    private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
+    private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+
     /**
      * Detials Scene show a title, body of text, and a button at the bottom.
      * @param model The model object where we get our information.
@@ -63,6 +68,8 @@ public class DetailsScene implements Scene {
                 BUTTON_WIDTH * 3 / 4, BUTTON_WIDTH * 3 / 4);
         sketch.hookControl(this.backButton);
 
+        this.model.button.image.width = BUTTON_IMAGE_WIDTH;
+        this.model.button.image.height = BUTTON_IMAGE_HEIGHT;
         this.centerButton = new ButtonControl(
             this.model.button,
             (sketchWidth / 2) - (BUTTON_WIDTH * 5 / 8),
