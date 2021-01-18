@@ -219,9 +219,8 @@ public class PromptSceneLoader {
             // If null, no file was chosen
             if (file != null) {
                 // Set the chooser to open in the same directory next time
-                String imagePath = file.getPath();
-                String directoryPath =
-                        imagePath.substring(0, imagePath.lastIndexOf(File.separator));
+                String imagePath = new File("./").toURI().relativize(file.toURI()).getPath();
+                String directoryPath = file.getParentFile().getPath();
                 imageFileChooser.setInitialDirectory(new File(directoryPath));
 
                 // Create an image if the answer does not already have one

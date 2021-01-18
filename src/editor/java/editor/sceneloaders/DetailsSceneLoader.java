@@ -40,7 +40,7 @@ public class DetailsSceneLoader {
                                  DetailsSceneModel model, VBox toolbarBox, SceneGraph graph) {
         toolbarBox.getChildren().clear();
 
-        // Get the editing Nodes for the PromptSceneModel properties
+        // Get the editing Nodes for the DetailsSceneModel properties
         VBox vbox = new VBox(
                 getIdBox(controller, model, graph),
                 getTitleBox(model, graph),
@@ -149,9 +149,8 @@ public class DetailsSceneLoader {
             // If null, no file was chosenA
             if (file != null) {
                 // Set the chooser to open in the same directory next time
-                String imagePath = file.getPath();
-                String directoryPath =
-                        imagePath.substring(0, imagePath.lastIndexOf(File.separator));
+                String imagePath = new File("./").toURI().relativize(file.toURI()).getPath();
+                String directoryPath = file.getParentFile().getPath();
                 imageFileChooser.setInitialDirectory(new File(directoryPath));
 
                 // Create an image if the answer does not already have one
