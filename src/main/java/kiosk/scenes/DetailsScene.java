@@ -6,6 +6,7 @@ import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.DetailsSceneModel;
+import kiosk.models.ImageModel;
 import processing.core.PConstants;
 
 
@@ -68,8 +69,11 @@ public class DetailsScene implements Scene {
                 BUTTON_WIDTH * 3 / 4, BUTTON_WIDTH * 3 / 4);
         sketch.hookControl(this.backButton);
 
-        this.model.button.image.width = BUTTON_IMAGE_WIDTH;
-        this.model.button.image.height = BUTTON_IMAGE_HEIGHT;
+        if (this.model.button.image != null) {
+            this.model.button.image.width = BUTTON_IMAGE_WIDTH;
+            this.model.button.image.height = BUTTON_IMAGE_HEIGHT;
+        }
+
         this.centerButton = new ButtonControl(
             this.model.button,
             (sketchWidth / 2) - (BUTTON_WIDTH * 5 / 8),
