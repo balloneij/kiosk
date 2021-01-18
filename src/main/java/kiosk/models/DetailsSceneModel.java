@@ -51,7 +51,7 @@ public class DetailsSceneModel implements SceneModel {
 
     @Override
     public String[] getTargets() {
-        return new String[0];
+        return new String[] {button.target};
     }
 
     @Override
