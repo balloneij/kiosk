@@ -107,12 +107,15 @@ public class LoadedSurveyModel implements Serializable {
             if (!(surveyObject instanceof LoadedSurveyModel)) {
                 String errorMsg = "Successfully loaded the survey XML, but\n"
                         + "the root object is not of the type 'LoadedSurveyModel'";
-                LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
-                errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+                var defaultScene = new ErrorSceneModel(errorMsg);
+                var defaultSceneList = new ArrayList<SceneModel>();
+                defaultSceneList.add(defaultScene);
+                LoadedSurveyModel errorSurvey = new LoadedSurveyModel(defaultSceneList);
                 return errorSurvey;
             }
             return (LoadedSurveyModel) surveyObject;
         } catch (FileNotFoundException exc) {
+            exc.printStackTrace();
             String errorMsg = "Could not read from survey at '" + file.getPath()
                     + "':\n" + exc.getMessage()
                     + "\n\nPress F2 to open the file-chooser and select a survey file. Press F5 "
@@ -120,24 +123,20 @@ public class LoadedSurveyModel implements Serializable {
                     + "\nThe program can also be started from the command line with the command "
                     + "\n\"java -jar kiosk.jar <survey file>\""
                     + "\nwhere <survey file> is the path to the survey file.";
-            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
-            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+            var defaultScene = new ErrorSceneModel(errorMsg);
+            var defaultSceneList = new ArrayList<SceneModel>();
+            defaultSceneList.add(defaultScene);
+            LoadedSurveyModel errorSurvey = new LoadedSurveyModel(defaultSceneList);
             return errorSurvey;
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             String errorMsg = "Could not read from survey at '" + file.getPath()
                     + "'\nThe XML is probably deformed in some way."
                     + "\nRefer to the console for more specific details.";
-            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
-            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
-            return errorSurvey;
-        } catch (Exception exc) {
-            exc.printStackTrace();
-            String errorMsg = "Could not read from survey at '" + file.getPath()
-                    + "'\nThe XML is probably deformed in some way."
-                    + "\nRefer to the console for more specific details.";
-            LoadedSurveyModel errorSurvey = new LoadedSurveyModel();
-            errorSurvey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+            var defaultScene = new ErrorSceneModel(errorMsg);
+            var defaultSceneList = new ArrayList<SceneModel>();
+            defaultSceneList.add(defaultScene);
+            LoadedSurveyModel errorSurvey = new LoadedSurveyModel(defaultSceneList);
             return errorSurvey;
         }
     }
