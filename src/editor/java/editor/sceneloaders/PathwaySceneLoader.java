@@ -195,16 +195,6 @@ public class PathwaySceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        // Setup button for changing answer shape
-        // (may need to convert to a combo-box if more shapes are added)
-        Button shapeButton = new Button(answer.isCircle ? "■" : "⬤");
-        shapeButton.setOnAction(event -> {
-            answer.isCircle = !answer.isCircle;
-            graph.registerSceneModel(model); // Re-register the model to update the scene
-
-            shapeButton.setText(answer.isCircle ? "■" : "⬤"); // Update the button symbol
-        });
-
         // Setup the button for adding an image to the answer
         Button imageChooseButton = new Button("Image");
         imageChooseButton.setOnAction(event -> {
@@ -270,7 +260,7 @@ public class PathwaySceneLoader {
         separator.setPadding(ANSWER_PADDING);
 
         // Put all the answer controls together
-        HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
+        HBox editingControls = new HBox(colorPicker, imageChooseButton, removeButton);
         answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
         return answerVbox;
     }
