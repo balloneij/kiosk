@@ -29,6 +29,7 @@ public class Editor extends Kiosk {
      */
     public Editor(String surveyPath, Settings settings) {
         super(surveyPath, settings);
+        this.setHotkeysEnabled(false);
     }
 
     @Override

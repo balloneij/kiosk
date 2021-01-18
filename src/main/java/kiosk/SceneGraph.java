@@ -1,8 +1,10 @@
 package kiosk;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
@@ -11,27 +13,56 @@ import kiosk.scenes.Scene;
 
 public class SceneGraph {
 
-    private final SceneModel root;
+    private SceneModel root;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
-    private final LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
+    private LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
 
     /**
      * Creates a scene graph which holds the root scene model, and
      * history while being traversed.
-     * @param root of the scene graph
+     * @param survey model to load from
      */
-    public SceneGraph(LoadedSurveyModel root) {
+    public SceneGraph(LoadedSurveyModel survey) {
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
-        this.root = root.scenes[0];
-        this.currentScene = this.root.deepCopy().createScene();
-        this.history.push(this.root);
         this.sceneChangeCallbacks = new LinkedList<>();
-        for (SceneModel sceneModel : root.scenes) {
+        this.loadSurvey(survey);
+    }
+
+    /**
+     * Load survey from a model. History and callbacks are cleared.
+     * sceneChangeCallbacks are _not_ called (because they were
+     * just cleared, dummy). Re-add callbacks and invoke SceneGraph.reset()
+     * if you would like the callbacks to be invoked.
+     * @param survey to load
+     */
+    public synchronized void loadSurvey(LoadedSurveyModel survey) {
+        // Reset to a new, initial state
+        this.history.clear();
+        this.sceneModels.clear();
+        this.sceneChangeCallbacks.clear();
+
+        // Register the new scene models
+        for (SceneModel sceneModel : survey.scenes) {
             this.registerSceneModel(sceneModel);
         }
+
+        this.root = this.sceneModels.get(survey.rootSceneId);
+        this.currentScene = this.root.deepCopy().createScene();
+        this.history.push(this.root);
+    }
+
+    /**
+     * Reconstruct the a survey model based off of the scenes
+     * currently loaded in the SceneGraph.
+     * @return a survey model representation of the scene graph
+     */
+    public synchronized LoadedSurveyModel exportSurvey() {
+        String rootSceneId = this.root.getId();
+        List<SceneModel> scenes = new ArrayList<>(this.sceneModels.values());
+        return new LoadedSurveyModel(rootSceneId, scenes);
     }
 
     /**
@@ -39,7 +70,7 @@ public class SceneGraph {
      * from the model provided
      * @param sceneModel to create a scene from
      */
-    public void pushScene(SceneModel sceneModel) {
+    public synchronized void pushScene(SceneModel sceneModel) {
         this.currentScene = sceneModel.deepCopy().createScene();
         this.history.push(sceneModel);
         this.onSceneChange(sceneModel);
@@ -50,7 +81,7 @@ public class SceneGraph {
      * from the scene model id.
      * @param sceneModelId The id of the registered scene to push.
      */
-    public void pushScene(String sceneModelId) {
+    public synchronized void pushScene(String sceneModelId) {
         var containsModel = sceneModels.containsKey(sceneModelId);
 
         if (containsModel) {
@@ -62,7 +93,7 @@ public class SceneGraph {
         }
     }
 
-    public boolean containsScene(String sceneId) {
+    public synchronized boolean containsScene(String sceneId) {
         return this.sceneModels.containsKey(sceneId);
     }
 
@@ -70,7 +101,7 @@ public class SceneGraph {
      * Removes the current Scene. Creates a new scene based
      * on the last SceneModel.
      */
-    public void popScene() {
+    public synchronized void popScene() {
         // Remove the current scene from history
         this.history.pop();
 
@@ -91,7 +122,7 @@ public class SceneGraph {
      * Reset the current Scene to the root and clear
      * the scene history.
      */
-    public void reset() {
+    public synchronized void reset() {
         this.currentScene = this.root.deepCopy().createScene();
         this.history.clear();
         this.history.push(this.root);
@@ -102,7 +133,7 @@ public class SceneGraph {
      * Registers the scene model by it's ID.
      * @param sceneModel Returns the scene model at the ID, if one exists.
      */
-    public void registerSceneModel(SceneModel sceneModel) {
+    public synchronized void registerSceneModel(SceneModel sceneModel) {
         var currentScene = history.peekFirst();
 
         // If we are changing the current scene model, recreate the scene
@@ -118,7 +149,7 @@ public class SceneGraph {
      * Unregister a scene model.
      * @param sceneModel to remove from the scene graph
      */
-    public void unregisterSceneModel(SceneModel sceneModel) {
+    public synchronized void unregisterSceneModel(SceneModel sceneModel) {
         SceneModel currentScene = getCurrentSceneModel();
 
         // If we are removing the current active scene, pop it before removing
@@ -134,7 +165,7 @@ public class SceneGraph {
      * @param currentId the current id of the model in the graph
      * @param newId the new id to assign to it
      */
-    public void reassignSceneModel(String currentId, String newId) {
+    public synchronized void reassignSceneModel(String currentId, String newId) {
         // Don't reassign if the id didn't change
         if (currentId.equals(newId)) {
             return;
@@ -155,11 +186,11 @@ public class SceneGraph {
      * Pass in a callback which will be called with the current scene when the scene changes.
      * @param callBack The callback to be registered
      */
-    public void addSceneChangeCallback(EventListener<SceneModel> callBack) {
+    public synchronized void addSceneChangeCallback(EventListener<SceneModel> callBack) {
         sceneChangeCallbacks.add(callBack);
     }
 
-    private void onSceneChange(SceneModel nextScene) {
+    private synchronized void onSceneChange(SceneModel nextScene) {
         for (EventListener<SceneModel> sceneChangeCallback : sceneChangeCallbacks) {
             sceneChangeCallback.invoke(nextScene);
         }
@@ -169,11 +200,11 @@ public class SceneGraph {
      * Get the scene most recently pushed to the state.
      * @return The current scene.
      */
-    public Scene getCurrentScene() {
+    public synchronized Scene getCurrentScene() {
         return currentScene;
     }
 
-    public SceneModel getCurrentSceneModel() {
+    public synchronized SceneModel getCurrentSceneModel() {
         return this.history.peek();
     }
 
@@ -182,7 +213,7 @@ public class SceneGraph {
      * @param id of the scene model
      * @return Scene model associated with the idea or an error scene model.
      */
-    public SceneModel getSceneById(String id) {
+    public synchronized SceneModel getSceneById(String id) {
         SceneModel sceneModel = this.sceneModels.get(id);
 
         if (sceneModel == null) {
@@ -191,7 +222,7 @@ public class SceneGraph {
         return sceneModel;
     }
 
-    public Set<String> getAllIds() {
+    public synchronized Set<String> getAllIds() {
         return this.sceneModels.keySet();
     }
 
@@ -199,7 +230,7 @@ public class SceneGraph {
      * Get the root scene's model.
      * @return The root sceneModel
      */
-    public SceneModel getRootSceneModel() {
+    public synchronized SceneModel getRootSceneModel() {
         return this.root;
     }
 
@@ -207,11 +238,11 @@ public class SceneGraph {
      * Returns the set of the scene Ids currently in the SceneGraph.
      * @return The set of the scene Ids currently in the SceneGraph.
      */
-    public Set<String> getSceneIds() {
+    public synchronized Set<String> getSceneIds() {
         return sceneModels.keySet();
     }
 
-    public Collection<SceneModel> getAllSceneModels() {
+    public synchronized Collection<SceneModel> getAllSceneModels() {
         return sceneModels.values();
     }
 }
