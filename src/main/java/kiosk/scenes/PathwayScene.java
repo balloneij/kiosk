@@ -45,8 +45,8 @@ public class PathwayScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         centerX = sketch.width / 2.f;
-        centerY = sketch.height / 2.f;
-        size = sketch.height * .8f;
+        centerY = (sketch.height  * .57f);
+        size = sketch.height * .75f;
         this.careerOptions = new ButtonControl[this.model.careers.length];
         for (int i = 0; i < careerOptions.length; i++) {
             this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);

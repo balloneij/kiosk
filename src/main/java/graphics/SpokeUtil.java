@@ -44,9 +44,7 @@ public class SpokeUtil {
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
             String centerText, ButtonControl[] answers, int[] weights) {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        var centerX = x + size / 2.f;
-        var centerY = y + size / 2.f;
-        drawInnerCircle(sketch, centerX, centerY, size / InnerOuterCircleRatio, centerText);
+        drawInnerCircle(sketch, x, y, size / InnerOuterCircleRatio, centerText);
 
         float deg = 0.f;
         var totalWeight = (float) Arrays.stream(weights).sum();
@@ -59,7 +57,7 @@ public class SpokeUtil {
 
             smRad = Math.min(smRad, maxRad) - padding; // Make sure circle is small enough to fit
             deg += degOffSet;
-            drawOuterCircle(sketch, centerX, centerY, smRad, size, deg, answers[i]);
+            drawOuterCircle(sketch, x, y, smRad, size, deg, answers[i]);
             deg += degOffSet;
         }
         sketch.textSize(18);
