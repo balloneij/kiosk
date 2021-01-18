@@ -20,6 +20,7 @@ public class DetailsScene implements Scene {
 
     // Buttons
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
     private static final int BUTTON_PADDING = 20;
 
     // White foreground
@@ -58,7 +59,7 @@ public class DetailsScene implements Scene {
         homeButtonModel.rgb = Color.DW_BLACK_RGB;
         homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING, BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_WIDTH * 3 / 4);
+                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.homeButton);
 
         var backButtonModel = new ButtonModel();
@@ -66,7 +67,7 @@ public class DetailsScene implements Scene {
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         this.backButton = new ButtonControl(backButtonModel,
                 BUTTON_PADDING, sketchHeight - (BUTTON_WIDTH * 3 / 4) - BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_WIDTH * 3 / 4);
+                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.backButton);
 
         if (this.model.button.image != null) {
@@ -94,7 +95,7 @@ public class DetailsScene implements Scene {
             FOREGROUND_X_PADDING + FOREGROUND_WIDTH + BUTTON_PADDING,
             sketchHeight - (BUTTON_WIDTH * 3 / 4) - BUTTON_PADDING,
             BUTTON_WIDTH * 3 / 4,
-            BUTTON_WIDTH * 3 / 4
+            BUTTON_HEIGHT * 3 / 4
         );
         this.nextButton.init(sketch);
         sketch.hookControl(this.nextButton);
