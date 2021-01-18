@@ -47,8 +47,8 @@ public class SpokeGraphPromptSceneLoader {
                 getHeaderTitleBox(model, graph),
                 getHeaderBodyBox(model, graph),
                 getCareerCTBox(model, graph),
-                getCareerOptionsBox(model, graph),
-                getCareerWeightsBox(model, graph),
+                getCareerOptionsBox(controller, model, graph),
+                //getCareerWeightsBox(model, graph),
                 getPromptTBox(model, graph),
                 getAnswersBox(controller, model, graph)
         );
@@ -127,12 +127,149 @@ public class SpokeGraphPromptSceneLoader {
         return vbox;
     }
 
-    //TODO need the career graph maker here
-    private static Node getCareerOptionsBox(SpokeGraphPromptSceneModel model, SceneGraph graph) {
-        return null;
+    /**
+     * Creates a Node with editing controls for all the answers, as well as a button to add
+     * additional answers. See createAnswerNode for more information on answer editing controls.
+     * @param model The PromptSceneModel being edited.
+     * @param graph The SceneGraph of the current survey being edited.
+     * @return A Node with editing controls for all the answers and a button to add additional
+     *         answers.
+     */
+    private static Node getCareerOptionsBox(Controller controller,
+                                      SpokeGraphPromptSceneModel model, SceneGraph graph) {
+        // Add a separator to separate the "Answers:" label from the answer sections
+        Separator separator = new Separator();
+        separator.setPadding(new Insets(0, 0, 10, 0));
+        var vbox = new VBox(new Label("Careers:"), separator);
+
+        // Create controls for each answer (and add them to the Node)
+        for (ButtonModel career : model.careers) {
+            vbox.getChildren().add(createCareerNode(controller, career, vbox, model, graph));
+        }
+
+        // Setup the button for adding answers
+        Button addButton = new Button("+");
+        addButton.setOnAction(event -> {
+            ButtonModel newAnswer = new ButtonModel();
+
+            // Add the new answer to the PromptSceneModel's answers
+            ArrayList<ButtonModel> careersList = new ArrayList<>(Arrays.asList(model.careers));
+            careersList.add(newAnswer);
+            model.careers = careersList.toArray(ButtonModel[]::new);
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+
+            // Add editing controls for the new answer
+            int index = vbox.getChildren().size() - 1; // Add controls just before the add button
+            vbox.getChildren().add(index,
+                    createCareerNode(controller, newAnswer, vbox, model, graph));
+        });
+
+        vbox.getChildren().add(addButton);
+        vbox.setPadding(PADDING);
+        return vbox;
     }
-    private static Node getCareerWeightsBox(SpokeGraphPromptSceneModel model, SceneGraph graph) {
-        return null;
+
+    /**
+     * Creates a Node containing all the controls for editing a career button, including a field
+     * to adjust the text, a color picker, buttons to change the shape and image, a drop down for
+     * selecting the target, and a button to remove the career.
+     * @param careersContainer The VBox that will contain the controls for all the careers.
+     * @param career The ButtonModel for the answer controls being created.
+     * @param model The PromptSceneModel being edited.
+     * @param graph The SceneGraph of the current survey being edited.
+     * @return A Node containing all the controls for editing an answer button
+     */
+    private static Node createCareerNode(Controller controller,
+                                         ButtonModel career, VBox careersContainer,
+                                         SpokeGraphPromptSceneModel model, SceneGraph graph) {
+        // Setup the text field for editing the answer
+        var answerField = new TextField(career.text);
+        answerField.textProperty().addListener((observable, oldValue, newValue) -> {
+            career.text = newValue;
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        // Setup the color picker for changing the answer color
+        Color initialColor = Color.rgb(career.rgb[0], career.rgb[1], career.rgb[2]);
+        ColorPicker colorPicker = new ColorPicker(initialColor);
+        colorPicker.setOnAction(event -> {
+            // Set the answer color to the new color
+            var newColor = colorPicker.getValue();
+            career.rgb[0] = (int) (newColor.getRed() * COLOR_RANGE);
+            career.rgb[1] = (int) (newColor.getGreen() * COLOR_RANGE);
+            career.rgb[2] = (int) (newColor.getBlue() * COLOR_RANGE);
+
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        // Setup the button for adding an image to the answer
+        Button imageChooseButton = new Button("Image");
+        imageChooseButton.setOnAction(event -> {
+            // Open the image file chooser
+            var file = imageFileChooser.showOpenDialog(null);
+
+            // If null, no file was chosen
+            if (file != null) {
+                // Set the chooser to open in the same directory next time
+                String imagePath = file.getPath();
+                String directoryPath =
+                        imagePath.substring(0, imagePath.lastIndexOf(File.separator));
+                imageFileChooser.setInitialDirectory(new File(directoryPath));
+
+                // Create an image if the answer does not already have one
+                if (career.image == null) {
+                    career.image = new ImageModel();
+                }
+
+                // Set the new image path
+                career.image.path = imagePath;
+                graph.registerSceneModel(model); // Re-register the model to update the scene
+            }
+        });
+
+        var answerVbox = new VBox(); // Contains all the editing controls for this answer
+
+        // Setup the button for removing an answer
+        Button removeButton = new Button("x");
+        removeButton.setOnAction(event -> {
+            // Remove the answer from the PromptSceneModel's answers
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
+            answersList.remove(career);
+            model.careers = answersList.toArray(ButtonModel[]::new);
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+
+            // Remove the editing controls for this answer from the parent container
+            careersContainer.getChildren().remove(answerVbox);
+        });
+
+        // Setup the combo-box for choosing the answers target scene
+        ArrayList<String> sceneIds = new ArrayList<>(graph.getSceneIds());
+        sceneIds.remove(model.id); // Prevent a scene from navigating to itself
+        ComboBox<String> targetComboBox = new ComboBox<>(FXCollections.observableList(sceneIds));
+        targetComboBox.setValue(career.target); // Set initial value to match the answer's target
+        targetComboBox.setOnAction(event -> {
+            String target = targetComboBox.getValue();
+            if (!target.equals(model.getId())) {
+                career.target = target;
+                graph.registerSceneModel(model); // Re-register the model to update the scene
+
+                // Update the scene graph view
+                controller.rebuildSceneGraphTreeView();
+            }
+        });
+
+        // Create an HBox with a "Target: " label and the combo-box
+        HBox targetsBox = new HBox(new Label("Target: "), targetComboBox);
+        targetsBox.setPadding(new Insets(0, 0, 0, 5));
+
+        // Add a separator so answers are visually separated
+        Separator separator = new Separator();
+        separator.setPadding(ANSWER_PADDING);
+
+        // Put all the answer controls together
+        HBox editingControls = new HBox(colorPicker, imageChooseButton, removeButton);
+        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
+        return answerVbox;
     }
 
     private static Node getPromptTBox(SpokeGraphPromptSceneModel model, SceneGraph graph) {
@@ -224,16 +361,6 @@ public class SpokeGraphPromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        // Setup button for changing answer shape
-        // (may need to convert to a combo-box if more shapes are added)
-        Button shapeButton = new Button(answer.isCircle ? "■" : "⬤");
-        shapeButton.setOnAction(event -> {
-            answer.isCircle = !answer.isCircle;
-            graph.registerSceneModel(model); // Re-register the model to update the scene
-
-            shapeButton.setText(answer.isCircle ? "■" : "⬤"); // Update the button symbol
-        });
-
         // Setup the button for adding an image to the answer
         Button imageChooseButton = new Button("Image");
         imageChooseButton.setOnAction(event -> {
@@ -299,7 +426,7 @@ public class SpokeGraphPromptSceneLoader {
         separator.setPadding(ANSWER_PADDING);
 
         // Put all the answer controls together
-        HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
+        HBox editingControls = new HBox(colorPicker, imageChooseButton, removeButton);
         answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
         return answerVbox;
     }

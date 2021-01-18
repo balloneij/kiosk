@@ -91,7 +91,7 @@ public class Controller implements Initializable {
 
         // Add scene type options for user seletion
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
-                new PromptSceneModel(), /*new SpokeGraphPromptSceneModel(),*/ new PathwaySceneModel() //TODO put SpokeGraphPromptSceneModel back in when it's done
+                new PromptSceneModel(), new SpokeGraphPromptSceneModel(), new PathwaySceneModel()
         ));
 
         // Handler for changing the type of scene via the combo box
