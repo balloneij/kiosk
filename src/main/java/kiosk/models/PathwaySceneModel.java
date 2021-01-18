@@ -15,8 +15,8 @@ public class PathwaySceneModel implements SceneModel {
      * Creates a new pathway scene model.
      * Composed of:
      * - Title
-     * - Unweighted spoke graph on the right
-     * - Weighted spoke graph on the left
+     * - Body
+     * - Career spoke graph consisting of weighted buttons
      */
     public PathwaySceneModel() {
         this.id = IdGenerator.getInstance().getNextId();

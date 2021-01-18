@@ -31,11 +31,11 @@ public class PathwayScene implements Scene {
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final PathwaySceneModel model;
-    private float size;
-    private float centerX;
-    private float centerY;
-    private int[] buttonLocations;
     private ButtonControl[] careerOptions;
+
+    float size;
+    float centerX;
+    float centerY;
 
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
@@ -51,29 +51,8 @@ public class PathwayScene implements Scene {
         centerY = (size / 2) + y;
         this.careerOptions = new ButtonControl[this.model.careers.length];
 
-        initializeButtons(model, sketch, size, centerX, centerY);
-    }
-
-    private void initializeButtons(PathwaySceneModel model, Kiosk sketch, float size,
-                                   float centerX, float centerY) {
-        var degrees = 0.f;
-        var radius = .25 * size;
-        buttonLocations = new int[2 * model.careers.length];
-
-        // for each answer find the degrees and position
-        for (var i = 0; i < model.careers.length; i++) {
-            var btnModel = model.careers[i];
-            btnModel.isCircle = true;
-
-            var upperLeftX = centerX + (.62 * size - radius) * Math.cos(Math.toRadians(degrees));
-            var upperLeftY = centerY + (.62 * size - radius) * Math.sin(Math.toRadians(degrees));
-            buttonLocations[2 * i] = (int) upperLeftX;
-            buttonLocations[2 * i + 1] = (int) upperLeftY;
-
-            this.careerOptions[i] = new ButtonControl(btnModel, (int) (upperLeftX - .5 * radius),
-                    (int) (upperLeftY - .125 * size), (int) radius, (int) radius);
-            degrees += 120;
-            sketch.hookControl(this.careerOptions[i]);
+        for (ButtonControl careerOption : this.careerOptions) {
+            sketch.hookControl(careerOption);
         }
     }
 
@@ -91,7 +70,7 @@ public class PathwayScene implements Scene {
         Graphics.useSansSerifBold(sketch, 48);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
-        drawPathwayGraph(sketch);
+        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText, careerOptions);
     }
 
     private void drawHeader(Kiosk sketch) {
@@ -111,14 +90,5 @@ public class PathwayScene implements Scene {
 
         Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
         sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y);
-    }
-
-    private void drawPathwayGraph(Kiosk sketch) {
-        for (int i = 0; i < model.careers.length; i++) {
-            sketch.stroke(255);
-            sketch.line(centerX, centerY, buttonLocations[2 * i], buttonLocations[2 * i + 1]);
-            this.careerOptions[i].draw(sketch);
-        }
-        SpokeUtil.drawInnerCircle(sketch, centerX, centerY, size / 4.f, model.centerText);
     }
 }

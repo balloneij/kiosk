@@ -23,10 +23,10 @@ public class SpokeUtil {
      * @param answers The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-          String centerText, ButtonModel[] answers) {
+          String centerText, ButtonControl[] answers) {
         var weights = new int[answers.length];
         Arrays.fill(weights, 1);
-        spokeGraph(sketch, size, x, y, padding, centerText, answers);
+        spokeGraph(sketch, size, x, y, padding, centerText, answers, weights);
     }
 
     /**
@@ -41,7 +41,7 @@ public class SpokeUtil {
      * @param answers The text that appears in each outer circle.
      * @param weights The relative ratio and weight of each option.
      */
-    public static void weightedSpokeGraph(Kiosk sketch, float size, float x, float y, float padding,
+    public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
             String centerText, ButtonControl[] answers, int[] weights) {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         var centerX = x + size / 2.f;
