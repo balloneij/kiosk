@@ -8,10 +8,6 @@ public class PathwaySceneModel implements SceneModel {
     public String id;
     public String headerTitle;
     public String headerBody;
-    public float xpos;
-    public float ypos;
-    public float size;
-    public float padding;
     public String centerText;
     public ButtonModel[] careers;
 
@@ -26,10 +22,6 @@ public class PathwaySceneModel implements SceneModel {
         this.id = IdGenerator.getInstance().getNextId();
         this.headerTitle = "";
         this.headerBody = "";
-        this.xpos = 0;
-        this.ypos = 0;
-        this.size = 50;
-        this.padding = 20;
         this.centerText = "";
         this.careers = new ButtonModel[]{};
     }
@@ -61,10 +53,6 @@ public class PathwaySceneModel implements SceneModel {
         copy.id = this.id;
         copy.headerTitle = this.headerTitle;
         copy.headerBody = this.headerBody;
-        copy.xpos = this.xpos;
-        copy.ypos = this.ypos;
-        copy.size = this.size;
-        copy.padding = this.padding;
         copy.centerText = this.centerText;
         copy.careers = answersCopy;
         return copy;
@@ -72,6 +60,12 @@ public class PathwaySceneModel implements SceneModel {
 
     @Override
     public String[] getTargets() {
-        return new String[0];
+        String[] ids = new String[this.careers.length];
+
+        for (int i = 0; i < this.careers.length; i++) {
+            ids[i] = this.careers[i].target;
+        }
+
+        return ids;
     }
 }
