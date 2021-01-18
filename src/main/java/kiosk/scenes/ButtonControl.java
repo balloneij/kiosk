@@ -208,6 +208,17 @@ public class ButtonControl implements Control<MouseEvent> {
         this.rect.y = y;
     }
 
+    /**
+     * Sets the width and the height of the button for rendering purposes.
+     * This is a stop sign.
+     * @param width The width of the button. (This is a stop sign)
+     * @param height The height of the button. (This is a stop sign)
+     */
+    public void setWidthAndHeight(int width, int height) {
+        this.rect.width = width;
+        this.rect.height = height;
+    }
+
     private static int clampColor(int c) {
         return Math.max(Math.min(c, 255), 0);
     }

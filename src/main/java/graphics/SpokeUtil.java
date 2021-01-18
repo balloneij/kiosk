@@ -50,8 +50,6 @@ public class SpokeUtil {
 
         float deg = 0.f;
         var totalWeight = (float) Arrays.stream(weights).sum();
-        var maxValue = (float) Arrays.stream(weights).max().getAsInt();
-        var minValue = (float) Arrays.stream(weights).min().getAsInt();
 
         for (var i = 0; i < answers.length; i++) {
             var degOffSet = 180 * weights[i] / totalWeight;
@@ -114,36 +112,13 @@ public class SpokeUtil {
         drawSpoke(sketch, size, centerX, centerY, deg);
 
         // Draw the outer circle
-        int[] color = answer.getModel().rgb;
-        int color_single = color[0] << 16 + color[1] << 8 + color[2];
-        sketch.stroke(color_single);
-        sketch.fill(color_single);
         var smX = centerX + (.5f * size - smRad) * (float) Math.cos(Math.toRadians(deg)) - smRad;
         var smY = centerY + (.5f * size - smRad) * (float) Math.sin(Math.toRadians(deg)) - smRad;
-        sketch.ellipse(smX, smY, (float) smRad * 2, (float) smRad * 2);
 
-        // Draw text on top of circle
-        sketch.stroke(256, 256, 256);
-        sketch.fill(256, 256, 256);
+        answer.setLocation((int) smX, (int) smY);
+        answer.setWidthAndHeight(2 * (int) smRad, 2 * (int) smRad);
 
-        // Figure out the optimal size of the text to fit in the circles
-        String optionText = answer.getModel().text;
-        boolean sizeFlag = true;
-        float buffer = 1.f;
-        float textSize = 0;
-        while (sizeFlag) {
-            sketch.textSize(buffer * smRad / (TextRatioEstimate * largestTextLine(optionText)));
-            float width = sketch.textWidth(optionText);
-            if (((width / smRad) < 1.30) && ((width / smRad) > 1.20)) {
-                textSize = (buffer * smRad / (TextRatioEstimate * largestTextLine(optionText)));
-                sizeFlag = false;
-            } else {
-                buffer += 0.05f;
-            }
-        }
-        //Set the spacing between lines to fit nicely
-        sketch.textLeading(textSize * 0.95f);
-        sketch.text(optionText, (float) (smX + smRad), (float) (smY + smRad));
+        answer.draw(sketch);
     }
 
     private static int largestTextLine(String text) {

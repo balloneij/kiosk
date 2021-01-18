@@ -68,4 +68,9 @@ public class PathwaySceneModel implements SceneModel {
 
         return ids;
     }
+
+    @Override
+    public String toString() {
+        return "Pathway Scene";
+    }
 }

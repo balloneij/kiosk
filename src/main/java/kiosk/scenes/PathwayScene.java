@@ -44,12 +44,14 @@ public class PathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        size = sketch.width * .4f;
-        var x = sketch.width * .05f + 2 * sketch.width / 5.f;
-        var y = sketch.height * .25f;
-        centerX = (size / 2) + x;
-        centerY = (size / 2) + y;
+        centerX = sketch.width / 2.f;
+        centerY = sketch.height / 2.f;
+        size = sketch.height * .8f;
         this.careerOptions = new ButtonControl[this.model.careers.length];
+        for (int i = 0; i < careerOptions.length; i++) {
+            this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);
+            this.model.careers[i].isCircle = true;
+        }
 
         for (ButtonControl careerOption : this.careerOptions) {
             sketch.hookControl(careerOption);
