@@ -26,6 +26,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private Image image;
     private boolean isPressed;
     private boolean wasClicked;
+    private boolean isClickable;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -40,6 +41,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.rect = new Rectangle(x, y, w, h);
         this.r = DEFAULT_RADIUS;
         this.image = null;
+        this.isClickable = true;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -60,6 +62,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.rect = new Rectangle(x, y, w, h);
         this.r = r;
         this.image = null;
+        this.isClickable = true;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -103,7 +106,7 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
         // Set the color and draw the shape
-        if (this.isPressed) {
+        if (this.isPressed && this.isClickable) {
             int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
             int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
             int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
@@ -132,7 +135,7 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
         // Set the color and draw the shape
-        if (this.isPressed) {
+        if (this.isPressed && this.isClickable) {
             int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
             int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
             int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
@@ -173,7 +176,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // clicked the same button twice if wasClicked() is called
         // in a subsequent update tick.
         this.wasClicked = false;
-        return temp;
+        return temp && this.isClickable;
     }
 
     public String getTarget() {
@@ -206,6 +209,14 @@ public class ButtonControl implements Control<MouseEvent> {
     public void setLocation(int x, int y) {
         this.rect.x = x;
         this.rect.y = y;
+    }
+
+    /**
+     * By default, button models are clickable. You can turn that off here.
+     * @param isClickable True if we can click it, false if not.
+     */
+    public void setClickable(boolean isClickable) {
+        this.isClickable = isClickable;
     }
 
     /**
