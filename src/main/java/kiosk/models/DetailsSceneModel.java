@@ -21,7 +21,6 @@ public class DetailsSceneModel implements SceneModel {
         this.title = "";
         this.body = "";
         this.button = new ButtonModel();
-        button.rgb = Color.DW_GREEN_RGB;
     }
 
     @Override
