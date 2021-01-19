@@ -134,11 +134,11 @@ public class SpokeUtil {
         var percentage = (weight - minValue) / (maxValue - minValue);
         var from = sketch.color(252, 177, 22);
         var to = sketch.color(57, 160, 91);
-        int color_single = sketch.lerpColor(from, to, percentage);
+        int colorSingle = sketch.lerpColor(from, to, percentage);
         int[] toReturn = new int[3];
-        toReturn[0] = (color_single & 0xFF0000) >> 16;
-        toReturn[1] = (color_single & 0x00FF00) >> 8;
-        toReturn[2] = color_single & 0x0000FF;
+        toReturn[0] = (colorSingle & 0xFF0000) >> 16;
+        toReturn[1] = (colorSingle & 0x00FF00) >> 8;
+        toReturn[2] = colorSingle & 0x0000FF;
         return toReturn;
     }
 }

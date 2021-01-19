@@ -21,7 +21,7 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private final ButtonModel model;
     private final Rectangle rect;
-    private final int r;
+    private final int radius;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
     private Image image;
     private boolean isPressed;
@@ -39,7 +39,7 @@ public class ButtonControl implements Control<MouseEvent> {
     public ButtonControl(ButtonModel model, int x, int y, int w, int h) {
         this.model = model;
         this.rect = new Rectangle(x, y, w, h);
-        this.r = DEFAULT_RADIUS;
+        this.radius = DEFAULT_RADIUS;
         this.image = null;
         this.isClickable = true;
 
@@ -55,12 +55,12 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param y of the top-right corner
      * @param w width
      * @param h height
-     * @param r radius (in circular case)
+     * @param radius radius (in circular case)
      */
-    public ButtonControl(ButtonModel model, int x, int y, int w, int h, int r) {
+    public ButtonControl(ButtonModel model, int x, int y, int w, int h, int radius) {
         this.model = model;
         this.rect = new Rectangle(x, y, w, h);
-        this.r = r;
+        this.radius = radius;
         this.image = null;
         this.isClickable = true;
 
@@ -118,7 +118,7 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
         }
         Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                this.rect.width, this.rect.height, r);
+                this.rect.width, this.rect.height, radius);
 
         // Draw text
         sketch.fill(255);

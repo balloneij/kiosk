@@ -1,7 +1,7 @@
 package kiosk.models;
 
-import kiosk.scenes.Scene;
 import kiosk.scenes.PathwayScene;
+import kiosk.scenes.Scene;
 
 public class PathwaySceneModel implements SceneModel {
 

@@ -40,6 +40,12 @@ public class SpokeGraphPromptScene implements Scene {
     private float centerX;
     private float centerY;
 
+    /**
+     * Creates a Spoke Graph Prompt Scene
+     * It has a spoke graph of all the careers in the upper left corner
+     * and a spoke graph in the bottom right for taking input.
+     * @param model The model to pull data from.
+     */
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
         this.careerOptions = new ButtonControl[this.model.careers.length];
@@ -90,8 +96,10 @@ public class SpokeGraphPromptScene implements Scene {
         Graphics.useSansSerifBold(sketch, 48);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, careerSize, centerX - careerSize, centerY - careerSize / 2, 1, model.careerCenterText, careerOptions, this.model.careerWeights);
-        SpokeUtil.spokeGraph(sketch, answerSize / 2, centerX + answerSize / 2, centerY, 5, model.promptText, answerButtons);
+        SpokeUtil.spokeGraph(sketch, careerSize, centerX - careerSize, centerY - careerSize / 2,
+                1, model.careerCenterText, careerOptions, this.model.careerWeights);
+        SpokeUtil.spokeGraph(sketch, answerSize / 2, centerX + answerSize / 2,
+                centerY, 5, model.promptText, answerButtons);
     }
 
     private void drawHeader(Kiosk sketch) {

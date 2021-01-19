@@ -37,8 +37,8 @@ public class SpokeGraphPromptSceneLoader {
      * @param toolbarBox The main editor view.
      * @param graph The scene graph used to manage application state.
      */
-    public static void loadScene(Controller controller,
-                                 SpokeGraphPromptSceneModel model, VBox toolbarBox, SceneGraph graph) {
+    public static void loadScene(Controller controller, SpokeGraphPromptSceneModel model,
+                                 VBox toolbarBox, SceneGraph graph) {
         toolbarBox.getChildren().clear();
 
         // Get the editing Nodes for the SpokeGraphPromptsSceneModel properties

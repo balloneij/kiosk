@@ -1,26 +1,26 @@
 package editor.sceneloaders;
 
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import kiosk.SceneGraph;
-import kiosk.models.PathwaySceneModel;
 import editor.Controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
+import kiosk.models.PathwaySceneModel;
 import kiosk.models.SceneModel;
 
 public class PathwaySceneLoader {
@@ -35,7 +35,8 @@ public class PathwaySceneLoader {
      * @param model The current scene model we want to modify.
      * @param graph The scene graph used to manage application state.
      */
-    public static void loadScene(Controller controller, PathwaySceneModel model, VBox toolbarBox, SceneGraph graph) {
+    public static void loadScene(Controller controller, PathwaySceneModel model,
+                                 VBox toolbarBox, SceneGraph graph) {
         // Get the editing Nodes for the PathwaySceneModel properties
         VBox vbox = new VBox(
                 getIdBox(controller, model, graph),

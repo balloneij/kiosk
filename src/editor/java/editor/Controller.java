@@ -1,8 +1,9 @@
 package editor;
 
+import editor.sceneloaders.DetailsSceneLoader;
+import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
 import editor.sceneloaders.SpokeGraphPromptSceneLoader;
-import editor.sceneloaders.PathwaySceneLoader;
 import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
@@ -25,7 +26,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
-import kiosk.models.*;
+import kiosk.models.DetailsSceneModel;
+import kiosk.models.EmptySceneModel;
+import kiosk.models.ErrorSceneModel;
+import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PathwaySceneModel;
+import kiosk.models.PromptSceneModel;
+import kiosk.models.SceneModel;
+import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.javafx.PSurfaceFX;
 
 
@@ -91,7 +99,10 @@ public class Controller implements Initializable {
 
         // Add scene type options for user seletion
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
-                new PromptSceneModel(), new SpokeGraphPromptSceneModel(), new PathwaySceneModel()
+                new PromptSceneModel(),
+                new SpokeGraphPromptSceneModel(), 
+                new PathwaySceneModel(),
+                new DetailsSceneModel()
         ));
 
         // Handler for changing the type of scene via the combo box
@@ -139,9 +150,12 @@ public class Controller implements Initializable {
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof SpokeGraphPromptSceneModel) {
-            SpokeGraphPromptSceneLoader.loadScene(this, (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+            SpokeGraphPromptSceneLoader.loadScene(this,
+                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof PathwaySceneModel) {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof DetailsSceneModel) {
+            DetailsSceneLoader.loadScene(this, (DetailsSceneModel) model, toolbarBox, sceneGraph);
         } else {
             toolbarBox.getChildren().clear();
         }
