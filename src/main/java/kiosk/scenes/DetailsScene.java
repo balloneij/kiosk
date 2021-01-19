@@ -92,8 +92,8 @@ public class DetailsScene implements Scene {
 
         this.nextButton = new ButtonControl(
             nextButtonModel,
-            FOREGROUND_X_PADDING + FOREGROUND_WIDTH + BUTTON_PADDING,
-            sketchHeight - (BUTTON_WIDTH * 3 / 4) - BUTTON_PADDING,
+            sketchWidth - BUTTON_PADDING - BUTTON_WIDTH,
+            sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
             BUTTON_WIDTH * 3 / 4,
             BUTTON_HEIGHT * 3 / 4
         );
