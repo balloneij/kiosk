@@ -66,7 +66,7 @@ public class DetailsScene implements Scene {
         backButtonModel.text = "Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         this.backButton = new ButtonControl(backButtonModel,
-                BUTTON_PADDING, sketchHeight - (BUTTON_WIDTH * 3 / 4) - BUTTON_PADDING,
+                BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
                 BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.backButton);
 
