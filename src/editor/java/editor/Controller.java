@@ -1,7 +1,9 @@
 package editor;
 
 import editor.sceneloaders.DetailsSceneLoader;
+import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
+import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
@@ -28,9 +30,10 @@ import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
-import kiosk.scenes.DetailsScene;
+import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.javafx.PSurfaceFX;
 
 
@@ -97,6 +100,8 @@ public class Controller implements Initializable {
         // Add scene type options for user seletion
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
                 new PromptSceneModel(),
+                new SpokeGraphPromptSceneModel(), 
+                new PathwaySceneModel(),
                 new DetailsSceneModel()
         ));
 
@@ -144,6 +149,11 @@ public class Controller implements Initializable {
         previousId = model.getId();
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof SpokeGraphPromptSceneModel) {
+            SpokeGraphPromptSceneLoader.loadScene(this,
+                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof PathwaySceneModel) {
+            PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
             DetailsSceneLoader.loadScene(this, (DetailsSceneModel) model, toolbarBox, sceneGraph);
         } else {

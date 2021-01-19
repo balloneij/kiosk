@@ -2,6 +2,8 @@ package graphics;
 
 import java.util.Arrays;
 import kiosk.Kiosk;
+import kiosk.models.ButtonModel;
+import kiosk.scenes.ButtonControl;
 import processing.core.PConstants;
 
 public class SpokeUtil {
@@ -18,13 +20,13 @@ public class SpokeUtil {
      * @param y The y location of the upper left-hand corner.
      * @param padding The gap space between each outer circle.
      * @param centerText The text that appears in the center circle.
-     * @param options The text that appears in each outer circle.
+     * @param answers The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-          String centerText, String[] options, int[] colors) {
-        var weights = new int[options.length];
+          String centerText, ButtonControl[] answers) {
+        var weights = new int[answers.length];
         Arrays.fill(weights, 1);
-        spokeGraph(sketch, size, x, y, padding, centerText, options, weights, colors);
+        spokeGraph(sketch, size, x, y, padding, centerText, answers, weights);
     }
 
     /**
@@ -36,33 +38,26 @@ public class SpokeUtil {
      * @param y The y location of the upper left-hand corner.
      * @param padding The gap space between each outer circle.
      * @param centerText The text that appears in the center circle.
-     * @param options The text that appears in each outer circle.
+     * @param answers The text that appears in each outer circle.
      * @param weights The relative ratio and weight of each option.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-            String centerText, String[] options, int[] weights, int[] colors) {
+            String centerText, ButtonControl[] answers, int[] weights) {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        var centerX = x + size / 2.f;
-        var centerY = y + size / 2.f;
-        drawInnerCircle(sketch, centerX, centerY, size / InnerOuterCircleRatio, centerText);
+        drawInnerCircle(sketch, x, y, size / InnerOuterCircleRatio, centerText);
 
         float deg = 0.f;
         var totalWeight = (float) Arrays.stream(weights).sum();
-        var maxValue = (float) Arrays.stream(weights).max().getAsInt();
-        var minValue = (float) Arrays.stream(weights).min().getAsInt();
 
-        for (var i = 0; i < options.length; i++) {
+        for (var i = 0; i < answers.length; i++) {
             var degOffSet = 180 * weights[i] / totalWeight;
             var maxRad = .125f * size;
             var smRad = .5f * size * (float) Math.sin(Math.toRadians(degOffSet))
                 / (1 + (float) Math.sin(Math.toRadians(degOffSet)));
-            var colorSelection = colors != null
-                    ? colors[i]
-                    : getColor(weights[i], maxValue, minValue, sketch);
 
             smRad = Math.min(smRad, maxRad) - padding; // Make sure circle is small enough to fit
             deg += degOffSet;
-            drawOuterCircle(sketch, centerX, centerY, smRad, size, deg, colorSelection, options[i]);
+            drawOuterCircle(sketch, x, y, smRad, size, deg, answers[i]);
             deg += degOffSet;
         }
         sketch.textSize(18);
@@ -110,38 +105,18 @@ public class SpokeUtil {
     }
 
     private static void drawOuterCircle(Kiosk sketch, float centerX, float centerY, float smRad,
-            float size, float deg, int color, String optionText) {
+            float size, float deg, ButtonControl answer) {
         // Create the line from the edge of the inner circle to the center of the outer circle
         drawSpoke(sketch, size, centerX, centerY, deg);
 
         // Draw the outer circle
-        sketch.stroke(color);
-        sketch.fill(color);
         var smX = centerX + (.5f * size - smRad) * (float) Math.cos(Math.toRadians(deg)) - smRad;
         var smY = centerY + (.5f * size - smRad) * (float) Math.sin(Math.toRadians(deg)) - smRad;
-        sketch.ellipse(smX, smY, (float) smRad * 2, (float) smRad * 2);
 
-        // Draw text on top of circle
-        sketch.stroke(256, 256, 256);
-        sketch.fill(256, 256, 256);
+        answer.setLocation((int) smX, (int) smY);
+        answer.setWidthAndHeight(2 * (int) smRad, 2 * (int) smRad);
 
-        // Figure out the optimal size of the text to fit in the circles
-        boolean sizeFlag = true;
-        float buffer = 1.f;
-        float textSize = 0;
-        while (sizeFlag) {
-            sketch.textSize(buffer * smRad / (TextRatioEstimate * largestTextLine(optionText)));
-            float width = sketch.textWidth(optionText);
-            if (((width / smRad) < 1.30) && ((width / smRad) > 1.20)) {
-                textSize = (buffer * smRad / (TextRatioEstimate * largestTextLine(optionText)));
-                sizeFlag = false;
-            } else {
-                buffer += 0.05f;
-            }
-        }
-        //Set the spacing between lines to fit nicely
-        sketch.textLeading(textSize * 0.95f);
-        sketch.text(optionText, (float) (smX + smRad), (float) (smY + smRad));
+        answer.draw(sketch);
     }
 
     private static int largestTextLine(String text) {
@@ -155,10 +130,15 @@ public class SpokeUtil {
         return largestLineSize;
     }
 
-    private static int getColor(float weight, float maxValue, float minValue, Kiosk sketch) {
+    private static int[] getColor(float weight, float maxValue, float minValue, Kiosk sketch) {
         var percentage = (weight - minValue) / (maxValue - minValue);
         var from = sketch.color(252, 177, 22);
         var to = sketch.color(57, 160, 91);
-        return sketch.lerpColor(from, to, percentage);
+        int colorSingle = sketch.lerpColor(from, to, percentage);
+        int[] toReturn = new int[3];
+        toReturn[0] = (colorSingle & 0xFF0000) >> 16;
+        toReturn[1] = (colorSingle & 0x00FF00) >> 8;
+        toReturn[2] = colorSingle & 0x0000FF;
+        return toReturn;
     }
 }

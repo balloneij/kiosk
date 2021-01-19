@@ -109,7 +109,6 @@ public class DetailsSceneLoader {
         ButtonModel answer = model.button;
 
         // Setup the text field for editing the answer
-        var answerLabel = new Label("Button Text:");
         var answerField = new TextArea(answer.text);
         answerField.setMaxHeight(5);
         answerField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -187,7 +186,8 @@ public class DetailsSceneLoader {
         var answerVbox = new VBox(); // Contains all the editing controls for this answer
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton);
-        answerVbox.getChildren().addAll(answerLabel, answerField, editingControls, targetsBox);
+        answerVbox.getChildren().addAll(
+                new Label("Button Text:"), answerField, editingControls, targetsBox);
         answerVbox.setPadding(PADDING);
         return answerVbox;
     }

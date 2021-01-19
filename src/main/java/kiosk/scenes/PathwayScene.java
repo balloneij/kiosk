@@ -5,10 +5,9 @@ import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
-import kiosk.models.SpokeGraphPromptSceneModel;
+import kiosk.models.PathwaySceneModel;
 
-
-public class SpokeGraphPromptScene implements Scene {
+public class PathwayScene implements Scene {
 
     // Pull constants from the settings
     private static final int SCREEN_W = Settings.readSettings().screenW;
@@ -31,60 +30,37 @@ public class SpokeGraphPromptScene implements Scene {
     private static final int HEADER_BODY_FONT_SIZE = 16;
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
-    private final SpokeGraphPromptSceneModel model;
+    private final PathwaySceneModel model;
     private ButtonControl[] careerOptions;
-    private ButtonControl[] answerButtons;
 
-    private float careerSize;
-    private float answerSize;
-    private float centerX;
-    private float centerY;
+    float size;
+    float centerX;
+    float centerY;
 
-    /**
-     * Creates a Spoke Graph Prompt Scene
-     * It has a spoke graph of all the careers in the upper left corner
-     * and a spoke graph in the bottom right for taking input.
-     * @param model The model to pull data from.
-     */
-    public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
+    public PathwayScene(PathwaySceneModel model) {
         this.model = model;
         this.careerOptions = new ButtonControl[this.model.careers.length];
-        this.answerButtons = new ButtonControl[this.model.answers.length];
     }
 
     @Override
     public void init(Kiosk sketch) {
         centerX = sketch.width / 2.f;
         centerY = (sketch.height  * .57f);
-        answerSize = sketch.height * .75f;
-        careerSize = answerSize / 2;
-
+        size = sketch.height * .75f;
         this.careerOptions = new ButtonControl[this.model.careers.length];
         for (int i = 0; i < careerOptions.length; i++) {
             this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);
             this.model.careers[i].isCircle = true;
         }
 
-        //initialize weights for testing purposes
-        this.model.careerWeights = new int[this.careerOptions.length];
-        for (int i = 0; i < this.model.careerWeights.length; i++) {
-            this.model.careerWeights[i] = i + 1;
-        }
-
-        this.answerButtons = new ButtonControl[this.model.answers.length];
-        for (int i = 0; i < answerButtons.length; i++) {
-            this.answerButtons[i] = new ButtonControl(this.model.answers[i], 0, 0, 0, 0);
-            this.model.answers[i].isCircle = true;
-        }
-
-        for (ButtonControl answerButton : this.answerButtons) {
-            sketch.hookControl(answerButton);
+        for (ButtonControl careerOption : this.careerOptions) {
+            sketch.hookControl(careerOption);
         }
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.answerButtons) {
+        for (ButtonControl button : this.careerOptions) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
@@ -96,10 +72,7 @@ public class SpokeGraphPromptScene implements Scene {
         Graphics.useSansSerifBold(sketch, 48);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, careerSize, centerX - careerSize, centerY - careerSize / 2,
-                1, model.careerCenterText, careerOptions, this.model.careerWeights);
-        SpokeUtil.spokeGraph(sketch, answerSize / 2, centerX + answerSize / 2,
-                centerY, 5, model.promptText, answerButtons);
+        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText, careerOptions);
     }
 
     private void drawHeader(Kiosk sketch) {

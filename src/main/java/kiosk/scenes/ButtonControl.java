@@ -15,16 +15,18 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private static final int FONT_SIZE = 20;
     // Radius of the rounded edge on rectangle buttons
-    private static final int RADIUS = 20;
+    private static final int DEFAULT_RADIUS = 20;
     // Negative will make the color darker on click
     private static final int COLOR_DELTA_ON_CLICK = -25;
 
     private final ButtonModel model;
     private final Rectangle rect;
+    private final int radius;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
     private Image image;
     private boolean isPressed;
     private boolean wasClicked;
+    private boolean isClickable;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -37,7 +39,30 @@ public class ButtonControl implements Control<MouseEvent> {
     public ButtonControl(ButtonModel model, int x, int y, int w, int h) {
         this.model = model;
         this.rect = new Rectangle(x, y, w, h);
+        this.radius = DEFAULT_RADIUS;
         this.image = null;
+        this.isClickable = true;
+
+        this.eventListeners = new HashMap<>();
+        this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
+        this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
+    }
+
+    /**
+     * Button UI control. Visual representation of a ButtonModel.
+     * @param model with button data
+     * @param x of the top-right corner
+     * @param y of the top-right corner
+     * @param w width
+     * @param h height
+     * @param radius radius (in circular case)
+     */
+    public ButtonControl(ButtonModel model, int x, int y, int w, int h, int radius) {
+        this.model = model;
+        this.rect = new Rectangle(x, y, w, h);
+        this.radius = radius;
+        this.image = null;
+        this.isClickable = true;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -81,7 +106,7 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
         // Set the color and draw the shape
-        if (this.isPressed) {
+        if (this.isPressed && this.isClickable) {
             int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
             int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
             int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
@@ -93,7 +118,7 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
         }
         Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                this.rect.width, this.rect.height, RADIUS);
+                this.rect.width, this.rect.height, radius);
 
         // Draw text
         sketch.fill(255);
@@ -110,7 +135,7 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
         // Set the color and draw the shape
-        if (this.isPressed) {
+        if (this.isPressed && this.isClickable) {
             int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
             int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
             int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
@@ -151,7 +176,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // clicked the same button twice if wasClicked() is called
         // in a subsequent update tick.
         this.wasClicked = false;
-        return temp;
+        return temp && this.isClickable;
     }
 
     public String getTarget() {
@@ -174,6 +199,35 @@ public class ButtonControl implements Control<MouseEvent> {
             this.wasClicked = true;
         }
         this.isPressed = false;
+    }
+
+    /**
+     * Moves the button to the specified Coordinates.
+     * @param x The X Location from the left of the screen.
+     * @param y The Y Location from the top of the screen.
+     */
+    public void setLocation(int x, int y) {
+        this.rect.x = x;
+        this.rect.y = y;
+    }
+
+    /**
+     * By default, button models are clickable. You can turn that off here.
+     * @param isClickable True if we can click it, false if not.
+     */
+    public void setClickable(boolean isClickable) {
+        this.isClickable = isClickable;
+    }
+
+    /**
+     * Sets the width and the height of the button for rendering purposes.
+     * This is a stop sign.
+     * @param width The width of the button. (This is a stop sign)
+     * @param height The height of the button. (This is a stop sign)
+     */
+    public void setWidthAndHeight(int width, int height) {
+        this.rect.width = width;
+        this.rect.height = height;
     }
 
     private static int clampColor(int c) {
