@@ -6,7 +6,6 @@ import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.DetailsSceneModel;
-import kiosk.models.ImageModel;
 import processing.core.PConstants;
 
 
@@ -92,7 +91,7 @@ public class DetailsScene implements Scene {
 
         this.nextButton = new ButtonControl(
             nextButtonModel,
-            sketchWidth - BUTTON_PADDING - BUTTON_WIDTH,
+            sketchWidth - BUTTON_PADDING - BUTTON_WIDTH * 3 / 4,
             sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
             BUTTON_WIDTH * 3 / 4,
             BUTTON_HEIGHT * 3 / 4
