@@ -1,8 +1,10 @@
 package editor;
 
+import java.io.File;
 import javafx.application.Application;
 import kiosk.Kiosk;
 import kiosk.Settings;
+import kiosk.models.LoadedSurveyModel;
 import processing.core.PSurface;
 import processing.javafx.PSurfaceFX;
 
@@ -67,6 +69,14 @@ public class Editor extends Kiosk {
      * @param args unused
      */
     public static void main(String[] args) {
+        // Create a sample survey file for demonstrating scenes
+        File sampleSurveyFile = new File("sample_survey.xml");
+        if (!sampleSurveyFile.exists()) {
+            LoadedSurveyModel surveyModel = LoadedSurveyModel.createSampleSurvey();
+            surveyModel.writeToFile(sampleSurveyFile);
+        }
+
+        // Run the editor
         Settings settings = new Settings();
 
         settings.screenW = Editor.PREVIEW_WIDTH;
