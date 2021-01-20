@@ -20,7 +20,6 @@ import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.ImageModel;
-import org.w3c.dom.Text;
 
 public class DetailsSceneLoader {
     // The default padding to space the editing Nodes
@@ -42,7 +41,7 @@ public class DetailsSceneLoader {
 
         // Get the editing Nodes for the DetailsSceneModel properties
         VBox vbox = new VBox(
-                getIdBox(controller, model, graph),
+                getNameBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getDescriptionBox(model, graph),
                 createButton(model, graph, controller)
@@ -59,16 +58,16 @@ public class DetailsSceneLoader {
         );
     }
 
-    private static Node getIdBox(Controller controller, DetailsSceneModel model, SceneGraph graph) {
-        var idField = new TextField(model.getId());
-        var idApplyButton = new Button("Apply");
+    private static Node getNameBox(Controller controller, DetailsSceneModel model, SceneGraph graph) {
+        var nameField = new TextField(model.getName());
 
-        idApplyButton.setOnAction(e -> {
-            graph.reassignSceneModel(model.getId(), idField.getText());
+        // Listener to update the title
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.setName(newValue);
             controller.rebuildSceneGraphTreeView();
         });
 
-        var vbox = new VBox(new Label("ID:"), new HBox(idField, idApplyButton));
+        var vbox = new VBox(new Label("Name:"), nameField);
         vbox.setPadding(PADDING);
         return vbox;
     }

@@ -6,6 +6,7 @@ import kiosk.scenes.Scene;
 public class PathwaySceneModel implements SceneModel {
 
     public String id;
+    public String name;
     public String headerTitle;
     public String headerBody;
     public String centerText;
@@ -20,6 +21,7 @@ public class PathwaySceneModel implements SceneModel {
      */
     public PathwaySceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Pathway Scene";
         this.headerTitle = "";
         this.headerBody = "";
         this.centerText = "";
@@ -42,6 +44,16 @@ public class PathwaySceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         ButtonModel[] answersCopy = new ButtonModel[this.careers.length];
         for (int i = 0; i < answersCopy.length; i++) {
@@ -51,6 +63,7 @@ public class PathwaySceneModel implements SceneModel {
 
         var copy = new PathwaySceneModel();
         copy.id = this.id;
+        copy.name = name;
         copy.headerTitle = this.headerTitle;
         copy.headerBody = this.headerBody;
         copy.centerText = this.centerText;

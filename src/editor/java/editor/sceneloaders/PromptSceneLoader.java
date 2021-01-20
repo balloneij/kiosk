@@ -42,7 +42,7 @@ public class PromptSceneLoader {
 
         // Get the editing Nodes for the PromptSceneModel properties
         VBox vbox = new VBox(
-                getIdBox(controller, model, graph),
+                getNameBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getPromptBox(model, graph),
                 getActionBox(model, graph),
@@ -63,19 +63,16 @@ public class PromptSceneLoader {
         );
     }
 
-    private static Node getIdBox(Controller controller, SceneModel model, SceneGraph graph) {
-        var idField = new TextField(model.getId());
-        var idApplyButton = new Button("Apply");
+    private static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
+        var nameField = new TextField(model.getName());
 
-        // When the id is updated as the user types, weird stuff can happen.
-        // ID changes should be deliberate, so I think having an apply button is
-        // appropriate
-        idApplyButton.setOnAction(e -> {
-            graph.reassignSceneModel(model.getId(), idField.getText());
+        // Listener to update the title
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.setName(newValue);
             controller.rebuildSceneGraphTreeView();
         });
 
-        var vbox = new VBox(new Label("ID:"), new HBox(idField, idApplyButton));
+        var vbox = new VBox(new Label("Name:"), nameField);
         vbox.setPadding(PADDING);
         return vbox;
     }

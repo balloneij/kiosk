@@ -14,9 +14,11 @@ public class DefaultSceneModel implements SceneModel {
             + "from the command line with the command \n\"java -jar kiosk.jar <survey file>\"\n"
             + "where <survey file> is the path to the survey file.";
     public String id;
+    public String name;
 
     public DefaultSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Default Scene";
     }
 
     @Override
@@ -32,6 +34,16 @@ public class DefaultSceneModel implements SceneModel {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

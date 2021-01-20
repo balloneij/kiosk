@@ -8,12 +8,14 @@ public final class WaveTransitionSceneModel implements SceneModel {
     public String target;
     public boolean invertedColors;
     public String id;
+    public String name;
 
     /**
      * Creates a default WaveTransitionSceneModel with a bad target.
      */
     public WaveTransitionSceneModel() {
         this.target = "null";
+        this.name = "Wave Transition";
         this.invertedColors = false;
         this.id = IdGenerator.getInstance().getNextId();
     }
@@ -24,7 +26,7 @@ public final class WaveTransitionSceneModel implements SceneModel {
      * @param invertedColors true for white, black otherwise
      */
     public WaveTransitionSceneModel(String target, boolean invertedColors) {
-        this(target, invertedColors, IdGenerator.getInstance().getNextId());
+        this(target, invertedColors, IdGenerator.getInstance().getNextId(), "Wave Transition");
     }
 
     /**
@@ -33,10 +35,11 @@ public final class WaveTransitionSceneModel implements SceneModel {
      * @param invertedColors true for white, black otherwise
      * @param uniqueId An id unique to this specific model.
      */
-    public WaveTransitionSceneModel(String target, boolean invertedColors, String uniqueId) {
+    public WaveTransitionSceneModel(String target, boolean invertedColors, String uniqueId, String name) {
         this.target = target;
         this.invertedColors = invertedColors;
         this.id = uniqueId;
+        this.name = name;
     }
 
     @Override
@@ -55,8 +58,18 @@ public final class WaveTransitionSceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
-        return new WaveTransitionSceneModel(target, invertedColors, id);
+        return new WaveTransitionSceneModel(target, invertedColors, id, name);
     }
 
     @Override
