@@ -155,14 +155,12 @@ public class SpokeGraphPromptScene implements Scene {
             model.careerCenterText,
             model.careerOptions,
             model.careerWeights,
-            null,
-                0,
-                1
+            null
         );
     }
 
     private void drawPromptGraph(Kiosk sketch) {
-        float[] textSizes = GraphicsUtil.spokeGraph(
+        GraphicsUtil.spokeGraph(
                 sketch,
                 size,
                 centerX,
@@ -170,13 +168,11 @@ public class SpokeGraphPromptScene implements Scene {
                 1.f,
                 model.promptText,
                 model.promptOptions,
-                new int[]{sketch.color(105, 183, 77), sketch.color(138, 37, 93), sketch.color(183, 48, 52)},
-                degreeOffset,
-                spokeScale
+                new int[]{sketch.color(105, 183, 77), sketch.color(138, 37, 93), sketch.color(183, 48, 52)}
         );
 
         for (int i = 0; i < model.answerButtons.length; i++) {
-            this.answerButtons[i].draw(sketch, textSizes[i] / ButtonControl.FONT_SIZE);
+            this.answerButtons[i].draw(sketch, ButtonControl.FONT_SIZE);
         }
 
     }
