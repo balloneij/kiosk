@@ -82,7 +82,11 @@ public class ButtonControl implements Control<MouseEvent> {
         }
         if (this.model.image != null) {
             sketch.imageMode(PConstants.CENTER);
-            this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+            if (this.isPressed) {
+                this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY() + this.rect.height / 10.f);
+            } else {
+                this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+            }
         }
     }
 
@@ -99,10 +103,20 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     private void drawRectangle(Kiosk sketch) {
         // Draw modifiers
-        sketch.rectMode(PConstants.CORNER);
+        sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        // Set the color and draw the shape
+        //Draw the darker button behind the button to add 3D effects
+        sketch.fill(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
+        sketch.stroke(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
+        Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y + this.rect.height / 10.f,
+                this.rect.width, this.rect.height, RADIUS);
+
+        // Set the color and draw the shape for when the button is clicked or not clicked
         if (this.isPressed) {
             int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
             int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
@@ -110,19 +124,60 @@ public class ButtonControl implements Control<MouseEvent> {
 
             sketch.fill(r, g, b);
             sketch.stroke(r, g, b);
+            Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y + this.rect.height / 10.f,
+                    this.rect.width, this.rect.height, RADIUS);
+
+            // Draw the text, including the text outline
+            sketch.fill(0);
+            sketch.stroke(0);
+            for (int x = -1; x < 2; x++) {
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x + this.rect.height / 10.f,
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+            }
+            sketch.fill(255);
+            sketch.stroke(255);
+            sketch.text(this.model.text,
+                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                    (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
+                    (float) this.rect.width,
+                    (float) this.rect.height);
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-        }
-        Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                this.rect.width, this.rect.height, RADIUS);
+            Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
+                    this.rect.width, this.rect.height, RADIUS);
 
-        // Draw text
-        sketch.fill(255);
-        sketch.stroke(255);
-        sketch.text(this.model.text,
-                (float) this.rect.getCenterX(),
-                (float) this.rect.getCenterY()-((TEXT_SIZE_MULTIPLIER - 1) * (FONT_SIZE / 2f)));
+            // Draw text, including the text outline
+            sketch.fill(0);
+            sketch.stroke(0);
+            for (int x = -1; x < 2; x++) {
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f),
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x,
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+            }
+            sketch.fill(255);
+            sketch.stroke(255);
+            sketch.text(this.model.text,
+                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                    (float) this.rect.getCenterY() - (this.rect.height / 2.f),
+                    (float) this.rect.width,
+                    (float) this.rect.height);
+        }
     }
 
     private void drawCircle(Kiosk sketch) {
@@ -130,6 +185,16 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.ellipseMode(PConstants.CORNER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
+        //Draw the darker button behind the button to add 3D effects
+        sketch.fill(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
+        sketch.stroke(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
+                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
+        sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f,
+                this.rect.width, this.rect.height);
+
         // Set the color and draw the shape
         if (this.isPressed) {
             int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
@@ -138,18 +203,58 @@ public class ButtonControl implements Control<MouseEvent> {
 
             sketch.fill(r, g, b);
             sketch.stroke(r, g, b);
+            sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f, this.rect.width, this.rect.height);
+
+            // Draw the text, including the text outline
+            sketch.fill(0);
+            sketch.stroke(0);
+            for (int x = -1; x < 2; x++) {
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x + this.rect.height / 10.f,
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+            }
+            sketch.fill(255);
+            sketch.stroke(255);
+            sketch.text(this.model.text,
+                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                    (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
+                    (float) this.rect.width,
+                    (float) this.rect.height);
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-        }
-        sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+            sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
-        // Draw text
-        sketch.fill(255);
-        sketch.stroke(255);
-        sketch.text(this.model.text,
-                (float) this.rect.getCenterX(),
-                (float) this.rect.getCenterY());
+            // Draw text, including the text outline
+            sketch.fill(0);
+            sketch.stroke(0);
+            for (int x = -1; x < 2; x++) {
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f),
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+                sketch.text(this.model.text,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x,
+                        (float) this.rect.width,
+                        (float) this.rect.height);
+            }
+            sketch.fill(255);
+            sketch.stroke(255);
+            sketch.text(this.model.text,
+                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                    (float) this.rect.getCenterY() - (this.rect.height / 2.f),
+                    (float) this.rect.width,
+                    (float) this.rect.height);
+        }
     }
 
 

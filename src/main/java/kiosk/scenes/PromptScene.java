@@ -29,7 +29,7 @@ public class PromptScene implements Scene {
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
     private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
     private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
-    private static final int COMMON_BUTTON_HEIGHT = Kiosk.getSettings().screenH / 10;
+    private static final int COMMON_BUTTON_HEIGHT = Kiosk.getSettings().screenH / 8;
     private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_PADDING = 20;
