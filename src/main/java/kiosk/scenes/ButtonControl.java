@@ -110,9 +110,10 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.fill(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
                 clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                 clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
-        sketch.stroke(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
-                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
-                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
+        sketch.stroke(59, 58, 57, 63f);
+//        sketch.stroke(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
+//                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
+//                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
         Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y + this.rect.height / 10.f,
                 this.rect.width, this.rect.height, RADIUS);
 
@@ -123,7 +124,8 @@ public class ButtonControl implements Control<MouseEvent> {
             int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
 
             sketch.fill(r, g, b);
-            sketch.stroke(r, g, b);
+            sketch.stroke(59, 58, 57, 63f);
+//            sketch.stroke(r, g, b);
             Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y + this.rect.height / 10.f,
                     this.rect.width, this.rect.height, RADIUS);
 
@@ -142,8 +144,8 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height);
             }
-            sketch.fill(255);
-            sketch.stroke(255);
+            sketch.fill(255 + COLOR_DELTA_ON_CLICK);
+            sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
             sketch.text(this.model.text,
                     (float) this.rect.getCenterX() - (this.rect.width / 2.f),
                     (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
@@ -151,7 +153,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     (float) this.rect.height);
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-            sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+            sketch.stroke(59, 58, 57, 63f);
+//            sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
                     this.rect.width, this.rect.height, RADIUS);
 
@@ -189,9 +192,10 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.fill(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
                 clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                 clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
-        sketch.stroke(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
-                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
-                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
+        sketch.stroke(59, 58, 57, 63f);
+//        sketch.stroke(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
+//                clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
+//                clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
         sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f,
                 this.rect.width, this.rect.height);
 
@@ -202,12 +206,13 @@ public class ButtonControl implements Control<MouseEvent> {
             int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
 
             sketch.fill(r, g, b);
-            sketch.stroke(r, g, b);
+            sketch.stroke(59, 58, 57, 63f);
+//            sketch.stroke(r, g, b);
             sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f, this.rect.width, this.rect.height);
 
             // Draw the text, including the text outline
-            sketch.fill(0);
-            sketch.stroke(0);
+            sketch.fill(59, 58, 57);
+            sketch.stroke(59, 58, 57);
             for (int x = -1; x < 2; x++) {
                 sketch.text(this.model.text,
                         (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
@@ -220,8 +225,8 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height);
             }
-            sketch.fill(255);
-            sketch.stroke(255);
+            sketch.fill(255 + COLOR_DELTA_ON_CLICK);
+            sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
             sketch.text(this.model.text,
                     (float) this.rect.getCenterX() - (this.rect.width / 2.f),
                     (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
@@ -229,12 +234,13 @@ public class ButtonControl implements Control<MouseEvent> {
                     (float) this.rect.height);
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-            sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+            sketch.stroke(59, 58, 57, 63f);
+//            sketch.stroke(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
             // Draw text, including the text outline
-            sketch.fill(0);
-            sketch.stroke(0);
+            sketch.fill(59, 58, 57);
+            sketch.stroke(59, 58, 57);
             for (int x = -1; x < 2; x++) {
                 sketch.text(this.model.text,
                         (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,

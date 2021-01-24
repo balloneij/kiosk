@@ -15,6 +15,7 @@ public class Graphics {
     private static boolean fontsLoaded = false;
     private static PFont gothic = null;
     private static PFont gothicBold = null;
+    private static float bubbleOffset = 0;
 
     private Graphics() {
 
@@ -70,23 +71,10 @@ public class Graphics {
      */
     public static void drawRoundedRectangle(Kiosk sketch, float x, float y,
                                             float w, float h, float r) {
-        float d = r * 2;
-
-        sketch.ellipseMode(PConstants.CORNER);
         sketch.rectMode(PConstants.CORNER);
 
-        // Draw left side rounded corners and connect them
-        sketch.ellipse(x, y, d, d);
-        sketch.ellipse(x, y + h - d, d, d);
-        sketch.rect(x, y + r, r, h - d);
-
-        // Draw the center
-        sketch.rect(x + r, y, w - d, h);
-
-        // Draw the right side rounded corners and connect them
-        sketch.ellipse(x + w - d, y, d, d);
-        sketch.ellipse(x + w - d, y + h - d, d, d);
-        sketch.rect(x + w - r, y + r, r, h - d);
+        // Draw the rounded rectangle
+        sketch.rect(x, y, w, h, r);
     }
 
     /**
@@ -109,12 +97,15 @@ public class Graphics {
         boolean stagger = false;
         float y = height - radius;
         while (radius > 1) {
-            for (float x = stagger ? spacing / 2 : 0; x < width; x += spacing) {
-                sketch.ellipse(x, y, radius, radius);
+            for (float x = stagger ? spacing / 2 - bubbleOffset : -bubbleOffset; x < width; x += spacing) {
+                if (y > 0) {
+                    sketch.ellipse(x, y, radius, radius);
+                }
             }
-            radius -= 0.25;
+            radius -= 0.2825;
             y -= spacing;
             stagger = !stagger;
         }
+        bubbleOffset = bubbleOffset + 0.125f;
     }
 }
