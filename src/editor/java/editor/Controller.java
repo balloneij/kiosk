@@ -1,5 +1,6 @@
 package editor;
 
+import com.sun.source.tree.Tree;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
@@ -55,7 +56,7 @@ public class Controller implements Initializable {
     @FXML
     SplitPane splitPane;
     @FXML
-    TreeView<String> sceneGraphTreeView;
+    TreeView<SceneModel> sceneGraphTreeView; //todo
     @FXML
     ComboBox<SceneModel> sceneTypeComboBox;
     @FXML
@@ -126,7 +127,7 @@ public class Controller implements Initializable {
         sceneGraphTreeView.getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, treeItem, selected) -> {
                     if (selected != null) {
-                        SceneModel scene = sceneGraph.getSceneById(selected.getValue());
+                        SceneModel scene = sceneGraph.getSceneById(selected.getValue().getId());
                         // Change scene graph to the scene selected
                         sceneGraph.pushScene(scene);
                     }
@@ -171,7 +172,7 @@ public class Controller implements Initializable {
         // All treeviews must have a root. This root is hidden, so it's
         // impossible for the user to modify it. Under the hidden root
         // is where we add the survey and orphaned children
-        TreeItem<String> hiddenRoot = new TreeItem<>("Hidden Root");
+        TreeItem<SceneModel> hiddenRoot = new TreeItem<>(); //previously had "hidden root" here
 
         // Create the survey subtree
         SceneModel rootScene = sceneGraph.getRootSceneModel();
@@ -214,18 +215,19 @@ public class Controller implements Initializable {
         this.sceneGraphTreeView.setRoot(hiddenRoot);
     }
 
-    private void rebuildSceneGraphTreeView(TreeItem<String> parent,
+    private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,
                                            SceneModel model, Set<String> nonOrphanChildren) {
         // Add node to parent
         String modelId = model.getId();
-        TreeItem<String> node = new TreeItem<>(modelId);
+        TreeItem<SceneModel> node = new TreeItem<>(model);
+
         parent.getChildren().add(node);
 
         // Walk through the new node's parents. If it's recursive,
         // return early instead of adding its children
-        TreeItem<String> parentWalker = parent;
-        while (parentWalker != null) {
-            if (parentWalker.getValue().equals(modelId)) {
+        TreeItem<SceneModel> parentWalker = parent;
+        while (parentWalker.getValue() != null) {
+            if (parentWalker.getValue().getId().equals(modelId)) {
                 return;
             }
             parentWalker = parentWalker.getParent();
@@ -270,8 +272,8 @@ public class Controller implements Initializable {
         sceneGraph.registerSceneModel(model);
 
         // Add as to the tree view as an orphan child
-        TreeItem<String> hiddenRoot = sceneGraphTreeView.getRoot();
-        hiddenRoot.getChildren().add(new TreeItem<>(model.getId()));
+        TreeItem<SceneModel> hiddenRoot = sceneGraphTreeView.getRoot();
+        hiddenRoot.getChildren().add(new TreeItem<>(model));
     }
 
     @FXML

@@ -93,4 +93,9 @@ public class ErrorSceneModel implements SceneModel {
     public String[] getTargets() {
         return new String[0];
     }
+
+    @Override
+    public String toString() {
+        return "Error Scene";
+    }
 }

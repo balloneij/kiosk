@@ -64,4 +64,9 @@ public class EmptySceneModel implements SceneModel {
     public String[] getTargets() {
         return new String[0];
     }
+
+    @Override
+    public String toString() {
+        return "Empty Scene";
+    }
 }
