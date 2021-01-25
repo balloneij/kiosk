@@ -35,6 +35,7 @@ public class DefaultScene implements Scene {
         Graphics.useGothic(sketch, 16, false);
         sketch.textSize(16);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        sketch.text(this.model.message, sketch.width / 2f, sketch.height / 2f);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.message, sketch.width / 2f, sketch.height / 2f, sketch.width, sketch.height);
     }
 }

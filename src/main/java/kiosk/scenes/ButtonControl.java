@@ -185,6 +185,7 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private void drawCircle(Kiosk sketch) {
         // Draw modifiers
+        sketch.rectMode(PConstants.CORNER);
         sketch.ellipseMode(PConstants.CORNER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 

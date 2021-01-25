@@ -87,7 +87,8 @@ public class Graphics {
         final int height = sketch.height;
 
         float spacing = width / 50f;
-        float radius = spacing / 2;
+        float radius = spacing / 2.05f;
+        float radiusChipping = 0.2825f;
 
         sketch.ellipseMode(PConstants.CORNER);
         sketch.noStroke();
@@ -96,13 +97,14 @@ public class Graphics {
 
         boolean stagger = false;
         float y = height - radius;
-        while (radius > 1) {
+        float iterationNumber = ((radius - 1) / radiusChipping);
+        for (int i = 0; i < iterationNumber; i++) {
             for (float x = stagger ? spacing / 2 - bubbleOffset : -bubbleOffset; x < width; x += spacing) {
                 if (y > 0) {
                     sketch.ellipse(x, y, radius, radius);
                 }
             }
-            radius -= 0.2825;
+            radius -= radiusChipping;
             y -= spacing;
             stagger = !stagger;
         }

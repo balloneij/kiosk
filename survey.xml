@@ -810,13 +810,13 @@ thing.
   <void id="intArray5" method="get">
    <object idref="ButtonModel6"/>
    <void index="1">
-    <int>108</int>
+    <int>160</int>
    </void>
    <void index="2">
-    <int>103</int>
+    <int>97</int>
    </void>
    <void index="0">
-    <int>51</int>
+    <int>44</int>
    </void>
   </void>
  </void>

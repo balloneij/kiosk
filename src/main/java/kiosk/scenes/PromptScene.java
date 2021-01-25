@@ -18,7 +18,7 @@ public class PromptScene implements Scene {
     private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
+    private static final int TITLE_Y = Kiosk.getSettings().screenH / 5;
     private static final int TITLE_FONT_SIZE = 24;
     private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 8;
     private static final int PROMPT_FONT_SIZE = 16;
@@ -127,20 +127,21 @@ public class PromptScene implements Scene {
                 FOREGROUND_CURVE_RADIUS);
 
         // Draw text
+        sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(0);
 
         // Title
         Graphics.useGothic(sketch, TITLE_FONT_SIZE);
-        sketch.text(this.model.title, centerX, TITLE_Y);
+        sketch.text(this.model.title, centerX, TITLE_Y, sketch.width / 1.5f, sketch.height / 5f);
 
         // Prompt
         Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
-        sketch.text(this.model.prompt, centerX, PROMPT_Y);
+        sketch.text(this.model.prompt, centerX, PROMPT_Y, sketch.width / 1.5f, sketch.height / 5f);
 
         // Action
         Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
-        sketch.text(this.model.actionPhrase, centerX, ACTION_Y);
+        sketch.text(this.model.actionPhrase, centerX, ACTION_Y, sketch.width / 1.5f, sketch.height / 6f);
 
         // Draw buttons
         for (ButtonControl button : this.buttons) {

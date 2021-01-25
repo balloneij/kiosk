@@ -1,5 +1,6 @@
 package kiosk.scenes;
 
+import kiosk.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ErrorSceneModel;
@@ -25,11 +26,12 @@ public class ErrorScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
+        Graphics.useGothic(sketch, 24);
         sketch.background(255, 0, 0);
         sketch.fill(255);
 
-        // TODO: Set the font
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        sketch.text(this.model.errorMsg, sketch.width / 2f, sketch.height / 2f);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.errorMsg, sketch.width / 2f, sketch.height / 2f, sketch.width, sketch.height);
     }
 }

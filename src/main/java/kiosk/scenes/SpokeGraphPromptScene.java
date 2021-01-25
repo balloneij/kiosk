@@ -6,6 +6,7 @@ import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
+import processing.core.PConstants;
 
 
 public class SpokeGraphPromptScene implements Scene {
@@ -122,6 +123,8 @@ public class SpokeGraphPromptScene implements Scene {
     }
 
     private void drawHeader(Kiosk sketch) {
+        sketch.rectMode(PConstants.CENTER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.textSize(18.f);
         sketch.fill(256, 256, 256);
         sketch.stroke(256, 256, 256);
@@ -135,14 +138,14 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.stroke(0, 0, 0);
 
         var boxCenterX = (boxX + boxWidth * .5f);
-        var boxCenterY = (boxY + boxHeight * .5f);
+        var boxCenterY = (boxY + boxHeight * .4f);
         var headerWidth = sketch.textWidth(model.headerTitle);
         sketch.textAscent();
         Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
-        sketch.text(model.headerTitle, boxCenterX, boxCenterY - boxHeight / 3);
+        sketch.text(model.headerTitle, boxCenterX / 4, boxCenterY - boxHeight / 3, boxWidth, boxHeight / 3f);
 
         Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
-        sketch.text(model.headerBody, boxCenterX, boxCenterY + boxHeight / 4f);
+        sketch.text(model.headerBody, boxCenterX / 4, boxCenterY + boxHeight / 4f, boxWidth, boxHeight / 4f);
     }
 
     private void drawCareerGraph(Kiosk sketch) {
