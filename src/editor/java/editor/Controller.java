@@ -16,17 +16,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
+import kiosk.TextFieldTreeCellImpl;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -173,10 +171,20 @@ public class Controller implements Initializable {
         // impossible for the user to modify it. Under the hidden root
         // is where we add the survey and orphaned children
         TreeItem<SceneModel> hiddenRoot = new TreeItem<>(); //previously had "hidden root" here
+        hiddenRoot.setExpanded(true);
 
         // Create the survey subtree
         SceneModel rootScene = sceneGraph.getRootSceneModel();
         rebuildSceneGraphTreeView(hiddenRoot, rootScene, nonOrphanChildren);
+
+        TreeView<SceneModel> treeView = new TreeView<SceneModel>(hiddenRoot);
+        treeView.setEditable(true);
+        treeView.setCellFactory(new Callback<TreeView<SceneModel>, TreeCell<SceneModel>>() {
+            @Override
+            public TreeCell<SceneModel> call(TreeView<SceneModel> p) {
+                return new TextFieldTreeCellImpl();
+            }
+        });
 
         // Start with all the children, remove the children
         // who have parents, and you are left with orphaned children
