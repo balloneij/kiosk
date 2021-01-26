@@ -218,6 +218,16 @@ public class Kiosk extends PApplet {
     }
 
     /**
+     * Hook a map of event listeners to the kiosk.
+     * @param listeners to attach
+     */
+    public void hookControl(Map<InputEvent, EventListener> listeners) {
+        for (InputEvent key : listeners.keySet()) {
+            this.mouseListeners.get(key).push(listeners.get(key));
+        }
+    }
+
+    /**
      * Event handler for when any key is pressed. Only certain keys have responses...
      * F2 - Open JFileChooser to select (only) an XML file
      * F5 - Refresh the current view to reflect the chosen file's paths
