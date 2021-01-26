@@ -6,5 +6,6 @@ public enum Riasec {
     Artistic,
     Social,
     Enterprising,
-    Conventional
+    Conventional,
+    None
 }
