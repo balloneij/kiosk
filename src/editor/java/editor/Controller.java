@@ -122,6 +122,7 @@ public class Controller implements Initializable {
                 });
 
         // Add listener that changes the scene when the user clicks it in the treeview
+        // todo @stenzel somehow make this not highlight after release? weird behavior, test
         sceneGraphTreeView.getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, treeItem, selected) -> {
                     if (selected != null) {
@@ -133,6 +134,18 @@ public class Controller implements Initializable {
 
         // An empty root is used, so hide it
         sceneGraphTreeView.setShowRoot(false);
+
+        sceneGraphTreeView.setEditable(true);
+
+        // This "overrides the TreeCell implementation and redefines the tree items as specified
+        // in the TextFieldTreeCellImpl class."
+        // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
+        sceneGraphTreeView.setCellFactory(new Callback<TreeView<SceneModel>, TreeCell<SceneModel>>() {
+            @Override
+            public TreeCell<SceneModel> call(TreeView<SceneModel> p) {
+                return new TextFieldTreeCellImpl();
+            }
+        });
     }
 
     private void rebuildToolbar(SceneModel model) {
@@ -170,21 +183,12 @@ public class Controller implements Initializable {
         // All treeviews must have a root. This root is hidden, so it's
         // impossible for the user to modify it. Under the hidden root
         // is where we add the survey and orphaned children
-        TreeItem<SceneModel> hiddenRoot = new TreeItem<>(); //previously had "hidden root" here
+        TreeItem<SceneModel> hiddenRoot = new TreeItem<>(); //previously had "hidden root" as arg
         hiddenRoot.setExpanded(true);
 
         // Create the survey subtree
         SceneModel rootScene = sceneGraph.getRootSceneModel();
         rebuildSceneGraphTreeView(hiddenRoot, rootScene, nonOrphanChildren);
-
-        TreeView<SceneModel> treeView = new TreeView<SceneModel>(hiddenRoot);
-        treeView.setEditable(true);
-        treeView.setCellFactory(new Callback<TreeView<SceneModel>, TreeCell<SceneModel>>() {
-            @Override
-            public TreeCell<SceneModel> call(TreeView<SceneModel> p) {
-                return new TextFieldTreeCellImpl();
-            }
-        });
 
         // Start with all the children, remove the children
         // who have parents, and you are left with orphaned children

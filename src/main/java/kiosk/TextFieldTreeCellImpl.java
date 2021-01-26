@@ -44,13 +44,14 @@ public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
             if (isEditing()) {
                 if (textField != null) {
                     textField.setText(getString());
-                    getItem().setName(getString());
+                    item.setName(getString());
                 }
                 setText(null);
                 setGraphic(textField);
             } else {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
+                item.setName(getString());
             }
         }
     }
@@ -64,6 +65,7 @@ public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
                 if (t.getCode() == KeyCode.ENTER) {
                     commitEdit(getItem());
                 } else if (t.getCode() == KeyCode.ESCAPE) {
+                    setText(getItem().getName());
                     cancelEdit();
                 }
             }

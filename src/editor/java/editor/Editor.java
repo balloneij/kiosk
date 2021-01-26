@@ -67,7 +67,7 @@ public class Editor extends Kiosk {
      * @param args unused
      */
     public static void main(String[] args) {
-        Settings settings = getSettings();
+        Settings settings = Settings.readSettings();
 
         settings.screenW = Editor.PREVIEW_WIDTH;
         settings.screenH = (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO);

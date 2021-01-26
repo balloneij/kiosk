@@ -1,11 +1,8 @@
 package kiosk;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
@@ -240,6 +237,18 @@ public class SceneGraph {
      */
     public synchronized Set<String> getSceneIds() {
         return sceneModels.keySet();
+    }
+
+    /**
+     * Returns the set of the scene Names currently in the SceneGraph.
+     * @return The set of the scene Names currently in the SceneGraph.
+     */
+    public synchronized Set<String> getSceneNames() {
+        Set<String> sceneNames = new HashSet<>();
+        for (String id : sceneModels.keySet()) {
+            sceneNames.add(sceneModels.get(id).getName());
+        }
+        return sceneNames;
     }
 
     public synchronized Collection<SceneModel> getAllSceneModels() {
