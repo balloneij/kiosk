@@ -249,16 +249,19 @@ public class PromptSceneLoader {
         // Setup the combo-box for choosing the answers target scene
         ArrayList<String> sceneIds = new ArrayList<>(graph.getSceneIds());
         sceneIds.remove(model.id); // Prevent a scene from navigating to itself
-        ComboBox<String> targetComboBox = new ComboBox<>(FXCollections.observableList(sceneIds));
 
-        // todo:
-        // get all names; still need Id's too though
-        // set the value to answer.text instead
-        // on action event, target gets set to the target, not the text...
+        ArrayList<SceneTarget> sceneTargets = new ArrayList<>();
+        for (String id : sceneIds) {
+            sceneTargets.add(new SceneTarget(id, graph.getSceneById(id).getName()));
+        }
 
-        targetComboBox.setValue(answer.target); // Set initial value to match the answer's target
+        ComboBox<SceneTarget> targetComboBox = new ComboBox<>(FXCollections.observableList(sceneTargets));
+
+        SceneTarget currentAnswer = new SceneTarget(answer.target, graph.getSceneById(answer.target).getName());
+
+        targetComboBox.setValue(currentAnswer); // Set initial value to match the answer's target
         targetComboBox.setOnAction(event -> {
-            String target = targetComboBox.getValue();
+            String target = targetComboBox.getValue().getSceneId();
             if (!target.equals(model.getId())) {
                 answer.target = target;
                 graph.registerSceneModel(model); // Re-register the model to update the scene
