@@ -1,6 +1,5 @@
 package editor;
 
-import com.sun.source.tree.Tree;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
@@ -24,7 +23,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
-import kiosk.TextFieldTreeCellImpl;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -140,15 +138,17 @@ public class Controller implements Initializable {
         // This "overrides the TreeCell implementation and redefines the tree items as specified
         // in the TextFieldTreeCellImpl class."
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
-        sceneGraphTreeView.setCellFactory(new Callback<TreeView<SceneModel>, TreeCell<SceneModel>>() {
-            @Override
-            public TreeCell<SceneModel> call(TreeView<SceneModel> p) {
-                return new TextFieldTreeCellImpl();
-            }
-        });
+        sceneGraphTreeView.setCellFactory(p -> new TextFieldTreeCellImpl(this));
     }
 
-    private void rebuildToolbar(SceneModel model) {
+    /**
+     * Rebuild the toolbar. Public because the toolbar can need to
+     * be remade under various circumstances (not just when switching scenes.)
+     * todo might be able to be replaced with just an "updateSceneName" method,
+     * todo as that is (currently) the only other way of rebuilding besides
+     * todo switching scenes
+     */
+    public void rebuildToolbar(SceneModel model) {
         // Clear the scene type selector if we changed scenes
         if (previousId != null && !previousId.equals(model.getId())) {
             sceneTypeComboBox.getSelectionModel().clearSelection();

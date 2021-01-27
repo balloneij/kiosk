@@ -1,4 +1,4 @@
-package kiosk;
+package editor;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
@@ -9,9 +9,10 @@ import kiosk.models.SceneModel;
 
 public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
     private TextField textField;
+    private Controller controller;
 
-    public TextFieldTreeCellImpl() {
-
+    public TextFieldTreeCellImpl(Controller controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -21,7 +22,9 @@ public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
         if (textField == null) {
             createTextField();
         }
-        setText(getItem().getName());
+
+        textField.setText(getName());
+        setText(getName());
         setGraphic(textField);
         textField.selectAll();
     }
@@ -43,29 +46,31 @@ public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
         } else {
             if (isEditing()) {
                 if (textField != null) {
-                    textField.setText(getString());
-                    item.setName(getString());
+                    textField.setText(getName());
+                    item.setName(getText());
                 }
                 setText(null);
                 setGraphic(textField);
             } else {
-                setText(getString());
+                setText(getName());
                 setGraphic(getTreeItem().getGraphic());
-                item.setName(getString());
+                item.setName(getText());
             }
         }
     }
 
     private void createTextField() {
-        textField = new TextField(getString());
+        textField = new TextField(getName());
         textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER) {
+                    getItem().setName(textField.getText());
+                    controller.rebuildSceneGraphTreeView();
+                    controller.rebuildToolbar(getItem());
                     commitEdit(getItem());
                 } else if (t.getCode() == KeyCode.ESCAPE) {
-                    setText(getItem().getName());
                     cancelEdit();
                 }
             }
@@ -73,7 +78,7 @@ public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
     }
 
     // We want the SceneModel's actual name, not the toString()
-    private String getString() {
+    private String getName() {
         return getItem() == null ? "" : getItem().getName();
     }
 }
