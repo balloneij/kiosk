@@ -22,7 +22,7 @@ public class EmptySceneModel implements SceneModel {
      */
     public EmptySceneModel(String uniqueId, String message) {
         this.id = uniqueId;
-        this.name = "Empy Scene";
+        this.name = "Empty Scene";
         this.message = message;
     }
 

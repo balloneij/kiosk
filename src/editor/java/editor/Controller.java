@@ -15,12 +15,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.models.DetailsSceneModel;
@@ -52,7 +55,7 @@ public class Controller implements Initializable {
     @FXML
     SplitPane splitPane;
     @FXML
-    TreeView<SceneModel> sceneGraphTreeView; //todo
+    TreeView<SceneModel> sceneGraphTreeView;
     @FXML
     ComboBox<SceneModel> sceneTypeComboBox;
     @FXML
@@ -120,7 +123,6 @@ public class Controller implements Initializable {
                 });
 
         // Add listener that changes the scene when the user clicks it in the treeview
-        // todo @stenzel somehow make this not highlight after release? weird behavior, test
         sceneGraphTreeView.getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, treeItem, selected) -> {
                     if (selected != null) {

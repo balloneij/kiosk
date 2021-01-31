@@ -67,8 +67,8 @@ public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER) {
                     getItem().setName(textField.getText());
-                    controller.rebuildSceneGraphTreeView();
                     controller.rebuildToolbar(getItem());
+                    controller.rebuildSceneGraphTreeView();
                     commitEdit(getItem());
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();

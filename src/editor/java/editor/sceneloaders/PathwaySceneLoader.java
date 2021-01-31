@@ -242,9 +242,11 @@ public class PathwaySceneLoader {
             sceneTargets.add(new SceneTarget(id, graph.getSceneById(id).getName()));
         }
 
-        ComboBox<SceneTarget> targetComboBox = new ComboBox<>(FXCollections.observableList(sceneTargets));
+        ComboBox<SceneTarget> targetComboBox =
+                new ComboBox<>(FXCollections.observableList(sceneTargets));
 
-        SceneTarget currentAnswer = new SceneTarget(answer.target, graph.getSceneById(answer.target).getName());
+        SceneTarget currentAnswer = new SceneTarget(answer.target,
+                graph.getSceneById(answer.target).getName());
 
         targetComboBox.setValue(currentAnswer); // Set initial value to match the answer's target
         targetComboBox.setOnAction(event -> {
