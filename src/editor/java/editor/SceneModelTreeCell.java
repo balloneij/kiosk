@@ -1,17 +1,15 @@
 package editor;
 
-import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import kiosk.models.SceneModel;
 
-public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
+public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private TextField textField;
     private Controller controller;
 
-    public TextFieldTreeCellImpl(Controller controller) {
+    public SceneModelTreeCell(Controller controller) {
         this.controller = controller;
     }
 
@@ -61,18 +59,14 @@ public class TextFieldTreeCellImpl extends TreeCell<SceneModel> {
 
     private void createTextField() {
         textField = new TextField(getName());
-        textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-
-            @Override
-            public void handle(KeyEvent t) {
-                if (t.getCode() == KeyCode.ENTER) {
-                    getItem().setName(textField.getText());
-                    controller.rebuildToolbar(getItem());
-                    controller.rebuildSceneGraphTreeView();
-                    commitEdit(getItem());
-                } else if (t.getCode() == KeyCode.ESCAPE) {
-                    cancelEdit();
-                }
+        textField.setOnKeyReleased(t -> {
+            if (t.getCode() == KeyCode.ENTER) {
+                getItem().setName(textField.getText());
+                controller.rebuildToolbar(getItem());
+                controller.rebuildSceneGraphTreeView();
+                commitEdit(getItem());
+            } else if (t.getCode() == KeyCode.ESCAPE) {
+                cancelEdit();
             }
         });
     }

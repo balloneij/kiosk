@@ -140,7 +140,7 @@ public class Controller implements Initializable {
         // This "overrides the TreeCell implementation and redefines the tree items as specified
         // in the TextFieldTreeCellImpl class."
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
-        sceneGraphTreeView.setCellFactory(p -> new TextFieldTreeCellImpl(this));
+        sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
     }
 
     /**
