@@ -6,6 +6,7 @@ import kiosk.scenes.TimeoutScene;
 public final class TimeoutSceneModel implements SceneModel {
 
     public String id;
+    public String name;
     public String title;
     public String prompt;
 
@@ -14,6 +15,7 @@ public final class TimeoutSceneModel implements SceneModel {
      */
     public TimeoutSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
+        this.id = "Timeout Scene";
         this.title = "";
         this.prompt = "\n\n";
     }
@@ -34,9 +36,20 @@ public final class TimeoutSceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         TimeoutSceneModel copy = new TimeoutSceneModel();
         copy.id = this.id;
+        copy.name = name;
         copy.title = this.title;
         copy.prompt = this.prompt;
 

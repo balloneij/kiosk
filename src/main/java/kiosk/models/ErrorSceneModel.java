@@ -16,6 +16,7 @@ public class ErrorSceneModel implements SceneModel {
 
     public String errorMsg;
     public String id;
+    public String name;
     public ErrorIntensity intensity;
 
     /**
@@ -25,6 +26,7 @@ public class ErrorSceneModel implements SceneModel {
     public ErrorSceneModel() {
         this.errorMsg = "null";
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Error Scene";
         this.intensity = ErrorIntensity.SEVERE;
     }
 
@@ -36,6 +38,7 @@ public class ErrorSceneModel implements SceneModel {
     public ErrorSceneModel(String errorMsg) {
         this.errorMsg = errorMsg;
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Error Scene";
         this.intensity = ErrorIntensity.SEVERE;
     }
 
@@ -47,6 +50,7 @@ public class ErrorSceneModel implements SceneModel {
     public ErrorSceneModel(String errorMsg, ErrorIntensity intensity) {
         this.errorMsg = errorMsg;
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Error Scene";
         this.intensity = intensity;
     }
 
@@ -66,9 +70,20 @@ public class ErrorSceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         var copy = new ErrorSceneModel();
         copy.id = id;
+        copy.name = name;
         copy.errorMsg = errorMsg;
         copy.intensity = intensity;
         return copy;
@@ -77,5 +92,10 @@ public class ErrorSceneModel implements SceneModel {
     @Override
     public String[] getTargets() {
         return new String[0];
+    }
+
+    @Override
+    public String toString() {
+        return "Error Scene";
     }
 }

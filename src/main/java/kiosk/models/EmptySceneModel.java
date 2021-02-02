@@ -6,12 +6,13 @@ import kiosk.scenes.Scene;
 public class EmptySceneModel implements SceneModel {
 
     public String id;
+    public String name;
     public String message;
 
     /**
      * Constructs a new empty scene model.
      */
-    public EmptySceneModel() {
+    public EmptySceneModel() { //todo this is different than normal
         this(IdGenerator.getInstance().getNextId(), "How did you get here?");
     }
 
@@ -21,6 +22,7 @@ public class EmptySceneModel implements SceneModel {
      */
     public EmptySceneModel(String uniqueId, String message) {
         this.id = uniqueId;
+        this.name = "Empty Scene";
         this.message = message;
     }
 
@@ -40,9 +42,20 @@ public class EmptySceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         var copy = new EmptySceneModel();
         copy.id = id;
+        copy.name = name;
         copy.message = message;
         return copy;
     }
@@ -50,5 +63,10 @@ public class EmptySceneModel implements SceneModel {
     @Override
     public String[] getTargets() {
         return new String[0];
+    }
+
+    @Override
+    public String toString() {
+        return "Empty Scene";
     }
 }

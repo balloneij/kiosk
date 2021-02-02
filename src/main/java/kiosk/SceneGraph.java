@@ -1,11 +1,8 @@
 package kiosk;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
+
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;

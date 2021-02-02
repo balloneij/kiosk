@@ -7,6 +7,7 @@ import kiosk.scenes.Scene;
 public class DetailsSceneModel implements SceneModel {
 
     public String id;
+    public String name;
     public String title;
     public String body;
     public ButtonModel button;
@@ -18,6 +19,7 @@ public class DetailsSceneModel implements SceneModel {
      */
     public DetailsSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Details Scene";
         this.title = "";
         this.body = "";
         this.button = new ButtonModel();
@@ -39,9 +41,20 @@ public class DetailsSceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         var copy = new DetailsSceneModel();
         copy.id = this.id;
+        copy.name = name;
         copy.title = title;
         copy.button = this.button.deepCopy();
         copy.body = this.body;
