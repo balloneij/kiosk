@@ -1,37 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0"
-            xmlns="http://javafx.com/javafx/9.0.1" fx:controller="editor.Controller">
+<?import javafx.scene.text.Font?>
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editor.Controller">
     <children>
-        <SplitPane dividerPositions="0.46870109546165883" layoutY="24.0" prefHeight="776.0" prefWidth="1280.0"
-                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                   AnchorPane.topAnchor="25.0">
+        <SplitPane fx:id="splitPane" dividerPositions="0.3" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" fx:id="editorPane">
-                    <children>
-                    </children>
-                </AnchorPane>
+            <VBox prefHeight="798.0" prefWidth="411.0">
+               <children>
+                  <MenuBar prefHeight="25.0" prefWidth="352.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" onAction="#loadSurvey" text="Load survey">
+                              <accelerator>
+                                  <KeyCodeCombination alt="UP" code="F2" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                              </accelerator>
+                          </MenuItem>
+                            <MenuItem mnemonicParsing="false" onAction="#reloadSurvey" text="Reload survey">
+                                <accelerator>
+                                    <KeyCodeCombination alt="UP" code="F5" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                                </accelerator>
+                            </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#saveSurveyAs" text="Save survey as...">
+                                  <accelerator>
+                                      <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                  </accelerator>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#saveSurvey" text="Save survey">
+                                  <accelerator>
+                                      <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                  </accelerator>
+                              </MenuItem>
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <TreeView fx:id="sceneGraphTreeView" prefHeight="238.0" prefWidth="380.0" />
+                  <VBox prefHeight="39.0" prefWidth="380.0">
+                     <children>
+                        <HBox prefHeight="42.0" prefWidth="380.0">
+                           <children>
+                              <Label text="Scene Type:">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="8.0" top="8.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <ComboBox fx:id="sceneTypeComboBox" prefWidth="150.0">
+                                 <HBox.margin>
+                                    <Insets left="8.0" top="8.0" />
+                                 </HBox.margin>
+                              </ComboBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="41.0" prefWidth="380.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#createNewScene" text="Create New Scene">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <HBox.margin>
+                              <Insets left="8.0" top="8.0" />
+                           </HBox.margin></Button>
+                        <Button fx:id="deleteCurrentSceneButton" mnemonicParsing="false" onAction="#deleteCurrentScene" text="Delete Current Scene">
+                           <HBox.margin>
+                              <Insets left="8.0" top="8.0" />
+                           </HBox.margin></Button>
+                     </children>
+                  </HBox>
+                  <ScrollPane prefHeight="478.0" prefWidth="380.0">
+                    <content>
+                        <VBox fx:id="toolbarBox" />
+                    </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
-                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0"
-                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <ToolBar prefHeight="0.0" prefWidth="676.0">
-                                    <items>
-                                        <Label text="Survey Preview:">
-                                            <font>
-                                                <Font size="18.0"/>
-                                            </font>
-                                        </Label>
-                                    </items>
-                                </ToolBar>
-                                <StackPane fx:id="surveyPreviewPane" alignment="TOP_LEFT" prefHeight="457.0" prefWidth="676.0"
-                                           VBox.vgrow="ALWAYS"/>
+                                <StackPane fx:id="surveyPreviewPane" alignment="TOP_LEFT" prefHeight="736.0" prefWidth="922.0" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin></StackPane>
                             </children>
                         </VBox>
                     </children>

@@ -1,6 +1,6 @@
 package kiosk.scenes;
 
-import kiosk.Graphics;
+import graphics.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.DefaultSceneModel;

@@ -1,6 +1,8 @@
 package kiosk.scenes;
 
-import kiosk.Graphics;
+import graphics.Color;
+import graphics.Graphics;
+import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
@@ -29,7 +31,6 @@ public class PromptScene implements Scene {
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
     private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
     private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
-    private static final int COMMON_BUTTON_HEIGHT = Kiosk.getSettings().screenH / 8;
     private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_PADDING = 20;
@@ -83,17 +84,9 @@ public class PromptScene implements Scene {
             x += BUTTON_WIDTH + BUTTON_PADDING;
         }
 
-        var homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "⌂";
-        this.homeButton = new ButtonControl(homeButtonModel,
-                BUTTON_PADDING, BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+        this.homeButton = GraphicsUtil.initializeHomeButton();
         sketch.hookControl(this.homeButton);
-        var backButtonModel = new ButtonModel();
-        backButtonModel.text = "← Back";
-        this.backButton = new ButtonControl(backButtonModel,
-                BUTTON_PADDING, sketchHeight - (COMMON_BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
         sketch.hookControl(this.backButton);
     }
 
@@ -132,7 +125,7 @@ public class PromptScene implements Scene {
         sketch.fill(0);
 
         // Title
-        Graphics.useGothic(sketch, TITLE_FONT_SIZE);
+        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
         sketch.text(this.model.title, centerX, TITLE_Y, sketch.width / 1.5f, sketch.height / 5f);
 
         // Prompt
@@ -148,9 +141,7 @@ public class PromptScene implements Scene {
             button.draw(sketch);
         }
 
-        homeButton.setColor(138, 37, 93);
-        homeButton.draw(sketch, 2);
-        backButton.setColor(59, 58, 57);
+        homeButton.draw(sketch);
         backButton.draw(sketch);
     }
 }

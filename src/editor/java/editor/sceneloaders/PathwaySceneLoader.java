@@ -20,10 +20,10 @@ import javafx.stage.FileChooser;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
-import kiosk.models.PromptSceneModel;
+import kiosk.models.PathwaySceneModel;
 import kiosk.models.SceneModel;
 
-public class PromptSceneLoader {
+public class PathwaySceneLoader {
     // The default padding to space the editing Nodes
     static final Insets PADDING = new Insets(0, 0, 10, 10);
     static final Insets ANSWER_PADDING = new Insets(15, 0, 15, 0);
@@ -33,19 +33,16 @@ public class PromptSceneLoader {
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
      * @param model The current scene model we want to modify.
-     * @param toolbarBox The main editor view.
      * @param graph The scene graph used to manage application state.
      */
-    public static void loadScene(Controller controller,
-                                 PromptSceneModel model, VBox toolbarBox, SceneGraph graph) {
-        toolbarBox.getChildren().clear();
-
-        // Get the editing Nodes for the PromptSceneModel properties
+    public static void loadScene(Controller controller, PathwaySceneModel model,
+                                 VBox toolbarBox, SceneGraph graph) {
+        // Get the editing Nodes for the PathwaySceneModel properties
         VBox vbox = new VBox(
                 getIdBox(controller, model, graph),
-                getTitleBox(model, graph),
-                getPromptBox(model, graph),
-                getActionBox(model, graph),
+                getHeaderTitleBox(model, graph),
+                getHeaderBodyBox(model, graph),
+                getCenterTextBox(model, graph),
                 getAnswersBox(controller, model, graph)
         );
 
@@ -55,7 +52,6 @@ public class PromptSceneLoader {
 
         // Add extension filters to the image file chooser
         imageFileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.gif"),
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg", "*.jpeg"),
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
@@ -80,49 +76,49 @@ public class PromptSceneLoader {
         return vbox;
     }
 
-    // Adds a Node containing a text field for editing the title.
-    private static Node getTitleBox(PromptSceneModel model, SceneGraph graph) {
-        var titleField = new TextField(model.title);
+    // Adds a Node containing a text field for editing the header title.
+    private static Node getHeaderTitleBox(PathwaySceneModel model, SceneGraph graph) {
+        var titleField = new TextField(model.headerTitle);
 
         // Listener to update the title
         titleField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.title = newValue;
+            model.headerTitle = newValue;
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Title:"), titleField);
+        var vbox = new VBox(new Label("Header Title:"), titleField);
         vbox.setPadding(PADDING);
         return vbox;
     }
 
-    // Adds a Node containing a text field for editing the prompt.
-    private static Node getPromptBox(PromptSceneModel model, SceneGraph graph) {
-        var promptField = new TextField(model.prompt);
+    // Adds a Node containing a text field for editing the header body.
+    private static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
+        var bodyField = new TextField(model.headerBody);
 
-        // Listener to update the prompt
-        promptField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.prompt = newValue;
+        // Listener to update the body
+        bodyField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.headerBody = newValue;
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Prompt:"), promptField);
+        var vbox = new VBox(new Label("Header Body:"), bodyField);
         vbox.setPadding(PADDING);
         return vbox;
     }
 
-    // Adds a Node containing a text field for editing the actionPhrase.
-    private static Node getActionBox(PromptSceneModel model, SceneGraph graph) {
-        var actionField = new TextField(model.actionPhrase);
+    private static Node getCenterTextBox(PathwaySceneModel model, SceneGraph graph) {
+        var centerTextField = new TextField(model.centerText);
 
-        // Listener to update the action phrase
-        actionField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.actionPhrase = newValue;
+        // Listeners to update the position
+        centerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.centerText = newValue;
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Action Phrase:"), actionField);
+        var vbox = new VBox(new Label("Center Text:"), centerTextField);
         vbox.setPadding(PADDING);
         return vbox;
+
     }
 
     /**
@@ -134,14 +130,14 @@ public class PromptSceneLoader {
      *         answers.
      */
     private static Node getAnswersBox(Controller controller,
-                                      PromptSceneModel model, SceneGraph graph) {
+                                      PathwaySceneModel model, SceneGraph graph) {
         // Add a separator to separate the "Answers:" label from the answer sections
         Separator separator = new Separator();
         separator.setPadding(new Insets(0, 0, 10, 0));
         var vbox = new VBox(new Label("Answers:"), separator);
 
         // Create controls for each answer (and add them to the Node)
-        for (ButtonModel answer : model.answers) {
+        for (ButtonModel answer : model.careers) {
             vbox.getChildren().add(createAnswerNode(controller, answer, vbox, model, graph));
         }
 
@@ -151,9 +147,9 @@ public class PromptSceneLoader {
             ButtonModel newAnswer = new ButtonModel();
 
             // Add the new answer to the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
             answersList.add(newAnswer);
-            model.answers = answersList.toArray(ButtonModel[]::new);
+            model.careers = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Add editing controls for the new answer
@@ -179,7 +175,7 @@ public class PromptSceneLoader {
      */
     private static Node createAnswerNode(Controller controller,
                                          ButtonModel answer, VBox answersContainer,
-                                         PromptSceneModel model, SceneGraph graph) {
+                                         PathwaySceneModel model, SceneGraph graph) {
         // Setup the text field for editing the answer
         var answerField = new TextField(answer.text);
         answerField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -200,16 +196,6 @@ public class PromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        // Setup button for changing answer shape
-        // (may need to convert to a combo-box if more shapes are added)
-        Button shapeButton = new Button(answer.isCircle ? "■" : "⬤");
-        shapeButton.setOnAction(event -> {
-            answer.isCircle = !answer.isCircle;
-            graph.registerSceneModel(model); // Re-register the model to update the scene
-
-            shapeButton.setText(answer.isCircle ? "■" : "⬤"); // Update the button symbol
-        });
-
         // Setup the button for adding an image to the answer
         Button imageChooseButton = new Button("Image");
         imageChooseButton.setOnAction(event -> {
@@ -219,8 +205,9 @@ public class PromptSceneLoader {
             // If null, no file was chosen
             if (file != null) {
                 // Set the chooser to open in the same directory next time
-                String imagePath = new File("./").toURI().relativize(file.toURI()).getPath();
-                String directoryPath = file.getParentFile().getPath();
+                String imagePath = file.getPath();
+                String directoryPath =
+                        imagePath.substring(0, imagePath.lastIndexOf(File.separator));
                 imageFileChooser.setInitialDirectory(new File(directoryPath));
 
                 // Create an image if the answer does not already have one
@@ -240,9 +227,9 @@ public class PromptSceneLoader {
         Button removeButton = new Button("x");
         removeButton.setOnAction(event -> {
             // Remove the answer from the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
             answersList.remove(answer);
-            model.answers = answersList.toArray(ButtonModel[]::new);
+            model.careers = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Remove the editing controls for this answer from the parent container
@@ -274,7 +261,7 @@ public class PromptSceneLoader {
         separator.setPadding(ANSWER_PADDING);
 
         // Put all the answer controls together
-        HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
+        HBox editingControls = new HBox(colorPicker, imageChooseButton, removeButton);
         answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
         return answerVbox;
     }

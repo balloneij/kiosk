@@ -16,9 +16,12 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Editor.fxml"));
         Parent root = loader.load();
         Controller.stage = primaryStage;
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root,
+                Editor.PREVIEW_WIDTH + Editor.TOOLBAR_WIDTH,
+                (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO));
 
-        primaryStage.setTitle("Processing FX Demo");
+        primaryStage.setTitle("Kiosk Editor 3000");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
 
