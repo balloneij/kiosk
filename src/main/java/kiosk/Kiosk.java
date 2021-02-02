@@ -178,7 +178,7 @@ public class Kiosk extends PApplet {
         // Make sure it's not the intro scene though first
         SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
         if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())
-                && currentSceneMillis > settings.timeoutMillis) {
+                && currentSceneMillis > Kiosk.settings.timeoutMillis) {
             if (timeoutActive) {
                 // Clear the timeoutActive flag
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
