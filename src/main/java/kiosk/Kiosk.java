@@ -178,7 +178,7 @@ public class Kiosk extends PApplet {
         // Make sure it's not the intro scene though first
         SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
         if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())
-                && currentSceneMillis > settings.timeoutMillis) {
+                && currentSceneMillis > Kiosk.settings.timeoutMillis) {
             if (timeoutActive) {
                 // Clear the timeoutActive flag
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
@@ -214,6 +214,16 @@ public class Kiosk extends PApplet {
 
         for (InputEvent key : newListeners.keySet()) {
             this.mouseListeners.get(key).push(newListeners.get(key));
+        }
+    }
+
+    /**
+     * Hook a map of event listeners to the kiosk.
+     * @param listeners to attach
+     */
+    public void hookControl(Map<InputEvent, EventListener> listeners) {
+        for (InputEvent key : listeners.keySet()) {
+            this.mouseListeners.get(key).push(listeners.get(key));
         }
     }
 

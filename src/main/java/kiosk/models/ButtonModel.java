@@ -1,5 +1,7 @@
 package kiosk.models;
 
+import kiosk.Riasec;
+
 public final class ButtonModel {
 
     public String text;
@@ -8,6 +10,7 @@ public final class ButtonModel {
     public int[] rgb = new int[] { 112, 191, 76 };
     // Optional. Null is a valid value
     public ImageModel image;
+    public Riasec category = Riasec.None;
 
     /**
      * Create a new button model with default values.
@@ -43,6 +46,7 @@ public final class ButtonModel {
         newButton.isCircle = this.isCircle;
         newButton.rgb = this.rgb.clone();
         newButton.image = this.image == null ? null : this.image.deepCopy();
+        newButton.category = this.category;
         return newButton;
     }
 }

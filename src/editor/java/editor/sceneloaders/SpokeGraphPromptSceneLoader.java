@@ -46,10 +46,10 @@ public class SpokeGraphPromptSceneLoader {
                 getNameBox(controller, model, graph),
                 getHeaderTitleBox(model, graph),
                 getHeaderBodyBox(model, graph),
-                getCareerCTBox(model, graph),
+                getCareerBox(model, graph),
                 getCareerOptionsBox(controller, model, graph),
                 //getCareerWeightsBox(model, graph),
-                getPromptTBox(model, graph),
+                getPromptBox(model, graph),
                 getAnswersBox(controller, model, graph)
         );
 
@@ -110,7 +110,7 @@ public class SpokeGraphPromptSceneLoader {
         return vbox;
     }
 
-    private static Node getCareerCTBox(SpokeGraphPromptSceneModel model, SceneGraph graph) {
+    private static Node getCareerBox(SpokeGraphPromptSceneModel model, SceneGraph graph) {
         var centerTextField = new TextField(model.careerCenterText);
 
         // Listeners to update the position
@@ -269,7 +269,7 @@ public class SpokeGraphPromptSceneLoader {
         return answerVbox;
     }
 
-    private static Node getPromptTBox(SpokeGraphPromptSceneModel model, SceneGraph graph) {
+    private static Node getPromptBox(SpokeGraphPromptSceneModel model, SceneGraph graph) {
         var promptTextField = new TextField(model.promptText);
 
         // Listeners to update the position

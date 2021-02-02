@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
@@ -29,6 +31,10 @@ public class PromptSceneLoader {
     static final Insets ANSWER_PADDING = new Insets(15, 0, 15, 0);
     static final int COLOR_RANGE = 255; // The range the colors can be set to
     static final FileChooser imageFileChooser = new FileChooser();
+
+    // Never changing, so load it once to save on electricity
+    private static final ObservableList<Riasec> RIASEC_VALUES =
+            FXCollections.observableList(Arrays.asList(Riasec.values()));
 
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
@@ -273,9 +279,22 @@ public class PromptSceneLoader {
             }
         });
 
+        // Setup combo-box for choosing Riasec categories
+        ComboBox<Riasec> riasecComboBox = new ComboBox<>(RIASEC_VALUES);
+        riasecComboBox.setValue(answer.category);
+        riasecComboBox.setOnAction(event -> {
+            Riasec category = riasecComboBox.getValue();
+            if (!answer.category.equals(category)) {
+                answer.category = category;
+                graph.registerSceneModel(model);
+            }
+        });
+
         // Create an HBox with a "Target: " label and the combo-box
         HBox targetsBox = new HBox(new Label("Target: "), targetComboBox);
         targetsBox.setPadding(new Insets(0, 0, 0, 5));
+
+        HBox riasecBox = new HBox(new Label("Holland Code: "), riasecComboBox);
 
         // Add a separator so answers are visually separated
         Separator separator = new Separator();
@@ -283,7 +302,8 @@ public class PromptSceneLoader {
 
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
-        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
+        answerVbox.getChildren().addAll(
+                answerField, editingControls, targetsBox, riasecBox, separator);
         return answerVbox;
     }
 }

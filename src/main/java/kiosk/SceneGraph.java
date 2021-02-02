@@ -10,6 +10,7 @@ import kiosk.scenes.Scene;
 
 public class SceneGraph {
 
+    private final UserScore userScore = new UserScore();
     private SceneModel root;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
@@ -38,6 +39,7 @@ public class SceneGraph {
     public synchronized void loadSurvey(LoadedSurveyModel survey) {
         // Reset to a new, initial state
         this.history.clear();
+        this.userScore.reset();
         this.sceneModels.clear();
         this.sceneChangeCallbacks.clear();
 
@@ -62,31 +64,47 @@ public class SceneGraph {
         return new LoadedSurveyModel(rootSceneId, scenes);
     }
 
+    public synchronized void pushScene(SceneModel sceneModel) {
+        this.pushScene(sceneModel, Riasec.None);
+    }
+
     /**
      * Changes the current Scene. Constructs the new scene
      * from the model provided
      * @param sceneModel to create a scene from
+     * @param category selected by the previous scene
      */
-    public synchronized void pushScene(SceneModel sceneModel) {
+    public synchronized void pushScene(SceneModel sceneModel, Riasec category) {
+        // Update the user score from the category selected on the
+        // previous scene
+        this.userScore.add(category);
+
+        // Add the new scene
         this.currentScene = sceneModel.deepCopy().createScene();
         this.history.push(sceneModel);
         this.onSceneChange(sceneModel);
+    }
+
+    public synchronized void pushScene(String sceneModelId) {
+        this.pushScene(sceneModelId, Riasec.None);
     }
 
     /**
      * Changes the current Scene. Constructs the new scene
      * from the scene model id.
      * @param sceneModelId The id of the registered scene to push.
+     * @param category selected by the previous scene
      */
-    public synchronized void pushScene(String sceneModelId) {
+    public synchronized void pushScene(String sceneModelId, Riasec category) {
         var containsModel = sceneModels.containsKey(sceneModelId);
 
         if (containsModel) {
             var nextSceneModel = sceneModels.get(sceneModelId);
-            pushScene(nextSceneModel);
+            pushScene(nextSceneModel, category);
         } else {
             pushScene(new ErrorSceneModel(
-                    "Scene of the id '" + sceneModelId + "' does not exist (yet)"));
+                    "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
+                    Riasec.None);
         }
     }
 
@@ -101,6 +119,9 @@ public class SceneGraph {
     public synchronized void popScene() {
         // Remove the current scene from history
         this.history.pop();
+
+        // Undo the last operation on the user score
+        this.userScore.undo();
 
         // Set the next scene from the stack
         SceneModel next = this.history.peek();
@@ -120,6 +141,10 @@ public class SceneGraph {
      * the scene history.
      */
     public synchronized void reset() {
+        // Reset the user score
+        this.userScore.reset();
+
+        // Reset the root scene
         this.currentScene = this.root.deepCopy().createScene();
         this.history.clear();
         this.history.push(this.root);
@@ -241,5 +266,9 @@ public class SceneGraph {
 
     public synchronized Collection<SceneModel> getAllSceneModels() {
         return sceneModels.values();
+    }
+
+    public UserScore getUserScore() {
+        return this.userScore;
     }
 }
