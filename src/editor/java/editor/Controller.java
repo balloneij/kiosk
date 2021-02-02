@@ -195,6 +195,7 @@ public class Controller implements Initializable {
 
         // Create the survey subtree
         SceneModel rootScene = sceneGraph.getRootSceneModel();
+
         rebuildSceneGraphTreeView(hiddenRoot, rootScene, nonOrphanChildren);
 
         // Start with all the children, remove the children
@@ -236,6 +237,13 @@ public class Controller implements Initializable {
 
     private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,
                                            SceneModel model, Set<String> nonOrphanChildren) {
+
+        if ((model.getName().startsWith("√")) && (model != sceneGraph.getRootSceneModel())) {           // if name starts with the marker, but it's NOT the root...
+            model.setName(model.getName().substring(1));                                                // delete the marker
+        } else if ((model == sceneGraph.getRootSceneModel()) && (!model.getName().startsWith("√"))) {   // if the model is the root, but DOESN'T have the marker...
+            model.setName("√" + model.getName());                                                       // add the marker
+        }
+
         // Add node to parent
         String modelId = model.getId();
         TreeItem<SceneModel> node = new TreeItem<>(model);
