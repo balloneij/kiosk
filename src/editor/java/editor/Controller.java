@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
@@ -354,6 +355,33 @@ public class Controller implements Initializable {
 
                 exception.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Saves a sample survey file in the user's working directory and shows them an alert
+     * confirming it was saved.
+     * @param event The event coming from the MenuItem for triggering the sample save.
+     */
+    @FXML
+    private void saveSampleSurvey(ActionEvent event) {
+        File sampleFile = new File("sample survey.xml");
+
+        try {
+            LoadedSurveyModel.createSampleSurvey().writeToFile(sampleFile);
+
+            // Let the user know where it was saved
+            Alert sampleSavedAlert = new Alert(Alert.AlertType.INFORMATION,
+                "Saved to " + sampleFile.getAbsolutePath());
+            sampleSavedAlert.setHeaderText("Sample survey saved.");
+            sampleSavedAlert.show();
+        } catch (Exception exception) {
+            // Push temporary scene describing error
+            String errorMsg = "Could not save survey to '" + sampleFile.getAbsolutePath()
+                + "\nRefer to the console for more specific details.";
+            sceneGraph.pushScene(new ErrorSceneModel(errorMsg));
+
+            exception.printStackTrace();
         }
     }
 

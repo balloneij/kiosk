@@ -35,6 +35,11 @@
                                       <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                   </accelerator>
                               </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#saveSampleSurvey" text="Create sample survey">
+                                  <accelerator>
+                                      <KeyCodeCombination alt="DOWN" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                  </accelerator>
+                              </MenuItem>
                         </items>
                       </Menu>
                     </menus>
