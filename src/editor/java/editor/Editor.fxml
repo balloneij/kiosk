@@ -13,7 +13,7 @@
                <children>
                   <MenuBar prefHeight="25.0" prefWidth="352.0">
                     <menus>
-                      <Menu mnemonicParsing="false" text="File">
+                        <Menu mnemonicParsing="false" text="File">
                         <items>
                           <MenuItem mnemonicParsing="false" onAction="#loadSurvey" text="Load survey">
                               <accelerator>
@@ -37,6 +37,11 @@
                               </MenuItem>
                         </items>
                       </Menu>
+                        <Menu mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#editSurveySettings" text="Survey Settings" />
+                            </items>
+                        </Menu>
                     </menus>
                   </MenuBar>
                   <TreeView fx:id="sceneGraphTreeView" prefHeight="238.0" prefWidth="380.0" />

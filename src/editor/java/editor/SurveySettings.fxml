@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Line?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="editor.SurveySettingsController"
+            prefHeight="100.0" prefWidth="200.0">
+    <children>
+        <VBox>
+            <GridPane>
+                <padding> <Insets left="15" top="15" bottom="15"/> </padding>
+                <Label text="Width: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <HBox GridPane.columnIndex="1"  GridPane.rowIndex="0">
+                    <padding> <Insets left="15" /> </padding>
+                    <Spinner fx:id="widthSpinner" />
+                    <Label text="pixels">
+                        <padding>
+                            <Insets left="5" right="15" />
+                        </padding>
+                    </Label>
+                </HBox>
+                <Label text="Height: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <HBox GridPane.columnIndex="1"  GridPane.rowIndex="1">
+                    <padding> <Insets left="15" /> </padding>
+                    <Spinner fx:id="heightSpinner">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="100000"/>
+                        </valueFactory>
+                    </Spinner>
+                    <Label text="pixels">
+                        <padding>
+                            <Insets left="5" right="15" />
+                        </padding>
+                    </Label>
+                </HBox>
+                <Label text="Time Out: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <padding> <Insets left="15" /> </padding>
+                    <Spinner fx:id="timeOutSpinner">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="600"/>
+                        </valueFactory>
+                    </Spinner>
+                    <Label text="seconds">
+                        <padding>
+                            <Insets left="5" right="15" />
+                        </padding>
+                    </Label>
+                </HBox>
+                <HBox GridPane.RowIndex="3">
+                    <Button fx:id="okButton" text="OK" onAction="#onSubmit">
+                    </Button>
+                </HBox>
+            </GridPane>
+        </VBox>
+    </children>
+</AnchorPane>

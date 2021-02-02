@@ -27,8 +27,8 @@ public class Settings {
      */
     public Settings() {
         timeoutMillis = 30000;
-        screenW = 1920 / 2;
-        screenH = 1080 / 2;
+        screenW = 1280;
+        screenH = 720;
     }
 
     /**

@@ -5,6 +5,7 @@ import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
 import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -12,8 +13,11 @@ import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -23,6 +27,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
@@ -256,13 +261,13 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void deleteCurrentScene(ActionEvent event) {
+    private void deleteCurrentScene() {
         sceneGraph.unregisterSceneModel(sceneGraph.getCurrentSceneModel());
         rebuildSceneGraphTreeView();
     }
 
     @FXML
-    private void createNewScene(ActionEvent event) {
+    private void createNewScene() {
         EmptySceneModel model = new EmptySceneModel();
         model.message = "This scene is empty! Change the scene type on the left side";
 
@@ -275,7 +280,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void loadSurvey(ActionEvent event) {
+    private void loadSurvey() {
         // Ask user for a survey file
         File file = Editor.showFileOpener();
 
@@ -308,13 +313,13 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void reloadSurvey(ActionEvent event) {
+    private void reloadSurvey() {
         sceneGraph.reset();
         rebuildSceneGraphTreeView();
     }
 
     @FXML
-    private void saveSurveyAs(ActionEvent event) {
+    private void saveSurveyAs() {
         // Prompt user for a file path to save to
         File file = Editor.showFileSaver();
 
@@ -340,9 +345,9 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void saveSurvey(ActionEvent event) {
+    private void saveSurvey() {
         if (surveyFile == null) {
-            this.saveSurveyAs(event);
+            this.saveSurveyAs();
         } else {
             try {
                 sceneGraph.exportSurvey().writeToFile(surveyFile);
@@ -355,6 +360,25 @@ public class Controller implements Initializable {
                 exception.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Event method that pops up the survey settings editor window.
+     * @throws IOException Can occur if the popup windows FXML file is missing.
+     */
+    @FXML
+    public void editSurveySettings() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SurveySettings.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage popupWindow = new Stage();
+
+        SurveySettingsController.root = popupWindow;
+        popupWindow.setScene(scene);
+        popupWindow.initModality(Modality.APPLICATION_MODAL);
+        popupWindow.setTitle("Survey Settings");
+
+        popupWindow.showAndWait();
     }
 
     private class EditorSceneChangeCallback implements EventListener<SceneModel> {
