@@ -159,6 +159,17 @@ public class SpokeGraphPromptSceneLoader {
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
             vbox.getChildren().add(index,
                     createCareerNode(controller, newAnswer, vbox, model, graph));
+
+            var children = vbox.getChildren();
+            Node nodeOut = children.get(children.size() - 2);
+            if (nodeOut instanceof VBox) {
+                for(Node nodeIn:((VBox)nodeOut).getChildren()) {
+                    if (nodeIn instanceof TextField) {
+                        nodeIn.requestFocus();
+                        ((TextField) nodeIn).selectAll();
+                    }
+                }
+            }
         });
 
         vbox.getChildren().add(addButton);
@@ -318,6 +329,18 @@ public class SpokeGraphPromptSceneLoader {
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
             vbox.getChildren().add(index,
                     createAnswerNode(controller, newAnswer, vbox, model, graph));
+
+            var children = vbox.getChildren();
+            Node nodeOut = children.get(children.size() - 2);
+            if (nodeOut instanceof VBox) {
+                for(Node nodeIn:((VBox)nodeOut).getChildren()) {
+                    if (nodeIn instanceof TextField) {
+                        nodeIn.requestFocus();
+                        ((TextField) nodeIn).selectAll();
+                    }
+                }
+            }
+
         });
 
         vbox.getChildren().add(addButton);

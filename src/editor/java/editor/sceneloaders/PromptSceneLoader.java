@@ -161,8 +161,20 @@ public class PromptSceneLoader {
 
             // Add editing controls for the new answer
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
-            vbox.getChildren().add(index,
-                    createAnswerNode(controller, newAnswer, vbox, model, graph));
+            var newChild = createAnswerNode(controller, newAnswer, vbox, model, graph);
+            vbox.getChildren().add(index, newChild);
+
+            var children = vbox.getChildren();
+            Node nodeOut = children.get(children.size() - 2);
+            if (nodeOut instanceof VBox) {
+                for(Node nodeIn:((VBox)nodeOut).getChildren()) {
+                    if (nodeIn instanceof TextField) {
+                        nodeIn.requestFocus();
+                        ((TextField) nodeIn).selectAll();
+                    }
+                }
+            }
+
         });
 
         vbox.getChildren().add(addButton);
