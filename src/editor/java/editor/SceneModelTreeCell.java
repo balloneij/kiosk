@@ -1,16 +1,26 @@
 package editor;
 
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import kiosk.models.SceneModel;
 
+import java.awt.event.ActionEvent;
+
 public class SceneModelTreeCell extends TreeCell<SceneModel> {
-    private TextField textField;
     private Controller controller;
+    private TextField textField;
+    private final ContextMenu editMenu = new ContextMenu();
 
     public SceneModelTreeCell(Controller controller) {
         this.controller = controller;
+        MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
+        editMenu.getItems().add(deleteMenuItem);
+        deleteMenuItem.setOnAction(t -> {
+            controller.deleteScene(getItem());
+        });
     }
 
     @Override
@@ -52,7 +62,7 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
             } else {
                 setText(getName());
                 setGraphic(getTreeItem().getGraphic());
-                item.setName(getText());
+                setContextMenu(editMenu);
             }
         }
     }

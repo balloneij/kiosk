@@ -290,6 +290,13 @@ public class Controller implements Initializable {
         rebuildSceneGraphTreeView();
     }
 
+    // this is called through the TreeCells' Context Menus
+    @FXML
+    public void deleteScene(SceneModel toDelete) {
+        sceneGraph.unregisterSceneModel(toDelete);
+        rebuildSceneGraphTreeView();
+    }
+
     @FXML
     private void createNewScene() {
         EmptySceneModel model = new EmptySceneModel();
