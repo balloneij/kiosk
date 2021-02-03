@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="15.0.1" class="java.beans.XMLDecoder">
+ <object class="kiosk.models.LoadedSurveyModel" id="LoadedSurveyModel0">
+  <void class="kiosk.models.LoadedSurveyModel" method="getField">
+   <string>rootSceneId</string>
+   <void method="set">
+    <object idref="LoadedSurveyModel0"/>
+    <string>Generated3</string>
+   </void>
+  </void>
+ </object>
+<void class="kiosk.models.LoadedSurveyModel" id="Field0" method="getField">
+ <string>scenes</string>
+ <void id="SceneModelArray0" method="get">
+  <object idref="LoadedSurveyModel0"/>
+  <void index="0">
+   <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel0">
+    <void class="kiosk.models.PromptSceneModel" method="getField">
+     <string>id</string>
+     <void method="set">
+      <object idref="PromptSceneModel0"/>
+      <string>Generated3</string>
+     </void>
+    </void>
+    <void class="kiosk.models.PromptSceneModel" method="getField">
+     <string>title</string>
+     <void method="set">
+      <object idref="PromptSceneModel0"/>
+      <string>Title</string>
+     </void>
+    </void>
+    <void class="kiosk.models.PromptSceneModel" method="getField">
+     <string>prompt</string>
+     <void method="set">
+      <object idref="PromptSceneModel0"/>
+      <string>Prompt</string>
+     </void>
+    </void>
+    <void class="kiosk.models.PromptSceneModel" method="getField">
+     <string>actionPhrase</string>
+     <void method="set">
+      <object idref="PromptSceneModel0"/>
+      <string>Action</string>
+     </void>
+    </void>
+   </object>
+  </void>
+ </void>
+</void>
+<void idref="SceneModelArray0"/>
+</java>

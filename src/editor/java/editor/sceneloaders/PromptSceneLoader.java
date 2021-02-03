@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
@@ -30,6 +32,10 @@ public class PromptSceneLoader {
     static final int COLOR_RANGE = 255; // The range the colors can be set to
     static final FileChooser imageFileChooser = new FileChooser();
 
+    // Never changing, so load it once to save on electricity
+    private static final ObservableList<Riasec> RIASEC_VALUES =
+            FXCollections.observableList(Arrays.asList(Riasec.values()));
+
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
      * @param model The current scene model we want to modify.
@@ -42,7 +48,7 @@ public class PromptSceneLoader {
 
         // Get the editing Nodes for the PromptSceneModel properties
         VBox vbox = new VBox(
-                getIdBox(controller, model, graph),
+                getNameBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getPromptBox(model, graph),
                 getActionBox(model, graph),
@@ -63,19 +69,16 @@ public class PromptSceneLoader {
         );
     }
 
-    private static Node getIdBox(Controller controller, SceneModel model, SceneGraph graph) {
-        var idField = new TextField(model.getId());
-        var idApplyButton = new Button("Apply");
+    private static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
+        var nameField = new TextField(model.getName());
 
-        // When the id is updated as the user types, weird stuff can happen.
-        // ID changes should be deliberate, so I think having an apply button is
-        // appropriate
-        idApplyButton.setOnAction(e -> {
-            graph.reassignSceneModel(model.getId(), idField.getText());
+        // Listener to update the title
+        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
+            model.setName(newValue);
             controller.rebuildSceneGraphTreeView();
         });
 
-        var vbox = new VBox(new Label("ID:"), new HBox(idField, idApplyButton));
+        var vbox = new VBox(new Label("Name:"), nameField);
         vbox.setPadding(PADDING);
         return vbox;
     }
@@ -252,10 +255,21 @@ public class PromptSceneLoader {
         // Setup the combo-box for choosing the answers target scene
         ArrayList<String> sceneIds = new ArrayList<>(graph.getSceneIds());
         sceneIds.remove(model.id); // Prevent a scene from navigating to itself
-        ComboBox<String> targetComboBox = new ComboBox<>(FXCollections.observableList(sceneIds));
-        targetComboBox.setValue(answer.target); // Set initial value to match the answer's target
+
+        ArrayList<SceneTarget> sceneTargets = new ArrayList<>();
+        for (String id : sceneIds) {
+            sceneTargets.add(new SceneTarget(id, graph.getSceneById(id).getName()));
+        }
+
+        ComboBox<SceneTarget> targetComboBox =
+                new ComboBox<>(FXCollections.observableList(sceneTargets));
+
+        SceneTarget currentAnswer = new SceneTarget(answer.target,
+                graph.getSceneById(answer.target).getName());
+
+        targetComboBox.setValue(currentAnswer); // Set initial value to match the answer's target
         targetComboBox.setOnAction(event -> {
-            String target = targetComboBox.getValue();
+            String target = targetComboBox.getValue().getSceneId();
             if (!target.equals(model.getId())) {
                 answer.target = target;
                 graph.registerSceneModel(model); // Re-register the model to update the scene
@@ -265,9 +279,22 @@ public class PromptSceneLoader {
             }
         });
 
+        // Setup combo-box for choosing Riasec categories
+        ComboBox<Riasec> riasecComboBox = new ComboBox<>(RIASEC_VALUES);
+        riasecComboBox.setValue(answer.category);
+        riasecComboBox.setOnAction(event -> {
+            Riasec category = riasecComboBox.getValue();
+            if (!answer.category.equals(category)) {
+                answer.category = category;
+                graph.registerSceneModel(model);
+            }
+        });
+
         // Create an HBox with a "Target: " label and the combo-box
         HBox targetsBox = new HBox(new Label("Target: "), targetComboBox);
         targetsBox.setPadding(new Insets(0, 0, 0, 5));
+
+        HBox riasecBox = new HBox(new Label("Holland Code: "), riasecComboBox);
 
         // Add a separator so answers are visually separated
         Separator separator = new Separator();
@@ -275,7 +302,8 @@ public class PromptSceneLoader {
 
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
-        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
+        answerVbox.getChildren().addAll(
+                answerField, editingControls, targetsBox, riasecBox, separator);
         return answerVbox;
     }
 }

@@ -94,7 +94,7 @@ public class PromptScene implements Scene {
     public void update(float dt, SceneGraph sceneGraph) {
         for (ButtonControl button : this.buttons) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget());
+                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
         }
 

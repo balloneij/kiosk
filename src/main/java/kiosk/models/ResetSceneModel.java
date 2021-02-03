@@ -6,12 +6,14 @@ import kiosk.scenes.Scene;
 public final class ResetSceneModel implements SceneModel {
 
     public String id;
+    public String name;
 
     /**
      * Constructs a new reset model.
      */
     public ResetSceneModel() {
         this(IdGenerator.getInstance().getNextId());
+        this.name = "Reset Scene";
     }
 
     /**
@@ -35,6 +37,16 @@ public final class ResetSceneModel implements SceneModel {
     @Override
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

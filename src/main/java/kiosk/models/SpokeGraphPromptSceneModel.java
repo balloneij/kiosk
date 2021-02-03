@@ -6,6 +6,7 @@ import kiosk.scenes.SpokeGraphPromptScene;
 public final class SpokeGraphPromptSceneModel implements SceneModel {
 
     public String id;
+    public String name;
     public String headerTitle;
     public String headerBody;
     public String careerCenterText;
@@ -25,6 +26,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
      */
     public SpokeGraphPromptSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Spoke Graph Prompt Scene";
         this.headerTitle = "";
         this.headerBody = "";
         this.careerCenterText = "";
@@ -51,6 +53,16 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         ButtonModel[] answersCopy = new ButtonModel[this.answers.length];
         for (int i = 0; i < answersCopy.length; i++) {
@@ -66,6 +78,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
 
         var copy = new SpokeGraphPromptSceneModel();
         copy.id = this.id;
+        copy.name = name;
         copy.headerTitle = this.headerTitle;
         copy.headerBody = this.headerBody;
         copy.careerCenterText = this.careerCenterText;

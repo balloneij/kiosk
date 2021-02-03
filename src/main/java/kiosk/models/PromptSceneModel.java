@@ -6,6 +6,7 @@ import kiosk.scenes.Scene;
 public final class PromptSceneModel implements SceneModel {
 
     public String id;
+    public String name;
     public String title;
     public String prompt;
     public String actionPhrase;
@@ -16,6 +17,7 @@ public final class PromptSceneModel implements SceneModel {
      */
     public PromptSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
+        this.name = "Prompt Scene";
         this.title = "";
         this.prompt = "\n\n";
         this.actionPhrase = "";
@@ -38,6 +40,16 @@ public final class PromptSceneModel implements SceneModel {
     }
 
     @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
         ButtonModel[] buttonsCopy = new ButtonModel[this.answers.length];
         for (int i = 0; i < buttonsCopy.length; i++) {
@@ -47,6 +59,7 @@ public final class PromptSceneModel implements SceneModel {
 
         PromptSceneModel copy = new PromptSceneModel();
         copy.id = this.id;
+        copy.name = name;
         copy.title = this.title;
         copy.prompt = this.prompt;
         copy.actionPhrase = this.actionPhrase;
