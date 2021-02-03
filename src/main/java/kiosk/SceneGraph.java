@@ -256,6 +256,10 @@ public class SceneGraph {
         return this.root;
     }
 
+    public synchronized void setRootSceneModel(SceneModel newRoot) {
+        this.root = newRoot;
+    }
+
     /**
      * Returns the set of the scene Ids currently in the SceneGraph.
      * @return The set of the scene Ids currently in the SceneGraph.

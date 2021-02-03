@@ -16,8 +16,12 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
 
     public SceneModelTreeCell(Controller controller) {
         this.controller = controller;
+        MenuItem rootMenuItem = new MenuItem("Make This Scene the Root");
         MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
-        editMenu.getItems().add(deleteMenuItem);
+        editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
+        rootMenuItem.setOnAction(t -> {
+            controller.setRootScene(getItem());
+        });
         deleteMenuItem.setOnAction(t -> {
             controller.deleteScene(getItem());
         });

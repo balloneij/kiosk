@@ -284,6 +284,13 @@ public class Controller implements Initializable {
         }
     }
 
+    // this is called through the TreeCells' Context Menus
+    @FXML
+    public void setRootScene(SceneModel newRoot) {
+        sceneGraph.setRootSceneModel(newRoot);
+        rebuildSceneGraphTreeView();
+    }
+
     @FXML
     private void deleteCurrentScene() {
         sceneGraph.unregisterSceneModel(sceneGraph.getCurrentSceneModel());
