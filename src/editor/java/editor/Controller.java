@@ -5,6 +5,7 @@ import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
 import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -12,8 +13,11 @@ import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -24,6 +28,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
@@ -56,7 +61,7 @@ public class Controller implements Initializable {
     @FXML
     SplitPane splitPane;
     @FXML
-    TreeView<String> sceneGraphTreeView;
+    TreeView<SceneModel> sceneGraphTreeView;
     @FXML
     ComboBox<SceneModel> sceneTypeComboBox;
     @FXML
@@ -127,7 +132,7 @@ public class Controller implements Initializable {
         sceneGraphTreeView.getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, treeItem, selected) -> {
                     if (selected != null) {
-                        SceneModel scene = sceneGraph.getSceneById(selected.getValue());
+                        SceneModel scene = sceneGraph.getSceneById(selected.getValue().getId());
                         // Change scene graph to the scene selected
                         sceneGraph.pushScene(scene);
                     }
@@ -135,9 +140,23 @@ public class Controller implements Initializable {
 
         // An empty root is used, so hide it
         sceneGraphTreeView.setShowRoot(false);
+
+        sceneGraphTreeView.setEditable(true);
+
+        // This "overrides the TreeCell implementation and redefines the tree items as specified
+        // in the TextFieldTreeCellImpl class."
+        // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
+        sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
     }
 
-    private void rebuildToolbar(SceneModel model) {
+    /**
+     * Rebuild the toolbar. Public because the toolbar can need to
+     * be remade under various circumstances (not just when switching scenes.)
+     * todo might be able to be replaced with just an "updateSceneName" method,
+     * todo as that is (currently) the only other way of rebuilding besides
+     * todo switching scenes
+     */
+    public void rebuildToolbar(SceneModel model) {
         // Clear the scene type selector if we changed scenes
         if (previousId != null && !previousId.equals(model.getId())) {
             sceneTypeComboBox.getSelectionModel().clearSelection();
@@ -172,7 +191,8 @@ public class Controller implements Initializable {
         // All treeviews must have a root. This root is hidden, so it's
         // impossible for the user to modify it. Under the hidden root
         // is where we add the survey and orphaned children
-        TreeItem<String> hiddenRoot = new TreeItem<>("Hidden Root");
+        TreeItem<SceneModel> hiddenRoot = new TreeItem<>(); //previously had "hidden root" as arg
+        hiddenRoot.setExpanded(true);
 
         // Create the survey subtree
         SceneModel rootScene = sceneGraph.getRootSceneModel();
@@ -215,18 +235,19 @@ public class Controller implements Initializable {
         this.sceneGraphTreeView.setRoot(hiddenRoot);
     }
 
-    private void rebuildSceneGraphTreeView(TreeItem<String> parent,
+    private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,
                                            SceneModel model, Set<String> nonOrphanChildren) {
         // Add node to parent
         String modelId = model.getId();
-        TreeItem<String> node = new TreeItem<>(modelId);
+        TreeItem<SceneModel> node = new TreeItem<>(model);
+
         parent.getChildren().add(node);
 
         // Walk through the new node's parents. If it's recursive,
         // return early instead of adding its children
-        TreeItem<String> parentWalker = parent;
-        while (parentWalker != null) {
-            if (parentWalker.getValue().equals(modelId)) {
+        TreeItem<SceneModel> parentWalker = parent;
+        while (parentWalker.getValue() != null) {
+            if (parentWalker.getValue().getId().equals(modelId)) {
                 return;
             }
             parentWalker = parentWalker.getParent();
@@ -257,13 +278,13 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void deleteCurrentScene(ActionEvent event) {
+    private void deleteCurrentScene() {
         sceneGraph.unregisterSceneModel(sceneGraph.getCurrentSceneModel());
         rebuildSceneGraphTreeView();
     }
 
     @FXML
-    private void createNewScene(ActionEvent event) {
+    private void createNewScene() {
         EmptySceneModel model = new EmptySceneModel();
         model.message = "This scene is empty! Change the scene type on the left side";
 
@@ -271,12 +292,12 @@ public class Controller implements Initializable {
         sceneGraph.registerSceneModel(model);
 
         // Add as to the tree view as an orphan child
-        TreeItem<String> hiddenRoot = sceneGraphTreeView.getRoot();
-        hiddenRoot.getChildren().add(new TreeItem<>(model.getId()));
+        TreeItem<SceneModel> hiddenRoot = sceneGraphTreeView.getRoot();
+        hiddenRoot.getChildren().add(new TreeItem<>(model));
     }
 
     @FXML
-    private void loadSurvey(ActionEvent event) {
+    private void loadSurvey() {
         // Ask user for a survey file
         File file = Editor.showFileOpener();
 
@@ -309,13 +330,13 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void reloadSurvey(ActionEvent event) {
+    private void reloadSurvey() {
         sceneGraph.reset();
         rebuildSceneGraphTreeView();
     }
 
     @FXML
-    private void saveSurveyAs(ActionEvent event) {
+    private void saveSurveyAs() {
         // Prompt user for a file path to save to
         File file = Editor.showFileSaver();
 
@@ -341,9 +362,9 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void saveSurvey(ActionEvent event) {
+    private void saveSurvey() {
         if (surveyFile == null) {
-            this.saveSurveyAs(event);
+            this.saveSurveyAs();
         } else {
             try {
                 sceneGraph.exportSurvey().writeToFile(surveyFile);
@@ -383,6 +404,25 @@ public class Controller implements Initializable {
 
             exception.printStackTrace();
         }
+    }
+
+    /**
+     * Event method that pops up the survey settings editor window.
+     * @throws IOException Can occur if the popup windows FXML file is missing.
+     */
+    @FXML
+    public void editSurveySettings() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SurveySettings.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage popupWindow = new Stage();
+
+        SurveySettingsController.root = popupWindow;
+        popupWindow.setScene(scene);
+        popupWindow.initModality(Modality.APPLICATION_MODAL);
+        popupWindow.setTitle("Survey Settings");
+
+        popupWindow.showAndWait();
     }
 
     private class EditorSceneChangeCallback implements EventListener<SceneModel> {

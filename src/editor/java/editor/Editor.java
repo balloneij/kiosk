@@ -32,11 +32,12 @@ public class Editor extends Kiosk {
     public Editor(String surveyPath, Settings settings) {
         super(surveyPath, settings);
         this.setHotkeysEnabled(false);
+        SurveySettingsController.editor = this;
     }
 
     @Override
     public void settings() {
-        size(settings.screenW, settings.screenH, FX2D);
+        size(Kiosk.settings.screenW, Kiosk.settings.screenH, FX2D);
     }
 
     @Override
@@ -65,6 +66,22 @@ public class Editor extends Kiosk {
     }
 
     /**
+     *  Writes the new settings out to a file and chooses which settings to
+     *  apply depending on whether or not they can be applied without a restart.
+     * @param newSettings The new settings class containing the newly set settings.
+     * @return True indicates that the user needs to restart the program for
+     *          some of the settings to apply.
+     */
+    protected static boolean applySettings(Settings newSettings) {
+        newSettings.writeSettings();
+        var restartRequired =
+            newSettings.screenH != Kiosk.settings.screenH
+            | newSettings.screenW != Kiosk.settings.screenW;
+        Kiosk.settings.timeoutMillis = newSettings.timeoutMillis;
+        return restartRequired;
+    }
+
+    /**
      * Starts the editor.
      * @param args unused
      */
@@ -77,12 +94,11 @@ public class Editor extends Kiosk {
         }
 
         // Run the editor
-        Settings settings = new Settings();
+        Settings settings = Settings.readSettings();
+        Settings editorSettings = new Settings();
+        editorSettings.timeoutMillis = settings.timeoutMillis;
 
-        settings.screenW = Editor.PREVIEW_WIDTH;
-        settings.screenH = (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO);
-
-        Editor editor = new Editor("survey.xml", settings);
+        Editor editor = new Editor("survey.xml", editorSettings);
         editor.runSketch();
     }
 }
