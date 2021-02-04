@@ -271,4 +271,27 @@ public class SceneGraph {
     public UserScore getUserScore() {
         return this.userScore;
     }
+
+    /**
+     * Check to see if there is a scene whose name matches the current scene.
+     * @param newModel The SceneModel whose name we are going to check for.
+     * @return Whether or not 2 or more scenes have the same name.
+     */
+    public boolean containsDuplicateSceneWithName(SceneModel newModel) {
+//        var newName = newModel.getName();
+//        var newId = newModel.getId();
+//        var count = sceneModels
+//            .values()
+//            .stream()
+//            .filter(scene -> scene.getName().equals(newName) && scene.getId().equals(newId))
+//            .count();
+//        return count >= 2;
+        for (SceneModel scene: sceneModels.values()) {
+            if (scene.getId().equals(newModel.getId()))
+                continue;
+            if (scene.getName().equals(newModel.getName()))
+                return true;
+        }
+        return false;
+    }
 }
