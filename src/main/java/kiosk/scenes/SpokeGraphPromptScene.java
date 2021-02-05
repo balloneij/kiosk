@@ -5,6 +5,9 @@ import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
+import kiosk.models.ButtonModel;
+import kiosk.models.CareerModel;
+import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 
 
@@ -33,6 +36,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     private final SpokeGraphPromptSceneModel model;
     private ButtonControl[] careerOptions;
+    private int[] careerWeights;
     private ButtonControl[] answerButtons;
 
     private float careerSize;
@@ -48,7 +52,8 @@ public class SpokeGraphPromptScene implements Scene {
      */
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
-        this.careerOptions = new ButtonControl[this.model.careers.length];
+        this.careerOptions = new ButtonControl[LoadedSurveyModel.careers.length];
+        this.careerWeights = new int[LoadedSurveyModel.careers.length];
         this.answerButtons = new ButtonControl[this.model.answers.length];
     }
 
@@ -59,16 +64,13 @@ public class SpokeGraphPromptScene implements Scene {
         answerSize = sketch.height * .75f;
         careerSize = answerSize / 2;
 
-        this.careerOptions = new ButtonControl[this.model.careers.length];
+        // Create buttons for the career spoke graph (these will not be clickable)
+        this.careerOptions = new ButtonControl[LoadedSurveyModel.careers.length];
         for (int i = 0; i < careerOptions.length; i++) {
-            this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);
-            this.model.careers[i].isCircle = true;
-        }
-
-        //initialize weights for testing purposes
-        this.model.careerWeights = new int[this.careerOptions.length];
-        for (int i = 0; i < this.model.careerWeights.length; i++) {
-            this.model.careerWeights[i] = i + 1;
+            CareerModel career = LoadedSurveyModel.careers[i];
+            ButtonModel careerButtonModel = new ButtonModel(career.name, "null");
+            careerButtonModel.isCircle = true;
+            this.careerOptions[i] = new ButtonControl(careerButtonModel, 0, 0, 0, 0);
         }
 
         this.answerButtons = new ButtonControl[this.model.answers.length];
@@ -84,6 +86,14 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        // TODO I don't like having this here since it only needs to run once but this is the
+        //  only place where we have access to the SceneGraph (which has the UserScore)
+        // Update the career weights based on the career's Riasec category and the user's score
+        for (int i = 0; i < careerWeights.length; i++) {
+            CareerModel career = LoadedSurveyModel.careers[i];
+            careerWeights[i] = sceneGraph.getUserScore().getCategoryScore(career.riasecCategory);
+        }
+
         for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
@@ -97,7 +107,7 @@ public class SpokeGraphPromptScene implements Scene {
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
         SpokeUtil.spokeGraph(sketch, careerSize, centerX - careerSize, centerY - careerSize / 2,
-                1, model.careerCenterText, careerOptions, this.model.careerWeights);
+                1, model.careerCenterText, careerOptions, careerWeights);
         SpokeUtil.spokeGraph(sketch, answerSize / 2, centerX + answerSize / 2,
                 centerY, 5, model.promptText, answerButtons);
     }

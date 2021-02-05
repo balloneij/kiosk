@@ -11,11 +11,20 @@ import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import kiosk.Riasec;
 
 public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
+    public static CareerModel[] careers = {
+        new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
+        new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
+        new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
+        new CareerModel("Social", Riasec.Social, "field", "category"),
+        new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
+        new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
+    };
 
     /**
      * Creates a survey with a single, error scene.
@@ -204,25 +213,25 @@ public class LoadedSurveyModel implements Serializable {
                 + "You can always go back and begin again";
         ButtonModel humanButton = new ButtonModel();
         humanButton.text = "";
-        humanButton.target = "";
+        humanButton.target = "career models scene";
         humanButton.isCircle = true;
         humanButton.rgb = new int[] { 152, 33, 107 };
         humanButton.image = new ImageModel("assets/human.png", 80, 80);
         ButtonModel natureButton = new ButtonModel();
         natureButton.text = "";
-        natureButton.target = "";
+        natureButton.target = "career models scene";
         natureButton.isCircle = true;
         natureButton.rgb = new int[] { 51, 108, 103 };
         natureButton.image = new ImageModel("assets/nature.png", 80, 80);
         ButtonModel smartMachinesButton = new ButtonModel();
         smartMachinesButton.text = "";
-        smartMachinesButton.target = "";
+        smartMachinesButton.target = "career models scene";
         smartMachinesButton.isCircle = true;
         smartMachinesButton.rgb = new int[] { 219, 98, 38 };
         smartMachinesButton.image = new ImageModel("assets/robot.png", 80, 80);
         ButtonModel spaceButton = new ButtonModel();
         spaceButton.text = "";
-        spaceButton.target = "";
+        spaceButton.target = "career models scene";
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
         spaceButton.image = new ImageModel("assets/space.png", 80, 80);
@@ -233,11 +242,15 @@ public class LoadedSurveyModel implements Serializable {
             spaceButton
         };
 
+        SpokeGraphPromptSceneModel careerModelDemo = new SpokeGraphPromptSceneModel();
+        careerModelDemo.id = "career models scene";
+
         var initialScenes = new ArrayList<SceneModel>();
         initialScenes.add(titleScreen);
         initialScenes.add(challengePrompt);
         initialScenes.add(agePrompt);
         initialScenes.add(pathPrompt);
+        initialScenes.add(careerModelDemo);
 
         return new LoadedSurveyModel(titleScreen.id, initialScenes);
     }

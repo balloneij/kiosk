@@ -386,7 +386,7 @@ public class Controller implements Initializable {
      */
     @FXML
     private void saveSampleSurvey(ActionEvent event) {
-        File sampleFile = new File("sample survey.xml");
+        File sampleFile = new File("sample_survey.xml");
 
         try {
             LoadedSurveyModel.createSampleSurvey().writeToFile(sampleFile);
