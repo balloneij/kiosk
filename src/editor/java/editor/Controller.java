@@ -112,15 +112,16 @@ public class Controller implements Initializable {
 
         // Handler for changing the type of scene via the combo box
         sceneTypeComboBox.getSelectionModel().selectedItemProperty()
-                .addListener((observableValue, sceneModel, selectedModel) -> {
+                .addListener((observableValue, oldValue, newValue) -> {
                     // Ignore when the combo box is reset
-                    if (selectedModel != null) {
+                    if (newValue != null
+                        && !newValue.toString().equals(sceneGraph.getCurrentSceneModel().toString())) {
                         String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
                         String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
 
                         // A deep copy is NECESSARY here. We are duplicating the scenes
                         // loaded into the scene type combobox.
-                        SceneModel newModel = selectedModel.deepCopy();
+                        SceneModel newModel = newValue.deepCopy();
                         newModel.setId(currentSceneId);
                         newModel.setName(currentSceneName);
                         sceneGraph.registerSceneModel(newModel);
@@ -153,6 +154,15 @@ public class Controller implements Initializable {
             sceneTypeComboBox
                 .getItems()
                 .filtered(scene -> scene.toString().equals(newSceneModel.toString())).stream()
+                .findFirst()
+                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
+        });
+
+        sceneGraph.addSceneChangeCallback(newSceneModel -> {
+            sceneTypeComboBox
+                .getItems()
+                .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
+                .stream()
                 .findFirst()
                 .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
         });
