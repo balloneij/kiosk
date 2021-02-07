@@ -116,11 +116,13 @@ public class Controller implements Initializable {
                     // Ignore when the combo box is reset
                     if (selectedModel != null) {
                         String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
+                        String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
 
                         // A deep copy is NECESSARY here. We are duplicating the scenes
                         // loaded into the scene type combobox.
                         SceneModel newModel = selectedModel.deepCopy();
                         newModel.setId(currentSceneId);
+                        newModel.setName(currentSceneName);
                         sceneGraph.registerSceneModel(newModel);
 
                         rebuildToolbar(newModel);
