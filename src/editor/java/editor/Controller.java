@@ -113,7 +113,7 @@ public class Controller implements Initializable {
         // Handler for changing the type of scene via the combo box
         sceneTypeComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((observableValue, oldValue, newValue) -> {
-                    // Ignore when the combo box is reset
+                    // Ignore when the combo box is reset, or the scene type already matches.
                     if (newValue != null
                         && !newValue.toString().equals(sceneGraph.getCurrentSceneModel().toString())) {
                         String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
