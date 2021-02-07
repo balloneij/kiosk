@@ -148,6 +148,14 @@ public class Controller implements Initializable {
         // in the TextFieldTreeCellImpl class."
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
+
+        sceneGraph.addSceneChangeCallback(newSceneModel -> {
+            sceneTypeComboBox
+                .getItems()
+                .filtered(scene -> scene.toString().equals(newSceneModel.toString())).stream()
+                .findFirst()
+                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
+        });
     }
 
     /**
