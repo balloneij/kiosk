@@ -21,6 +21,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -146,6 +148,12 @@ public class Controller implements Initializable {
         // in the TextFieldTreeCellImpl class."
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
+        
+        MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
+        sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
+        newSceneMenuItem.setOnAction(t -> {
+            createNewScene();
+        });
     }
 
     /**
