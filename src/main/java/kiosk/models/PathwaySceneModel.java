@@ -10,7 +10,7 @@ public class PathwaySceneModel implements SceneModel {
     public String headerTitle;
     public String headerBody;
     public String centerText;
-    public ButtonModel[] careers;
+    public ButtonModel[] buttonModels;
 
     /**
      * Creates a new pathway scene model.
@@ -25,7 +25,7 @@ public class PathwaySceneModel implements SceneModel {
         this.headerTitle = "";
         this.headerBody = "";
         this.centerText = "";
-        this.careers = new ButtonModel[]{};
+        this.buttonModels = new ButtonModel[]{};
     }
 
     @Override
@@ -55,9 +55,9 @@ public class PathwaySceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        ButtonModel[] answersCopy = new ButtonModel[this.careers.length];
+        ButtonModel[] answersCopy = new ButtonModel[this.buttonModels.length];
         for (int i = 0; i < answersCopy.length; i++) {
-            ButtonModel answer = this.careers[i];
+            ButtonModel answer = this.buttonModels[i];
             answersCopy[i] = answer.deepCopy();
         }
 
@@ -67,16 +67,16 @@ public class PathwaySceneModel implements SceneModel {
         copy.headerTitle = this.headerTitle;
         copy.headerBody = this.headerBody;
         copy.centerText = this.centerText;
-        copy.careers = answersCopy;
+        copy.buttonModels = answersCopy;
         return copy;
     }
 
     @Override
     public String[] getTargets() {
-        String[] ids = new String[this.careers.length];
+        String[] ids = new String[this.buttonModels.length];
 
-        for (int i = 0; i < this.careers.length; i++) {
-            ids[i] = this.careers[i].target;
+        for (int i = 0; i < this.buttonModels.length; i++) {
+            ids[i] = this.buttonModels[i].target;
         }
 
         return ids;

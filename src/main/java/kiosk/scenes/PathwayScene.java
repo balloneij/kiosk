@@ -31,7 +31,7 @@ public class PathwayScene implements Scene {
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final PathwaySceneModel model;
-    private ButtonControl[] careerOptions;
+    protected ButtonControl[] buttons;
 
     float size;
     float centerX;
@@ -39,7 +39,7 @@ public class PathwayScene implements Scene {
 
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        this.careerOptions = new ButtonControl[this.model.careers.length];
+        this.buttons = new ButtonControl[this.model.buttonModels.length];
     }
 
     @Override
@@ -47,22 +47,22 @@ public class PathwayScene implements Scene {
         centerX = sketch.width / 2.f;
         centerY = (sketch.height  * .57f);
         size = sketch.height * .75f;
-        this.careerOptions = new ButtonControl[this.model.careers.length];
-        for (int i = 0; i < careerOptions.length; i++) {
-            this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);
-            this.model.careers[i].isCircle = true;
+        this.buttons = new ButtonControl[this.model.buttonModels.length];
+        for (int i = 0; i < buttons.length; i++) {
+            this.buttons[i] = new ButtonControl(this.model.buttonModels[i], 0, 0, 0, 0);
+            this.model.buttonModels[i].isCircle = true;
         }
 
-        for (ButtonControl careerOption : this.careerOptions) {
+        for (ButtonControl careerOption : this.buttons) {
             sketch.hookControl(careerOption);
         }
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.careerOptions) {
+        for (ButtonControl button : this.buttons) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget());
+                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
         }
     }
@@ -72,10 +72,10 @@ public class PathwayScene implements Scene {
         Graphics.useSansSerifBold(sketch, 48);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText, careerOptions);
+        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText, buttons);
     }
 
-    private void drawHeader(Kiosk sketch) {
+    protected void drawHeader(Kiosk sketch) {
         // Draw the white header box
         sketch.fill(255);
         sketch.stroke(255);
