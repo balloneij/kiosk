@@ -26,7 +26,7 @@ public class Settings {
      * to be written out in the xml file.
      */
     public Settings() {
-        timeoutMillis = 30000;
+        timeoutMillis = 60000;
         screenW = 1280;
         screenH = 720;
     }

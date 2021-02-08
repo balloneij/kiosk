@@ -30,12 +30,14 @@ public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private Scene lastScene;
+    private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
     protected static Settings settings;
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
+    private static boolean shouldTimeout = true;
 
     private static JFileChooser fileChooser;
 
@@ -136,6 +138,14 @@ public class Kiosk extends PApplet {
         size(settings.screenW, settings.screenH);
     }
 
+    public static void enableTimeout() {
+        shouldTimeout = true;
+    }
+
+    public static void disableTimeout() {
+        shouldTimeout = false;
+    }
+
     @Override
     public void setup() {
         super.setup();
@@ -152,6 +162,7 @@ public class Kiosk extends PApplet {
 
         // Get the current scene and sceneModel
         Scene currentScene = this.sceneGraph.getCurrentScene();
+        SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
 
         // Initialize the current scene if it hasn't been
         if (currentScene != this.lastScene) {
@@ -166,6 +177,7 @@ public class Kiosk extends PApplet {
             this.newSceneMillis = currMillis;
 
             this.lastScene = currentScene;
+            this.lastSceneModel = currentSceneModel;
         }
 
         // Update and draw the scene
@@ -175,10 +187,15 @@ public class Kiosk extends PApplet {
         int currentSceneMillis = currMillis - this.newSceneMillis;
 
         // Check for timeout (since the current scene has been loaded)
-        // Make sure it's not the intro scene though first
-        SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
+        // Make sure it's not the root scene though first
+        // Also make sure that we weren't previously on the root scene,
+        // otherwise we get the timeout popup immediately
+        currentSceneModel = this.sceneGraph.getCurrentSceneModel();
+        if (lastSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
+            currentSceneMillis = 0;
+        }
         if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())
-                && currentSceneMillis > Kiosk.settings.timeoutMillis) {
+                && currentSceneMillis > Kiosk.settings.timeoutMillis && shouldTimeout) {
             if (timeoutActive) {
                 // Clear the timeoutActive flag
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
