@@ -310,7 +310,7 @@ public class Controller implements Initializable {
         } catch (SceneModelException e) {
             JFrame f = new JFrame();
             f.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(f, e.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(f, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
