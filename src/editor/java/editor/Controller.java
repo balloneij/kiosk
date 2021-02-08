@@ -1,5 +1,6 @@
 package editor;
 
+import editor.sceneloaders.CareerPathwaySceneLoader;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
@@ -32,6 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
+import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -103,11 +105,12 @@ public class Controller implements Initializable {
         // Populate the tree view
         rebuildSceneGraphTreeView();
 
-        // Add scene type options for user seletion
+        // Add scene type options for user selection
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
                 new PromptSceneModel(),
                 new SpokeGraphPromptSceneModel(), 
                 new PathwaySceneModel(),
+                new CareerPathwaySceneModel(),
                 new DetailsSceneModel()
         ));
 
@@ -172,6 +175,9 @@ public class Controller implements Initializable {
         } else if (model instanceof SpokeGraphPromptSceneModel) {
             SpokeGraphPromptSceneLoader.loadScene(this,
                     (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof CareerPathwaySceneModel) {
+            CareerPathwaySceneLoader.loadScene(this, (CareerPathwaySceneModel) model,
+                toolbarBox, sceneGraph);
         } else if (model instanceof PathwaySceneModel) {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
