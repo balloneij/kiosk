@@ -43,6 +43,8 @@ import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.javafx.PSurfaceFX;
 
+import javax.swing.*;
+
 
 public class Controller implements Initializable {
 
@@ -148,7 +150,7 @@ public class Controller implements Initializable {
         // in the TextFieldTreeCellImpl class."
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
-        
+
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
         newSceneMenuItem.setOnAction(t -> {
@@ -299,17 +301,22 @@ public class Controller implements Initializable {
         rebuildSceneGraphTreeView();
     }
 
-    @FXML
-    private void deleteCurrentScene() {
-        sceneGraph.unregisterSceneModel(sceneGraph.getCurrentSceneModel());
-        rebuildSceneGraphTreeView();
-    }
-
     // this is called through the TreeCells' Context Menus
     @FXML
     public void deleteScene(SceneModel toDelete) {
-        sceneGraph.unregisterSceneModel(toDelete);
-        rebuildSceneGraphTreeView();
+        try {
+            sceneGraph.unregisterSceneModel(toDelete);
+            rebuildSceneGraphTreeView();
+        } catch (SceneModelException e) {
+            JFrame f = new JFrame();
+            f.setAlwaysOnTop(true);
+            JOptionPane.showMessageDialog(f, e.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    @FXML
+    private void deleteCurrentScene() {
+        deleteScene(sceneGraph.getCurrentSceneModel());
     }
 
     @FXML
@@ -410,7 +417,7 @@ public class Controller implements Initializable {
 
     /**
      * Event method that pops up the survey settings editor window.
-     * @throws IOException Can occur if the popup windows FXML file is missing.
+     * @throws IOException Can occur if the popup window's FXML file is missing.
      */
     @FXML
     public void editSurveySettings() throws IOException {

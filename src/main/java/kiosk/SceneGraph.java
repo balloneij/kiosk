@@ -3,6 +3,7 @@ package kiosk;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import editor.SceneModelException;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
@@ -171,15 +172,21 @@ public class SceneGraph {
      * Unregister a scene model.
      * @param sceneModel to remove from the scene graph
      */
-    public synchronized void unregisterSceneModel(SceneModel sceneModel) {
-        SceneModel currentScene = getCurrentSceneModel();
+    public synchronized void unregisterSceneModel(SceneModel sceneModel)
+            throws SceneModelException {
+        // Can't remove the root scene
+        if (sceneModel != this.root) {
+            SceneModel currentScene = getCurrentSceneModel();
 
-        // If we are removing the current active scene, pop it before removing
-        if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
-            popScene();
+            // If we are removing the current active scene, pop it before removing
+            if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
+                popScene();
+            }
+
+            sceneModels.remove(sceneModel.getId());
+        } else {
+            throw new SceneModelException("Cannot delete the root scene");
         }
-
-        sceneModels.remove(sceneModel.getId());
     }
 
     /**
