@@ -51,9 +51,9 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
             setTooltip(orphanInfo);
         }
 
-        // todo testing code; prints out Null every time!
+        // todo testing code; prints out Null every time.
         // todo When a new cell is created, apparently it isn't?
-        System.out.println(getItem());
+        System.out.println("a new cell was made: " + getItem());
     }
 
     @Override
