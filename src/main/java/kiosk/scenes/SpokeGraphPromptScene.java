@@ -96,7 +96,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget());
+                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
         }
     }
