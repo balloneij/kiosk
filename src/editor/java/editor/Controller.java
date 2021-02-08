@@ -171,10 +171,6 @@ public class Controller implements Initializable {
             sceneTypeComboBox.getSelectionModel().clearSelection();
         }
 
-        // Grey out the delete button so we can't remove the root node
-        deleteCurrentSceneButton.setDisable(
-                model.getId().equals(sceneGraph.getRootSceneModel().getId()));
-
         previousId = model.getId();
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
