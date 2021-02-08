@@ -31,6 +31,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.models.DetailsSceneModel;
@@ -42,9 +44,6 @@ import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.javafx.PSurfaceFX;
-
-import javax.swing.*;
-
 
 public class Controller implements Initializable {
 
@@ -67,8 +66,6 @@ public class Controller implements Initializable {
     TreeView<SceneModel> sceneGraphTreeView;
     @FXML
     ComboBox<SceneModel> sceneTypeComboBox;
-    @FXML
-    Button deleteCurrentSceneButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -244,11 +241,34 @@ public class Controller implements Initializable {
     private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,
                                            SceneModel model, Set<String> nonOrphanChildren) {
 
-        if ((model.getName().startsWith("√")) && (model != sceneGraph.getRootSceneModel())) {           // if name starts with the marker, but it's NOT the root...
-            model.setName(model.getName().substring(1));                                                // delete the marker
-        } else if ((model == sceneGraph.getRootSceneModel()) && (!model.getName().startsWith("√"))) {   // if the model is the root, but DOESN'T have the marker...
-            model.setName("√" + model.getName());                                                       // add the marker
+        if ((model.getName().startsWith("√"))
+                && (model != sceneGraph.getRootSceneModel())) {
+            model.setName(model.getName().substring(1));
+        } else if ((model == sceneGraph.getRootSceneModel())
+                && (!model.getName().startsWith("√"))) {
+            model.setName("√" + model.getName());
         }
+
+        boolean orphan = true;
+        for (String id : sceneGraph.getAllIds()) {
+            for (String target : sceneGraph.getSceneById(id).getTargets()) {
+                if (model.getId().equals(target)) {
+                    orphan = false;
+                    break;
+                }
+            }
+        }
+
+        if (orphan && (model != sceneGraph.getRootSceneModel())) {
+            if (!(model.getName().startsWith("⇱"))) {
+                model.setName("⇱" + model.getName());
+            }
+        } else {
+            if ((model.getName().startsWith("⇱"))) {
+                model.setName(model.getName().substring(1));
+            }
+        }
+
 
         // Add node to parent
         String modelId = model.getId();
@@ -290,14 +310,17 @@ public class Controller implements Initializable {
         }
     }
 
-    // this is called through the TreeCells' Context Menus
     @FXML
     public void setRootScene(SceneModel newRoot) {
         sceneGraph.setRootSceneModel(newRoot);
         rebuildSceneGraphTreeView();
     }
 
-    // this is called through the TreeCells' Context Menus
+    /**
+     * Deletes a specific SceneModel from the SceneGraph.
+     * This is called through the TreeCells' Context Menus.
+     * @param toDelete the SceneModel to be deleted
+     */
     @FXML
     public void deleteScene(SceneModel toDelete) {
         try {
@@ -306,7 +329,8 @@ public class Controller implements Initializable {
         } catch (SceneModelException e) {
             JFrame f = new JFrame();
             f.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(f, e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(f, e.getMessage(),
+                    "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 

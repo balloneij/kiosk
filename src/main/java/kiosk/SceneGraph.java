@@ -171,6 +171,9 @@ public class SceneGraph {
     /**
      * Unregister a scene model.
      * @param sceneModel to remove from the scene graph
+     * @throws SceneModelException this is a check to ensure the
+     * root is never deleted; shouldn't be possible because the option
+     * is disabled in the ContextMenu
      */
     public synchronized void unregisterSceneModel(SceneModel sceneModel)
             throws SceneModelException {

@@ -3,28 +3,57 @@ package editor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 import kiosk.models.SceneModel;
-
-import java.awt.event.ActionEvent;
 
 public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private Controller controller;
     private TextField textField;
     private final ContextMenu editMenu = new ContextMenu();
 
+    /**
+     * Creates a new TreeCell used for displaying SceneModels.
+     * @param controller the editor's controller
+     */
     public SceneModelTreeCell(Controller controller) {
         this.controller = controller;
+
+        // Creating ContextMenu
         MenuItem rootMenuItem = new MenuItem("Make This Scene the Root");
-        MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
-        editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
         rootMenuItem.setOnAction(t -> {
             controller.setRootScene(getItem());
         });
+        MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
         deleteMenuItem.setOnAction(t -> {
             controller.deleteScene(getItem());
         });
+        // Determine if scene is the root; if so, disable options
+        // todo Why does't this work? Why are we FILLED with nulls?
+        // todo In the Controller's initialization, this is called like 11 times.
+        if ((getItem() != null)
+            && (getItem().getId().equals(Controller.sceneGraph.getRootSceneModel().getId()))) {
+            rootMenuItem.setDisable(true);
+            deleteMenuItem.setDisable(true);
+        }
+        editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
+
+        // Create tooltip, if needed
+        // todo Same as above, this doesn't work. Once the above is fixed,
+        // todo the first check can be removed here too (hopefully)
+        if ((getItem() != null)
+                && getItem().getName().contains("⇱")) {
+            Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
+                    + "by any other scenes");
+            orphanInfo.setHideDelay(new Duration(.5));
+            setTooltip(orphanInfo);
+        }
+
+        // todo testing code; prints out Null every time!
+        // todo When a new cell is created, apparently it isn't?
+        System.out.println(getItem());
     }
 
     @Override
