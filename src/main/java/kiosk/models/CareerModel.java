@@ -25,4 +25,8 @@ public class CareerModel {
         this.field = field;
         this.category = category;
     }
+
+    public CareerModel deepCopy() {
+        return new CareerModel(this.name, this.riasecCategory, this.field, this.category);
+    }
 }
