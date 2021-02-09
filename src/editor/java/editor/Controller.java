@@ -4,6 +4,7 @@ import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
 import editor.sceneloaders.SpokeGraphPromptSceneLoader;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -27,12 +28,16 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.models.DetailsSceneModel;
@@ -44,6 +49,8 @@ import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.javafx.PSurfaceFX;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Controller implements Initializable {
 
@@ -103,7 +110,7 @@ public class Controller implements Initializable {
         // Populate the tree view
         rebuildSceneGraphTreeView();
 
-        // Add scene type options for user seletion
+        // Add scene type options for user selection
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
                 new PromptSceneModel(),
                 new SpokeGraphPromptSceneModel(), 
@@ -147,6 +154,7 @@ public class Controller implements Initializable {
         // in the TextFieldTreeCellImpl class."
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
+        sceneGraphTreeView.scrollTo(9);
 
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
@@ -236,6 +244,8 @@ public class Controller implements Initializable {
         }
 
         this.sceneGraphTreeView.setRoot(hiddenRoot);
+        // todo this is correct though
+        System.out.println(hiddenRoot.getChildren().size());
     }
 
     private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,

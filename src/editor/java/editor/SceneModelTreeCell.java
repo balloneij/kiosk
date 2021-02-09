@@ -6,6 +6,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import kiosk.models.SceneModel;
 
@@ -13,47 +19,30 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private Controller controller;
     private TextField textField;
     private final ContextMenu editMenu = new ContextMenu();
+    private final MenuItem rootMenuItem = new MenuItem("Make This Scene the Root");
+    private final MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
+    Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
+            + "by any other scenes");
 
     /**
      * Creates a new TreeCell used for displaying SceneModels.
+     *
      * @param controller the editor's controller
      */
     public SceneModelTreeCell(Controller controller) {
         this.controller = controller;
 
-        // Creating ContextMenu
-        MenuItem rootMenuItem = new MenuItem("Make This Scene the Root");
+        // Creating ContextMenu Actions
         rootMenuItem.setOnAction(t -> {
             controller.setRootScene(getItem());
         });
-        MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
         deleteMenuItem.setOnAction(t -> {
             controller.deleteScene(getItem());
         });
-        // Determine if scene is the root; if so, disable options
-        // todo Why does't this work? Why are we FILLED with nulls?
-        // todo In the Controller's initialization, this is called like 11 times.
-        if ((getItem() != null)
-            && (getItem().getId().equals(Controller.sceneGraph.getRootSceneModel().getId()))) {
-            rootMenuItem.setDisable(true);
-            deleteMenuItem.setDisable(true);
-        }
+
         editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
 
-        // Create tooltip, if needed
-        // todo Same as above, this doesn't work. Once the above is fixed,
-        // todo the first check can be removed here too (hopefully)
-        if ((getItem() != null)
-                && getItem().getName().contains("⇱")) {
-            Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
-                    + "by any other scenes");
-            orphanInfo.setHideDelay(new Duration(.5));
-            setTooltip(orphanInfo);
-        }
-
-        // todo testing code; prints out Null every time.
-        // todo When a new cell is created, apparently it isn't?
-        System.out.println("a new cell was made: " + getItem());
+        orphanInfo.setHideDelay(new Duration(.5));
     }
 
     @Override
@@ -80,22 +69,44 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     @Override
     public void updateItem(SceneModel item, boolean empty) {
         super.updateItem(item, empty);
+        setCache(false);
 
-        if (empty) {
+        if (empty || isEmpty()) {
             setText(null);
             setGraphic(null);
+            // Remove the ContextMenu
+            setContextMenu(null);
+            // Remove the ToolTip
+            setTooltip(null);
         } else {
+            // Determine if scene is the root; if so, disable some options
+            // This is more indicative than just not adding the items in the first place
+            if (getItem().getId().equals(Controller.sceneGraph.getRootSceneModel().getId())) {
+                rootMenuItem.setDisable(true);
+                deleteMenuItem.setDisable(true);
+            } else {
+                // This is used if the root scene is changed; it re-enables the options
+                rootMenuItem.setDisable(false);
+                deleteMenuItem.setDisable(false);
+            }
+            // Add the ContextMenu if it's not there
+            if (getContextMenu() == null) {
+                setContextMenu(editMenu);
+            }
+            // Add the ToolTip if it's not there already and if it's needed
+            if(getTooltip() == null && getItem().getName().contains("⇱")) {
+                setTooltip(orphanInfo);
+            }
+
             if (isEditing()) {
                 if (textField != null) {
                     textField.setText(getName());
-                    item.setName(getText());
                 }
                 setText(null);
                 setGraphic(textField);
             } else {
                 setText(getName());
                 setGraphic(getTreeItem().getGraphic());
-                setContextMenu(editMenu);
             }
         }
     }
@@ -104,6 +115,7 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         textField = new TextField(getName());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
+                // todo call Seth's SceneGraph's EvaluateName()
                 getItem().setName(textField.getText());
                 controller.rebuildToolbar(getItem());
                 controller.rebuildSceneGraphTreeView();
