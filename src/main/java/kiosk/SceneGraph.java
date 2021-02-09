@@ -1,8 +1,11 @@
 package kiosk;
 
-import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
@@ -274,24 +277,13 @@ public class SceneGraph {
 
     /**
      * Check to see if there is a scene whose name matches the current scene.
-     * @param newModel The SceneModel whose name we are going to check for.
+     * @param sceneName The name of the model for which we are looking.
      * @return Whether or not 2 or more scenes have the same name.
      */
-    public boolean containsDuplicateSceneWithName(SceneModel newModel) {
-//        var newName = newModel.getName();
-//        var newId = newModel.getId();
-//        var count = sceneModels
-//            .values()
-//            .stream()
-//            .filter(scene -> scene.getName().equals(newName) && scene.getId().equals(newId))
-//            .count();
-//        return count >= 2;
-        for (SceneModel scene: sceneModels.values()) {
-            if (scene.getId().equals(newModel.getId()))
-                continue;
-            if (scene.getName().equals(newModel.getName()))
-                return true;
-        }
-        return false;
+    public SceneModel getSceneModelByName(String sceneName) {
+        return sceneModels
+            .values().stream()
+            .filter(sceneModel -> sceneModel.getName().equals(sceneName))
+            .findFirst().orElse(null);
     }
 }
