@@ -43,8 +43,9 @@ public class ErrorScene implements Scene {
             default -> sketch.background(0);
         }
 
-        Graphics.useSansSerifBold(sketch, 16);
+        Graphics.useGothic(sketch, 16);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        sketch.text(this.model.errorMsg, sketch.width / 2f, sketch.height / 2f);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.errorMsg, sketch.width / 2f, sketch.height / 2f, sketch.width, sketch.height);
     }
 }

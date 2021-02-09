@@ -14,6 +14,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public int[] careerWeights;
     public String promptText;
     public ButtonModel[] answers;
+    public ButtonModel backButton;
+    public ButtonModel homeButton;
 
     /**
      * Creates a new SG prompt scene model.

@@ -1,18 +1,22 @@
 package kiosk.scenes;
 
+import graphics.Color;
 import graphics.Graphics;
+import graphics.GraphicsUtil;
 import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
+import kiosk.models.ButtonModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
+import processing.core.PConstants;
 
 
 public class SpokeGraphPromptScene implements Scene {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Settings.readSettings().screenW;
-    private static final int SCREEN_H = Settings.readSettings().screenH;
+    private static final int SCREEN_W = Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
 
     // Header
     private static final float HEADER_W = SCREEN_W * 3f / 4;
@@ -34,6 +38,9 @@ public class SpokeGraphPromptScene implements Scene {
     private final SpokeGraphPromptSceneModel model;
     private ButtonControl[] careerOptions;
     private ButtonControl[] answerButtons;
+    private ButtonControl homeButton;
+    private ButtonControl backButton;
+
 
     private float careerSize;
     private float answerSize;
@@ -80,6 +87,12 @@ public class SpokeGraphPromptScene implements Scene {
         for (ButtonControl answerButton : this.answerButtons) {
             sketch.hookControl(answerButton);
         }
+
+        this.homeButton = GraphicsUtil.initializeHomeButton();
+        sketch.hookControl(this.homeButton);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        sketch.hookControl(this.backButton);
+
     }
 
     @Override
@@ -88,18 +101,25 @@ public class SpokeGraphPromptScene implements Scene {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
         }
     }
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.useSansSerifBold(sketch, 48);
+        Graphics.useGothic(sketch, 48, true);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
+        this.homeButton.draw(sketch);
+        this.backButton.draw(sketch);
         SpokeUtil.spokeGraph(sketch, careerSize, centerX - careerSize, centerY - careerSize / 2,
-                1, model.careerCenterText, careerOptions, this.model.careerWeights);
+                1, model.careerCenterText, careerOptions, false, this.model.careerWeights);
         SpokeUtil.spokeGraph(sketch, answerSize / 2, centerX + answerSize / 2,
-                centerY, 5, model.promptText, answerButtons);
+                centerY, 5, model.promptText, answerButtons, true);
     }
 
     private void drawHeader(Kiosk sketch) {
@@ -114,10 +134,12 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.fill(0);
         sketch.stroke(0);
 
-        Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
-        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y);
+        Graphics.useGothic(sketch, HEADER_TITLE_FONT_SIZE, true);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
 
-        Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
-        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y);
+        Graphics.useGothic(sketch, HEADER_BODY_FONT_SIZE, false);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
 }
