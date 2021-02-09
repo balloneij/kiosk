@@ -274,4 +274,16 @@ public class SceneGraph {
     public UserScore getUserScore() {
         return this.userScore;
     }
+
+    /**
+     * Check to see if there is a scene whose name matches the current scene.
+     * @param sceneName The name of the model for which we are looking.
+     * @return Whether or not 2 or more scenes have the same name.
+     */
+    public SceneModel getSceneModelByName(String sceneName) {
+        return sceneModels
+            .values().stream()
+            .filter(sceneModel -> sceneModel.getName().equals(sceneName))
+            .findFirst().orElse(null);
+    }
 }

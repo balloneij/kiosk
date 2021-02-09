@@ -35,8 +35,13 @@ public final class WaveTransitionSceneModel implements SceneModel {
      * @param invertedColors true for white, black otherwise
      * @param uniqueId An id unique to this specific model.
      */
+<<<<<<< HEAD
     public WaveTransitionSceneModel(String target,
                                     boolean invertedColors, String uniqueId, String name) {
+=======
+    public WaveTransitionSceneModel(String target, boolean invertedColors,
+            String uniqueId, String name) {
+>>>>>>> dev
         this.target = target;
         this.invertedColors = invertedColors;
         this.id = uniqueId;
