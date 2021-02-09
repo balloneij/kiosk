@@ -15,18 +15,21 @@ public class SceneLoader {
     // The default padding to space the editing Nodes
     static final Insets PADDING = new Insets(0, 0, 10, 10);
     static boolean ShowingNameAlert = false;
+    static Alert alert = new Alert(Alert.AlertType.ERROR);
 
     protected static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
         var nameField = new TextField(model.getName());
 
         nameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && !ShowingNameAlert) {
+            if (!newValue && !ShowingNameAlert
+                    && !model.getName().equals(nameField.getText())) {
                 evaluateNameProperty(controller, model, graph, nameField);
             }
         });
 
         nameField.setOnKeyPressed(event -> {
-            if (event.getCode().equals(KeyCode.ENTER)) {
+            if (event.getCode().equals(KeyCode.ENTER)
+                    && !model.getName().equals(nameField.getText())) {
                 evaluateNameProperty(controller, model, graph, nameField);
             }
         });
@@ -40,22 +43,19 @@ public class SceneLoader {
             SceneGraph graph, TextField nameField) {
         var newValue = nameField.getText();
         var oldName = model.getName();
-        model.setName(newValue);
-        if (graph.containsDuplicateSceneWithName(model)) {
+        alert.setContentText(String.format("There is already a scene with the name %s."
+                + "\r\n Please try a different name.", newValue));
+
+        if (graph.getSceneModelByName(newValue) == null) { // No matches
+            model.setName(newValue);
+            controller.rebuildSceneGraphTreeView();
+        } else {
+            if (!alert.isShowing()) {
+                alert.showAndWait();
+            }
             nameField.setText(oldName);
             nameField.positionCaret(oldName.length());
-            if (!ShowingNameAlert) {
-                ShowingNameAlert = true;
-                Alert alert = new Alert(
-                        Alert.AlertType.ERROR,
-                        String.format("There is already a scene with the name %s."
-                                + "\r\n Please try a different name.", newValue)
-                );
-                alert.showAndWait();
-                ShowingNameAlert = false;
-            }
         }
-        controller.rebuildSceneGraphTreeView();
     }
 
 }
