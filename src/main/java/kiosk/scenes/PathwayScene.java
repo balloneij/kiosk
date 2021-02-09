@@ -2,10 +2,9 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
-import graphics.SpokeUtil;
+import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.Settings;
 import kiosk.models.PathwaySceneModel;
 import processing.core.PConstants;
 
@@ -33,48 +32,54 @@ public class PathwayScene implements Scene {
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final PathwaySceneModel model;
-    private ButtonControl[] careerOptions;
-    private ButtonControl homeButton;
+    private final SpokeGraph spokeGraph;
     private ButtonControl backButton;
+    private ButtonControl homeButton;
 
-    float size;
-    float centerX;
-    float centerY;
-
+    /**
+     * Create a pathway scene.
+     * @param model to base the scene off of
+     */
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        this.careerOptions = new ButtonControl[this.model.careers.length];
+        for (var careerModel : model.careers) {
+            careerModel.isCircle = true;
+        }
+
+        // Create the spoke graph
+        var size = SCREEN_H - HEADER_Y - HEADER_H;
+        this.spokeGraph = new SpokeGraph(size,
+                SCREEN_W / 2f - size / 2,
+                HEADER_Y + HEADER_H,
+                this.model.centerText,
+                this.model.careers);
+
+        this.backButton = ButtonControl.createBackButton();
+        this.homeButton = ButtonControl.createHomeButton();
     }
 
     @Override
     public void init(Kiosk sketch) {
-        centerX = sketch.width / 2.f;
-        centerY = (sketch.height  * .57f);
-        size = sketch.height * .75f;
-
         this.homeButton = GraphicsUtil.initializeHomeButton();
         sketch.hookControl(this.homeButton);
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
         sketch.hookControl(this.backButton);
 
-        this.careerOptions = new ButtonControl[this.model.careers.length];
-        for (int i = 0; i < careerOptions.length; i++) {
-            this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);
-            this.model.careers[i].isCircle = true;
-        }
-
-        for (ButtonControl careerOption : this.careerOptions) {
+        for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
+        sketch.hookControl(this.backButton);
+        sketch.hookControl(this.homeButton);
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.careerOptions) {
+        for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
         }
+
         if (this.homeButton.wasClicked()) {
             sceneGraph.reset();
         } else if (this.backButton.wasClicked()) {
@@ -90,9 +95,10 @@ public class PathwayScene implements Scene {
         sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText, careerOptions, true);
-        this.homeButton.draw(sketch);
+        this.spokeGraph.draw(sketch);
+
         this.backButton.draw(sketch);
+        this.homeButton.draw(sketch);
     }
 
     private void drawHeader(Kiosk sketch) {
@@ -109,10 +115,12 @@ public class PathwayScene implements Scene {
 
         Graphics.useGothic(sketch, HEADER_TITLE_FONT_SIZE, true);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y,
+                (int) (HEADER_W * 0.95), HEADER_H / 2);
 
         Graphics.useGothic(sketch, HEADER_BODY_FONT_SIZE, false);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(model.headerBody, HEADER_CENTER_X, (int)(HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
+        sketch.text(model.headerBody, HEADER_CENTER_X,
+                (int) (HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
 }

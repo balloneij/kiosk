@@ -1,11 +1,9 @@
 package kiosk.scenes;
 
-import graphics.Color;
 import graphics.Graphics;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.models.ButtonModel;
 import kiosk.models.DetailsSceneModel;
 import processing.core.PConstants;
 
@@ -114,14 +112,16 @@ public class DetailsScene implements Scene {
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(33);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.title, centerX, (int) (TITLE_Y * 1.15), (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
+        sketch.text(this.model.title, centerX, (int) (TITLE_Y * 1.15),
+                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
 
         // Body
         Graphics.useGothic(sketch, BODY_FONT_SIZE, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(25);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.body, centerX, (int) (BODY_Y * 1.15), (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
+        sketch.text(this.model.body, centerX, (int) (BODY_Y * 1.15),
+                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
 
         this.centerButton.draw(sketch);
         this.homeButton.draw(sketch);

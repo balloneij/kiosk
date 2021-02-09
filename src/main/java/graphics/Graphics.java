@@ -73,6 +73,12 @@ public class Graphics {
         useGothic(sketch, fontSize, false);
     }
 
+    /**
+     * Rob doesn't write documentation.
+     * @param sketch to draw to
+     * @param fontSize font size
+     * @param bold bold or not
+     */
     public static void useGothic(Kiosk sketch, int fontSize, boolean bold) {
         if (bold) {
             sketch.textFont(gothicBold, fontSize);
@@ -158,7 +164,8 @@ public class Graphics {
         float y = height - radius;
         float iterationNumber = ((radius - 1) / radiusChipping);
         for (int i = 0; i < iterationNumber; i++) {
-            for (float x = stagger ? spacing / 2 - bubbleOffset : -bubbleOffset; x < width; x += spacing) {
+            for (float x = stagger ? spacing / 2 - bubbleOffset : -bubbleOffset;
+                 x < width; x += spacing) {
                 if (y > 0) {
                     sketch.ellipse(x, y, radius, radius);
                 }
