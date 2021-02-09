@@ -92,14 +92,6 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
     }
 
-    public void setColor(int r, int g, int b) {
-        if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
-            this.model.rgb[0] = r;
-            this.model.rgb[1] = g;
-            this.model.rgb[2] = b;
-        }
-    }
-
     /**
      * Initialize the button for loading images.
      *
@@ -131,13 +123,19 @@ public class ButtonControl implements Control<MouseEvent> {
         if (this.model.image != null) {
             sketch.imageMode(PConstants.CENTER);
             if (this.isPressed) {
-                this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY() + this.rect.height / 10.f);
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) rect.getCenterY() + this.rect.height / 10.f);
             } else {
                 this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
             }
         }
     }
 
+    /**
+     * Draw the button.
+     * @param sketch to draw to
+     * @param multiplier ?????? @ Rob Retzlaff
+     */
     public void draw(Kiosk sketch, float multiplier) {
         Graphics.useGothic(sketch, (int) (FONT_SIZE * multiplier), true);
         FONT_SIZE_OVERWRITTEN = true;
@@ -166,7 +164,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
             sketch.stroke(59, 58, 57, 63f);
-            Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y + this.rect.height / 10.f,
+            Graphics.drawRoundedRectangle(sketch, this.rect.x,
+                    this.rect.y + this.rect.height / 10.f,
                     this.rect.width, this.rect.height, DEFAULT_RADIUS);
         }
 
@@ -178,7 +177,8 @@ public class ButtonControl implements Control<MouseEvent> {
 
             sketch.fill(r, g, b);
             sketch.stroke(59, 58, 57, 63f);
-            Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y + this.rect.height / 10.f,
+            Graphics.drawRoundedRectangle(sketch, this.rect.x,
+                    this.rect.y + this.rect.height / 10.f,
                     this.rect.width, this.rect.height, DEFAULT_RADIUS);
 
             // Draw the text, including the text outline
@@ -187,12 +187,16 @@ public class ButtonControl implements Control<MouseEvent> {
             for (int x = -1; x < 2; x++) {
                 sketch.text(this.model.text,
                         (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
+                        (float) this.rect.getCenterY()
+                                - (this.rect.height / 2.f)
+                                + this.rect.height / 10.f,
                         (float) this.rect.width,
                         (float) this.rect.height);
                 sketch.text(this.model.text,
                         (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x + this.rect.height / 10.f,
+                        (float) this.rect.getCenterY()
+                                - (this.rect.height / 2.f)
+                                + x + this.rect.height / 10.f,
                         (float) this.rect.width,
                         (float) this.rect.height);
             }
@@ -200,7 +204,9 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
             sketch.text(this.model.text,
                     (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                    (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
+                    (float) this.rect.getCenterY()
+                            - (this.rect.height / 2.f)
+                            + this.rect.height / 10.f,
                     (float) this.rect.width,
                     (float) this.rect.height);
         } else {

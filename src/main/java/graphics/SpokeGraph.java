@@ -118,6 +118,10 @@ public class SpokeGraph {
         return buttonControls;
     }
 
+    /**
+     * Visually disable buttons.
+     * @param disabled true or false
+     */
     public void setDisabled(boolean disabled) {
         if (disabled) {
             for (var button : buttonControls) {

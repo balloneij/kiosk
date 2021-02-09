@@ -101,12 +101,14 @@ public class TimeoutScene implements Scene {
         // Title
         Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.title, centerX, TITLE_Y, (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
+        sketch.text(this.model.title, centerX, TITLE_Y,
+                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
 
         // Prompt
         Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.prompt, centerX, PROMPT_Y, (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
+        sketch.text(this.model.prompt, centerX, PROMPT_Y,
+                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
 
         homeButton.draw(sketch);
         backButton.draw(sketch);

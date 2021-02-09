@@ -36,6 +36,8 @@ public class DefaultScene implements Scene {
         sketch.textSize(16);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.message, sketch.width / 2f, sketch.height / 2f, sketch.width, sketch.height);
+        sketch.text(this.model.message,
+                sketch.width / 2f,
+                sketch.height / 2f, sketch.width, sketch.height);
     }
 }

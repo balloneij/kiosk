@@ -1,6 +1,5 @@
 package kiosk.scenes;
 
-import graphics.Color;
 import graphics.Graphics;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
@@ -126,15 +125,18 @@ public class PromptScene implements Scene {
 
         // Title
         Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
-        sketch.text(this.model.title, centerX, TITLE_Y, sketch.width / 1.5f, sketch.height / 5f);
+        sketch.text(this.model.title, centerX, TITLE_Y,
+                sketch.width / 1.5f, sketch.height / 5f);
 
         // Prompt
         Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
-        sketch.text(this.model.prompt, centerX, PROMPT_Y, sketch.width / 1.5f, sketch.height / 5f);
+        sketch.text(this.model.prompt, centerX, PROMPT_Y,
+                sketch.width / 1.5f, sketch.height / 5f);
 
         // Action
         Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
-        sketch.text(this.model.actionPhrase, centerX, ACTION_Y, sketch.width / 1.5f, sketch.height / 6f);
+        sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
+                sketch.width / 1.5f, sketch.height / 6f);
 
         // Draw buttons
         for (ButtonControl button : this.buttons) {

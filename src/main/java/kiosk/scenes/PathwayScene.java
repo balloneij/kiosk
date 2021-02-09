@@ -115,10 +115,12 @@ public class PathwayScene implements Scene {
 
         Graphics.useGothic(sketch, HEADER_TITLE_FONT_SIZE, true);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y,
+                (int) (HEADER_W * 0.95), HEADER_H / 2);
 
         Graphics.useGothic(sketch, HEADER_BODY_FONT_SIZE, false);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(model.headerBody, HEADER_CENTER_X, (int)(HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
+        sketch.text(model.headerBody, HEADER_CENTER_X,
+                (int) (HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
 }

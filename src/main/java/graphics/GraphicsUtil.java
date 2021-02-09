@@ -1,11 +1,8 @@
 package graphics;
 
-import java.util.Arrays;
-
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
-import processing.core.PConstants;
 
 public class GraphicsUtil {
 
@@ -16,16 +13,27 @@ public class GraphicsUtil {
     public static final float TextRatioEstimate = 1.5f; // 1.7
     public static final float InnerOuterCircleRatio = 4.f;
 
+    /**
+     * Create home button.
+     * @param sketch to draw to
+     * @return back button control
+     */
     public static ButtonControl initializeBackButton(Kiosk sketch) {
         var backButtonModel = new ButtonModel();
+        // Rob fix your checkstyle
         backButtonModel.text = "\uD83E\uDC78 Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         ButtonControl backButton = new ButtonControl(backButtonModel,
-                COMMON_BUTTON_PADDING, sketch.height - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
+                COMMON_BUTTON_PADDING, sketch.height
+                - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
         return backButton;
     }
 
+    /**
+     * Create home button.
+     * @return back button control
+     */
     public static ButtonControl initializeHomeButton() {
         var homeButtonModel = new ButtonModel();
         homeButtonModel.text = "⭯ Restart";
@@ -36,6 +44,11 @@ public class GraphicsUtil {
         return homeButton;
     }
 
+    /**
+     * Create next button.
+     * @param sketch to create on.
+     * @return next button
+     */
     public static ButtonControl initializeNextButton(Kiosk sketch) {
         var nextButtonModel = new ButtonModel();
         nextButtonModel.text = "Go! \uD83E\uDC7A";

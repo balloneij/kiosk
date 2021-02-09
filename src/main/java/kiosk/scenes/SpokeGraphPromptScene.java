@@ -1,8 +1,8 @@
 package kiosk.scenes;
 
 import graphics.Graphics;
-import graphics.SpokeGraph;
 import graphics.GraphicsUtil;
+import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
@@ -37,6 +37,7 @@ public class SpokeGraphPromptScene implements Scene {
     // Answers
     private static final int ANSWERS_PADDING = 20;
     private static final float ANSWERS_SPOKE_THICKNESS = 2;
+    private static final int ANSWERS_MAX = 4;
 
     private final SpokeGraphPromptSceneModel model;
     private final ButtonControl[] answerButtons;
@@ -63,7 +64,7 @@ public class SpokeGraphPromptScene implements Scene {
         int answersCenterY = headerBottomY + halfHeight - 20;
 
         int answersCount = this.model.answers.length;
-        this.answerButtons = new ButtonControl[answersCount];
+        this.answerButtons = new ButtonControl[Math.min(answersCount, ANSWERS_MAX)];
 
         if (answersCount > 0) {
             this.answerButtons[0] = new ButtonControl(
