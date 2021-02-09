@@ -26,13 +26,13 @@ public interface SceneModel extends Serializable {
     void setId(String id);
 
     /**
-     * Get this model's name; should be unique
-     * @return The name of the model
+     * Get this model's name; should be unique.
+     * @return The name of the model.
      */
     String getName();
 
     /**
-     * Set the name of the model
+     * Set the name of the model.
      * @param name to set
      */
     void setName(String name);
