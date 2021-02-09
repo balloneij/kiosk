@@ -10,6 +10,7 @@ public class SpokeUtil {
 
     public static final float TextRatioEstimate = 1.5f; // 1.7
     public static final float InnerOuterCircleRatio = 4.f;
+    public static boolean clickableButtons;
 
     /**
      * Draws a new spoke graph. Draws a large circle in the middle with text and smaller circles
@@ -23,10 +24,10 @@ public class SpokeUtil {
      * @param answers The text that appears in each outer circle.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-          String centerText, ButtonControl[] answers) {
+          String centerText, ButtonControl[] answers, boolean isClickable) {
         var weights = new int[answers.length];
         Arrays.fill(weights, 1);
-        spokeGraph(sketch, size, x, y, padding, centerText, answers, weights);
+        spokeGraph(sketch, size, x, y, padding, centerText, answers, isClickable, weights);
     }
 
     /**
@@ -42,7 +43,8 @@ public class SpokeUtil {
      * @param weights The relative ratio and weight of each option.
      */
     public static void spokeGraph(Kiosk sketch, float size, float x, float y, float padding,
-            String centerText, ButtonControl[] answers, int[] weights) {
+            String centerText, ButtonControl[] answers, boolean isClickable, int[] weights) {
+        clickableButtons = isClickable;
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         drawInnerCircle(sketch, x, y, size / InnerOuterCircleRatio, centerText);
 
@@ -60,7 +62,7 @@ public class SpokeUtil {
             drawOuterCircle(sketch, x, y, smRad, size, deg, answers[i]);
             deg += degOffSet;
         }
-        sketch.textSize(18);
+        Graphics.useGothic(sketch, 18, false);
     }
 
     /**
@@ -81,7 +83,9 @@ public class SpokeUtil {
         sketch.stroke(256, 256, 256);
         sketch.fill(256, 256, 256);
         sketch.textLeading(2 * diameter / (TextRatioEstimate * largestTextLine(text)) * 1.15f);
-        sketch.text(text, centerX, centerY);
+        sketch.rectMode(PConstants.CENTER);
+        Graphics.useGothic(sketch, 20);
+        sketch.text(text, centerX, centerY, diameter, diameter);
     }
 
     /**
@@ -99,8 +103,8 @@ public class SpokeUtil {
         sketch.line(
             centerX + length * .125f * (float) Math.cos(Math.toRadians(angle)),
             centerY + length * .125f * (float) Math.sin(Math.toRadians(angle)),
-            (float) Math.cos(Math.toRadians(angle)) * .5f * length + centerX,
-            (float) Math.sin(Math.toRadians(angle)) * .5f * length + centerY
+            (float) Math.cos(Math.toRadians(angle)) * .45f * length + centerX,
+            (float) Math.sin(Math.toRadians(angle)) * .45f * length + centerY
         );
     }
 
@@ -116,7 +120,7 @@ public class SpokeUtil {
         answer.setLocation((int) smX, (int) smY);
         answer.setWidthAndHeight(2 * (int) smRad, 2 * (int) smRad);
 
-        answer.draw(sketch);
+        answer.draw(sketch, clickableButtons);
     }
 
     private static int largestTextLine(String text) {

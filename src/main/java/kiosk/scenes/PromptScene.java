@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Color;
 import graphics.Graphics;
+import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
@@ -16,10 +17,10 @@ public class PromptScene implements Scene {
     private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
     private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
     private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-    private static final int FOREGROUND_CURVE_RADIUS = 50;
+    private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
+    private static final int TITLE_Y = Kiosk.getSettings().screenH / 5;
     private static final int TITLE_FONT_SIZE = 24;
     private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 8;
     private static final int PROMPT_FONT_SIZE = 16;
@@ -83,19 +84,9 @@ public class PromptScene implements Scene {
             x += BUTTON_WIDTH + BUTTON_PADDING;
         }
 
-        var homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "Home";
-        homeButtonModel.rgb = Color.DW_BLACK_RGB;
-        this.homeButton = new ButtonControl(homeButtonModel,
-                BUTTON_PADDING, BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+        this.homeButton = GraphicsUtil.initializeHomeButton();
         sketch.hookControl(this.homeButton);
-        var backButtonModel = new ButtonModel();
-        backButtonModel.text = "Back";
-        backButtonModel.rgb = Color.DW_BLACK_RGB;
-        this.backButton = new ButtonControl(backButtonModel,
-                BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
         sketch.hookControl(this.backButton);
     }
 
@@ -129,20 +120,21 @@ public class PromptScene implements Scene {
                 FOREGROUND_CURVE_RADIUS);
 
         // Draw text
+        sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(0);
 
         // Title
-        Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
-        sketch.text(this.model.title, centerX, TITLE_Y);
+        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
+        sketch.text(this.model.title, centerX, TITLE_Y, sketch.width / 1.5f, sketch.height / 5f);
 
         // Prompt
-        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE);
-        sketch.text(this.model.prompt, centerX, PROMPT_Y);
+        Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
+        sketch.text(this.model.prompt, centerX, PROMPT_Y, sketch.width / 1.5f, sketch.height / 5f);
 
         // Action
-        Graphics.useSansSerifBold(sketch, ACTION_FONT_SIZE);
-        sketch.text(this.model.actionPhrase, centerX, ACTION_Y);
+        Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
+        sketch.text(this.model.actionPhrase, centerX, ACTION_Y, sketch.width / 1.5f, sketch.height / 6f);
 
         // Draw buttons
         for (ButtonControl button : this.buttons) {
