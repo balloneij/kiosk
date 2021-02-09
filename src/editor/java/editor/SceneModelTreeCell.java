@@ -1,13 +1,17 @@
 package editor;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
+import kiosk.SceneGraph;
 import kiosk.models.SceneModel;
 
 public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private TextField textField;
     private Controller controller;
+    private static Alert alert = new Alert(Alert.AlertType.ERROR);
+    public static SceneGraph sceneGraph;
 
     public SceneModelTreeCell(Controller controller) {
         this.controller = controller;
@@ -42,18 +46,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
             setText(null);
             setGraphic(null);
         } else {
-            if (isEditing()) {
-                if (textField != null) {
-                    textField.setText(getName());
-                    item.setName(getText());
-                }
-                setText(null);
-                setGraphic(textField);
-            } else {
-                setText(getName());
-                setGraphic(getTreeItem().getGraphic());
-                item.setName(getText());
-            }
+            setText(getName());
+            setGraphic(getTreeItem().getGraphic());
         }
     }
 
@@ -61,7 +55,17 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         textField = new TextField(getName());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                getItem().setName(textField.getText());
+                if (sceneGraph.getSceneModelByName(textField.getText()) == null) {
+                    getItem().setName(textField.getText());
+                } else {
+                    alert.setContentText(String.format("There is already a scene with the name %s."
+                            + "\r\n Please try a different name.", textField.getText()));
+                    if (!alert.isShowing()) {
+                        alert.showAndWait();
+                    }
+                    textField.setText(getItem().getName());
+                    textField.positionCaret(getItem().getName().length());
+                }
                 controller.rebuildToolbar(getItem());
                 controller.rebuildSceneGraphTreeView();
                 commitEdit(getItem());
