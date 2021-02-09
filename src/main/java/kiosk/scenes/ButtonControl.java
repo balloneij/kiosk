@@ -38,6 +38,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private boolean wasClicked;
     private boolean isClickable;
     private float centerSquareSize = 0;
+    private boolean disabled = false;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -54,6 +55,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.radius = DEFAULT_RADIUS;
         this.image = null;
         this.isClickable = true;
+        this.centerSquareSize = (float) Math.sqrt(Math.pow(Math.min(w, h) * 2, 2) / 2);
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -239,7 +241,7 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        if (this.isClickable) {
+        if (this.isClickable && !this.disabled) {
             //Draw the darker button behind the button to add 3D effects
             sketch.fill(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
@@ -250,6 +252,8 @@ public class ButtonControl implements Control<MouseEvent> {
         }
 
         // Set the color and draw the shape
+        sketch.rectMode(PConstants.CENTER);
+
         if (this.isPressed && this.isClickable) {
             int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
             int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
@@ -257,30 +261,34 @@ public class ButtonControl implements Control<MouseEvent> {
 
             sketch.fill(r, g, b);
             sketch.stroke(59, 58, 57, 63f);
-            sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f, this.rect.width, this.rect.height);
+            sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f,
+                    this.rect.width, this.rect.height);
 
             // Draw the text, including the text outline
             sketch.fill(59, 58, 57);
             sketch.stroke(59, 58, 57);
-            for (int x = -1; x < 2; x++) {
+
+            if (!this.model.text.isBlank()) {
+                for (int x = -1; x < 2; x++) {
+                    sketch.text(this.model.text,
+                            (float) this.rect.getCenterX() + x,
+                            (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                            centerSquareSize,
+                            centerSquareSize);
+                    sketch.text(this.model.text,
+                            (float) this.rect.getCenterX(),
+                            (float) this.rect.getCenterY() + x + this.rect.height / 10.f,
+                            centerSquareSize,
+                            centerSquareSize);
+                }
+                sketch.fill(255 + COLOR_DELTA_ON_CLICK);
+                sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
-                        (float) this.rect.width,
-                        (float) this.rect.height);
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x + this.rect.height / 10.f,
-                        (float) this.rect.width,
-                        (float) this.rect.height);
+                        (float) this.rect.getCenterX(),
+                        (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                        centerSquareSize,
+                        centerSquareSize);
             }
-            sketch.fill(255 + COLOR_DELTA_ON_CLICK);
-            sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
-            sketch.text(this.model.text,
-                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                    (float) this.rect.getCenterY() - (this.rect.height / 2.f) + this.rect.height / 10.f,
-                    (float) this.rect.width,
-                    (float) this.rect.height);
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
@@ -291,33 +299,28 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(255);
             Graphics.useSansSerifBold(sketch, FONT_SIZE);
             if (!this.model.text.isBlank()) {
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY(),
-                        centerSquareSize,
-                        centerSquareSize);
                 // Draw text, including the text outline
                 sketch.fill(59, 58, 57);
                 sketch.stroke(59, 58, 57);
                 for (int x = -1; x < 2; x++) {
                     sketch.text(this.model.text,
-                            (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
-                            (float) this.rect.getCenterY() - (this.rect.height / 2.f),
-                            (float) this.rect.width,
-                            (float) this.rect.height);
+                            (float) this.rect.getCenterX() + x,
+                            (float) this.rect.getCenterY(),
+                            centerSquareSize,
+                            centerSquareSize);
                     sketch.text(this.model.text,
-                            (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                            (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x,
-                            (float) this.rect.width,
-                            (float) this.rect.height);
+                            (float) this.rect.getCenterX(),
+                            (float) this.rect.getCenterY() + x,
+                            centerSquareSize,
+                            centerSquareSize);
                 }
                 sketch.fill(255);
                 sketch.stroke(255);
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f),
-                        (float) this.rect.width,
-                        (float) this.rect.height);
+                        (float) this.rect.getCenterX(),
+                        (float) this.rect.getCenterY(),
+                        centerSquareSize,
+                        centerSquareSize);
             }
         }
     }
@@ -430,5 +433,9 @@ public class ButtonControl implements Control<MouseEvent> {
         return new ButtonControl(backButtonModel,
                 BUTTON_PADDING, SCREEN_H - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
                 BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 }

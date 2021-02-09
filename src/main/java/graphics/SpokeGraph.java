@@ -117,4 +117,16 @@ public class SpokeGraph {
     public ButtonControl[] getButtonControls() {
         return buttonControls;
     }
+
+    public void setDisabled(boolean disabled) {
+        if (disabled) {
+            for (var button : buttonControls) {
+                button.setDisabled(true);
+            }
+        } else {
+            for (var button : buttonControls) {
+                button.setDisabled(false);
+            }
+        }
+    }
 }

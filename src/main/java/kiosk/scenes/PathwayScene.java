@@ -1,12 +1,10 @@
 package kiosk.scenes;
 
 import graphics.Graphics;
-import graphics.SpokeGraph;
 import graphics.GraphicsUtil;
-import graphics.SpokeUtil;
+import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.Settings;
 import kiosk.models.PathwaySceneModel;
 import processing.core.PConstants;
 

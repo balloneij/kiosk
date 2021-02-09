@@ -1,10 +1,8 @@
 package kiosk.scenes;
 
-import graphics.Color;
 import graphics.Graphics;
 import graphics.SpokeGraph;
 import graphics.GraphicsUtil;
-import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
@@ -115,6 +113,7 @@ public class SpokeGraphPromptScene implements Scene {
                 answerDiameter, answerDiameter,
                 answerRadius
         );
+        promptButton.setDisabled(true);
 
         final int width = Settings.readSettings().screenW;
         final int height = Settings.readSettings().screenH;
@@ -126,6 +125,7 @@ public class SpokeGraphPromptScene implements Scene {
         this.spokeGraph = new SpokeGraph(size,
                 0, HEADER_Y + HEADER_H,
                 this.model.careerCenterText, this.model.careers);
+        spokeGraph.setDisabled(true);
 
         this.backButton = ButtonControl.createBackButton();
         this.homeButton = ButtonControl.createHomeButton();
@@ -142,7 +142,6 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.hookControl(this.homeButton);
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
         sketch.hookControl(this.backButton);
-
     }
 
     @Override
@@ -179,13 +178,13 @@ public class SpokeGraphPromptScene implements Scene {
         Graphics.drawRoundedRectangle(sketch,
                 HEADER_X, HEADER_Y, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
 
-        sketch.fill(0);
-        sketch.stroke(0);
         Graphics.useSansSerifBold(sketch, 48);
 
         // Draw the title text
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+        sketch.fill(0);
+        sketch.stroke(0);
         Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
         sketch.text(this.model.headerTitle,
                 HEADER_CENTER_X, HEADER_TITLE_Y,
@@ -220,12 +219,5 @@ public class SpokeGraphPromptScene implements Scene {
         // Draw the back and home buttons
         this.backButton.draw(sketch);
         this.homeButton.draw(sketch);
-        Graphics.useGothic(sketch, HEADER_TITLE_FONT_SIZE, true);
-        sketch.rectMode(PConstants.CENTER);
-        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
-
-        Graphics.useGothic(sketch, HEADER_BODY_FONT_SIZE, false);
-        sketch.rectMode(PConstants.CENTER);
-        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
 }
