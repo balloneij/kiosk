@@ -1,5 +1,6 @@
 package kiosk.scenes;
 
+import graphics.Color;
 import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -13,11 +14,18 @@ import processing.event.MouseEvent;
 
 public class ButtonControl implements Control<MouseEvent> {
 
-    private static final int FONT_SIZE = 20;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+
+    private static final int FONT_SIZE = 16;
     // Radius of the rounded edge on rectangle buttons
     private static final int DEFAULT_RADIUS = 20;
     // Negative will make the color darker on click
     private static final int COLOR_DELTA_ON_CLICK = -25;
+
+    // Constants for home and back button
+    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+    private static final int BUTTON_PADDING = 20;
 
     private final ButtonModel model;
     private final Rectangle rect;
@@ -27,6 +35,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private boolean isPressed;
     private boolean wasClicked;
     private boolean isClickable;
+    private float centerSquareSize = 0;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -63,6 +72,14 @@ public class ButtonControl implements Control<MouseEvent> {
         this.radius = radius;
         this.image = null;
         this.isClickable = true;
+
+        // The text has to fit inside the largest square possible inside the circle
+        // so we're using the Pythagorean theorem to get the sides of the square, and
+        // the diameter is the hypotenuse.
+        // Additionally, we're using the diameter of the minimumButtonRadius in
+        // order to keep all the font sizes consistent
+        // Images must fit inside this circle too
+        this.centerSquareSize = (float) Math.sqrt(Math.pow(radius * 2, 2) / 2);
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -121,17 +138,24 @@ public class ButtonControl implements Control<MouseEvent> {
                 this.rect.width, this.rect.height, radius);
 
         // Draw text
+        sketch.rectMode(PConstants.CENTER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(255);
         sketch.stroke(255);
         Graphics.useSansSerifBold(sketch, FONT_SIZE);
-        sketch.text(this.model.text,
-                (float) this.rect.getCenterX(),
-                (float) this.rect.getCenterY());
+        if (!this.model.text.isBlank()) {
+            sketch.text(this.model.text,
+                    (float) this.rect.getCenterX(),
+                    (float) this.rect.getCenterY(),
+                    this.rect.width,
+                    this.rect.height);
+        }
     }
 
     private void drawCircle(Kiosk sketch) {
         // Draw modifiers
         sketch.ellipseMode(PConstants.CORNER);
+        sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
         // Set the color and draw the shape
@@ -152,11 +176,14 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.fill(255);
         sketch.stroke(255);
         Graphics.useSansSerifBold(sketch, FONT_SIZE);
-        sketch.text(this.model.text,
-                (float) this.rect.getCenterX(),
-                (float) this.rect.getCenterY());
+        if (!this.model.text.isBlank()) {
+            sketch.text(this.model.text,
+                    (float) this.rect.getCenterX(),
+                    (float) this.rect.getCenterY(),
+                    centerSquareSize,
+                    centerSquareSize);
+        }
     }
-
 
     public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
         return this.eventListeners;
@@ -230,7 +257,41 @@ public class ButtonControl implements Control<MouseEvent> {
         this.rect.height = height;
     }
 
+    public float getCenterX() {
+        return (float) this.rect.getCenterX();
+    }
+
+    public float getCenterY() {
+        return (float) this.rect.getCenterY();
+    }
+
     private static int clampColor(int c) {
         return Math.max(Math.min(c, 255), 0);
+    }
+
+    /**
+     * Create ButtonControl representing the home button.
+     * @return ButtonControl in the position of the model
+     */
+    public static ButtonControl createHomeButton() {
+        var homeButtonModel = new ButtonModel();
+        homeButtonModel.text = "Home";
+        homeButtonModel.rgb = Color.DW_BLACK_RGB;
+        return new ButtonControl(homeButtonModel,
+                BUTTON_PADDING, BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+    }
+
+    /**
+     * Create ButtonControl representing the back button.
+     * @return ButtonControl in the position of the model
+     */
+    public static ButtonControl createBackButton() {
+        var backButtonModel = new ButtonModel();
+        backButtonModel.text = "Back";
+        backButtonModel.rgb = Color.DW_BLACK_RGB;
+        return new ButtonControl(backButtonModel,
+                BUTTON_PADDING, SCREEN_H - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
+                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
     }
 }

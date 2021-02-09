@@ -1,7 +1,7 @@
 package kiosk.scenes;
 
 import graphics.Graphics;
-import graphics.SpokeUtil;
+import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
@@ -31,39 +31,53 @@ public class PathwayScene implements Scene {
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final PathwaySceneModel model;
-    private ButtonControl[] careerOptions;
+    private final SpokeGraph spokeGraph;
+    private final ButtonControl backButton;
+    private final ButtonControl homeButton;
 
-    float size;
-    float centerX;
-    float centerY;
-
+    /**
+     * Create a pathway scene.
+     * @param model to base the scene off of
+     */
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        this.careerOptions = new ButtonControl[this.model.careers.length];
+        for (var careerModel : model.careers) {
+            careerModel.isCircle = true;
+        }
+
+        // Create the spoke graph
+        var size = SCREEN_H - HEADER_Y - HEADER_H;
+        this.spokeGraph = new SpokeGraph(size,
+                SCREEN_W / 2f - size / 2,
+                HEADER_Y + HEADER_H,
+                this.model.centerText,
+                this.model.careers);
+
+        this.backButton = ButtonControl.createBackButton();
+        this.homeButton = ButtonControl.createHomeButton();
     }
 
     @Override
     public void init(Kiosk sketch) {
-        centerX = sketch.width / 2.f;
-        centerY = (sketch.height  * .57f);
-        size = sketch.height * .75f;
-        this.careerOptions = new ButtonControl[this.model.careers.length];
-        for (int i = 0; i < careerOptions.length; i++) {
-            this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);
-            this.model.careers[i].isCircle = true;
-        }
-
-        for (ButtonControl careerOption : this.careerOptions) {
+        for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
+        sketch.hookControl(this.backButton);
+        sketch.hookControl(this.homeButton);
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.careerOptions) {
+        for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
+        }
+
+        if (this.homeButton.wasClicked()) {
+            sceneGraph.reset();
+        } else if (this.backButton.wasClicked()) {
+            sceneGraph.popScene();
         }
     }
 
@@ -72,7 +86,10 @@ public class PathwayScene implements Scene {
         Graphics.useSansSerifBold(sketch, 48);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText, careerOptions);
+        this.spokeGraph.draw(sketch);
+
+        this.backButton.draw(sketch);
+        this.homeButton.draw(sketch);
     }
 
     private void drawHeader(Kiosk sketch) {
