@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Color;
 import graphics.Graphics;
+import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
@@ -27,7 +28,7 @@ public class DetailsScene implements Scene {
     private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
     private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
     private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-    private static final int FOREGROUND_CURVE_RADIUS = 50;
+    private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
     private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
@@ -53,20 +54,9 @@ public class DetailsScene implements Scene {
         final int sketchHeight = Kiosk.getSettings().screenH;
         final int sketchWidth = Kiosk.getSettings().screenW;
 
-        var homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "Home";
-        homeButtonModel.rgb = Color.DW_BLACK_RGB;
-        homeButton = new ButtonControl(homeButtonModel,
-                BUTTON_PADDING, BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+        this.homeButton = GraphicsUtil.initializeHomeButton();
         sketch.hookControl(this.homeButton);
-
-        var backButtonModel = new ButtonModel();
-        backButtonModel.text = "Back";
-        backButtonModel.rgb = Color.DW_BLACK_RGB;
-        this.backButton = new ButtonControl(backButtonModel,
-                BUTTON_PADDING, sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
-                BUTTON_WIDTH * 3 / 4, BUTTON_HEIGHT * 3 / 4);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
         sketch.hookControl(this.backButton);
 
         if (this.model.button.image != null) {
@@ -85,18 +75,7 @@ public class DetailsScene implements Scene {
         this.centerButton.init(sketch);
         sketch.hookControl(this.centerButton);
 
-        var nextButtonModel = new ButtonModel();
-        nextButtonModel.rgb = Color.DW_GREEN_RGB;
-        nextButtonModel.text = "Go!";
-
-        this.nextButton = new ButtonControl(
-            nextButtonModel,
-            sketchWidth - BUTTON_PADDING - BUTTON_WIDTH * 3 / 4,
-            sketchHeight - (BUTTON_HEIGHT * 3 / 4) - BUTTON_PADDING,
-            BUTTON_WIDTH * 3 / 4,
-            BUTTON_HEIGHT * 3 / 4
-        );
-        this.nextButton.init(sketch);
+        this.nextButton = GraphicsUtil.initializeNextButton(sketch);
         sketch.hookControl(this.nextButton);
     }
 
@@ -131,16 +110,18 @@ public class DetailsScene implements Scene {
 
 
         // Title
-        Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
+        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(33);
-        sketch.text(this.model.title, centerX, TITLE_Y);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.title, centerX, (int) (TITLE_Y * 1.15), (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
 
         // Body
-        Graphics.useSansSerif(sketch, BODY_FONT_SIZE);
+        Graphics.useGothic(sketch, BODY_FONT_SIZE, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(25);
-        sketch.text(this.model.body, centerX, BODY_Y);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.body, centerX, (int) (BODY_Y * 1.15), (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
 
         this.centerButton.draw(sketch);
         this.homeButton.draw(sketch);

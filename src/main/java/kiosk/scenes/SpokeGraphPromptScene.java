@@ -1,7 +1,10 @@
 package kiosk.scenes;
 
+import graphics.Color;
 import graphics.Graphics;
 import graphics.SpokeGraph;
+import graphics.GraphicsUtil;
+import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
@@ -13,8 +16,8 @@ import processing.core.PConstants;
 public class SpokeGraphPromptScene implements Scene {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Settings.readSettings().screenW;
-    private static final int SCREEN_H = Settings.readSettings().screenH;
+    private static final int SCREEN_W = Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
 
     // Header
     private static final float HEADER_W = SCREEN_W * 3f / 4;
@@ -41,8 +44,8 @@ public class SpokeGraphPromptScene implements Scene {
     private final ButtonControl[] answerButtons;
     private final ButtonControl promptButton;
     private final SpokeGraph spokeGraph;
-    private final ButtonControl backButton;
-    private final ButtonControl homeButton;
+    private ButtonControl backButton;
+    private ButtonControl homeButton;
 
     /**
      * Creates a Spoke Graph Prompt Scene
@@ -134,8 +137,12 @@ public class SpokeGraphPromptScene implements Scene {
         for (var button : this.answerButtons) {
             sketch.hookControl(button);
         }
-        sketch.hookControl(this.backButton);
+
+        this.homeButton = GraphicsUtil.initializeHomeButton();
         sketch.hookControl(this.homeButton);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        sketch.hookControl(this.backButton);
+
     }
 
     @Override
@@ -144,6 +151,11 @@ public class SpokeGraphPromptScene implements Scene {
         for (var button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
+            }
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
             }
         }
 
@@ -156,7 +168,10 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
+        Graphics.useGothic(sketch, 48, true);
         Graphics.drawBubbleBackground(sketch);
+        this.homeButton.draw(sketch);
+        this.backButton.draw(sketch);
 
         // Draw the white header box
         sketch.fill(255);
@@ -205,5 +220,12 @@ public class SpokeGraphPromptScene implements Scene {
         // Draw the back and home buttons
         this.backButton.draw(sketch);
         this.homeButton.draw(sketch);
+        Graphics.useGothic(sketch, HEADER_TITLE_FONT_SIZE, true);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
+
+        Graphics.useGothic(sketch, HEADER_BODY_FONT_SIZE, false);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
 }

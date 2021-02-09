@@ -2,16 +2,19 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.SpokeGraph;
+import graphics.GraphicsUtil;
+import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
 import kiosk.models.PathwaySceneModel;
+import processing.core.PConstants;
 
 public class PathwayScene implements Scene {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Settings.readSettings().screenW;
-    private static final int SCREEN_H = Settings.readSettings().screenH;
+    private static final int SCREEN_W = Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
 
     // Header
     private static final float HEADER_W = SCREEN_W * 3f / 4;
@@ -32,8 +35,8 @@ public class PathwayScene implements Scene {
 
     private final PathwaySceneModel model;
     private final SpokeGraph spokeGraph;
-    private final ButtonControl backButton;
-    private final ButtonControl homeButton;
+    private ButtonControl backButton;
+    private ButtonControl homeButton;
 
     /**
      * Create a pathway scene.
@@ -59,6 +62,11 @@ public class PathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
+        this.homeButton = GraphicsUtil.initializeHomeButton();
+        sketch.hookControl(this.homeButton);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        sketch.hookControl(this.backButton);
+
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
@@ -83,7 +91,10 @@ public class PathwayScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.useSansSerifBold(sketch, 48);
+        Graphics.useGothic(sketch, 48, true);
+        // Text Properties
+        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+        sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
         this.spokeGraph.draw(sketch);
@@ -104,10 +115,12 @@ public class PathwayScene implements Scene {
         sketch.fill(0);
         sketch.stroke(0);
 
-        Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
-        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y);
+        Graphics.useGothic(sketch, HEADER_TITLE_FONT_SIZE, true);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y, (int) (HEADER_W * 0.95), HEADER_H / 2);
 
-        Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
-        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y);
+        Graphics.useGothic(sketch, HEADER_BODY_FONT_SIZE, false);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerBody, HEADER_CENTER_X, (int)(HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
 }

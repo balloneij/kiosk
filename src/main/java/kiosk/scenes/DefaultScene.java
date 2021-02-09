@@ -32,9 +32,10 @@ public class DefaultScene implements Scene {
         sketch.background(99, 144, 197);
         sketch.fill(255);
 
-        Graphics.useSansSerif(sketch, 16);
+        Graphics.useGothic(sketch, 16, false);
         sketch.textSize(16);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        sketch.text(this.model.message, sketch.width / 2f, sketch.height / 2f);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.message, sketch.width / 2f, sketch.height / 2f, sketch.width, sketch.height);
     }
 }
