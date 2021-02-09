@@ -243,8 +243,6 @@ public class Controller implements Initializable {
         }
 
         this.sceneGraphTreeView.setRoot(hiddenRoot);
-        // todo this is correct though
-        System.out.println(hiddenRoot.getChildren().size());
     }
 
     private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,
