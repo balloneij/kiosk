@@ -1,6 +1,5 @@
 package kiosk;
 
-import editor.SceneModelException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
