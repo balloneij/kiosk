@@ -51,7 +51,7 @@ public class GraphicsUtil {
      */
     public static ButtonControl initializeNextButton(Kiosk sketch) {
         var nextButtonModel = new ButtonModel();
-        nextButtonModel.text = `Go! 🡺`;
+        nextButtonModel.text = "Go! \uD83E\uDC7A";
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
         ButtonControl nextButton = new ButtonControl(nextButtonModel,
                 sketch.width - COMMON_BUTTON_PADDING - COMMON_BUTTON_WIDTH * 3 / 4,
