@@ -128,8 +128,10 @@ public class SpokeGraphPromptScene implements Scene {
                 this.model.careerCenterText, this.model.careers);
         spokeGraph.setDisabled(true);
 
-        this.backButton = ButtonControl.createBackButton();
-        this.homeButton = ButtonControl.createHomeButton();
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.backButton = ButtonControl.createBackButton();
+            this.homeButton = ButtonControl.createHomeButton();
+        }
     }
 
     @Override
@@ -139,10 +141,12 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.hookControl(button);
         }
 
-        this.homeButton = GraphicsUtil.initializeHomeButton();
-        sketch.hookControl(this.homeButton);
-        this.backButton = GraphicsUtil.initializeBackButton(sketch);
-        sketch.hookControl(this.backButton);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            sketch.hookControl(this.homeButton);
+            this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            sketch.hookControl(this.backButton);
+        }
     }
 
     @Override
@@ -152,17 +156,14 @@ public class SpokeGraphPromptScene implements Scene {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
+        }
+
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
                 sceneGraph.popScene();
             }
-        }
-
-        if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
-        } else if (this.backButton.wasClicked()) {
-            sceneGraph.popScene();
         }
     }
 
@@ -170,8 +171,6 @@ public class SpokeGraphPromptScene implements Scene {
     public void draw(Kiosk sketch) {
         Graphics.useGothic(sketch, 48, true);
         Graphics.drawBubbleBackground(sketch);
-        this.homeButton.draw(sketch);
-        this.backButton.draw(sketch);
 
         // Draw the white header box
         sketch.fill(255);
@@ -217,8 +216,10 @@ public class SpokeGraphPromptScene implements Scene {
         // Draw the career spoke graph
         this.spokeGraph.draw(sketch);
 
-        // Draw the back and home buttons
-        this.backButton.draw(sketch);
-        this.homeButton.draw(sketch);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            // Draw the back and home buttons
+            this.backButton.draw(sketch);
+            this.homeButton.draw(sketch);
+        }
     }
 }

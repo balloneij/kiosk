@@ -52,10 +52,12 @@ public class DetailsScene implements Scene {
         final int sketchHeight = Kiosk.getSettings().screenH;
         final int sketchWidth = Kiosk.getSettings().screenW;
 
-        this.homeButton = GraphicsUtil.initializeHomeButton();
-        sketch.hookControl(this.homeButton);
-        this.backButton = GraphicsUtil.initializeBackButton(sketch);
-        sketch.hookControl(this.backButton);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            sketch.hookControl(this.homeButton);
+            this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            sketch.hookControl(this.backButton);
+        }
 
         if (this.model.button.image != null) {
             this.model.button.image.width = BUTTON_IMAGE_WIDTH;
@@ -79,11 +81,14 @@ public class DetailsScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
-        } else if (this.backButton.wasClicked()) {
-            sceneGraph.popScene();
-        } else if (this.centerButton.wasClicked()) {
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
+        }
+        if (this.centerButton.wasClicked()) {
             sceneGraph.pushScene(this.centerButton.getTarget());
         } else if (this.nextButton.wasClicked()) {
             sceneGraph.pushScene(this.centerButton.getTarget());
@@ -123,9 +128,12 @@ public class DetailsScene implements Scene {
         sketch.text(this.model.body, centerX, (int) (BODY_Y * 1.15),
                 (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
 
+
         this.centerButton.draw(sketch);
-        this.homeButton.draw(sketch);
-        this.backButton.draw(sketch);
         this.nextButton.draw(sketch);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton.draw(sketch);
+            this.backButton.draw(sketch);
+        }
     }
 }

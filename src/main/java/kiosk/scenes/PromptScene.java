@@ -83,10 +83,12 @@ public class PromptScene implements Scene {
             x += BUTTON_WIDTH + BUTTON_PADDING;
         }
 
-        this.homeButton = GraphicsUtil.initializeHomeButton();
-        sketch.hookControl(this.homeButton);
-        this.backButton = GraphicsUtil.initializeBackButton(sketch);
-        sketch.hookControl(this.backButton);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            sketch.hookControl(this.homeButton);
+            this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            sketch.hookControl(this.backButton);
+        }
     }
 
     @Override
@@ -97,10 +99,12 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
-        } else if (this.backButton.wasClicked()) {
-            sceneGraph.popScene();
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
         }
     }
 
@@ -143,7 +147,9 @@ public class PromptScene implements Scene {
             button.draw(sketch);
         }
 
-        homeButton.draw(sketch);
-        backButton.draw(sketch);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            homeButton.draw(sketch);
+            backButton.draw(sketch);
+        }
     }
 }

@@ -54,22 +54,24 @@ public class PathwayScene implements Scene {
                 this.model.centerText,
                 this.model.careers);
 
-        this.backButton = ButtonControl.createBackButton();
-        this.homeButton = ButtonControl.createHomeButton();
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.backButton = ButtonControl.createBackButton();
+            this.homeButton = ButtonControl.createHomeButton();
+        }
     }
 
     @Override
     public void init(Kiosk sketch) {
-        this.homeButton = GraphicsUtil.initializeHomeButton();
-        sketch.hookControl(this.homeButton);
-        this.backButton = GraphicsUtil.initializeBackButton(sketch);
-        sketch.hookControl(this.backButton);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            sketch.hookControl(this.homeButton);
+            this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            sketch.hookControl(this.backButton);
+        }
 
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
-        sketch.hookControl(this.backButton);
-        sketch.hookControl(this.homeButton);
     }
 
     @Override
@@ -80,10 +82,12 @@ public class PathwayScene implements Scene {
             }
         }
 
-        if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
-        } else if (this.backButton.wasClicked()) {
-            sceneGraph.popScene();
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
         }
     }
 
@@ -97,8 +101,10 @@ public class PathwayScene implements Scene {
         drawHeader(sketch);
         this.spokeGraph.draw(sketch);
 
-        this.backButton.draw(sketch);
-        this.homeButton.draw(sketch);
+        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+            this.backButton.draw(sketch);
+            this.homeButton.draw(sketch);
+        }
     }
 
     private void drawHeader(Kiosk sketch) {

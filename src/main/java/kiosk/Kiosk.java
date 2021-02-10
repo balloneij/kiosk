@@ -28,7 +28,7 @@ import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
-    protected SceneGraph sceneGraph;
+    protected static SceneGraph sceneGraph;
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
@@ -363,6 +363,10 @@ public class Kiosk extends PApplet {
 
     public static Settings getSettings() {
         return settings;
+    }
+
+    public static SceneGraph getSceneGraph() {
+        return sceneGraph;
     }
 
     public void run() {
