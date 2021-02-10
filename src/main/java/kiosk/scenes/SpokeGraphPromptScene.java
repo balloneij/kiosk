@@ -130,10 +130,16 @@ public class SpokeGraphPromptScene implements Scene {
         final double availableHeight = (height - HEADER_Y - HEADER_H);
         final double size = Math.min(width, availableHeight);
 
-        // TODO make career buttons from LoadedSurveyModel
+        ButtonModel[] careerButtons = new ButtonModel[LoadedSurveyModel.careers.length];
+        for (int i = 0; i < LoadedSurveyModel.careers.length; i++) {
+            CareerModel career = LoadedSurveyModel.careers[i];
+            careerButtons[i] = new ButtonModel();
+            careerButtons[i].text = career.name;
+        }
+
         this.spokeGraph = new SpokeGraph(size,
                 0, HEADER_Y + HEADER_H,
-                this.model.careerCenterText, this.model.careers);
+                this.model.careerCenterText, careerButtons);
         spokeGraph.setDisabled(true);
 
         this.backButton = ButtonControl.createBackButton();

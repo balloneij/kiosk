@@ -260,70 +260,21 @@ public class LoadedSurveyModel implements Serializable {
         spoke.id = "spoke";
         spoke.headerTitle = "Answer some questions";
         spoke.headerBody = "Click the answer the best applies to you";
+        spoke.promptText = "What's your favorite subject?";
 
         var answer1 = new ButtonModel();
-        answer1.text = "I like math";
-        answer1.target = "career models 1";
+        answer1.text = "Math!";
+        answer1.category = Riasec.Realistic;
+        answer1.target = "career pathway";
         var answer2 = new ButtonModel();
-        answer2.text = "I like math";
-        answer2.target = "career models 1";
+        answer2.text = "Art!";
+        answer2.category = Riasec.Artistic;
+        answer2.target = "career pathway";
         var answer3 = new ButtonModel();
-        answer3.text = "I like math";
-        answer3.target = "career models 1";
+        answer3.text = "Business!";
+        answer3.category = Riasec.Enterprising;
+        answer3.target = "career pathway";
         spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
-
-        spoke.careers = new ButtonModel[8];
-        for (int i = 0; i < spoke.careers.length; i++) {
-            var buttonModel = new ButtonModel();
-            buttonModel.text = "Career " + i;
-            spoke.careers[i] = buttonModel;
-        }
-
-        // Create a scene to demonstrate the career models
-        SpokeGraphPromptSceneModel careerModelDemo = new SpokeGraphPromptSceneModel();
-        careerModelDemo.id = "career models 1";
-
-        ButtonModel realisticButton = new ButtonModel();
-        realisticButton.text = "Realistic";
-        realisticButton.target = "career models 2";
-        realisticButton.category = Riasec.Realistic;
-        ButtonModel investigativeButton = new ButtonModel();
-        investigativeButton.text = "Investigative";
-        investigativeButton.target = "career models 2";
-        investigativeButton.category = Riasec.Investigative;
-        ButtonModel artisticButton = new ButtonModel();
-        artisticButton.text = "Artistic";
-        artisticButton.target = "career models 2";
-        artisticButton.category = Riasec.Artistic;
-
-        careerModelDemo.answers = new ButtonModel[]{
-            realisticButton,
-            investigativeButton,
-            artisticButton
-        };
-
-        // Create another scene to demonstrate the career models
-        SpokeGraphPromptSceneModel careerModelDemo2 = new SpokeGraphPromptSceneModel();
-        careerModelDemo2.id = "career models 2";
-
-        ButtonModel socialButton = new ButtonModel();
-        socialButton.text = "Social";
-        socialButton.target = "career pathway";
-        socialButton.category = Riasec.Social;
-        ButtonModel enterprisingButton = new ButtonModel();
-        enterprisingButton.text = "Enterprising";
-        enterprisingButton.target = "career pathway";
-        enterprisingButton.category = Riasec.Enterprising;
-        ButtonModel conventionalButton = new ButtonModel();
-        conventionalButton.text = "Conventional";
-        conventionalButton.target = "career pathway";
-        conventionalButton.category = Riasec.Conventional;
-
-        careerModelDemo2.answers = new ButtonModel[]{
-            socialButton,
-            enterprisingButton,
-            conventionalButton
-        };
 
         // Create a career pathways scene
         CareerPathwaySceneModel careerPathway = new CareerPathwaySceneModel();
@@ -336,8 +287,6 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(pathPrompt);
         initialScenes.add(pathway);
         initialScenes.add(spoke);
-        initialScenes.add(careerModelDemo);
-        initialScenes.add(careerModelDemo2);
         initialScenes.add(careerPathway);
 
         return new LoadedSurveyModel(titleScreen.id, initialScenes);
