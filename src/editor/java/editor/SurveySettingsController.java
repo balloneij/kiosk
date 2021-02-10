@@ -2,8 +2,6 @@ package editor;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Set;
-
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

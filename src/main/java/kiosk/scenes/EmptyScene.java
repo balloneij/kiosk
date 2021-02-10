@@ -1,5 +1,6 @@
 package kiosk.scenes;
 
+import graphics.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.EmptySceneModel;
@@ -28,12 +29,15 @@ public class EmptyScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        // TODO: Reset the font
+        Graphics.useGothic(sketch, 24);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(255);
 
         sketch.background(0);
-        sketch.text("Empty scene", this.textX, this.textY);
-        sketch.text(this.model.message, this.textX, this.textY + 32);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text("Empty scene",
+                this.textX, this.textY, sketch.width / 2f, sketch.height / 3f);
+        sketch.text(this.model.message,
+                this.textX, this.textY + 32, sketch.width / 2f, sketch.height / 3f);
     }
 }

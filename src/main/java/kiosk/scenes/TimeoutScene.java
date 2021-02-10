@@ -15,12 +15,12 @@ public class TimeoutScene implements Scene {
     private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
     private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
     private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-    private static final int FOREGROUND_CURVE_RADIUS = 50;
+    private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
     private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
     private static final int TITLE_FONT_SIZE = 24;
-    private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 8;
+    private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 6;
     private static final int PROMPT_FONT_SIZE = 16;
     private static final int ACTION_Y = Kiosk.getSettings().screenH / 2;
     private static final int ACTION_FONT_SIZE = 20;
@@ -48,22 +48,24 @@ public class TimeoutScene implements Scene {
         final int sketchHeight = Kiosk.getSettings().screenH;
 
         var homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "Take me back to the beginning";
+        homeButtonModel.text = "Take me back to the beginning!";
+        sketch.rectMode(PConstants.CENTER);
         this.homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING * 2, sketchHeight - BUTTON_PADDING * 5,
                 BUTTON_WIDTH * 3, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.homeButton);
         var backButtonModel = new ButtonModel();
         backButtonModel.text = "I'm still here!";
+        sketch.rectMode(PConstants.CENTER);
         this.backButton = new ButtonControl(backButtonModel,
-                sketchWidth - BUTTON_HEIGHT - BUTTON_PADDING - BUTTON_WIDTH * 2,
+                sketchWidth - BUTTON_PADDING * 2 - BUTTON_WIDTH * 3,
                 sketchHeight - BUTTON_PADDING * 5,
-                BUTTON_WIDTH * 2, BUTTON_HEIGHT * 3 / 4);
+                BUTTON_WIDTH * 3, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.backButton);
 
         this.model.title = "Are You Still There?";
-        this.model.prompt = "\n\n\n If you no longer wish to complete the survey, click "
-                + "\n \"Take me back to the beginning!\" "
+        this.model.prompt = "\n\n\n If you still want to complete the survey, click "
+                + "\n \"I'm still here!\" "
                 + "\n Careful, if you don't choose an option, "
                 + "\n the survey will automatically reset "
                 + "\n after a little while!";
@@ -97,12 +99,16 @@ public class TimeoutScene implements Scene {
         sketch.fill(0);
 
         // Title
-        Graphics.useSansSerifBold(sketch, TITLE_FONT_SIZE);
-        sketch.text(this.model.title, centerX, TITLE_Y);
+        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.title, centerX, TITLE_Y,
+                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
 
         // Prompt
-        Graphics.useSansSerif(sketch, PROMPT_FONT_SIZE);
-        sketch.text(this.model.prompt, centerX, PROMPT_Y);
+        Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(this.model.prompt, centerX, PROMPT_Y,
+                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
 
         homeButton.draw(sketch);
         backButton.draw(sketch);

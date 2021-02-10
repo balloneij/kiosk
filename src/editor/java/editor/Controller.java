@@ -151,6 +151,8 @@ public class Controller implements Initializable {
         newSceneMenuItem.setOnAction(t -> {
             createNewScene();
         });
+
+        SceneModelTreeCell.sceneGraph = sceneGraph;
     }
 
     /**

@@ -2,17 +2,13 @@ package editor;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import kiosk.SceneGraph;
 import kiosk.models.SceneModel;
 
 public class SceneModelTreeCell extends TreeCell<SceneModel> {
@@ -23,6 +19,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private final MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
     Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
             + "by any other scenes");
+    private static Alert alert = new Alert(Alert.AlertType.ERROR);
+    public static SceneGraph sceneGraph;
 
     /**
      * Creates a new TreeCell used for displaying SceneModels.
@@ -98,16 +96,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
                 setTooltip(orphanInfo);
             }
 
-            if (isEditing()) {
-                if (textField != null) {
-                    textField.setText(getName());
-                }
-                setText(null);
-                setGraphic(textField);
-            } else {
-                setText(getName());
-                setGraphic(getTreeItem().getGraphic());
-            }
+            setText(getName());
+            setGraphic(getTreeItem().getGraphic());
         }
     }
 
@@ -115,8 +105,17 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         textField = new TextField(getName());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                // todo call Seth's SceneGraph's EvaluateName()
-                getItem().setName(textField.getText());
+                if (sceneGraph.getSceneModelByName(textField.getText()) == null) {
+                    getItem().setName(textField.getText());
+                } else {
+                    alert.setContentText(String.format("There is already a scene with the name %s."
+                            + "\r\n Please try a different name.", textField.getText()));
+                    if (!alert.isShowing()) {
+                        alert.showAndWait();
+                    }
+                    textField.setText(getItem().getName());
+                    textField.positionCaret(getItem().getName().length());
+                }
                 controller.rebuildToolbar(getItem());
                 controller.rebuildSceneGraphTreeView();
                 commitEdit(getItem());
