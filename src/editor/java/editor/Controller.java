@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -29,8 +30,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.models.DetailsSceneModel;
@@ -327,10 +326,10 @@ public class Controller implements Initializable {
             sceneGraph.unregisterSceneModel(toDelete);
             rebuildSceneGraphTreeView();
         } catch (SceneModelException e) {
-            JFrame f = new JFrame();
-            f.setAlwaysOnTop(true);
-            JOptionPane.showMessageDialog(f, e.getMessage(),
-                    "Warning", JOptionPane.WARNING_MESSAGE);
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
 
