@@ -1,18 +1,21 @@
 package kiosk.scenes;
 
 import graphics.Graphics;
-import graphics.SpokeUtil;
+import graphics.GraphicsUtil;
+import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
+import kiosk.models.ButtonModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
+import processing.core.PConstants;
 
 
 public class SpokeGraphPromptScene implements Scene {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Settings.readSettings().screenW;
-    private static final int SCREEN_H = Settings.readSettings().screenH;
+    private static final int SCREEN_W = Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
 
     // Header
     private static final float HEADER_W = SCREEN_W * 3f / 4;
@@ -31,14 +34,17 @@ public class SpokeGraphPromptScene implements Scene {
     private static final int HEADER_BODY_FONT_SIZE = 16;
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
-    private final SpokeGraphPromptSceneModel model;
-    private ButtonControl[] careerOptions;
-    private ButtonControl[] answerButtons;
+    // Answers
+    private static final int ANSWERS_PADDING = 20;
+    private static final float ANSWERS_SPOKE_THICKNESS = 2;
+    private static final int ANSWERS_MAX = 4;
 
-    private float careerSize;
-    private float answerSize;
-    private float centerX;
-    private float centerY;
+    private final SpokeGraphPromptSceneModel model;
+    private final ButtonControl[] answerButtons;
+    private final ButtonControl promptButton;
+    private final SpokeGraph spokeGraph;
+    private ButtonControl backButton;
+    private ButtonControl homeButton;
 
     /**
      * Creates a Spoke Graph Prompt Scene
@@ -48,76 +54,171 @@ public class SpokeGraphPromptScene implements Scene {
      */
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
-        this.careerOptions = new ButtonControl[this.model.careers.length];
-        this.answerButtons = new ButtonControl[this.model.answers.length];
+
+        int headerBottomY = (int) (HEADER_Y + HEADER_H) + 40;
+        int answerDiameter = (SCREEN_H - headerBottomY) / 3;
+        int answerRadius = answerDiameter / 2;
+        int halfHeight = (SCREEN_H - headerBottomY) / 2;
+
+        int answersCenterX = SCREEN_W * 3 / 4;
+        int answersCenterY = headerBottomY + halfHeight - 20;
+
+        int answersCount = this.model.answers.length;
+        this.answerButtons = new ButtonControl[Math.min(answersCount, ANSWERS_MAX)];
+
+        if (answersCount > 0) {
+            this.answerButtons[0] = new ButtonControl(
+                    model.answers[0],
+                    answersCenterX - answerDiameter * 3 / 2,
+                    answersCenterY + answerRadius,
+                    answerDiameter, answerDiameter,
+                    answerRadius
+            );
+        }
+        if (answersCount > 1) {
+            this.answerButtons[1] = new ButtonControl(
+                    model.answers[1],
+                    answersCenterX + answerRadius,
+                    answersCenterY - answerDiameter * 3 / 2,
+                    answerDiameter, answerDiameter,
+                    answerRadius
+            );
+        }
+        if (answersCount > 2) {
+            this.answerButtons[2] = new ButtonControl(
+                    model.answers[2],
+                    answersCenterX + answerRadius,
+                    answersCenterY + answerRadius,
+                    answerDiameter, answerDiameter,
+                    answerRadius
+            );
+        }
+        if (answersCount > 3) {
+            this.answerButtons[3] = new ButtonControl(
+                    model.answers[3],
+                    answersCenterX - answerDiameter * 3 / 2,
+                    answersCenterY - answerDiameter * 3 / 2,
+                    answerDiameter, answerDiameter,
+                    answerRadius
+            );
+        }
+
+        var prompt = new ButtonModel();
+        prompt.isCircle = true;
+        prompt.rgb = new int[]{ 0, 0, 0 };
+        prompt.text = this.model.promptText;
+        this.promptButton = new ButtonControl(
+                prompt,
+                answersCenterX - answerRadius,
+                answersCenterY - answerRadius,
+                answerDiameter, answerDiameter,
+                answerRadius
+        );
+        promptButton.setDisabled(true);
+
+        final int width = Settings.readSettings().screenW;
+        final int height = Settings.readSettings().screenH;
+
+        // Define the size of the square that the spoke graph will fit in
+        final double availableHeight = (height - HEADER_Y - HEADER_H);
+        final double size = Math.min(width, availableHeight);
+
+        this.spokeGraph = new SpokeGraph(size,
+                0, HEADER_Y + HEADER_H,
+                this.model.careerCenterText, this.model.careers);
+        spokeGraph.setDisabled(true);
+
+        this.backButton = ButtonControl.createBackButton();
+        this.homeButton = ButtonControl.createHomeButton();
     }
 
     @Override
     public void init(Kiosk sketch) {
-        centerX = sketch.width / 2.f;
-        centerY = (sketch.height  * .57f);
-        answerSize = sketch.height * .75f;
-        careerSize = answerSize / 2;
-
-        this.careerOptions = new ButtonControl[this.model.careers.length];
-        for (int i = 0; i < careerOptions.length; i++) {
-            this.careerOptions[i] = new ButtonControl(this.model.careers[i], 0, 0, 0, 0);
-            this.model.careers[i].isCircle = true;
+        // Hook scene graph button clicks
+        for (var button : this.answerButtons) {
+            sketch.hookControl(button);
         }
 
-        //initialize weights for testing purposes
-        this.model.careerWeights = new int[this.careerOptions.length];
-        for (int i = 0; i < this.model.careerWeights.length; i++) {
-            this.model.careerWeights[i] = i + 1;
-        }
-
-        this.answerButtons = new ButtonControl[this.model.answers.length];
-        for (int i = 0; i < answerButtons.length; i++) {
-            this.answerButtons[i] = new ButtonControl(this.model.answers[i], 0, 0, 0, 0);
-            this.model.answers[i].isCircle = true;
-        }
-
-        for (ButtonControl answerButton : this.answerButtons) {
-            sketch.hookControl(answerButton);
-        }
+        this.homeButton = GraphicsUtil.initializeHomeButton();
+        sketch.hookControl(this.homeButton);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        sketch.hookControl(this.backButton);
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.answerButtons) {
+        // Check for button clicks on the scene graph
+        for (var button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget());
             }
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
+        }
+
+        if (this.homeButton.wasClicked()) {
+            sceneGraph.reset();
+        } else if (this.backButton.wasClicked()) {
+            sceneGraph.popScene();
         }
     }
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.useSansSerifBold(sketch, 48);
+        Graphics.useGothic(sketch, 48, true);
         Graphics.drawBubbleBackground(sketch);
-        drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, careerSize, centerX - careerSize, centerY - careerSize / 2,
-                1, model.careerCenterText, careerOptions, this.model.careerWeights);
-        SpokeUtil.spokeGraph(sketch, answerSize / 2, centerX + answerSize / 2,
-                centerY, 5, model.promptText, answerButtons);
-    }
+        this.homeButton.draw(sketch);
+        this.backButton.draw(sketch);
 
-    private void drawHeader(Kiosk sketch) {
         // Draw the white header box
         sketch.fill(255);
         sketch.stroke(255);
-
         Graphics.drawRoundedRectangle(sketch,
                 HEADER_X, HEADER_Y, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
 
-        // Draw the title and body
+        Graphics.useSansSerifBold(sketch, 48);
+
+        // Draw the title text
+        sketch.rectMode(PConstants.CENTER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(0);
         sketch.stroke(0);
-
         Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
-        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y);
+        sketch.text(this.model.headerTitle,
+                HEADER_CENTER_X, HEADER_TITLE_Y,
+                HEADER_W, HEADER_TITLE_FONT_SIZE * 2);
 
+        // Draw the body text
         Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
-        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y);
+        sketch.text(this.model.headerBody,
+                HEADER_CENTER_X, HEADER_BODY_Y,
+                HEADER_W, HEADER_BODY_FONT_SIZE * 2);
+
+        // Calculate answer location constants
+        var headerBottomY = HEADER_Y + HEADER_H + 2 * ANSWERS_PADDING;
+        var answersCenterX = SCREEN_W * 3 / 4;
+        var answersCenterY = headerBottomY + (SCREEN_H - headerBottomY) / 2 - ANSWERS_PADDING;
+
+        // Draw answer buttons
+        for (var answer : answerButtons) {
+            sketch.strokeWeight(ANSWERS_SPOKE_THICKNESS);
+            sketch.stroke(255);
+            sketch.line(answersCenterX, answersCenterY,
+                    answer.getCenterX(), answer.getCenterY());
+            answer.draw(sketch);
+        }
+
+        // Draw the center prompt button
+        this.promptButton.draw(sketch);
+
+        // Draw the career spoke graph
+        this.spokeGraph.draw(sketch);
+
+        // Draw the back and home buttons
+        this.backButton.draw(sketch);
+        this.homeButton.draw(sketch);
     }
 }
