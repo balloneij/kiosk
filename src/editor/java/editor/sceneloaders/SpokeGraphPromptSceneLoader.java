@@ -147,7 +147,7 @@ public class SpokeGraphPromptSceneLoader {
             var children = vbox.getChildren();
             Node nodeOut = children.get(children.size() - 2);
             if (nodeOut instanceof VBox) {
-                for(Node nodeIn:((VBox)nodeOut).getChildren()) {
+                for (Node nodeIn : ((VBox) nodeOut).getChildren()) {
                     if (nodeIn instanceof TextField) {
                         nodeIn.requestFocus();
                         ((TextField) nodeIn).selectAll();
@@ -317,7 +317,7 @@ public class SpokeGraphPromptSceneLoader {
             var children = vbox.getChildren();
             Node nodeOut = children.get(children.size() - 2);
             if (nodeOut instanceof VBox) {
-                for(Node nodeIn:((VBox)nodeOut).getChildren()) {
+                for (Node nodeIn : ((VBox) nodeOut).getChildren()) {
                     if (nodeIn instanceof TextField) {
                         nodeIn.requestFocus();
                         ((TextField) nodeIn).selectAll();

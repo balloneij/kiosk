@@ -14,14 +14,14 @@ public class GraphicsUtil {
     public static final float InnerOuterCircleRatio = 4.f;
 
     /**
-     * Create home button.
+     * Initialize the back button's ButtonControl model.
      * @param sketch to draw to
      * @return back button control
      */
     public static ButtonControl initializeBackButton(Kiosk sketch) {
         var backButtonModel = new ButtonModel();
         // Rob fix your checkstyle
-        backButtonModel.text = "\uD83E\uDC78 Back";
+        backButtonModel.text = `🡸 Back`;
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         ButtonControl backButton = new ButtonControl(backButtonModel,
                 COMMON_BUTTON_PADDING, sketch.height
@@ -31,8 +31,8 @@ public class GraphicsUtil {
     }
 
     /**
-     * Create home button.
-     * @return back button control
+     * Initialize the home button's ButtonControl model.
+     * @return home button control
      */
     public static ButtonControl initializeHomeButton() {
         var homeButtonModel = new ButtonModel();
@@ -45,13 +45,13 @@ public class GraphicsUtil {
     }
 
     /**
-     * Create next button.
+     * Initialize the next button's ButtonControl model.
      * @param sketch to create on.
-     * @return next button
+     * @return next button control
      */
     public static ButtonControl initializeNextButton(Kiosk sketch) {
         var nextButtonModel = new ButtonModel();
-        nextButtonModel.text = "Go! \uD83E\uDC7A";
+        nextButtonModel.text = `Go! 🡺`;
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
         ButtonControl nextButton = new ButtonControl(nextButtonModel,
                 sketch.width - COMMON_BUTTON_PADDING - COMMON_BUTTON_WIDTH * 3 / 4,
