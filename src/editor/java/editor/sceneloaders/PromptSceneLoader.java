@@ -23,7 +23,6 @@ import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
 import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
 
 public class PromptSceneLoader {
     // The default padding to space the editing Nodes
@@ -48,7 +47,7 @@ public class PromptSceneLoader {
 
         // Get the editing Nodes for the PromptSceneModel properties
         VBox vbox = new VBox(
-                getNameBox(controller, model, graph),
+                SceneLoader.getNameBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getPromptBox(model, graph),
                 getActionBox(model, graph),
@@ -67,20 +66,6 @@ public class PromptSceneLoader {
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
                 new FileChooser.ExtensionFilter("Any", "*.*")
         );
-    }
-
-    private static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
-        var nameField = new TextField(model.getName());
-
-        // Listener to update the title
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.setName(newValue);
-            controller.rebuildSceneGraphTreeView();
-        });
-
-        var vbox = new VBox(new Label("Name:"), nameField);
-        vbox.setPadding(PADDING);
-        return vbox;
     }
 
     // Adds a Node containing a text field for editing the title.

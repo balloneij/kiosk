@@ -1,17 +1,18 @@
 package kiosk.scenes;
 
 import graphics.Graphics;
-import graphics.SpokeUtil;
+import graphics.GraphicsUtil;
+import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.Settings;
 import kiosk.models.PathwaySceneModel;
+import processing.core.PConstants;
 
 public class PathwayScene implements Scene {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Settings.readSettings().screenW;
-    private static final int SCREEN_H = Settings.readSettings().screenH;
+    private static final int SCREEN_W = Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
 
     // Header
     private static final float HEADER_W = SCREEN_W * 3f / 4;
@@ -31,48 +32,73 @@ public class PathwayScene implements Scene {
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final PathwaySceneModel model;
-    protected ButtonControl[] buttons;
+    private final SpokeGraph spokeGraph;
+    private ButtonControl backButton;
+    private ButtonControl homeButton;
 
-    float size;
-    float centerX;
-    float centerY;
-
+    /**
+     * Create a pathway scene.
+     * @param model to base the scene off of
+     */
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        this.buttons = new ButtonControl[this.model.buttonModels.length];
+        for (var careerModel : model.buttonModels) {
+            careerModel.isCircle = true;
+        }
+
+        // Create the spoke graph
+        var size = SCREEN_H - HEADER_Y - HEADER_H;
+        this.spokeGraph = new SpokeGraph(size,
+                SCREEN_W / 2f - size / 2,
+                HEADER_Y + HEADER_H,
+                this.model.centerText,
+                this.model.buttonModels);
+
+        this.backButton = ButtonControl.createBackButton();
+        this.homeButton = ButtonControl.createHomeButton();
     }
 
     @Override
     public void init(Kiosk sketch) {
-        centerX = sketch.width / 2.f;
-        centerY = (sketch.height  * .57f);
-        size = sketch.height * .75f;
-        this.buttons = new ButtonControl[this.model.buttonModels.length];
-        for (int i = 0; i < buttons.length; i++) {
-            this.buttons[i] = new ButtonControl(this.model.buttonModels[i], 0, 0, 0, 0);
-            this.model.buttonModels[i].isCircle = true;
-        }
+        this.homeButton = GraphicsUtil.initializeHomeButton();
+        sketch.hookControl(this.homeButton);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        sketch.hookControl(this.backButton);
 
-        for (ButtonControl careerOption : this.buttons) {
+        for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
+        sketch.hookControl(this.backButton);
+        sketch.hookControl(this.homeButton);
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.buttons) {
+        for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
+        }
+
+        if (this.homeButton.wasClicked()) {
+            sceneGraph.reset();
+        } else if (this.backButton.wasClicked()) {
+            sceneGraph.popScene();
         }
     }
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.useSansSerifBold(sketch, 48);
+        Graphics.useGothic(sketch, 48, true);
+        // Text Properties
+        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+        sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
         drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText, buttons);
+        this.spokeGraph.draw(sketch);
+
+        this.backButton.draw(sketch);
+        this.homeButton.draw(sketch);
     }
 
     protected void drawHeader(Kiosk sketch) {
@@ -87,10 +113,14 @@ public class PathwayScene implements Scene {
         sketch.fill(0);
         sketch.stroke(0);
 
-        Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
-        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y);
+        Graphics.useGothic(sketch, HEADER_TITLE_FONT_SIZE, true);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerTitle, HEADER_CENTER_X, HEADER_TITLE_Y,
+                (int) (HEADER_W * 0.95), HEADER_H / 2);
 
-        Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
-        sketch.text(model.headerBody, HEADER_CENTER_X, HEADER_BODY_Y);
+        Graphics.useGothic(sketch, HEADER_BODY_FONT_SIZE, false);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.text(model.headerBody, HEADER_CENTER_X,
+                (int) (HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
 }

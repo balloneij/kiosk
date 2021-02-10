@@ -1,6 +1,5 @@
 package editor.sceneloaders;
 
-
 import editor.Controller;
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import javafx.stage.FileChooser;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
-import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 
 public class SpokeGraphPromptSceneLoader {
@@ -43,7 +41,7 @@ public class SpokeGraphPromptSceneLoader {
 
         // Get the editing Nodes for the SpokeGraphPromptsSceneModel properties
         VBox vbox = new VBox(
-                getNameBox(controller, model, graph),
+                SceneLoader.getNameBox(controller, model, graph),
                 getHeaderTitleBox(model, graph),
                 getHeaderBodyBox(model, graph),
                 getCareerBox(model, graph),
@@ -62,20 +60,6 @@ public class SpokeGraphPromptSceneLoader {
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
                 new FileChooser.ExtensionFilter("Any", "*.*")
         );
-    }
-
-    private static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
-        var nameField = new TextField(model.getName());
-
-        // Listener to update the title
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.setName(newValue);
-            controller.rebuildSceneGraphTreeView();
-        });
-
-        var vbox = new VBox(new Label("Name:"), nameField);
-        vbox.setPadding(PADDING);
-        return vbox;
     }
 
     // Adds a Node containing a text field for editing the header title.

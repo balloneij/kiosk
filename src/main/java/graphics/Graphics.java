@@ -10,16 +10,21 @@ import processing.core.PFont;
 
 public class Graphics {
 
+    private static final String GOTHIC_PATH = "assets/CenturyGothic.ttf";
+    private static final String GOTHIC_BOLD_PATH = "assets/CenturyGothicBold.ttf";
     private static final String SANS_SERIF_PATH = "assets/Gothic.ttf";
     private static final String SANS_SERIF_BOLD_PATH = "assets/Gothic-Bold.ttf";
     private static final String SANS_SERIF_ITALICIZE_PATH = "assets/Gothic-Italicize.ttf";
     private static final String SANS_SERIF_BOLD_ITALICIZE_PATH = "assets/Gothic-Bold-Italicize.ttf";
 
     private static boolean fontsLoaded = false;
+    private static PFont gothic = null;
+    private static PFont gothicBold = null;
     private static PFont sansSerif = null;
     private static PFont sansSerifBold = null;
     private static PFont sansSerifItalicize = null;
     private static PFont sansSerifBoldItalicize = null;
+    private static float bubbleOffset = 0;
 
     private Graphics() {
 
@@ -32,13 +37,18 @@ public class Graphics {
         if (Graphics.fontsLoaded) {
             System.err.println("FontManager.loadFonts should only be called once");
         } else {
-
+            File gothicFile = new File(GOTHIC_PATH);
+            File gothicBoldFile = new File(GOTHIC_BOLD_PATH);
             File sansSerifFile = new File(SANS_SERIF_PATH);
             File sansSerifStrongFile = new File(SANS_SERIF_BOLD_PATH);
             File sansSerifItalicizeFile = new File(SANS_SERIF_ITALICIZE_PATH);
             File sansSerifBoldItalicizeFile = new File(SANS_SERIF_BOLD_ITALICIZE_PATH);
 
             try {
+                Graphics.gothic = new PFont(
+                        Font.createFont(Font.TRUETYPE_FONT, gothicFile), true);
+                Graphics.gothicBold = new PFont(
+                        Font.createFont(Font.TRUETYPE_FONT, gothicBoldFile), true);
                 Graphics.sansSerif = new PFont(
                         Font.createFont(Font.TRUETYPE_FONT, sansSerifFile), true);
                 Graphics.sansSerifBold = new PFont(
@@ -52,6 +62,28 @@ public class Graphics {
             }
 
             Graphics.fontsLoaded = true;
+        }
+    }
+
+    public static void useGothic(Kiosk sketch) {
+        useGothic(sketch, 48, false);
+    }
+
+    public static void useGothic(Kiosk sketch, int fontSize) {
+        useGothic(sketch, fontSize, false);
+    }
+
+    /**
+     * Rob doesn't write documentation.
+     * @param sketch to draw to
+     * @param fontSize font size
+     * @param bold bold or not
+     */
+    public static void useGothic(Kiosk sketch, int fontSize, boolean bold) {
+        if (bold) {
+            sketch.textFont(gothicBold, fontSize);
+        } else {
+            sketch.textFont(gothic, fontSize);
         }
     }
 
@@ -102,23 +134,10 @@ public class Graphics {
      */
     public static void drawRoundedRectangle(Kiosk sketch, float x, float y,
                                             float w, float h, float r) {
-        float d = r * 2;
-
-        sketch.ellipseMode(PConstants.CORNER);
         sketch.rectMode(PConstants.CORNER);
 
-        // Draw left side rounded corners and connect them
-        sketch.ellipse(x, y, d, d);
-        sketch.ellipse(x, y + h - d, d, d);
-        sketch.rect(x, y + r, r, h - d);
-
-        // Draw the center
-        sketch.rect(x + r, y, w - d, h);
-
-        // Draw the right side rounded corners and connect them
-        sketch.ellipse(x + w - d, y, d, d);
-        sketch.ellipse(x + w - d, y + h - d, d, d);
-        sketch.rect(x + w - r, y + r, r, h - d);
+        // Draw the rounded rectangle
+        sketch.rect(x, y, w, h, r);
     }
 
     /**
@@ -131,7 +150,8 @@ public class Graphics {
         final int height = sketch.height;
 
         float spacing = width / 50f;
-        float radius = spacing / 2;
+        float radius = spacing / 2.05f;
+        float radiusChipping = 0.2825f;
 
         sketch.ellipseMode(PConstants.CORNER);
         sketch.noStroke();
@@ -142,13 +162,18 @@ public class Graphics {
 
         boolean stagger = false;
         float y = height - radius;
-        while (radius > 1) {
-            for (float x = stagger ? spacing / 2 : 0; x < width; x += spacing) {
-                sketch.ellipse(x, y, radius, radius);
+        float iterationNumber = ((radius - 1) / radiusChipping);
+        for (int i = 0; i < iterationNumber; i++) {
+            for (float x = stagger ? spacing / 2 - bubbleOffset : -bubbleOffset;
+                 x < width; x += spacing) {
+                if (y > 0) {
+                    sketch.ellipse(x, y, radius, radius);
+                }
             }
-            radius -= 0.25;
+            radius -= radiusChipping;
             y -= spacing;
             stagger = !stagger;
         }
+        bubbleOffset = bubbleOffset + 0.125f;
     }
 }

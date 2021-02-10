@@ -18,7 +18,7 @@ public class CareerPathwaySceneLoader extends PathwaySceneLoader {
                                  VBox toolbarBox, SceneGraph graph) {
         // Get the editing Nodes for the CareerPathwaySceneModel properties
         VBox vbox = new VBox(
-            getNameBox(controller, model, graph),
+            SceneLoader.getNameBox(controller, model, graph),
             getHeaderTitleBox(model, graph),
             getHeaderBodyBox(model, graph),
             getCenterTextBox(model, graph)

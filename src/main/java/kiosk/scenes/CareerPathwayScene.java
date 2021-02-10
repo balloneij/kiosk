@@ -1,7 +1,6 @@
 package kiosk.scenes;
 
 import graphics.Graphics;
-import graphics.SpokeUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.CareerModel;
@@ -26,14 +25,15 @@ public class CareerPathwayScene extends PathwayScene {
         weights = new int[LoadedSurveyModel.careers.length];
     }
 
-    @Override
-    public void draw(Kiosk sketch) {
-        Graphics.useSansSerifBold(sketch, 48);
-        Graphics.drawBubbleBackground(sketch);
-        drawHeader(sketch);
-        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText,
-            buttons, weights);
-    }
+    // TODO
+//    @Override
+//    public void draw(Kiosk sketch) {
+//        Graphics.useSansSerifBold(sketch, 48);
+//        Graphics.drawBubbleBackground(sketch);
+//        drawHeader(sketch);
+//        SpokeUtil.spokeGraph(sketch, size, centerX, centerY, 5, model.centerText,
+//            buttons, weights);
+//    }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {

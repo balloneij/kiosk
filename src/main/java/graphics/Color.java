@@ -5,7 +5,7 @@ import processing.core.PConstants;
 
 public class Color {
 
-    // Colors as defined by Discovery World Jody herself
+    // Colors as defined by Discovery World Jodi herself
     public static final int[] DW_WHITE_RGB = new int[] { 255, 255, 255 };
     public static final int[] DW_BLACK_RGB = new int[] { 59, 58, 57 };
     public static final int[] DW_BLUE_RGB = new int[] { 50, 123, 174 };

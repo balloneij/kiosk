@@ -10,6 +10,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String headerTitle;
     public String headerBody;
     public String careerCenterText;
+    public ButtonModel[] careers;
+    public int[] careerWeights;
     public String promptText;
     public ButtonModel[] answers;
 
@@ -26,6 +28,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         this.headerTitle = "";
         this.headerBody = "";
         this.careerCenterText = "";
+        this.careers = new ButtonModel[]{};
+        this.careerWeights = new int[]{};
         this.promptText = "";
         this.answers = new ButtonModel[]{};
         this.id = "";
@@ -64,12 +68,20 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
             answersCopy[i] = answer.deepCopy();
         }
 
+        ButtonModel[] careersCopy = new ButtonModel[this.careers.length];
+        for (int i = 0; i < careers.length; i++) {
+            ButtonModel career = this.careers[i];
+            careersCopy[i] = career.deepCopy();
+        }
+
         var copy = new SpokeGraphPromptSceneModel();
         copy.id = this.id;
         copy.name = name;
         copy.headerTitle = this.headerTitle;
         copy.headerBody = this.headerBody;
         copy.careerCenterText = this.careerCenterText;
+        copy.careers = careersCopy;
+        copy.careerWeights = this.careerWeights;
         copy.promptText = this.promptText;
         copy.answers = answersCopy;
         return copy;

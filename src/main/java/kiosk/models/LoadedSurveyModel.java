@@ -213,25 +213,25 @@ public class LoadedSurveyModel implements Serializable {
                 + "You can always go back and begin again";
         ButtonModel humanButton = new ButtonModel();
         humanButton.text = "";
-        humanButton.target = "career models 1";
+        humanButton.target = "pathway";
         humanButton.isCircle = true;
         humanButton.rgb = new int[] { 152, 33, 107 };
         humanButton.image = new ImageModel("assets/human.png", 80, 80);
         ButtonModel natureButton = new ButtonModel();
         natureButton.text = "";
-        natureButton.target = "career models 1";
+        natureButton.target = "pathway";
         natureButton.isCircle = true;
         natureButton.rgb = new int[] { 51, 108, 103 };
         natureButton.image = new ImageModel("assets/nature.png", 80, 80);
         ButtonModel smartMachinesButton = new ButtonModel();
         smartMachinesButton.text = "";
-        smartMachinesButton.target = "career models 1";
+        smartMachinesButton.target = "pathway";
         smartMachinesButton.isCircle = true;
         smartMachinesButton.rgb = new int[] { 219, 98, 38 };
         smartMachinesButton.image = new ImageModel("assets/robot.png", 80, 80);
         ButtonModel spaceButton = new ButtonModel();
         spaceButton.text = "";
-        spaceButton.target = "career models 1";
+        spaceButton.target = "pathway";
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
         spaceButton.image = new ImageModel("assets/space.png", 80, 80);
@@ -241,6 +241,43 @@ public class LoadedSurveyModel implements Serializable {
             smartMachinesButton,
             spaceButton
         };
+
+        PathwaySceneModel pathway = new PathwaySceneModel();
+        pathway.buttonModels = new ButtonModel[8];
+        for (int i = 0; i < pathway.buttonModels.length; i++) {
+            var buttonModel = new ButtonModel();
+            buttonModel.isCircle = true;
+            buttonModel.text = "Choice " + i;
+            buttonModel.target = "spoke";
+            pathway.buttonModels[i] = buttonModel;
+        }
+        pathway.centerText = "Pick 1!";
+        pathway.headerBody = "There are many options";
+        pathway.headerTitle = "Choose one please";
+        pathway.id = "pathway";
+
+        SpokeGraphPromptSceneModel spoke = new SpokeGraphPromptSceneModel();
+        spoke.id = "spoke";
+        spoke.headerTitle = "Answer some questions";
+        spoke.headerBody = "Click the answer the best applies to you";
+
+        var answer1 = new ButtonModel();
+        answer1.text = "I like math";
+        answer1.target = "career models 1";
+        var answer2 = new ButtonModel();
+        answer2.text = "I like math";
+        answer2.target = "career models 1";
+        var answer3 = new ButtonModel();
+        answer3.text = "I like math";
+        answer3.target = "career models 1";
+        spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
+
+        spoke.careers = new ButtonModel[8];
+        for (int i = 0; i < spoke.careers.length; i++) {
+            var buttonModel = new ButtonModel();
+            buttonModel.text = "Career " + i;
+            spoke.careers[i] = buttonModel;
+        }
 
         // Create a scene to demonstrate the career models
         SpokeGraphPromptSceneModel careerModelDemo = new SpokeGraphPromptSceneModel();
@@ -297,6 +334,8 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(challengePrompt);
         initialScenes.add(agePrompt);
         initialScenes.add(pathPrompt);
+        initialScenes.add(pathway);
+        initialScenes.add(spoke);
         initialScenes.add(careerModelDemo);
         initialScenes.add(careerModelDemo2);
         initialScenes.add(careerPathway);
