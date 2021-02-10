@@ -21,7 +21,7 @@ public class GraphicsUtil {
     public static ButtonControl initializeBackButton(Kiosk sketch) {
         var backButtonModel = new ButtonModel();
         // Rob fix your checkstyle
-        backButtonModel.text = `🡸 Back`;
+        backButtonModel.text = "\uD83E\uDC78 Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         ButtonControl backButton = new ButtonControl(backButtonModel,
                 COMMON_BUTTON_PADDING, sketch.height
