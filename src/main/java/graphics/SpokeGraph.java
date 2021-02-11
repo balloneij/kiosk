@@ -5,6 +5,9 @@ import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
 import processing.core.PConstants;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class SpokeGraph {
 
     // The minimum button size is a percentage of the max button size
@@ -23,6 +26,7 @@ public class SpokeGraph {
     private final float centerSquareSize;
 
     private final ButtonControl[] buttonControls;
+    private final double[] weights;
 
     /**
      * Create a spoke graph.
@@ -33,9 +37,26 @@ public class SpokeGraph {
      * @param buttons to create a spoke graph off of
      */
     public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons) {
+        this(size, x, y, centerText, buttons, new double[buttons.length]);
+        Arrays.fill(weights, 0); // Set all weights to 0
+    }
+
+    /**
+     * Create a spoke graph.
+     * @param size the square to fit the graph in
+     * @param x top left corner
+     * @param y top right corner
+     * @param centerText text of the center wheel
+     * @param buttons to create a spoke graph off of
+     */
+    public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons,
+                      double[] weights) {
         this.centerText = centerText;
         this.centerX = (float) (x + size / 2);
         this.centerY = (float) (y + size / 2);
+        this.weights = weights;
+
+        double[] normalWeights = normalizeWeights(weights);
 
         // Worst case Spokegraph
         //      O
@@ -62,7 +83,7 @@ public class SpokeGraph {
 
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
-            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, 0.5);
+            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, normalWeights[i]);
             final float diameter = radius * 2;
             final float buttonX = (float)
                     (centerX + Math.cos(STARTING_ANGLE + angleDelta * i) * (spokeLength + radius));
@@ -77,6 +98,34 @@ public class SpokeGraph {
                     (int) diameter, (int) diameter,
                     (int) radius);
         }
+    }
+
+    private double[] normalizeWeights(double[] weights) {
+        // Find the min and max weights in the weights array
+        double minWeight = Double.POSITIVE_INFINITY;
+        double maxWeight = Double.NEGATIVE_INFINITY;
+        for (double w : weights) {
+            if (w < minWeight) {
+                minWeight = w;
+            }
+            if (w > maxWeight) {
+                maxWeight = w;
+            }
+        }
+
+
+        double[] newWeights = new double[weights.length];
+        if (minWeight != maxWeight) {
+            for (int i = 0; i < weights.length; i++) {
+                // Normalize the weights to be from 0-1
+                newWeights[i] = (weights[i] - minWeight) / (maxWeight - minWeight);
+            }
+        } else {
+            // If the min and max are the same, just use 0.5 for all
+            Arrays.fill(newWeights, 0.5);
+        }
+
+        return newWeights;
     }
 
     /**

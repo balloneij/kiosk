@@ -6,6 +6,7 @@ import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
+import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.LoadedSurveyModel;
@@ -42,8 +43,6 @@ public class SpokeGraphPromptScene implements Scene {
     private static final int ANSWERS_MAX = 4;
 
     private final SpokeGraphPromptSceneModel model;
-    private ButtonControl[] careerOptions;
-    private int[] careerWeights;
     private ButtonControl[] answerButtons;
     private final ButtonControl promptButton;
     private final SpokeGraph spokeGraph;
@@ -58,8 +57,6 @@ public class SpokeGraphPromptScene implements Scene {
      */
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
-        this.careerOptions = new ButtonControl[LoadedSurveyModel.careers.length];
-        this.careerWeights = new int[LoadedSurveyModel.careers.length];
         this.answerButtons = new ButtonControl[this.model.answers.length];
 
         int headerBottomY = (int) (HEADER_Y + HEADER_H) + 40;
@@ -130,16 +127,22 @@ public class SpokeGraphPromptScene implements Scene {
         final double availableHeight = (height - HEADER_Y - HEADER_H);
         final double size = Math.min(width, availableHeight);
 
-        ButtonModel[] careerButtons = new ButtonModel[LoadedSurveyModel.careers.length];
-        for (int i = 0; i < LoadedSurveyModel.careers.length; i++) {
-            CareerModel career = LoadedSurveyModel.careers[i];
+        CareerModel[] careers = LoadedSurveyModel.careers; // Reference to current list of careers
+        UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
             careerButtons[i] = new ButtonModel();
             careerButtons[i].text = career.name;
+            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
         }
 
-        this.spokeGraph = new SpokeGraph(size,
-                0, HEADER_Y + HEADER_H,
-                this.model.careerCenterText, careerButtons);
+        this.spokeGraph = new SpokeGraph(size, 0, HEADER_Y + HEADER_H,
+            this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
 
         this.backButton = ButtonControl.createBackButton();
@@ -148,15 +151,6 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        // Create buttons for the career spoke graph (these will not be clickable)
-        this.careerOptions = new ButtonControl[LoadedSurveyModel.careers.length];
-        for (int i = 0; i < careerOptions.length; i++) {
-            CareerModel career = LoadedSurveyModel.careers[i];
-            ButtonModel careerButtonModel = new ButtonModel(career.name, "null");
-            careerButtonModel.isCircle = true;
-            this.careerOptions[i] = new ButtonControl(careerButtonModel, 0, 0, 0, 0);
-        }
-
         // Hook scene graph button clicks
         for (var button : this.answerButtons) {
             sketch.hookControl(button);
@@ -170,14 +164,6 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        // TODO I don't like having this here since it only needs to run once but this is the
-        //  only place where we have access to the SceneGraph (which has the UserScore)
-        // Update the career weights based on the career's Riasec category and the user's score
-        for (int i = 0; i < careerWeights.length; i++) {
-            CareerModel career = LoadedSurveyModel.careers[i];
-            careerWeights[i] = sceneGraph.getUserScore().getCategoryScore(career.riasecCategory);
-        }
-
         for (var button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget(), button.getModel().category);
