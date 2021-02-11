@@ -1,12 +1,10 @@
 package graphics;
 
+import java.util.Arrays;
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
 import processing.core.PConstants;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 public class SpokeGraph {
 
