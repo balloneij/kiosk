@@ -32,7 +32,7 @@ public class PathwayScene implements Scene {
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final PathwaySceneModel model;
-    private final SpokeGraph spokeGraph;
+    protected final SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
 
@@ -42,8 +42,8 @@ public class PathwayScene implements Scene {
      */
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        for (var careerModel : model.buttonModels) {
-            careerModel.isCircle = true;
+        for (var buttonModel : model.buttonModels) {
+            buttonModel.isCircle = true;
         }
 
         // Create the spoke graph

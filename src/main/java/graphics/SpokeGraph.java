@@ -26,7 +26,7 @@ public class SpokeGraph {
     private final float centerSquareSize;
 
     private final ButtonControl[] buttonControls;
-    private final double[] weights;
+    private double[] weights;
 
     /**
      * Create a spoke graph.
@@ -95,7 +95,6 @@ public class SpokeGraph {
             button.isCircle = true;
             buttonControls[i] = new ButtonControl(button,
                     (int) (buttonX - radius), (int) (buttonY - radius),
-                    (int) diameter, (int) diameter,
                     (int) radius);
         }
     }
@@ -165,6 +164,21 @@ public class SpokeGraph {
 
     public ButtonControl[] getButtonControls() {
         return buttonControls;
+    }
+
+    /**
+     * Updates the spoke weights with the provided values.
+     * @param weights The new weights to apply to the spokes.
+     */
+    public void setWeights(double[] weights) {
+        this.weights = weights;
+        double[] normalWeights = normalizeWeights(weights);
+
+        for (int i = 0; i < buttonControls.length; i++) {
+            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, normalWeights[i]);
+            buttonControls[i].setWidth((int) radius * 2);
+            buttonControls[i].setHeight((int) radius * 2);
+        }
     }
 
     /**

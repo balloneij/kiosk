@@ -75,7 +75,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[0],
                     answersCenterX - answerDiameter * 3 / 2,
                     answersCenterY + answerRadius,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -84,7 +83,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[1],
                     answersCenterX + answerRadius,
                     answersCenterY - answerDiameter * 3 / 2,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -93,7 +91,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[2],
                     answersCenterX + answerRadius,
                     answersCenterY + answerRadius,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -102,7 +99,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[3],
                     answersCenterX - answerDiameter * 3 / 2,
                     answersCenterY - answerDiameter * 3 / 2,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -115,7 +111,6 @@ public class SpokeGraphPromptScene implements Scene {
                 prompt,
                 answersCenterX - answerRadius,
                 answersCenterY - answerRadius,
-                answerDiameter, answerDiameter,
                 answerRadius
         );
         promptButton.setDisabled(true);
