@@ -12,7 +12,7 @@
    <string>scenes</string>
    <void method="set">
     <object idref="LoadedSurveyModel0"/>
-    <array class="kiosk.models.SceneModel" length="9">
+    <array class="kiosk.models.SceneModel" length="7">
      <void index="0">
       <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel0">
        <void class="kiosk.models.PromptSceneModel" method="getField">
@@ -759,17 +759,41 @@ You can always go back and begin again</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>careers</string>
+        <string>promptText</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel0"/>
-         <array class="kiosk.models.ButtonModel" length="8">
+         <string>What&apos;s your favorite subject?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="kiosk.models.ButtonModel" length="3">
           <void index="0">
            <object class="kiosk.models.ButtonModel" id="ButtonModel17">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel17"/>
-              <string>Career 0</string>
+              <string>Math!</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel17"/>
+              <string>career pathway</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel17"/>
+              <object class="java.lang.Enum" method="valueOf">
+               <class>kiosk.Riasec</class>
+               <string>Realistic</string>
+              </object>
              </void>
             </void>
            </object>
@@ -780,7 +804,24 @@ You can always go back and begin again</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel18"/>
-              <string>Career 1</string>
+              <string>Art!</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel18"/>
+              <string>career pathway</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel18"/>
+              <object class="java.lang.Enum" method="valueOf">
+               <class>kiosk.Riasec</class>
+               <string>Artistic</string>
+              </object>
              </void>
             </void>
            </object>
@@ -791,124 +832,24 @@ You can always go back and begin again</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel19"/>
-              <string>Career 2</string>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="3">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel20">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel20"/>
-              <string>Career 3</string>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="4">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel21">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel21"/>
-              <string>Career 4</string>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="5">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel22">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel22"/>
-              <string>Career 5</string>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="6">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel23">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel23"/>
-              <string>Career 6</string>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="7">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel24">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel24"/>
-              <string>Career 7</string>
-             </void>
-            </void>
-           </object>
-          </void>
-         </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>answers</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel0"/>
-         <array class="kiosk.models.ButtonModel" length="3">
-          <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel25">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel25"/>
-              <string>I like math</string>
+              <string>Business!</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel25"/>
-              <string>career models 1</string>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel26">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel26"/>
-              <string>I like math</string>
+              <object idref="ButtonModel19"/>
+              <string>career pathway</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
+             <string>category</string>
              <void method="set">
-              <object idref="ButtonModel26"/>
-              <string>career models 1</string>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel27">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel27"/>
-              <string>I like math</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel27"/>
-              <string>career models 1</string>
+              <object idref="ButtonModel19"/>
+              <object class="java.lang.Enum" method="valueOf">
+               <class>kiosk.Riasec</class>
+               <string>Enterprising</string>
+              </object>
              </void>
             </void>
            </object>
@@ -919,212 +860,6 @@ You can always go back and begin again</string>
       </object>
      </void>
      <void index="6">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel1">
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>id</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
-         <string>career models 1</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>answers</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
-         <array class="kiosk.models.ButtonModel" length="3">
-          <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel28">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel28"/>
-              <string>Realistic</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel28"/>
-              <string>career models 2</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel28"/>
-              <object class="java.lang.Enum" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Realistic</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel29">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel29"/>
-              <string>Investigative</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel29"/>
-              <string>career models 2</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel29"/>
-              <object class="java.lang.Enum" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Investigative</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel30">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel30"/>
-              <string>Artistic</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel30"/>
-              <string>career models 2</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel30"/>
-              <object class="java.lang.Enum" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Artistic</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-         </array>
-        </void>
-       </void>
-      </object>
-     </void>
-     <void index="7">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel2">
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>id</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <string>career models 2</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>answers</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <array class="kiosk.models.ButtonModel" length="3">
-          <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel31">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel31"/>
-              <string>Social</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel31"/>
-              <string>career pathway</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel31"/>
-              <object class="java.lang.Enum" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Social</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel32">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel32"/>
-              <string>Enterprising</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel32"/>
-              <string>career pathway</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel32"/>
-              <object class="java.lang.Enum" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Enterprising</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel33">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel33"/>
-              <string>Conventional</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel33"/>
-              <string>career pathway</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel33"/>
-              <object class="java.lang.Enum" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Conventional</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-         </array>
-        </void>
-       </void>
-      </object>
-     </void>
-     <void index="8">
       <object class="kiosk.models.CareerPathwaySceneModel" id="CareerPathwaySceneModel0">
        <void class="kiosk.models.PathwaySceneModel" method="getField">
         <string>id</string>
@@ -1142,15 +877,15 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
  <string>rgb</string>
  <void id="intArray0" method="get">
-  <object idref="ButtonModel8"/>
+  <object idref="ButtonModel5"/>
   <void index="1">
-   <int>97</int>
+   <int>33</int>
   </void>
   <void index="2">
-   <int>157</int>
+   <int>107</int>
   </void>
   <void index="0">
-   <int>21</int>
+   <int>152</int>
   </void>
  </void>
 </void>
@@ -1174,15 +909,15 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field2" method="getField">
  <string>rgb</string>
  <void id="intArray2" method="get">
-  <object idref="ButtonModel5"/>
+  <object idref="ButtonModel4"/>
   <void index="1">
-   <int>33</int>
+   <int>80</int>
   </void>
   <void index="2">
-   <int>107</int>
+   <int>50</int>
   </void>
   <void index="0">
-   <int>152</int>
+   <int>244</int>
   </void>
  </void>
 </void>
@@ -1222,15 +957,15 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field5" method="getField">
  <string>rgb</string>
  <void id="intArray5" method="get">
-  <object idref="ButtonModel4"/>
+  <object idref="ButtonModel8"/>
   <void index="1">
-   <int>80</int>
+   <int>97</int>
   </void>
   <void index="2">
-   <int>50</int>
+   <int>157</int>
   </void>
   <void index="0">
-   <int>244</int>
+   <int>21</int>
   </void>
  </void>
 </void>
