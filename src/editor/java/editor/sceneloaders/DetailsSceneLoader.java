@@ -11,7 +11,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -41,7 +40,7 @@ public class DetailsSceneLoader {
 
         // Get the editing Nodes for the DetailsSceneModel properties
         VBox vbox = new VBox(
-                getNameBox(controller, model, graph),
+                SceneLoader.getNameBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getDescriptionBox(model, graph),
                 createButton(model, graph, controller)
@@ -56,21 +55,6 @@ public class DetailsSceneLoader {
                 new FileChooser.ExtensionFilter("GIF", "*.gif"),
                 new FileChooser.ExtensionFilter("Any", "*.*")
         );
-    }
-
-    private static Node getNameBox(Controller controller, DetailsSceneModel model,
-                                   SceneGraph graph) {
-        var nameField = new TextField(model.getName());
-
-        // Listener to update the title
-        nameField.textProperty().addListener((observable, oldValue, newValue) -> {
-            model.setName(newValue);
-            controller.rebuildSceneGraphTreeView();
-        });
-
-        var vbox = new VBox(new Label("Name:"), nameField);
-        vbox.setPadding(PADDING);
-        return vbox;
     }
 
     // Adds a Node containing a text field for editing the title.
