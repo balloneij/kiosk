@@ -153,14 +153,6 @@ public class Controller implements Initializable {
         sceneGraph.addSceneChangeCallback(newSceneModel -> {
             sceneTypeComboBox
                 .getItems()
-                .filtered(scene -> scene.toString().equals(newSceneModel.toString())).stream()
-                .findFirst()
-                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
-        });
-
-        sceneGraph.addSceneChangeCallback(newSceneModel -> {
-            sceneTypeComboBox
-                .getItems()
                 .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
                 .stream()
                 .findFirst()
