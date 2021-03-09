@@ -116,9 +116,9 @@ public class ButtonControl implements Control<MouseEvent> {
         }
         FONT_SIZE_OVERWRITTEN = false;
         if (this.model.isCircle) {
-            this.drawCircle(sketch);
+            this.drawCircle(sketch, 1);
         } else {
-            this.drawRectangle(sketch);
+            this.drawRectangle(sketch, 1);
         }
         if (this.model.image != null) {
             sketch.imageMode(PConstants.CENTER);
@@ -134,7 +134,7 @@ public class ButtonControl implements Control<MouseEvent> {
     /**
      * Draw the button.
      * @param sketch to draw to
-     * @param multiplier ?????? @ Rob Retzlaff
+     * @param multiplier to change the font's size for this drawing only
      */
     public void draw(Kiosk sketch, float multiplier) {
         Graphics.useGothic(sketch, (int) (FONT_SIZE * multiplier), true);
@@ -149,11 +149,35 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     /**
+     * Draw the button.
+     * @param sketch to draw to
+     * @param sizeMultiplier to change the button's overall size, for animation purposes
+     */
+    public void draw(Kiosk sketch, double sizeMultiplier) {
+        Graphics.useGothic(sketch, (int) (FONT_SIZE * sizeMultiplier), true);
+        TEXT_SIZE_MULTIPLIER = (float) sizeMultiplier;
+        if (this.model.isCircle) {
+            this.drawCircle(sketch, sizeMultiplier);
+        } else {
+            this.drawRectangle(sketch, sizeMultiplier);
+        }
+        if (this.model.image != null) {
+            sketch.imageMode(PConstants.CENTER);
+            if (this.isPressed) {
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) rect.getCenterY() + this.rect.height / 10.f);
+            } else {
+                this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+            }
+        }
+    }
+
+    /**
      * Draw the button as a rectangle.
      *
      * @param sketch to draw to
      */
-    private void drawRectangle(Kiosk sketch) {
+    private void drawRectangle(Kiosk sketch, double sizeMultiplier) {
         // Draw modifiers
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -166,7 +190,9 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(59, 58, 57, 63f);
             Graphics.drawRoundedRectangle(sketch, this.rect.x,
                     this.rect.y + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height, DEFAULT_RADIUS);
+                    (int) (this.rect.width * sizeMultiplier),
+                    (int) (this.rect.height * sizeMultiplier),
+                    (int) (DEFAULT_RADIUS * sizeMultiplier));
         }
 
         // Set the color and draw the shape for when the button is clicked or not clicked
@@ -179,7 +205,9 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(59, 58, 57, 63f);
             Graphics.drawRoundedRectangle(sketch, this.rect.x,
                     this.rect.y + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height, DEFAULT_RADIUS);
+                    (int) (this.rect.width * sizeMultiplier),
+                    (int) (this.rect.height * sizeMultiplier),
+                    (int) (DEFAULT_RADIUS * sizeMultiplier));
 
             // Draw the text, including the text outline
             sketch.fill(0);
@@ -213,7 +241,9 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
             Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                    this.rect.width, this.rect.height, DEFAULT_RADIUS);
+                    (int) (this.rect.width * sizeMultiplier),
+                    (int) (this.rect.height * sizeMultiplier),
+                    (int) (DEFAULT_RADIUS * sizeMultiplier));
 
             // Draw text, including the text outline
             sketch.fill(0);
@@ -240,7 +270,7 @@ public class ButtonControl implements Control<MouseEvent> {
         }
     }
 
-    private void drawCircle(Kiosk sketch) {
+    private void drawCircle(Kiosk sketch, double sizeMultiplier) {
         // Draw modifiers
         sketch.rectMode(PConstants.CORNER);
         sketch.ellipseMode(PConstants.CORNER);

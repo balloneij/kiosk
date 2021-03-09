@@ -115,36 +115,78 @@ public class PromptScene implements Scene {
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
-        // Draw the white foreground box
-        sketch.fill(255);
-        Graphics.drawRoundedRectangle(sketch,
-                FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
-                FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
-                FOREGROUND_CURVE_RADIUS);
+        //TODO MAKE WORK ON ALL SCENES, NOT JUST FIRST
+        //TODO MAKE ANIMATION LESS CHOPPY WHEN LESS FRAMES DESIRED
+        //If this scene is new, animate the items to gradually show up on screen
+        if (sketch.frameCount < Kiosk.getSettings().animationFrames) {
+            // Draw the white foreground box
+            sketch.fill(255);
+            //TODO CHANGE RECTANGLE CREATION METHOD TO CENTER FOR SMOOTHER ANIMATION
+            //     THIS WILL TAKE QUITE A BIT OF REFACTORING OTHER RECTANGLE CREATION METHODS...
+            //     ALSO PRESENT IN THE BUTTONS DRAWN BELOW...
+            Graphics.drawRoundedRectangle(sketch,
+                    FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
+                    (float) (FOREGROUND_WIDTH * (sketch.frameCount * 1.0
+                            / Kiosk.getSettings().animationFrames)),
+                    (float) (FOREGROUND_HEIGHT * (sketch.frameCount * 1.0
+                            / Kiosk.getSettings().animationFrames)),
+                    (float) (FOREGROUND_CURVE_RADIUS * (sketch.frameCount * 1.0
+                            / Kiosk.getSettings().animationFrames)));
+            // Draw text
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+            // Title
+            Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE * (sketch.frameCount * 1.0
+                    / Kiosk.getSettings().animationFrames)), true);
+            sketch.text(this.model.title, centerX, TITLE_Y,
+                    sketch.width / 1.5f, sketch.height / 5f);
+            // Prompt
+            Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE * (sketch.frameCount * 1.0
+                    / Kiosk.getSettings().animationFrames)), false);
+            sketch.text(this.model.prompt, centerX, PROMPT_Y,
+                    sketch.width / 1.5f, sketch.height / 5f);
+            // Action
+            Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE * (sketch.frameCount * 1.0
+                    / Kiosk.getSettings().animationFrames)), true);
+            sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
+                    sketch.width / 1.5f, sketch.height / 6f);
+            for (ButtonControl button : this.buttons) {
+                button.draw(sketch, (sketch.frameCount * 1.0
+                        / Kiosk.getSettings().animationFrames));
+            }
+        } else { //If it's already a second-or-two old, draw the scene normally
+            // Draw the white foreground box
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
+                    FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
+                    FOREGROUND_CURVE_RADIUS);
 
-        // Draw text
-        sketch.rectMode(PConstants.CENTER);
-        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        sketch.fill(0);
+            // Draw text
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
 
-        // Title
-        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
-        sketch.text(this.model.title, centerX, TITLE_Y,
-                sketch.width / 1.5f, sketch.height / 5f);
+            // Title
+            Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
+            sketch.text(this.model.title, centerX, TITLE_Y,
+                    sketch.width / 1.5f, sketch.height / 5f);
 
-        // Prompt
-        Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
-        sketch.text(this.model.prompt, centerX, PROMPT_Y,
-                sketch.width / 1.5f, sketch.height / 5f);
+            // Prompt
+            Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
+            sketch.text(this.model.prompt, centerX, PROMPT_Y,
+                    sketch.width / 1.5f, sketch.height / 5f);
 
-        // Action
-        Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
-        sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
-                sketch.width / 1.5f, sketch.height / 6f);
+            // Action
+            Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
+            sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
+                    sketch.width / 1.5f, sketch.height / 6f);
 
-        // Draw buttons
-        for (ButtonControl button : this.buttons) {
-            button.draw(sketch);
+            // Draw buttons
+            for (ButtonControl button : this.buttons) {
+                button.draw(sketch);
+            }
         }
 
         if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
