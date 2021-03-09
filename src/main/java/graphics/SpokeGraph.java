@@ -26,6 +26,9 @@ public class SpokeGraph {
     private final ButtonControl[] buttonControls;
     private double[] weights;
 
+    private final int[] rgbColor1 = new int[] { 0, 0, 255 };
+    private final int[] rgbColor2 = new int[] { 255, 0, 0 };
+
     /**
      * Create a spoke graph.
      * @param size the square to fit the graph in
@@ -81,7 +84,8 @@ public class SpokeGraph {
 
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
-            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, normalWeights[i]);
+            double weight = normalWeights[i];
+            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
             final float diameter = radius * 2;
             final float buttonX = (float)
                     (centerX + Math.cos(STARTING_ANGLE + angleDelta * i) * (spokeLength + radius));
@@ -91,6 +95,8 @@ public class SpokeGraph {
             // Create the ButtonControl
             ButtonModel button = buttons[i];
             button.isCircle = true;
+            button.rgb = lerpColor(rgbColor1, rgbColor2, weight);
+
             buttonControls[i] = new ButtonControl(button,
                     (int) (buttonX - radius), (int) (buttonY - radius),
                     (int) radius);
@@ -160,6 +166,21 @@ public class SpokeGraph {
         return (1 - amount) * a + amount * b;
     }
 
+    /**
+     * Interpolate between two colors.
+     * @param color1 the low, 0% color
+     * @param color2 the high, 100% color
+     * @param amount to interpolate between the two colors
+     * @return the interpolated color
+     */
+    private static int[] lerpColor(int[] color1, int[] color2, double amount) {
+        return new int[] {
+            (int) lerp(color1[0], color2[0], amount),
+            (int) lerp(color1[1], color2[1], amount),
+            (int) lerp(color1[2], color2[2], amount)
+        };
+    }
+
     public ButtonControl[] getButtonControls() {
         return buttonControls;
     }
@@ -173,9 +194,11 @@ public class SpokeGraph {
         double[] normalWeights = normalizeWeights(weights);
 
         for (int i = 0; i < buttonControls.length; i++) {
-            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, normalWeights[i]);
+            double weight = normalWeights[i];
+            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
             buttonControls[i].setWidth((int) radius * 2);
             buttonControls[i].setHeight((int) radius * 2);
+            buttonControls[i].getModel().rgb = lerpColor(rgbColor1, rgbColor2, weight);
         }
     }
 
