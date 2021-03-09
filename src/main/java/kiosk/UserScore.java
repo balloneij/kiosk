@@ -147,6 +147,26 @@ public class UserScore {
                 + "}";
     }
 
+    /**
+     * Gets the score for the provided category.
+     * @param category The Riasec category to get the user's score for
+     * @return The user's score in the provided category.
+     */
+    public int getCategoryScore(Riasec category) {
+        int score;
+        switch (category) {
+            case Realistic -> score = this.realistic;
+            case Investigative -> score = this.investigative;
+            case Artistic -> score = this.artistic;
+            case Social -> score = this.social;
+            case Enterprising -> score = this.enterprising;
+            case Conventional -> score = this.conventional;
+            default -> score = 0;
+        }
+
+        return score;
+    }
+
     private enum UserScoreOperation {
         Add,
         Subtract

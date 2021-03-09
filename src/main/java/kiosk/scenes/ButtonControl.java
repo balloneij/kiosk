@@ -19,7 +19,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private static final int FONT_SIZE = 16;
     private static boolean FONT_SIZE_OVERWRITTEN = false;
     // Radius of the rounded edge on rectangle buttons
-    private static final int DEFAULT_RADIUS = 20;
+    private static final int DEFAULT_CORNER_RADIUS = 20;
     // Negative will make the color darker on click
     private static final int COLOR_DELTA_ON_CLICK = -25;
     private static float TEXT_SIZE_MULTIPLIER = 1;
@@ -31,12 +31,11 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private final ButtonModel model;
     private final Rectangle rect;
-    private final int radius;
+    private int radius;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
     private Image image;
     private boolean isPressed;
     private boolean wasClicked;
-    private boolean isClickable;
     private float centerSquareSize = 0;
     private boolean disabled = false;
 
@@ -52,10 +51,9 @@ public class ButtonControl implements Control<MouseEvent> {
     public ButtonControl(ButtonModel model, int x, int y, int w, int h) {
         this.model = model;
         this.rect = new Rectangle(x, y, w, h);
-        this.radius = DEFAULT_RADIUS;
+        updateRadius(); // Radius only used when button is circle
         this.image = null;
-        this.isClickable = true;
-        this.centerSquareSize = (float) Math.sqrt(Math.pow(Math.min(w, h) * 2, 2) / 2);
+        this.disabled = false;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -68,24 +66,14 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param model  with button data
      * @param x      of the top-right corner
      * @param y      of the top-right corner
-     * @param w      width
-     * @param h      height
      * @param radius radius (in circular case)
      */
-    public ButtonControl(ButtonModel model, int x, int y, int w, int h, int radius) {
+    public ButtonControl(ButtonModel model, int x, int y, int radius) {
         this.model = model;
-        this.rect = new Rectangle(x, y, w, h);
-        this.radius = radius;
+        this.rect = new Rectangle(x, y, radius * 2, radius * 2);
+        updateRadius(); // Radius only used when button is circle
         this.image = null;
-        this.isClickable = true;
-
-        // The text has to fit inside the largest square possible inside the circle
-        // so we're using the Pythagorean theorem to get the sides of the square, and
-        // the diameter is the hypotenuse.
-        // Additionally, we're using the diameter of the minimumButtonRadius in
-        // order to keep all the font sizes consistent
-        // Images must fit inside this circle too
-        this.centerSquareSize = (float) Math.sqrt(Math.pow(radius * 2, 2) / 2);
+        this.disabled = false;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -144,7 +132,7 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     public void draw(Kiosk sketch, boolean isClickable) {
-        this.setClickable(isClickable);
+        this.setDisabled(!isClickable);
         draw(sketch);
     }
 
@@ -158,7 +146,8 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        if (this.isClickable) {
+        // If it's clickable, draw the darker button behind the main one to add 3D effect
+        if (!this.disabled) {
             //Draw the darker button behind the button to add 3D effects
             sketch.fill(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
@@ -166,77 +155,31 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(59, 58, 57, 63f);
             Graphics.drawRoundedRectangle(sketch, this.rect.x,
                     this.rect.y + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height, DEFAULT_RADIUS);
+                    this.rect.width, this.rect.height, DEFAULT_CORNER_RADIUS);
         }
 
-        // Set the color and draw the shape for when the button is clicked or not clicked
-        if (this.isPressed && this.isClickable) {
-            int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
-            int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
-            int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
-
-            sketch.fill(r, g, b);
-            sketch.stroke(59, 58, 57, 63f);
-            Graphics.drawRoundedRectangle(sketch, this.rect.x,
-                    this.rect.y + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height, DEFAULT_RADIUS);
-
-            // Draw the text, including the text outline
-            sketch.fill(0);
-            sketch.stroke(0);
-            for (int x = -1; x < 2; x++) {
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
-                        (float) this.rect.getCenterY()
-                                - (this.rect.height / 2.f)
-                                + this.rect.height / 10.f,
-                        (float) this.rect.width,
-                        (float) this.rect.height);
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                        (float) this.rect.getCenterY()
-                                - (this.rect.height / 2.f)
-                                + x + this.rect.height / 10.f,
-                        (float) this.rect.width,
-                        (float) this.rect.height);
-            }
-            sketch.fill(255 + COLOR_DELTA_ON_CLICK);
-            sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
-            sketch.text(this.model.text,
-                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                    (float) this.rect.getCenterY()
-                            - (this.rect.height / 2.f)
-                            + this.rect.height / 10.f,
-                    (float) this.rect.width,
-                    (float) this.rect.height);
+        // If pressed, draw the text lower and don't draw the main button
+        // This makes it look like the button is pushed into the screen
+        if (this.isPressed) {
+            textWithOutline(this.model.text,
+                (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                (float) this.rect.getCenterY() - (this.rect.height / 2.f)
+                    + this.rect.height / 10.f,
+                (float) this.rect.width,
+                (float) this.rect.height,
+                sketch);
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
             Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                    this.rect.width, this.rect.height, DEFAULT_RADIUS);
+                    this.rect.width, this.rect.height, DEFAULT_CORNER_RADIUS);
 
-            // Draw text, including the text outline
-            sketch.fill(0);
-            sketch.stroke(0);
-            for (int x = -1; x < 2; x++) {
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f),
-                        (float) this.rect.width,
-                        (float) this.rect.height);
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x,
-                        (float) this.rect.width,
-                        (float) this.rect.height);
-            }
-            sketch.fill(255);
-            sketch.stroke(255);
-            sketch.text(this.model.text,
-                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                    (float) this.rect.getCenterY() - (this.rect.height / 2.f),
-                    (float) this.rect.width,
-                    (float) this.rect.height);
+            textWithOutline(this.model.text,
+                (float) this.rect.getCenterX() - (this.rect.width / 2.f),
+                (float) this.rect.getCenterY() - (this.rect.height / 2.f),
+                (float) this.rect.width,
+                (float) this.rect.height,
+                sketch);
         }
     }
 
@@ -247,8 +190,8 @@ public class ButtonControl implements Control<MouseEvent> {
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
-        if (this.isClickable && !this.disabled) {
-            //Draw the darker button behind the button to add 3D effects
+        // If it's clickable, draw the darker button behind the main one to add 3D effect
+        if (!disabled) {
             sketch.fill(clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
@@ -257,78 +200,41 @@ public class ButtonControl implements Control<MouseEvent> {
                     this.rect.width, this.rect.height);
         }
 
-        // Set the color and draw the shape
-        sketch.rectMode(PConstants.CENTER);
-
-        if (this.isPressed && this.isClickable) {
-            int r = clampColor(this.model.rgb[0] + COLOR_DELTA_ON_CLICK);
-            int g = clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK);
-            int b = clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK);
-
-            sketch.fill(r, g, b);
-            sketch.stroke(59, 58, 57, 63f);
-            sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height);
-
-            // Draw the text, including the text outline
-            sketch.fill(59, 58, 57);
-            sketch.stroke(59, 58, 57);
-
+        // If pressed, draw the text lower and don't draw the main button
+        // This makes it look like the button is pushed into the screen
+        if (this.isPressed) {
             if (!this.model.text.isBlank()) {
-                for (int x = -1; x < 2; x++) {
-                    sketch.text(this.model.text,
-                            (float) this.rect.getCenterX() + x,
-                            (float) this.rect.getCenterY() + this.rect.height / 10.f,
-                            centerSquareSize,
-                            centerSquareSize);
-                    sketch.text(this.model.text,
-                            (float) this.rect.getCenterX(),
-                            (float) this.rect.getCenterY() + x + this.rect.height / 10.f,
-                            centerSquareSize,
-                            centerSquareSize);
-                }
-                sketch.fill(255 + COLOR_DELTA_ON_CLICK);
-                sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY() + this.rect.height / 10.f,
-                        centerSquareSize,
-                        centerSquareSize);
+                textWithOutline(this.model.text,
+                    (float) this.rect.getCenterX(),
+                    (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                    centerSquareSize, centerSquareSize,
+                    sketch);
             }
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
             sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
-            // Draw text
-            sketch.fill(255);
-            sketch.stroke(255);
-            Graphics.useSansSerifBold(sketch, FONT_SIZE);
-            if (!this.model.text.isBlank()) {
-                // Draw text, including the text outline
-                sketch.fill(59, 58, 57);
-                sketch.stroke(59, 58, 57);
-                for (int x = -1; x < 2; x++) {
-                    sketch.text(this.model.text,
-                            (float) this.rect.getCenterX() + x,
-                            (float) this.rect.getCenterY(),
-                            centerSquareSize,
-                            centerSquareSize);
-                    sketch.text(this.model.text,
-                            (float) this.rect.getCenterX(),
-                            (float) this.rect.getCenterY() + x,
-                            centerSquareSize,
-                            centerSquareSize);
-                }
-                sketch.fill(255);
-                sketch.stroke(255);
-                sketch.text(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY(),
-                        centerSquareSize,
-                        centerSquareSize);
-            }
+            textWithOutline(this.model.text,
+                (float) this.rect.getCenterX(),
+                (float) this.rect.getCenterY(),
+                centerSquareSize, centerSquareSize,
+                sketch);
         }
+    }
+
+    // TODO maybe this should be extracted to a graphics class
+    private void textWithOutline(String text, float x, float y, float w, float h, Kiosk sketch) {
+        // Draw multiple copies of the text shifted by a few pixels to create the outline
+        sketch.fill(0, 0, 0);
+        for (int delta = -1; delta < 2; delta++) {
+            sketch.text(text, x + delta, y, w, h);
+            sketch.text(text, x, y + delta, w, h);
+        }
+
+        // Draw the text
+        sketch.fill(255);
+        sketch.text(text, x, y, w, h);
     }
 
     public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
@@ -349,7 +255,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // clicked the same button twice if wasClicked() is called
         // in a subsequent update tick.
         this.wasClicked = false;
-        return temp && this.isClickable;
+        return temp && !this.disabled;
     }
 
     public String getTarget() {
@@ -358,6 +264,29 @@ public class ButtonControl implements Control<MouseEvent> {
 
     public ButtonModel getModel() {
         return this.model;
+    }
+
+    public void setWidth(int width) {
+        this.rect.width = width;
+        updateRadius();
+    }
+
+    public void setHeight(int height) {
+        this.rect.height = height;
+        updateRadius();
+    }
+
+    // Helper method for updating the radius and calculating new centerSquareSize
+    private void updateRadius() {
+        this.radius = Math.min(this.rect.width, this.rect.height);
+
+        // The text has to fit inside the largest square possible inside the circle
+        // so we're using the Pythagorean theorem to get the sides of the square, and
+        // the diameter is the hypotenuse.
+        // Additionally, we're using the diameter of the minimumButtonRadius in
+        // order to keep all the font sizes consistent
+        // Images must fit inside this circle too
+        this.centerSquareSize = (float) Math.sqrt(Math.pow(this.radius * 2, 2) / 2);
     }
 
     private void onMousePressed(MouseEvent event) {
@@ -382,14 +311,6 @@ public class ButtonControl implements Control<MouseEvent> {
     public void setLocation(int x, int y) {
         this.rect.x = x;
         this.rect.y = y;
-    }
-
-    /**
-     * By default, button models are clickable. You can turn that off here.
-     * @param isClickable True if we can click it, false if not.
-     */
-    public void setClickable(boolean isClickable) {
-        this.isClickable = isClickable;
     }
 
     /**
