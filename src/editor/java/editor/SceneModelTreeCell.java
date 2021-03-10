@@ -1,8 +1,8 @@
 package editor;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
@@ -51,8 +51,11 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
             createTextField();
         }
 
-        textField.setText(getName());
-        setText(getName());
+        String name = getName();
+        name = name.replaceAll("⇱", "");
+        name = name.replaceAll("√", "");
+        textField.setText(name);
+        setText(name);
         setGraphic(textField);
         textField.selectAll();
     }

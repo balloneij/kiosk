@@ -1,6 +1,7 @@
 package editor.sceneloaders;
 
 import editor.Controller;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -18,18 +19,17 @@ public class SceneLoader {
     static Alert alert = new Alert(Alert.AlertType.ERROR);
 
     protected static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
-        var nameField = new TextField(model.getName());
+        String name = model.getName();
+        name = name.replaceAll("⇱", "");
+        name = name.replaceAll("√", "");
 
-        nameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue && !ShowingNameAlert
-                    && !model.getName().equals(nameField.getText())) {
-                evaluateNameProperty(controller, model, graph, nameField);
-            }
-        });
+        var nameField = new TextField(name);
 
+        // just so lambda doesn't yell at us
+        String finalName = name;
         nameField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)
-                    && !model.getName().equals(nameField.getText())) {
+                    && !finalName.equals(nameField.getText())) {
                 evaluateNameProperty(controller, model, graph, nameField);
             }
         });
@@ -40,9 +40,13 @@ public class SceneLoader {
     }
 
     private static void evaluateNameProperty(Controller controller, SceneModel model,
-            SceneGraph graph, TextField nameField) {
-        var newValue = nameField.getText();
+                                             SceneGraph graph, TextField nameField) {
         var oldName = model.getName();
+        oldName = oldName.replaceAll("⇱", "");
+        oldName = oldName.replaceAll("√", "");
+
+        var newValue = nameField.getText();
+        alert.setHeaderText("Duplicate Name");
         alert.setContentText(String.format("There is already a scene with the name %s."
                 + "\r\n Please try a different name.", newValue));
 
