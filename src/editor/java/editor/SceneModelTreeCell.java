@@ -18,7 +18,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private final MenuItem rootMenuItem = new MenuItem("Make This Scene the Root");
     private final MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
     Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
-            + "by any other scenes");
+            + "in the survey");
+    Tooltip rootInfo = new Tooltip("This is the root scene");
     private static Alert alert = new Alert(Alert.AlertType.ERROR);
     public static SceneGraph sceneGraph;
 
@@ -41,6 +42,7 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
 
         orphanInfo.setHideDelay(new Duration(.5));
+        rootInfo.setHideDelay(new Duration(.5));
     }
 
     @Override
@@ -97,6 +99,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
             // Add the ToolTip if it's not there already and if it's needed
             if (getTooltip() == null && getItem().getName().contains("⇱")) {
                 setTooltip(orphanInfo);
+            } else if (getTooltip() == null && getItem().getName().contains("√")) {
+                setTooltip(rootInfo);
             }
 
             setText(getName());
