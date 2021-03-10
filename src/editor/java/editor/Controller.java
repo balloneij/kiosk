@@ -310,14 +310,27 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Sets the specified SceneModel as the SceneGraph's
+     * new Root Scene. This is called through the TreeCells'
+     * Context Menus.
+     * @param newRoot the SceneModel that becomes the Root
+     */
     @FXML
     public void setRootScene(SceneModel newRoot) {
-        sceneGraph.setRootSceneModel(newRoot);
-        rebuildSceneGraphTreeView();
+        if (newRoot.getClass().equals(EmptySceneModel.class)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Invalid Root Scene");
+            alert.setContentText("An empty scene type cannot be set as the root scene");
+            alert.showAndWait();
+        } else {
+            sceneGraph.setRootSceneModel(newRoot);
+            rebuildSceneGraphTreeView();
+        }
     }
 
     /**
-     * Deletes a specific SceneModel from the SceneGraph.
+     * Deletes a specified SceneModel from the SceneGraph.
      * This is called through the TreeCells' Context Menus.
      * @param toDelete the SceneModel to be deleted
      */
@@ -327,8 +340,8 @@ public class Controller implements Initializable {
             sceneGraph.unregisterSceneModel(toDelete);
             rebuildSceneGraphTreeView();
         } catch (SceneModelException e) {
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Unable to Delete Scene");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
