@@ -20,8 +20,8 @@ public class SceneLoader {
 
     protected static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
         String name = model.getName();
-        name = name.replaceAll("⇱", "");
-        name = name.replaceAll("√", "");
+        name = name.replaceAll("⦸", "");
+        name = name.replaceAll("✪", "");
 
         var nameField = new TextField(name);
 
@@ -42,8 +42,8 @@ public class SceneLoader {
     private static void evaluateNameProperty(Controller controller, SceneModel model,
                                              SceneGraph graph, TextField nameField) {
         var oldName = model.getName();
-        oldName = oldName.replaceAll("⇱", "");
-        oldName = oldName.replaceAll("√", "");
+        oldName = oldName.replaceAll("⦸", "");
+        oldName = oldName.replaceAll("✪", "");
 
         var newValue = nameField.getText();
         alert.setHeaderText("Duplicate Name");

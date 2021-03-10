@@ -54,8 +54,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         }
 
         String name = getName();
-        name = name.replaceAll("⇱", "");
-        name = name.replaceAll("√", "");
+        name = name.replaceAll("⦸", "");
+        name = name.replaceAll("✪", "");
         textField.setText(name);
         setText(name);
         setGraphic(textField);
@@ -97,9 +97,9 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
                 setContextMenu(editMenu);
             }
             // Add the ToolTip if it's not there already and if it's needed
-            if (getTooltip() == null && getItem().getName().contains("⇱")) {
+            if (getTooltip() == null && getItem().getName().contains("⦸")) {
                 setTooltip(orphanInfo);
-            } else if (getTooltip() == null && getItem().getName().contains("√")) {
+            } else if (getTooltip() == null && getItem().getName().contains("✪")) {
                 setTooltip(rootInfo);
             }
 

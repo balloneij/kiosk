@@ -241,12 +241,12 @@ public class Controller implements Initializable {
     private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,
                                            SceneModel model, Set<String> nonOrphanChildren) {
 
-        if ((model.getName().startsWith("√"))
+        if ((model.getName().startsWith("✪"))
                 && (model != sceneGraph.getRootSceneModel())) {
             model.setName(model.getName().substring(1));
         } else if ((model == sceneGraph.getRootSceneModel())
-                && (!model.getName().startsWith("√"))) {
-            model.setName("√" + model.getName());
+                && (!model.getName().startsWith("✪"))) {
+            model.setName("✪" + model.getName());
         }
 
         boolean orphan = true;
@@ -260,11 +260,11 @@ public class Controller implements Initializable {
         }
 
         if (orphan && (model != sceneGraph.getRootSceneModel())) {
-            if (!(model.getName().startsWith("⇱"))) {
-                model.setName("⇱" + model.getName());
+            if (!(model.getName().startsWith("⦸"))) {
+                model.setName("⦸" + model.getName());
             }
         } else {
-            if ((model.getName().startsWith("⇱"))) {
+            if ((model.getName().startsWith("⦸"))) {
                 model.setName(model.getName().substring(1));
             }
         }
