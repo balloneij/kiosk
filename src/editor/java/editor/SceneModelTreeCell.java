@@ -15,7 +15,7 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private Controller controller;
     private TextField textField;
     private final ContextMenu editMenu = new ContextMenu();
-    private final MenuItem rootMenuItem = new MenuItem("Make This Scene the Root");
+    private final MenuItem rootMenuItem = new MenuItem("Make This Scene The Root");
     private final MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
     Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
             + "in the survey");
