@@ -14,7 +14,8 @@ public class Settings {
     public static final String DEFAULT_SAVE_PATH = "settings.xml";
 
     public int timeoutMillis;
-    public int animationFrames;
+    public int sceneAnimationFrames;
+    public int buttonAnimationFrames;
     public int screenW;
     public int screenH;
 
@@ -28,7 +29,8 @@ public class Settings {
      */
     public Settings() {
         timeoutMillis = 60000;
-        animationFrames = 150;
+        sceneAnimationFrames = 0;
+        buttonAnimationFrames = 80;
         screenW = 1280;
         screenH = 720;
     }

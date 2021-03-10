@@ -14,8 +14,8 @@ public class PromptScene implements Scene {
     // White foreground
     private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
     private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
-    private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
+    private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
+    private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
     private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
@@ -35,6 +35,9 @@ public class PromptScene implements Scene {
     private static final int BUTTON_PADDING = 20;
     private static final int BUTTON_Y = Kiosk.getSettings().screenH * 7 / 12;
 
+    //Animations
+    private int startFrame = 0;
+
     private final PromptSceneModel model;
     private final ButtonControl[] buttons;
     private ButtonControl homeButton;
@@ -47,6 +50,7 @@ public class PromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
+        startFrame = sketch.frameCount;
         final int sketchHeight = Kiosk.getSettings().screenH;
 
         // Start the X on the far left so we simply need to add
@@ -115,45 +119,41 @@ public class PromptScene implements Scene {
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
-        //TODO MAKE WORK ON ALL SCENES, NOT JUST FIRST
         //TODO MAKE ANIMATION LESS CHOPPY WHEN LESS FRAMES DESIRED
         //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.frameCount < Kiosk.getSettings().animationFrames) {
+        if (sketch.frameCount - startFrame < Kiosk.getSettings().sceneAnimationFrames) {
             // Draw the white foreground box
             sketch.fill(255);
-            //TODO CHANGE RECTANGLE CREATION METHOD TO CENTER FOR SMOOTHER ANIMATION
-            //     THIS WILL TAKE QUITE A BIT OF REFACTORING OTHER RECTANGLE CREATION METHODS...
-            //     ALSO PRESENT IN THE BUTTONS DRAWN BELOW...
             Graphics.drawRoundedRectangle(sketch,
                     FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
-                    (float) (FOREGROUND_WIDTH * (sketch.frameCount * 1.0
-                            / Kiosk.getSettings().animationFrames)),
-                    (float) (FOREGROUND_HEIGHT * (sketch.frameCount * 1.0
-                            / Kiosk.getSettings().animationFrames)),
-                    (float) (FOREGROUND_CURVE_RADIUS * (sketch.frameCount * 1.0
-                            / Kiosk.getSettings().animationFrames)));
+                    (float) (FOREGROUND_WIDTH * ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames)),
+                    (float) (FOREGROUND_HEIGHT * ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames)),
+                    (float) (FOREGROUND_CURVE_RADIUS * ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames)));
             // Draw text
             sketch.rectMode(PConstants.CENTER);
             sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
             sketch.fill(0);
             // Title
-            Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE * (sketch.frameCount * 1.0
-                    / Kiosk.getSettings().animationFrames)), true);
+            Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames)), true);
             sketch.text(this.model.title, centerX, TITLE_Y,
                     sketch.width / 1.5f, sketch.height / 5f);
             // Prompt
-            Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE * (sketch.frameCount * 1.0
-                    / Kiosk.getSettings().animationFrames)), false);
+            Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames)), false);
             sketch.text(this.model.prompt, centerX, PROMPT_Y,
                     sketch.width / 1.5f, sketch.height / 5f);
             // Action
-            Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE * (sketch.frameCount * 1.0
-                    / Kiosk.getSettings().animationFrames)), true);
+            Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames)), true);
             sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
                     sketch.width / 1.5f, sketch.height / 6f);
             for (ButtonControl button : this.buttons) {
-                button.draw(sketch, (sketch.frameCount * 1.0
-                        / Kiosk.getSettings().animationFrames));
+                button.draw(sketch, ((sketch.frameCount - startFrame) * 1.0
+                        / Kiosk.getSettings().sceneAnimationFrames));
             }
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box

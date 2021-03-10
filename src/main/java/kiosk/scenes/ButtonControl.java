@@ -178,6 +178,7 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param sketch to draw to
      */
     private void drawRectangle(Kiosk sketch, double sizeMultiplier) {
+        //TODO MAKE HOME & BACK BUTTONS NOT ANIMATED
         // Draw modifiers
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -188,11 +189,20 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
             sketch.stroke(59, 58, 57, 63f);
-            Graphics.drawRoundedRectangle(sketch, this.rect.x,
-                    this.rect.y + this.rect.height / 10.f,
-                    (int) (this.rect.width * sizeMultiplier),
-                    (int) (this.rect.height * sizeMultiplier),
-                    (int) (DEFAULT_RADIUS * sizeMultiplier));
+            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                        (int) (this.rect.width * sizeMultiplier * (1 + offset)),
+                        (int) (this.rect.height * sizeMultiplier * (1 + offset)),
+                        (int) (DEFAULT_RADIUS * sizeMultiplier));
+            } else {
+                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                        (int) (this.rect.width * sizeMultiplier),
+                        (int) (this.rect.height * sizeMultiplier),
+                        (int) (DEFAULT_RADIUS * sizeMultiplier));
+            }
         }
 
         // Set the color and draw the shape for when the button is clicked or not clicked
@@ -203,26 +213,27 @@ public class ButtonControl implements Control<MouseEvent> {
 
             sketch.fill(r, g, b);
             sketch.stroke(59, 58, 57, 63f);
-            Graphics.drawRoundedRectangle(sketch, this.rect.x,
-                    this.rect.y + this.rect.height / 10.f,
+            Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
+                    this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                     (int) (this.rect.width * sizeMultiplier),
                     (int) (this.rect.height * sizeMultiplier),
                     (int) (DEFAULT_RADIUS * sizeMultiplier));
 
             // Draw the text, including the text outline
+            //TODO ANIMATE TEXT TO MOVE AS WELL
             sketch.fill(0);
             sketch.stroke(0);
             for (int x = -1; x < 2; x++) {
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
-                        (float) this.rect.getCenterY()
+                        (float) this.rect.getCenterX() + (this.rect.width / 2.f) - (this.rect.width / 2.f) + x,
+                        (float) this.rect.getCenterY() + (this.rect.height / 2.f)
                                 - (this.rect.height / 2.f)
                                 + this.rect.height / 10.f,
                         (float) this.rect.width,
                         (float) this.rect.height);
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                        (float) this.rect.getCenterY()
+                        (float) this.rect.getCenterX() + (this.rect.width / 2.f) - (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() + (this.rect.height / 2.f)
                                 - (this.rect.height / 2.f)
                                 + x + this.rect.height / 10.f,
                         (float) this.rect.width,
@@ -231,8 +242,8 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.fill(255 + COLOR_DELTA_ON_CLICK);
             sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
             sketch.text(this.model.text,
-                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                    (float) this.rect.getCenterY()
+                    (float) this.rect.getCenterX() + (this.rect.width / 2.f) - (this.rect.width / 2.f),
+                    (float) this.rect.getCenterY() + (this.rect.height / 2.f)
                             - (this.rect.height / 2.f)
                             + this.rect.height / 10.f,
                     (float) this.rect.width,
@@ -240,40 +251,50 @@ public class ButtonControl implements Control<MouseEvent> {
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
-            Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
-                    (int) (this.rect.width * sizeMultiplier),
-                    (int) (this.rect.height * sizeMultiplier),
-                    (int) (DEFAULT_RADIUS * sizeMultiplier));
+            //Every 110 frames, play an animation lasting 10 frames
+            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f, this.rect.y + this.rect.height / 2.f,
+                        (int) (this.rect.width * sizeMultiplier * (1 + offset)),
+                        (int) (this.rect.height * sizeMultiplier * (1 + offset)),
+                        (int) (DEFAULT_RADIUS * sizeMultiplier));
+            } else {
+                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f, this.rect.y + this.rect.height / 2.f,
+                        (int) (this.rect.width * sizeMultiplier),
+                        (int) (this.rect.height * sizeMultiplier),
+                        (int) (DEFAULT_RADIUS * sizeMultiplier));
+            }
 
             // Draw text, including the text outline
             sketch.fill(0);
             sketch.stroke(0);
             for (int x = -1; x < 2; x++) {
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f) + x,
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f),
+                        (float) this.rect.getCenterX() + (this.rect.width / 2.f) - (this.rect.width / 2.f) + x,
+                        (float) this.rect.getCenterY() + (this.rect.height / 2.f) - (this.rect.height / 2.f),
                         (float) this.rect.width,
                         (float) this.rect.height);
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                        (float) this.rect.getCenterY() - (this.rect.height / 2.f) + x,
+                        (float) this.rect.getCenterX() + (this.rect.width / 2.f) - (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() + (this.rect.height / 2.f) - (this.rect.height / 2.f) + x,
                         (float) this.rect.width,
                         (float) this.rect.height);
             }
             sketch.fill(255);
             sketch.stroke(255);
             sketch.text(this.model.text,
-                    (float) this.rect.getCenterX() - (this.rect.width / 2.f),
-                    (float) this.rect.getCenterY() - (this.rect.height / 2.f),
+                    (float) this.rect.getCenterX() + (this.rect.width / 2.f) - (this.rect.width / 2.f),
+                    (float) this.rect.getCenterY() + (this.rect.height / 2.f) - (this.rect.height / 2.f),
                     (float) this.rect.width,
                     (float) this.rect.height);
         }
     }
 
     private void drawCircle(Kiosk sketch, double sizeMultiplier) {
+        //TODO MAKE SPOKE GRAPHS NOT-CLICKABLE BUTTONS NOT ANIMATED
         // Draw modifiers
         sketch.rectMode(PConstants.CORNER);
-        sketch.ellipseMode(PConstants.CORNER);
+        sketch.ellipseMode(PConstants.CENTER);
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
 
@@ -283,8 +304,18 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
             sketch.stroke(59, 58, 57, 63f);
-            sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height);
+            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                        (int) (this.rect.width * sizeMultiplier * (1 + offset)),
+                        (int) (this.rect.height * sizeMultiplier * (1 + offset)));
+            } else {
+                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                        (int) (this.rect.width * sizeMultiplier),
+                        (int) (this.rect.height * sizeMultiplier));
+            }
         }
 
         // Set the color and draw the shape
@@ -297,8 +328,8 @@ public class ButtonControl implements Control<MouseEvent> {
 
             sketch.fill(r, g, b);
             sketch.stroke(59, 58, 57, 63f);
-            sketch.ellipse(this.rect.x, this.rect.y + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height);
+            sketch.ellipse(this.rect.x + this.rect.width / 2.f, this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                    (float) (this.rect.width * sizeMultiplier), (float) (this.rect.height * sizeMultiplier));
 
             // Draw the text, including the text outline
             sketch.fill(59, 58, 57);
@@ -307,28 +338,39 @@ public class ButtonControl implements Control<MouseEvent> {
             if (!this.model.text.isBlank()) {
                 for (int x = -1; x < 2; x++) {
                     sketch.text(this.model.text,
-                            (float) this.rect.getCenterX() + x,
-                            (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                            (float) this.rect.getCenterX() - (this.rect.width / 2.f)  + (this.rect.width / 2.f) + x,
+                            (float) this.rect.getCenterY() - (this.rect.height / 2.f)  + (this.rect.height / 2.f) + this.rect.height / 10.f,
                             centerSquareSize,
                             centerSquareSize);
                     sketch.text(this.model.text,
-                            (float) this.rect.getCenterX(),
-                            (float) this.rect.getCenterY() + x + this.rect.height / 10.f,
+                            (float) this.rect.getCenterX() - (this.rect.width / 2.f)  + (this.rect.width / 2.f),
+                            (float) this.rect.getCenterY() - (this.rect.height / 2.f)  + (this.rect.height / 2.f) + x + this.rect.height / 10.f,
                             centerSquareSize,
                             centerSquareSize);
                 }
                 sketch.fill(255 + COLOR_DELTA_ON_CLICK);
                 sketch.stroke(255 + COLOR_DELTA_ON_CLICK);
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f)  + (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f)  + (this.rect.height / 2.f) + this.rect.height / 10.f,
                         centerSquareSize,
                         centerSquareSize);
             }
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
-            sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f,
+                        (float) (this.rect.width * sizeMultiplier * (1 + offset)),
+                        (float) (this.rect.height * sizeMultiplier * (1 + offset)));
+            } else {
+                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f,
+                        (float) (this.rect.width * sizeMultiplier),
+                        (float) (this.rect.height * sizeMultiplier));
+            }
 
             // Draw text
             sketch.fill(255);
@@ -340,21 +382,21 @@ public class ButtonControl implements Control<MouseEvent> {
                 sketch.stroke(59, 58, 57);
                 for (int x = -1; x < 2; x++) {
                     sketch.text(this.model.text,
-                            (float) this.rect.getCenterX() + x,
-                            (float) this.rect.getCenterY(),
+                            (float) this.rect.getCenterX() - (this.rect.width / 2.f)  + (this.rect.width / 2.f) + x,
+                            (float) this.rect.getCenterY() - (this.rect.height / 2.f)  + (this.rect.height / 2.f),
                             centerSquareSize,
                             centerSquareSize);
                     sketch.text(this.model.text,
-                            (float) this.rect.getCenterX(),
-                            (float) this.rect.getCenterY() + x,
+                            (float) this.rect.getCenterX() - (this.rect.width / 2.f)  + (this.rect.width / 2.f),
+                            (float) this.rect.getCenterY() - (this.rect.height / 2.f)  + (this.rect.height / 2.f) + x,
                             centerSquareSize,
                             centerSquareSize);
                 }
                 sketch.fill(255);
                 sketch.stroke(255);
                 sketch.text(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY(),
+                        (float) this.rect.getCenterX() - (this.rect.width / 2.f)  + (this.rect.width / 2.f),
+                        (float) this.rect.getCenterY() - (this.rect.height / 2.f)  + (this.rect.height / 2.f),
                         centerSquareSize,
                         centerSquareSize);
             }

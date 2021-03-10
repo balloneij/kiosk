@@ -103,7 +103,7 @@ public class DetailsScene implements Scene {
         // Draw the white foreground box
         sketch.fill(255);
         Graphics.drawRoundedRectangle(sketch,
-            FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
+            FOREGROUND_X_PADDING + FOREGROUND_WIDTH / 2.f, FOREGROUND_Y_PADDING + FOREGROUND_HEIGHT / 2.f,
             FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
             FOREGROUND_CURVE_RADIUS);
 

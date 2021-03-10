@@ -134,7 +134,7 @@ public class Graphics {
      */
     public static void drawRoundedRectangle(Kiosk sketch, float x, float y,
                                             float w, float h, float r) {
-        sketch.rectMode(PConstants.CORNER);
+        sketch.rectMode(PConstants.CENTER);
 
         // Draw the rounded rectangle
         sketch.rect(x, y, w, h, r);

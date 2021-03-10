@@ -113,7 +113,7 @@ public class PathwayScene implements Scene {
         sketch.stroke(255);
 
         Graphics.drawRoundedRectangle(sketch,
-                HEADER_X, HEADER_Y, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
+                HEADER_X + HEADER_W / 2, HEADER_Y + HEADER_H / 2, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
 
         // Draw the title and body
         sketch.fill(0);
