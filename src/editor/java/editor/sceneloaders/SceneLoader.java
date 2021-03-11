@@ -1,7 +1,6 @@
 package editor.sceneloaders;
 
 import editor.Controller;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -19,24 +18,18 @@ public class SceneLoader {
     static Alert alert = new Alert(Alert.AlertType.ERROR);
 
     protected static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
-        String name = model.getName();
-        name = name.replaceAll("⦸", "");
-        name = name.replaceAll("✪", "");
+        var nameField = new TextField(getEditableName(model));
 
-        var nameField = new TextField(name);
-
-        // just so lambda doesn't yell at us
-        String finalName = name;
         nameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && !ShowingNameAlert
-                    && !finalName.equals(nameField.getText())) {
+                    && !getEditableName(model).equals(nameField.getText())) {
                 evaluateNameProperty(controller, model, graph, nameField);
             }
         });
 
         nameField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)
-                    && !finalName.equals(nameField.getText())) {
+                    && !getEditableName(model).equals(nameField.getText())) {
                 evaluateNameProperty(controller, model, graph, nameField);
             }
         });
@@ -48,9 +41,7 @@ public class SceneLoader {
 
     private static void evaluateNameProperty(Controller controller, SceneModel model,
                                              SceneGraph graph, TextField nameField) {
-        var oldName = model.getName();
-        oldName = oldName.replaceAll("⦸", "");
-        oldName = oldName.replaceAll("✪", "");
+        var oldName = getEditableName(model);
 
         var newValue = nameField.getText();
         alert.setHeaderText("Duplicate Name");
@@ -69,4 +60,9 @@ public class SceneLoader {
         }
     }
 
+    private static String getEditableName(SceneModel model) {
+        String name = model.getName();
+        name = name.replaceAll("⦸", "");
+        return name.replaceAll("✪", "");
+    }
 }
