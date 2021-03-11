@@ -162,6 +162,14 @@ public class Controller implements Initializable {
                 .findFirst()
                 .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
         });
+
+        MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
+        sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
+        newSceneMenuItem.setOnAction(t -> {
+            createNewScene();
+        });
+
+        SceneModelTreeCell.sceneGraph = sceneGraph;
     }
 
     /**
