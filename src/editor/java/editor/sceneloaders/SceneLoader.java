@@ -27,6 +27,13 @@ public class SceneLoader {
 
         // just so lambda doesn't yell at us
         String finalName = name;
+        nameField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && !ShowingNameAlert
+                    && !finalName.equals(nameField.getText())) {
+                evaluateNameProperty(controller, model, graph, nameField);
+            }
+        });
+
         nameField.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)
                     && !finalName.equals(nameField.getText())) {
