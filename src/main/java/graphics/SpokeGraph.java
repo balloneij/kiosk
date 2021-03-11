@@ -1,5 +1,6 @@
 package graphics;
 
+import java.util.Arrays;
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
@@ -23,6 +24,10 @@ public class SpokeGraph {
     private final float centerSquareSize;
 
     private final ButtonControl[] buttonControls;
+    private double[] weights;
+
+    private final int[] rgbColor1 = new int[] { 0, 0, 255 };
+    private final int[] rgbColor2 = new int[] { 255, 0, 0 };
 
     /**
      * Create a spoke graph.
@@ -33,9 +38,26 @@ public class SpokeGraph {
      * @param buttons to create a spoke graph off of
      */
     public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons) {
+        this(size, x, y, centerText, buttons, new double[buttons.length]);
+        Arrays.fill(weights, 0); // Set all weights to 0
+    }
+
+    /**
+     * Create a spoke graph.
+     * @param size the square to fit the graph in
+     * @param x top left corner
+     * @param y top right corner
+     * @param centerText text of the center wheel
+     * @param buttons to create a spoke graph off of
+     */
+    public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons,
+                      double[] weights) {
         this.centerText = centerText;
         this.centerX = (float) (x + size / 2);
         this.centerY = (float) (y + size / 2);
+        this.weights = weights;
+
+        double[] normalWeights = normalizeWeights(weights);
 
         // Worst case Spokegraph
         //      O
@@ -62,7 +84,8 @@ public class SpokeGraph {
 
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
-            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, 0.5);
+            double weight = normalWeights[i];
+            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
             final float diameter = radius * 2;
             final float buttonX = (float)
                     (centerX + Math.cos(STARTING_ANGLE + angleDelta * i) * (spokeLength + radius));
@@ -72,11 +95,40 @@ public class SpokeGraph {
             // Create the ButtonControl
             ButtonModel button = buttons[i];
             button.isCircle = true;
+            button.rgb = lerpColor(rgbColor1, rgbColor2, weight);
+
             buttonControls[i] = new ButtonControl(button,
                     (int) (buttonX - radius), (int) (buttonY - radius),
-                    (int) diameter, (int) diameter,
                     (int) radius);
         }
+    }
+
+    private double[] normalizeWeights(double[] weights) {
+        // Find the min and max weights in the weights array
+        double minWeight = Double.POSITIVE_INFINITY;
+        double maxWeight = Double.NEGATIVE_INFINITY;
+        for (double w : weights) {
+            if (w < minWeight) {
+                minWeight = w;
+            }
+            if (w > maxWeight) {
+                maxWeight = w;
+            }
+        }
+
+
+        double[] newWeights = new double[weights.length];
+        if (minWeight != maxWeight) {
+            for (int i = 0; i < weights.length; i++) {
+                // Normalize the weights to be from 0-1
+                newWeights[i] = (weights[i] - minWeight) / (maxWeight - minWeight);
+            }
+        } else {
+            // If the min and max are the same, just use 0.5 for all
+            Arrays.fill(newWeights, 0.5);
+        }
+
+        return newWeights;
     }
 
     /**
@@ -114,8 +166,40 @@ public class SpokeGraph {
         return (1 - amount) * a + amount * b;
     }
 
+    /**
+     * Interpolate between two colors.
+     * @param color1 the low, 0% color
+     * @param color2 the high, 100% color
+     * @param amount to interpolate between the two colors
+     * @return the interpolated color
+     */
+    private static int[] lerpColor(int[] color1, int[] color2, double amount) {
+        return new int[] {
+            (int) lerp(color1[0], color2[0], amount),
+            (int) lerp(color1[1], color2[1], amount),
+            (int) lerp(color1[2], color2[2], amount)
+        };
+    }
+
     public ButtonControl[] getButtonControls() {
         return buttonControls;
+    }
+
+    /**
+     * Updates the spoke weights with the provided values.
+     * @param weights The new weights to apply to the spokes.
+     */
+    public void setWeights(double[] weights) {
+        this.weights = weights;
+        double[] normalWeights = normalizeWeights(weights);
+
+        for (int i = 0; i < buttonControls.length; i++) {
+            double weight = normalWeights[i];
+            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
+            buttonControls[i].setWidth((int) radius * 2);
+            buttonControls[i].setHeight((int) radius * 2);
+            buttonControls[i].getModel().rgb = lerpColor(rgbColor1, rgbColor2, weight);
+        }
     }
 
     /**

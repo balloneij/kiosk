@@ -12,15 +12,14 @@ public final class ButtonModel {
     public ImageModel image;
     public Riasec category = Riasec.None;
 
+    private static int buttonCount = 1; // Un-named buttons will be numbered
+
     /**
      * Create a new button model with default values.
      * They will need to overwritten
      */
     public ButtonModel() {
-        this.text = "null";
-        this.target = "null";
-        this.isCircle = false;
-        this.image = null;
+        this("button " + buttonCount++, "null");
     }
 
     /**
@@ -31,6 +30,8 @@ public final class ButtonModel {
     public ButtonModel(String text, String target) {
         this.text = text;
         this.target = target;
+        this.isCircle = false;
+        this.image = null;
     }
 
     /**

@@ -32,7 +32,7 @@ public class PathwayScene implements Scene {
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     private final PathwaySceneModel model;
-    private final SpokeGraph spokeGraph;
+    protected final SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
 
@@ -42,8 +42,8 @@ public class PathwayScene implements Scene {
      */
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        for (var careerModel : model.careers) {
-            careerModel.isCircle = true;
+        for (var buttonModel : model.buttonModels) {
+            buttonModel.isCircle = true;
         }
 
         // Create the spoke graph
@@ -52,7 +52,7 @@ public class PathwayScene implements Scene {
                 SCREEN_W / 2f - size / 2,
                 HEADER_Y + HEADER_H,
                 this.model.centerText,
-                this.model.careers);
+                this.model.buttonModels);
 
         this.backButton = ButtonControl.createBackButton();
         this.homeButton = ButtonControl.createHomeButton();
@@ -76,7 +76,7 @@ public class PathwayScene implements Scene {
     public void update(float dt, SceneGraph sceneGraph) {
         for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget());
+                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
         }
 
@@ -101,7 +101,7 @@ public class PathwayScene implements Scene {
         this.homeButton.draw(sketch);
     }
 
-    private void drawHeader(Kiosk sketch) {
+    protected void drawHeader(Kiosk sketch) {
         // Draw the white header box
         sketch.fill(255);
         sketch.stroke(255);

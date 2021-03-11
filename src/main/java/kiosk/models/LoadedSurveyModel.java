@@ -11,11 +11,20 @@ import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import kiosk.Riasec;
 
 public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
+    public static CareerModel[] careers = {
+        new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
+        new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
+        new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
+        new CareerModel("Social", Riasec.Social, "field", "category"),
+        new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
+        new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
+    };
 
     /**
      * Creates a survey with a single, error scene.
@@ -234,13 +243,13 @@ public class LoadedSurveyModel implements Serializable {
         };
 
         PathwaySceneModel pathway = new PathwaySceneModel();
-        pathway.careers = new ButtonModel[8];
-        for (int i = 0; i < pathway.careers.length; i++) {
+        pathway.buttonModels = new ButtonModel[8];
+        for (int i = 0; i < pathway.buttonModels.length; i++) {
             var buttonModel = new ButtonModel();
             buttonModel.isCircle = true;
             buttonModel.text = "Choice " + i;
             buttonModel.target = "spoke";
-            pathway.careers[i] = buttonModel;
+            pathway.buttonModels[i] = buttonModel;
         }
         pathway.centerText = "Pick 1!";
         pathway.headerBody = "There are many options";
@@ -251,21 +260,25 @@ public class LoadedSurveyModel implements Serializable {
         spoke.id = "spoke";
         spoke.headerTitle = "Answer some questions";
         spoke.headerBody = "Click the answer the best applies to you";
+        spoke.promptText = "What's your favorite subject?";
 
         var answer1 = new ButtonModel();
-        answer1.text = "I like math";
+        answer1.text = "Math!";
+        answer1.category = Riasec.Realistic;
+        answer1.target = "career pathway";
         var answer2 = new ButtonModel();
-        answer2.text = "I like math";
+        answer2.text = "Art!";
+        answer2.category = Riasec.Artistic;
+        answer2.target = "career pathway";
         var answer3 = new ButtonModel();
-        answer3.text = "I like math";
+        answer3.text = "Business!";
+        answer3.category = Riasec.Enterprising;
+        answer3.target = "career pathway";
         spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
 
-        spoke.careers = new ButtonModel[8];
-        for (int i = 0; i < spoke.careers.length; i++) {
-            var buttonModel = new ButtonModel();
-            buttonModel.text = "Career " + i;
-            spoke.careers[i] = buttonModel;
-        }
+        // Create a career pathways scene
+        CareerPathwaySceneModel careerPathway = new CareerPathwaySceneModel();
+        careerPathway.id = "career pathway";
 
         var initialScenes = new ArrayList<SceneModel>();
         initialScenes.add(titleScreen);
@@ -274,6 +287,7 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(pathPrompt);
         initialScenes.add(pathway);
         initialScenes.add(spoke);
+        initialScenes.add(careerPathway);
 
         return new LoadedSurveyModel(titleScreen.id, initialScenes);
     }

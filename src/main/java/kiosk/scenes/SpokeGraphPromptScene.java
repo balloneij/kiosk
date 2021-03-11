@@ -6,7 +6,10 @@ import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.Settings;
+import kiosk.UserScore;
 import kiosk.models.ButtonModel;
+import kiosk.models.CareerModel;
+import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
 
@@ -40,7 +43,7 @@ public class SpokeGraphPromptScene implements Scene {
     private static final int ANSWERS_MAX = 4;
 
     private final SpokeGraphPromptSceneModel model;
-    private final ButtonControl[] answerButtons;
+    private ButtonControl[] answerButtons;
     private final ButtonControl promptButton;
     private final SpokeGraph spokeGraph;
     private ButtonControl backButton;
@@ -54,6 +57,7 @@ public class SpokeGraphPromptScene implements Scene {
      */
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
+        this.answerButtons = new ButtonControl[this.model.answers.length];
 
         int headerBottomY = (int) (HEADER_Y + HEADER_H) + 40;
         int answerDiameter = (SCREEN_H - headerBottomY) / 3;
@@ -71,7 +75,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[0],
                     answersCenterX - answerDiameter * 3 / 2,
                     answersCenterY + answerRadius,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -80,7 +83,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[1],
                     answersCenterX + answerRadius,
                     answersCenterY - answerDiameter * 3 / 2,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -89,7 +91,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[2],
                     answersCenterX + answerRadius,
                     answersCenterY + answerRadius,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -98,7 +99,6 @@ public class SpokeGraphPromptScene implements Scene {
                     model.answers[3],
                     answersCenterX - answerDiameter * 3 / 2,
                     answersCenterY - answerDiameter * 3 / 2,
-                    answerDiameter, answerDiameter,
                     answerRadius
             );
         }
@@ -111,7 +111,6 @@ public class SpokeGraphPromptScene implements Scene {
                 prompt,
                 answersCenterX - answerRadius,
                 answersCenterY - answerRadius,
-                answerDiameter, answerDiameter,
                 answerRadius
         );
         promptButton.setDisabled(true);
@@ -123,9 +122,22 @@ public class SpokeGraphPromptScene implements Scene {
         final double availableHeight = (height - HEADER_Y - HEADER_H);
         final double size = Math.min(width, availableHeight);
 
-        this.spokeGraph = new SpokeGraph(size,
-                0, HEADER_Y + HEADER_H,
-                this.model.careerCenterText, this.model.careers);
+        CareerModel[] careers = LoadedSurveyModel.careers; // Reference to current list of careers
+        UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
+            careerButtons[i] = new ButtonModel();
+            careerButtons[i].text = career.name;
+            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+        }
+
+        this.spokeGraph = new SpokeGraph(size, 0, HEADER_Y + HEADER_H,
+            this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
 
         this.backButton = ButtonControl.createBackButton();
@@ -147,10 +159,9 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        // Check for button clicks on the scene graph
         for (var button : this.answerButtons) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget());
+                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();

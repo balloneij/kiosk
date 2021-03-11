@@ -1,5 +1,6 @@
 package editor;
 
+import editor.sceneloaders.CareerPathwaySceneLoader;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
@@ -19,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -33,6 +35,7 @@ import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
+import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -106,6 +109,7 @@ public class Controller implements Initializable {
                 new PromptSceneModel(),
                 new SpokeGraphPromptSceneModel(), 
                 new PathwaySceneModel(),
+                new CareerPathwaySceneModel(),
                 new DetailsSceneModel()
         ));
 
@@ -174,6 +178,9 @@ public class Controller implements Initializable {
         } else if (model instanceof SpokeGraphPromptSceneModel) {
             SpokeGraphPromptSceneLoader.loadScene(this,
                     (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof CareerPathwaySceneModel) {
+            CareerPathwaySceneLoader.loadScene(this, (CareerPathwaySceneModel) model,
+                toolbarBox, sceneGraph);
         } else if (model instanceof PathwaySceneModel) {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
@@ -445,6 +452,33 @@ public class Controller implements Initializable {
 
                 exception.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Saves a sample survey file in the user's working directory and shows them an alert
+     * confirming it was saved.
+     * @param event The event coming from the MenuItem for triggering the sample save.
+     */
+    @FXML
+    private void saveSampleSurvey(ActionEvent event) {
+        File sampleFile = new File("sample_survey.xml");
+
+        try {
+            LoadedSurveyModel.createSampleSurvey().writeToFile(sampleFile);
+
+            // Let the user know where it was saved
+            Alert sampleSavedAlert = new Alert(Alert.AlertType.INFORMATION,
+                "Saved to " + sampleFile.getAbsolutePath());
+            sampleSavedAlert.setHeaderText("Sample survey saved.");
+            sampleSavedAlert.show();
+        } catch (Exception exception) {
+            // Push temporary scene describing error
+            String errorMsg = "Could not save survey to '" + sampleFile.getAbsolutePath()
+                + "\nRefer to the console for more specific details.";
+            sceneGraph.pushScene(new ErrorSceneModel(errorMsg));
+
+            exception.printStackTrace();
         }
     }
 
