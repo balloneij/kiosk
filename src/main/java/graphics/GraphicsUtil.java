@@ -21,7 +21,7 @@ public class GraphicsUtil {
     public static ButtonControl initializeBackButton(Kiosk sketch) {
         var backButtonModel = new ButtonModel();
         // Rob fix your checkstyle
-        backButtonModel.text = "\uD83E\uDC78 Back";
+        backButtonModel.text = "← Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         ButtonControl backButton = new ButtonControl(backButtonModel,
                 COMMON_BUTTON_PADDING, sketch.height
@@ -36,7 +36,7 @@ public class GraphicsUtil {
      */
     public static ButtonControl initializeHomeButton() {
         var homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "⭯ Restart";
+        homeButtonModel.text = "◄◄ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
         ButtonControl homeButton = new ButtonControl(homeButtonModel,
                 COMMON_BUTTON_PADDING, COMMON_BUTTON_PADDING,
@@ -51,7 +51,7 @@ public class GraphicsUtil {
      */
     public static ButtonControl initializeNextButton(Kiosk sketch) {
         var nextButtonModel = new ButtonModel();
-        nextButtonModel.text = "Go! \uD83E\uDC7A";
+        nextButtonModel.text = "Go! →";
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
         ButtonControl nextButton = new ButtonControl(nextButtonModel,
                 sketch.width - COMMON_BUTTON_PADDING - COMMON_BUTTON_WIDTH * 3 / 4,
