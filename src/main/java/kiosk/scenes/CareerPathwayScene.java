@@ -26,24 +26,4 @@ public class CareerPathwayScene extends PathwayScene {
         }
         spokeGraph.setWeights(weights);
     }
-
-//    // TODO
-//    @Override
-//    public void draw(Kiosk sketch) {
-//        Graphics.useSansSerifBold(sketch, 48);
-//        Graphics.drawBubbleBackground(sketch);
-//        drawHeader(sketch);
-//    }
-
-//    @Override
-//    public void update(float dt, SceneGraph sceneGraph) {
-//        super.update(dt, sceneGraph);
-//        // TODO I don't like having this here since it only needs to run once but this is the
-//        //  only place where we have access to the SceneGraph (which has the UserScore)
-//        // Update the career weights based on the career's Riasec category and the user's score
-//        for (int i = 0; i < weights.length; i++) {
-//            CareerModel career = LoadedSurveyModel.careers[i];
-//            weights[i] = sceneGraph.getUserScore().getCategoryScore(career.riasecCategory);
-//        }
-//    }
 }
