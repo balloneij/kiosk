@@ -9,10 +9,20 @@ import kiosk.scenes.Scene;
  * Model for storing information about a CareerPathwayScene.
  */
 public class CareerPathwaySceneModel extends PathwaySceneModel {
+    public FilterGroupModel filter;
+    public CareerModel[] careers;
 
     public CareerPathwaySceneModel() {
         super();
-        createCareerButtons(Arrays.asList(LoadedSurveyModel.careers));
+        // TODO make this a default "All" filter
+        filter = new FilterGroupModel("All", "Realistic",
+            "Investigative", "Artistic");
+
+        // Filter the list of careers
+        careers = Arrays.stream(LoadedSurveyModel.careers)
+            .filter(careerModel -> filter.getCareers().contains(careerModel.name))
+            .toArray(CareerModel[]::new);
+        createCareerButtons(Arrays.asList(careers));
     }
 
     /**

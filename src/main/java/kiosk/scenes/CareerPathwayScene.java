@@ -4,7 +4,6 @@ import kiosk.SceneGraph;
 import kiosk.UserScore;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
-import kiosk.models.LoadedSurveyModel;
 
 /**
  * A scene that displays a spoke graph containing buttons for each of the careers currently in
@@ -18,12 +17,11 @@ public class CareerPathwayScene extends PathwayScene {
     public CareerPathwayScene(CareerPathwaySceneModel model) {
         super(model);
 
-        CareerModel[] careers = LoadedSurveyModel.careers;
+        // Update weights based on user score
         UserScore userScore = SceneGraph.getUserScore();
-
-        double[] weights = new double[careers.length];
-        for (int i = 0; i < careers.length; i++) {
-            CareerModel career = careers[i];
+        double[] weights = new double[model.careers.length];
+        for (int i = 0; i < model.careers.length; i++) {
+            CareerModel career = model.careers[i];
             weights[i] = userScore.getCategoryScore(career.riasecCategory);
         }
         spokeGraph.setWeights(weights);
