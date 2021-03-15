@@ -10,18 +10,21 @@ import java.util.Set;
  * spoke graph.
  */
 public class FilterGroupModel {
+    private String name;
     private Set<String> careers;
 
-    public FilterGroupModel(Set<String> careers) {
+    public FilterGroupModel(String name, Set<String> careers) {
+        this.name = name;
         this.setCareers(careers);
     }
 
-    public FilterGroupModel(List<String> careers) {
+    public FilterGroupModel(String name, List<String> careers) {
+        this.name = name;
         this.setCareers(careers);
     }
 
-    public FilterGroupModel(String... careers) {
-        this(Arrays.asList(careers));
+    public FilterGroupModel(String name, String... careers) {
+        this(name, Arrays.asList(careers));
     }
 
     public void setCareers(Set<String> careers) {
@@ -34,5 +37,13 @@ public class FilterGroupModel {
 
     public Set<String> getCareers() {
         return careers;
+    }
+
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
     }
 }
