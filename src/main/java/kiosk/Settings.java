@@ -16,6 +16,7 @@ public class Settings {
     public int timeoutMillis;
     public int sceneAnimationFrames;
     public int buttonAnimationFrames;
+    public int buttonAnimationLengthFrames;
     public int screenW;
     public int screenH;
 
@@ -31,6 +32,7 @@ public class Settings {
         timeoutMillis = 60000;
         sceneAnimationFrames = 0;
         buttonAnimationFrames = 80;
+        buttonAnimationLengthFrames = 20;
         screenW = 1280;
         screenH = 720;
     }

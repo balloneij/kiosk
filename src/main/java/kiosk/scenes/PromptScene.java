@@ -136,24 +136,28 @@ public class PromptScene implements Scene {
             sketch.rectMode(PConstants.CENTER);
             sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
             sketch.fill(0);
-            // Title
-            Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames)), true);
-            sketch.text(this.model.title, centerX, TITLE_Y,
-                    sketch.width / 1.5f, sketch.height / 5f);
-            // Prompt
-            Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames)), false);
-            sketch.text(this.model.prompt, centerX, PROMPT_Y,
-                    sketch.width / 1.5f, sketch.height / 5f);
-            // Action
-            Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames)), true);
-            sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
-                    sketch.width / 1.5f, sketch.height / 6f);
-            for (ButtonControl button : this.buttons) {
-                button.draw(sketch, ((sketch.frameCount - startFrame) * 1.0
-                        / Kiosk.getSettings().sceneAnimationFrames));
+            if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
+                // Title
+                Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
+                sketch.text(this.model.title, centerX, TITLE_Y,
+                        sketch.width / 1.5f, sketch.height / 5f);
+                // Prompt
+                Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), false);
+                sketch.text(this.model.prompt, centerX, PROMPT_Y,
+                        sketch.width / 1.5f, sketch.height / 5f);
+                // Action
+                Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
+                sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
+                        sketch.width / 1.5f, sketch.height / 6f);
+            }
+            if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
+                for (ButtonControl button : this.buttons) {
+                    button.draw(sketch, ((sketch.frameCount - startFrame) * 1.0
+                            / (Kiosk.getSettings().sceneAnimationFrames + 1)));
+                }
             }
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box

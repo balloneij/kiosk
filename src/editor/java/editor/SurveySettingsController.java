@@ -25,6 +25,12 @@ public class SurveySettingsController implements Initializable {
     @FXML
     private Spinner<Integer> timeOutSpinner;
     @FXML
+    private Spinner<Integer> sceneAnimationSpinner;
+    @FXML
+    private Spinner<Integer> buttonAnimationSpinner;
+    @FXML
+    private Spinner<Integer> buttonAnimationLengthSpinner;
+    @FXML
     public Button okButton;
     @FXML
     public static Stage root;
@@ -38,6 +44,9 @@ public class SurveySettingsController implements Initializable {
         currentSettings = Settings.readSettings();
         widthSpinner.setEditable(true);
         heightSpinner.setEditable(true);
+        sceneAnimationSpinner.setEditable(true);
+        buttonAnimationSpinner.setEditable(true);
+        buttonAnimationLengthSpinner.setEditable(true);
         widthSpinner.setValueFactory(new SpinnerValueFactory<Integer>() {
             @Override
             public void decrement(int i) {
@@ -101,6 +110,9 @@ public class SurveySettingsController implements Initializable {
         heightSpinner.getValueFactory().setValue(settings.screenH);
         timeOutSpinner.setEditable(true);
         timeOutSpinner.increment(settings.timeoutMillis / 1000);
+        sceneAnimationSpinner.getValueFactory().setValue(settings.sceneAnimationFrames);
+        buttonAnimationSpinner.getValueFactory().setValue(settings.buttonAnimationFrames);
+        buttonAnimationLengthSpinner.getValueFactory().setValue(settings.buttonAnimationLengthFrames);
     }
 
     /**
@@ -111,19 +123,31 @@ public class SurveySettingsController implements Initializable {
         int width = widthSpinner.getValue();
         int height = heightSpinner.getValue();
         int timeOut = timeOutSpinner.getValue();
+        int sceneAnim = sceneAnimationSpinner.getValue();
+        int buttonAnim = buttonAnimationSpinner.getValue();
+        int buttonAnimLength = buttonAnimationLengthSpinner.getValue();
 
         Settings settings = new Settings();
         settings.screenH = height;
         settings.screenW = width;
         settings.timeoutMillis = timeOut * 1000; // Convert ms to seconds
+        settings.sceneAnimationFrames = sceneAnim;
+        settings.buttonAnimationFrames = buttonAnim;
+        settings.buttonAnimationLengthFrames = buttonAnimLength;
         settings.writeSettings();
 
         boolean restartNeeded;
         restartNeeded = currentSettings == null
-            ? settings.screenH != Editor.getSettings().screenH
-                || settings.screenW != Editor.getSettings().screenW :
+                ? settings.screenH != Editor.getSettings().screenH
+                || settings.screenW != Editor.getSettings().screenW
+                || settings.sceneAnimationFrames != Editor.getSettings().sceneAnimationFrames
+                || settings.buttonAnimationFrames != Editor.getSettings().buttonAnimationFrames
+                || settings.buttonAnimationLengthFrames != Editor.getSettings().buttonAnimationLengthFrames :
             currentSettings.screenH != settings.screenH
-                || settings.screenW != currentSettings.screenW;
+                || settings.screenW != currentSettings.screenW
+                || settings.sceneAnimationFrames != currentSettings.sceneAnimationFrames
+                || settings.buttonAnimationFrames != currentSettings.buttonAnimationFrames
+                || settings.buttonAnimationLengthFrames != currentSettings.buttonAnimationLengthFrames;
         if (restartNeeded) {
             ButtonType restartLater = new ButtonType(
                     "Close Later", ButtonBar.ButtonData.CANCEL_CLOSE);

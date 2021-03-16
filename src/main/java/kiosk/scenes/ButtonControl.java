@@ -189,8 +189,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
             sketch.stroke(59, 58, 57, 63f);
-            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
-                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < Kiosk.getSettings().buttonAnimationLengthFrames) {
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * ((Kiosk.getSettings().buttonAnimationLengthFrames - 1) / 850.0))); //TODO MOVE THE VARIABLE 850 TO SETTINGS
                 Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                         (int) (this.rect.width * sizeMultiplier * (1 + offset)),
@@ -252,8 +252,8 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
             //Every 110 frames, play an animation lasting 10 frames
-            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
-                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < Kiosk.getSettings().buttonAnimationLengthFrames) {
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * ((Kiosk.getSettings().buttonAnimationLengthFrames - 1) / 850.0))); //TODO MOVE THE VARIABLE 850 TO SETTINGS
                 Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f, this.rect.y + this.rect.height / 2.f,
                         (int) (this.rect.width * sizeMultiplier * (1 + offset)),
                         (int) (this.rect.height * sizeMultiplier * (1 + offset)),
@@ -304,8 +304,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
             sketch.stroke(59, 58, 57, 63f);
-            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
-                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < Kiosk.getSettings().buttonAnimationLengthFrames) {
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * ((Kiosk.getSettings().buttonAnimationLengthFrames - 1) / 850.0))); //TODO MOVE THE VARIABLE 850 TO SETTINGS
                 sketch.ellipse(this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                         (int) (this.rect.width * sizeMultiplier * (1 + offset)),
@@ -359,8 +359,8 @@ public class ButtonControl implements Control<MouseEvent> {
         } else {
             sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
             sketch.stroke(59, 58, 57, 63f);
-            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < 20) { //TODO MOVE THE 20 TO VARIABLE IN SETTINGS
-                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (19.0 / 850.0))); //TODO MOVE THESE VARIABLES 850, 19 TO SETTINGS
+            if (isClickable && sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames < Kiosk.getSettings().buttonAnimationLengthFrames) {
+                double offset = ((0 - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) / (850.0)) + ((sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames) * ((Kiosk.getSettings().buttonAnimationLengthFrames - 1) / 850.0))); //TODO MOVE THE VARIABLE 850 SETTINGS
                 sketch.ellipse(this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f,
                         (float) (this.rect.width * sizeMultiplier * (1 + offset)),
