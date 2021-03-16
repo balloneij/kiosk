@@ -35,6 +35,11 @@
                                       <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                   </accelerator>
                               </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#saveSampleSurvey" text="Create sample survey">
+                                  <accelerator>
+                                      <KeyCodeCombination alt="DOWN" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                  </accelerator>
+                              </MenuItem>
                         </items>
                       </Menu>
                         <Menu mnemonicParsing="false" text="Edit">
@@ -66,21 +71,6 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <HBox prefHeight="41.0" prefWidth="380.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#createNewScene" text="Create New Scene">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <HBox.margin>
-                              <Insets left="8.0" top="8.0" />
-                           </HBox.margin></Button>
-                        <Button fx:id="deleteCurrentSceneButton" mnemonicParsing="false" onAction="#deleteCurrentScene" text="Delete Current Scene">
-                           <HBox.margin>
-                              <Insets left="8.0" top="8.0" />
-                           </HBox.margin></Button>
-                     </children>
-                  </HBox>
                   <ScrollPane prefHeight="478.0" prefWidth="380.0">
                     <content>
                         <VBox fx:id="toolbarBox" />

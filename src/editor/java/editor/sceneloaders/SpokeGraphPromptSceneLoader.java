@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.ImageModel;
@@ -29,6 +31,10 @@ public class SpokeGraphPromptSceneLoader {
     static final int COLOR_RANGE = 255; // The range the colors can be set to
     static final FileChooser imageFileChooser = new FileChooser();
 
+    // Never changing, so load it once to save on electricity
+    private static final ObservableList<Riasec> RIASEC_VALUES =
+        FXCollections.observableList(Arrays.asList(Riasec.values()));
+    
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
      * @param model The current scene model we want to modify.
@@ -45,8 +51,6 @@ public class SpokeGraphPromptSceneLoader {
                 getHeaderTitleBox(model, graph),
                 getHeaderBodyBox(model, graph),
                 getCareerBox(model, graph),
-                getCareerOptionsBox(controller, model, graph),
-                //getCareerWeightsBox(model, graph),
                 getPromptBox(model, graph),
                 getAnswersBox(controller, model, graph)
         );
@@ -107,6 +111,7 @@ public class SpokeGraphPromptSceneLoader {
         vbox.setPadding(PADDING);
         return vbox;
     }
+
 
     /**
      * Creates a Node with editing controls for all the answers, as well as a button to add
@@ -432,9 +437,22 @@ public class SpokeGraphPromptSceneLoader {
             }
         });
 
+        // Setup combo-box for choosing Riasec categories
+        ComboBox<Riasec> riasecComboBox = new ComboBox<>(RIASEC_VALUES);
+        riasecComboBox.setValue(answer.category);
+        riasecComboBox.setOnAction(event -> {
+            Riasec category = riasecComboBox.getValue();
+            if (!answer.category.equals(category)) {
+                answer.category = category;
+                graph.registerSceneModel(model);
+            }
+        });
+
         // Create an HBox with a "Target: " label and the combo-box
         HBox targetsBox = new HBox(new Label("Target: "), targetComboBox);
         targetsBox.setPadding(new Insets(0, 0, 0, 5));
+
+        HBox riasecBox = new HBox(new Label("Holland Code: "), riasecComboBox);
 
         // Add a separator so answers are visually separated
         Separator separator = new Separator();
@@ -442,7 +460,8 @@ public class SpokeGraphPromptSceneLoader {
 
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, removeButton);
-        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
+        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, riasecBox,
+            separator);
         return answerVbox;
     }
 }

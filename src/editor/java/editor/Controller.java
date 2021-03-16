@@ -1,5 +1,6 @@
 package editor;
 
+import editor.sceneloaders.CareerPathwaySceneLoader;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
 import editor.sceneloaders.PromptSceneLoader;
@@ -19,8 +20,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -31,6 +35,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
+import kiosk.SceneModelException;
+import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -40,7 +46,6 @@ import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.javafx.PSurfaceFX;
-
 
 public class Controller implements Initializable {
 
@@ -63,8 +68,6 @@ public class Controller implements Initializable {
     TreeView<SceneModel> sceneGraphTreeView;
     @FXML
     ComboBox<SceneModel> sceneTypeComboBox;
-    @FXML
-    Button deleteCurrentSceneButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -102,25 +105,29 @@ public class Controller implements Initializable {
         // Populate the tree view
         rebuildSceneGraphTreeView();
 
-        // Add scene type options for user seletion
+        // Add scene type options for user selection
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
                 new PromptSceneModel(),
                 new SpokeGraphPromptSceneModel(), 
                 new PathwaySceneModel(),
+                new CareerPathwaySceneModel(),
                 new DetailsSceneModel()
         ));
 
         // Handler for changing the type of scene via the combo box
         sceneTypeComboBox.getSelectionModel().selectedItemProperty()
-                .addListener((observableValue, sceneModel, selectedModel) -> {
-                    // Ignore when the combo box is reset
-                    if (selectedModel != null) {
+                .addListener((observableValue, oldValue, newValue) -> {
+                    // Ignore when the combo box is reset, or the scene type already matches.
+                    if (newValue != null
+                        && !newValue.toString().equals(sceneGraph.getCurrentSceneModel().toString())) {
                         String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
+                        String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
 
                         // A deep copy is NECESSARY here. We are duplicating the scenes
                         // loaded into the scene type combobox.
-                        SceneModel newModel = selectedModel.deepCopy();
+                        SceneModel newModel = newValue.deepCopy();
                         newModel.setId(currentSceneId);
+                        newModel.setName(currentSceneName);
                         sceneGraph.registerSceneModel(newModel);
 
                         rebuildToolbar(newModel);
@@ -146,6 +153,22 @@ public class Controller implements Initializable {
         // in the TextFieldTreeCellImpl class."
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
+
+        sceneGraph.addSceneChangeCallback(newSceneModel -> {
+            sceneTypeComboBox
+                .getItems()
+                .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
+                .stream()
+                .findFirst()
+                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
+        });
+
+        MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
+        sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
+        newSceneMenuItem.setOnAction(t -> {
+            createNewScene();
+        });
+
         SceneModelTreeCell.sceneGraph = sceneGraph;
     }
 
@@ -162,16 +185,15 @@ public class Controller implements Initializable {
             sceneTypeComboBox.getSelectionModel().clearSelection();
         }
 
-        // Grey out the delete button so we can't remove the root node
-        deleteCurrentSceneButton.setDisable(
-                model.getId().equals(sceneGraph.getRootSceneModel().getId()));
-
         previousId = model.getId();
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof SpokeGraphPromptSceneModel) {
             SpokeGraphPromptSceneLoader.loadScene(this,
                     (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof CareerPathwaySceneModel) {
+            CareerPathwaySceneLoader.loadScene(this, (CareerPathwaySceneModel) model,
+                toolbarBox, sceneGraph);
         } else if (model instanceof PathwaySceneModel) {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
@@ -196,6 +218,7 @@ public class Controller implements Initializable {
 
         // Create the survey subtree
         SceneModel rootScene = sceneGraph.getRootSceneModel();
+
         rebuildSceneGraphTreeView(hiddenRoot, rootScene, nonOrphanChildren);
 
         // Start with all the children, remove the children
@@ -237,6 +260,36 @@ public class Controller implements Initializable {
 
     private void rebuildSceneGraphTreeView(TreeItem<SceneModel> parent,
                                            SceneModel model, Set<String> nonOrphanChildren) {
+
+        if ((model.getName().startsWith("✪"))
+                && (model != sceneGraph.getRootSceneModel())) {
+            model.setName(model.getName().substring(1));
+        } else if ((model == sceneGraph.getRootSceneModel())
+                && (!model.getName().startsWith("✪"))) {
+            model.setName("✪" + model.getName());
+        }
+
+        boolean orphan = true;
+        for (String id : sceneGraph.getAllIds()) {
+            for (String target : sceneGraph.getSceneById(id).getTargets()) {
+                if (model.getId().equals(target)) {
+                    orphan = false;
+                    break;
+                }
+            }
+        }
+
+        if (orphan && (model != sceneGraph.getRootSceneModel())) {
+            if (!(model.getName().startsWith("⦸"))) {
+                model.setName("⦸" + model.getName());
+            }
+        } else {
+            if ((model.getName().startsWith("⦸"))) {
+                model.setName(model.getName().substring(1));
+            }
+        }
+
+
         // Add node to parent
         String modelId = model.getId();
         TreeItem<SceneModel> node = new TreeItem<>(model);
@@ -277,10 +330,46 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Sets the specified SceneModel as the SceneGraph's
+     * new Root Scene. This is called through the TreeCells'
+     * Context Menus.
+     * @param newRoot the SceneModel that becomes the Root
+     */
+    @FXML
+    public void setRootScene(SceneModel newRoot) {
+        if (newRoot.getClass().equals(EmptySceneModel.class)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Invalid Root Scene");
+            alert.setContentText("An empty scene type cannot be set as the root scene");
+            alert.showAndWait();
+        } else {
+            sceneGraph.setRootSceneModel(newRoot);
+            rebuildSceneGraphTreeView();
+        }
+    }
+
+    /**
+     * Deletes a specified SceneModel from the SceneGraph.
+     * This is called through the TreeCells' Context Menus.
+     * @param toDelete the SceneModel to be deleted
+     */
+    @FXML
+    public void deleteScene(SceneModel toDelete) {
+        try {
+            sceneGraph.unregisterSceneModel(toDelete);
+            rebuildSceneGraphTreeView();
+        } catch (SceneModelException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Unable to Delete Scene");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
     @FXML
     private void deleteCurrentScene() {
-        sceneGraph.unregisterSceneModel(sceneGraph.getCurrentSceneModel());
-        rebuildSceneGraphTreeView();
+        deleteScene(sceneGraph.getCurrentSceneModel());
     }
 
     @FXML
@@ -380,8 +469,35 @@ public class Controller implements Initializable {
     }
 
     /**
+     * Saves a sample survey file in the user's working directory and shows them an alert
+     * confirming it was saved.
+     * @param event The event coming from the MenuItem for triggering the sample save.
+     */
+    @FXML
+    private void saveSampleSurvey(ActionEvent event) {
+        File sampleFile = new File("sample_survey.xml");
+
+        try {
+            LoadedSurveyModel.createSampleSurvey().writeToFile(sampleFile);
+
+            // Let the user know where it was saved
+            Alert sampleSavedAlert = new Alert(Alert.AlertType.INFORMATION,
+                "Saved to " + sampleFile.getAbsolutePath());
+            sampleSavedAlert.setHeaderText("Sample survey saved.");
+            sampleSavedAlert.show();
+        } catch (Exception exception) {
+            // Push temporary scene describing error
+            String errorMsg = "Could not save survey to '" + sampleFile.getAbsolutePath()
+                + "\nRefer to the console for more specific details.";
+            sceneGraph.pushScene(new ErrorSceneModel(errorMsg));
+
+            exception.printStackTrace();
+        }
+    }
+
+    /**
      * Event method that pops up the survey settings editor window.
-     * @throws IOException Can occur if the popup windows FXML file is missing.
+     * @throws IOException Can occur if the popup window's FXML file is missing.
      */
     @FXML
     public void editSurveySettings() throws IOException {

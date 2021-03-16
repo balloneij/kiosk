@@ -59,7 +59,7 @@ public class PathwaySceneLoader {
     }
 
     // Adds a Node containing a text field for editing the header title.
-    private static Node getHeaderTitleBox(PathwaySceneModel model, SceneGraph graph) {
+    protected static Node getHeaderTitleBox(PathwaySceneModel model, SceneGraph graph) {
         var titleField = new TextField(model.headerTitle);
 
         // Listener to update the title
@@ -74,7 +74,7 @@ public class PathwaySceneLoader {
     }
 
     // Adds a Node containing a text field for editing the header body.
-    private static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
+    protected static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
         var bodyField = new TextField(model.headerBody);
 
         // Listener to update the body
@@ -88,7 +88,7 @@ public class PathwaySceneLoader {
         return vbox;
     }
 
-    private static Node getCenterTextBox(PathwaySceneModel model, SceneGraph graph) {
+    protected static Node getCenterTextBox(PathwaySceneModel model, SceneGraph graph) {
         var centerTextField = new TextField(model.centerText);
 
         // Listeners to update the position
@@ -119,7 +119,7 @@ public class PathwaySceneLoader {
         var vbox = new VBox(new Label("Answers:"), separator);
 
         // Create controls for each answer (and add them to the Node)
-        for (ButtonModel answer : model.careers) {
+        for (ButtonModel answer : model.buttonModels) {
             vbox.getChildren().add(createAnswerNode(controller, answer, vbox, model, graph));
         }
 
@@ -129,9 +129,9 @@ public class PathwaySceneLoader {
             ButtonModel newAnswer = new ButtonModel();
 
             // Add the new answer to the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.buttonModels));
             answersList.add(newAnswer);
-            model.careers = answersList.toArray(ButtonModel[]::new);
+            model.buttonModels = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Add editing controls for the new answer
@@ -220,9 +220,9 @@ public class PathwaySceneLoader {
         Button removeButton = new Button("x");
         removeButton.setOnAction(event -> {
             // Remove the answer from the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.careers));
+            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.buttonModels));
             answersList.remove(answer);
-            model.careers = answersList.toArray(ButtonModel[]::new);
+            model.buttonModels = answersList.toArray(ButtonModel[]::new);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Remove the editing controls for this answer from the parent container

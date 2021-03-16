@@ -13,7 +13,7 @@ import kiosk.scenes.Scene;
 
 public class SceneGraph {
 
-    private final UserScore userScore = new UserScore();
+    private static final UserScore userScore = new UserScore();
     private SceneModel root;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
@@ -42,7 +42,7 @@ public class SceneGraph {
     public synchronized void loadSurvey(LoadedSurveyModel survey) {
         // Reset to a new, initial state
         this.history.clear();
-        this.userScore.reset();
+        userScore.reset();
         this.sceneModels.clear();
         this.sceneChangeCallbacks.clear();
 
@@ -80,7 +80,7 @@ public class SceneGraph {
     public synchronized void pushScene(SceneModel sceneModel, Riasec category) {
         // Update the user score from the category selected on the
         // previous scene
-        this.userScore.add(category);
+        userScore.add(category);
 
         // Add the new scene
         this.currentScene = sceneModel.deepCopy().createScene();
@@ -124,7 +124,7 @@ public class SceneGraph {
         this.history.pop();
 
         // Undo the last operation on the user score
-        this.userScore.undo();
+        userScore.undo();
 
         // Set the next scene from the stack
         SceneModel next = this.history.peek();
@@ -145,7 +145,7 @@ public class SceneGraph {
      */
     public synchronized void reset() {
         // Reset the user score
-        this.userScore.reset();
+        userScore.reset();
 
         // Reset the root scene
         this.currentScene = this.root.deepCopy().createScene();
@@ -173,16 +173,25 @@ public class SceneGraph {
     /**
      * Unregister a scene model.
      * @param sceneModel to remove from the scene graph
+     * @throws SceneModelException this is a check to ensure the
+     *     root is never deleted; shouldn't be possible because the option
+     *     is disabled in the ContextMenu
      */
-    public synchronized void unregisterSceneModel(SceneModel sceneModel) {
-        SceneModel currentScene = getCurrentSceneModel();
+    public synchronized void unregisterSceneModel(SceneModel sceneModel)
+            throws SceneModelException {
+        // Can't remove the root scene
+        if (sceneModel != this.root) {
+            SceneModel currentScene = getCurrentSceneModel();
 
-        // If we are removing the current active scene, pop it before removing
-        if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
-            popScene();
+            // If we are removing the current active scene, pop it before removing
+            if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
+                popScene();
+            }
+
+            sceneModels.remove(sceneModel.getId());
+        } else {
+            throw new SceneModelException("Cannot delete the root scene");
         }
-
-        sceneModels.remove(sceneModel.getId());
     }
 
     /**
@@ -259,6 +268,10 @@ public class SceneGraph {
         return this.root;
     }
 
+    public synchronized void setRootSceneModel(SceneModel newRoot) {
+        this.root = newRoot;
+    }
+
     /**
      * Returns the set of the scene Ids currently in the SceneGraph.
      * @return The set of the scene Ids currently in the SceneGraph.
@@ -271,8 +284,8 @@ public class SceneGraph {
         return sceneModels.values();
     }
 
-    public UserScore getUserScore() {
-        return this.userScore;
+    public static UserScore getUserScore() {
+        return userScore;
     }
 
     /**
