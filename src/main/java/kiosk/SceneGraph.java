@@ -173,16 +173,25 @@ public class SceneGraph {
     /**
      * Unregister a scene model.
      * @param sceneModel to remove from the scene graph
+     * @throws SceneModelException this is a check to ensure the
+     *     root is never deleted; shouldn't be possible because the option
+     *     is disabled in the ContextMenu
      */
-    public synchronized void unregisterSceneModel(SceneModel sceneModel) {
-        SceneModel currentScene = getCurrentSceneModel();
+    public synchronized void unregisterSceneModel(SceneModel sceneModel)
+            throws SceneModelException {
+        // Can't remove the root scene
+        if (sceneModel != this.root) {
+            SceneModel currentScene = getCurrentSceneModel();
 
-        // If we are removing the current active scene, pop it before removing
-        if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
-            popScene();
+            // If we are removing the current active scene, pop it before removing
+            if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
+                popScene();
+            }
+
+            sceneModels.remove(sceneModel.getId());
+        } else {
+            throw new SceneModelException("Cannot delete the root scene");
         }
-
-        sceneModels.remove(sceneModel.getId());
     }
 
     /**
@@ -257,6 +266,10 @@ public class SceneGraph {
      */
     public synchronized SceneModel getRootSceneModel() {
         return this.root;
+    }
+
+    public synchronized void setRootSceneModel(SceneModel newRoot) {
+        this.root = newRoot;
     }
 
     /**

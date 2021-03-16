@@ -1,20 +1,48 @@
 package editor;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 import kiosk.SceneGraph;
 import kiosk.models.SceneModel;
 
 public class SceneModelTreeCell extends TreeCell<SceneModel> {
-    private TextField textField;
     private Controller controller;
+    private TextField textField;
+    private final ContextMenu editMenu = new ContextMenu();
+    private final MenuItem rootMenuItem = new MenuItem("Make This Scene The Root");
+    private final MenuItem deleteMenuItem = new MenuItem("Delete This Scene");
+    Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
+            + "in the survey");
+    Tooltip rootInfo = new Tooltip("This is the root scene");
     private static Alert alert = new Alert(Alert.AlertType.ERROR);
     public static SceneGraph sceneGraph;
 
+    /**
+     * Creates a new TreeCell used for displaying SceneModels.
+     *
+     * @param controller the editor's controller
+     */
     public SceneModelTreeCell(Controller controller) {
         this.controller = controller;
+
+        // Creating ContextMenu Actions
+        rootMenuItem.setOnAction(t -> {
+            controller.setRootScene(getItem());
+        });
+        deleteMenuItem.setOnAction(t -> {
+            controller.deleteScene(getItem());
+        });
+
+        editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
+
+        orphanInfo.setHideDelay(new Duration(.5));
+        rootInfo.setHideDelay(new Duration(.5));
     }
 
     @Override
@@ -25,8 +53,11 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
             createTextField();
         }
 
-        textField.setText(getName());
-        setText(getName());
+        String name = getName();
+        name = name.replaceAll("⦸", "");
+        name = name.replaceAll("✪", "");
+        textField.setText(name);
+        setText(name);
         setGraphic(textField);
         textField.selectAll();
     }
@@ -41,11 +72,37 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     @Override
     public void updateItem(SceneModel item, boolean empty) {
         super.updateItem(item, empty);
+        setCache(false);
 
-        if (empty) {
+        if (empty || isEmpty()) {
             setText(null);
             setGraphic(null);
+            // Remove the ContextMenu
+            setContextMenu(null);
+            // Remove the ToolTip
+            setTooltip(null);
         } else {
+            // Determine if scene is the root; if so, disable some options
+            // This is more indicative than just not adding the items in the first place
+            if (getItem().getId().equals(Controller.sceneGraph.getRootSceneModel().getId())) {
+                rootMenuItem.setDisable(true);
+                deleteMenuItem.setDisable(true);
+            } else {
+                // This is used if the root scene is changed; it re-enables the options
+                rootMenuItem.setDisable(false);
+                deleteMenuItem.setDisable(false);
+            }
+            // Add the ContextMenu if it's not there
+            if (getContextMenu() == null) {
+                setContextMenu(editMenu);
+            }
+            // Add the ToolTip if it's not there already and if it's needed
+            if (getTooltip() == null && getItem().getName().contains("⦸")) {
+                setTooltip(orphanInfo);
+            } else if (getTooltip() == null && getItem().getName().contains("✪")) {
+                setTooltip(rootInfo);
+            }
+
             setText(getName());
             setGraphic(getTreeItem().getGraphic());
         }
