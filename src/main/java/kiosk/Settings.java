@@ -17,6 +17,7 @@ public class Settings {
     public int sceneAnimationFrames;
     public int buttonAnimationFrames;
     public int buttonAnimationLengthFrames;
+    public double buttonAnimationIntensity;
     public int screenW;
     public int screenH;
 
@@ -33,6 +34,7 @@ public class Settings {
         sceneAnimationFrames = 0;
         buttonAnimationFrames = 80;
         buttonAnimationLengthFrames = 20;
+        buttonAnimationIntensity = buttonAnimationFrames * buttonAnimationLengthFrames / 2.0;
         screenW = 1280;
         screenH = 720;
     }
