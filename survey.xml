@@ -306,7 +306,7 @@ You can always go back and begin again</string>
                 <string>path</string>
                 <void method="set">
                  <object idref="ImageModel0"/>
-                 <string>assets/human.png</string>
+                 <string>assets/Human.png</string>
                 </void>
                </void>
                <void class="kiosk.models.ImageModel" method="getField">
@@ -360,7 +360,7 @@ You can always go back and begin again</string>
                 <string>path</string>
                 <void method="set">
                  <object idref="ImageModel1"/>
-                 <string>assets/nature.png</string>
+                 <string>assets/Nature.png</string>
                 </void>
                </void>
                <void class="kiosk.models.ImageModel" method="getField">
@@ -414,7 +414,7 @@ You can always go back and begin again</string>
                 <string>path</string>
                 <void method="set">
                  <object idref="ImageModel2"/>
-                 <string>assets/robot.png</string>
+                 <string>assets/SmartMachines.png</string>
                 </void>
                </void>
                <void class="kiosk.models.ImageModel" method="getField">
@@ -468,7 +468,7 @@ You can always go back and begin again</string>
                 <string>path</string>
                 <void method="set">
                  <object idref="ImageModel3"/>
-                 <string>assets/space.png</string>
+                 <string>assets/Space.png</string>
                 </void>
                </void>
                <void class="kiosk.models.ImageModel" method="getField">
