@@ -94,8 +94,9 @@ public class PromptScene implements Scene {
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
         } else {
-            this.supplementaryButton = GraphicsUtil.initializeMSOEButton(sketch);
-            sketch.hookControl(this.supplementaryButton);
+            //TODO
+//            this.supplementaryButton = GraphicsUtil.initializeMSOEButton(sketch);
+//            sketch.hookControl(this.supplementaryButton);
         }
     }
 
