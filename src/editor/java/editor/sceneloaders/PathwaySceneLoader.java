@@ -59,7 +59,7 @@ public class PathwaySceneLoader {
     }
 
     // Adds a Node containing a text field for editing the header title.
-    private static Node getHeaderTitleBox(PathwaySceneModel model, SceneGraph graph) {
+    protected static Node getHeaderTitleBox(PathwaySceneModel model, SceneGraph graph) {
         TextField titleField = new TextField(model.headerTitle);
 
         // Listener to update the title
@@ -74,7 +74,7 @@ public class PathwaySceneLoader {
     }
 
     // Adds a Node containing a text field for editing the header body.
-    private static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
+    protected static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
         TextField bodyField = new TextField(model.headerBody);
 
         // Listener to update the body
@@ -88,7 +88,7 @@ public class PathwaySceneLoader {
         return vbox;
     }
 
-    private static Node getCenterTextBox(PathwaySceneModel model, SceneGraph graph) {
+    protected static Node getCenterTextBox(PathwaySceneModel model, SceneGraph graph) {
         TextField centerTextField = new TextField(model.centerText);
 
         // Listeners to update the position

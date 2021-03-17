@@ -40,9 +40,6 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         });
 
         editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
-
-        orphanInfo.setHideDelay(new Duration(.5));
-        rootInfo.setHideDelay(new Duration(.5));
     }
 
     @Override
