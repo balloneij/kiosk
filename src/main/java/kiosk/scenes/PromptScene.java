@@ -14,8 +14,10 @@ public class PromptScene implements Scene {
     // White foreground
     private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
     private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
-    private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
+    private static final int FOREGROUND_X_PADDING
+            = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
+    private static final int FOREGROUND_Y_PADDING
+            = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
     private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
@@ -79,7 +81,7 @@ public class PromptScene implements Scene {
                 model.image.height = BUTTON_IMAGE_HEIGHT;
             }
 
-            var button = new ButtonControl(model, x, BUTTON_Y, width, height);
+            ButtonControl button = new ButtonControl(model, x, BUTTON_Y, width, height);
             button.init(sketch);
 
             sketch.hookControl(button);
@@ -91,12 +93,14 @@ public class PromptScene implements Scene {
         if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
             sketch.hookControl(this.homeButton);
+            this.homeButton.setHomeOrBack(true);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            this.backButton.setHomeOrBack(true);
             sketch.hookControl(this.backButton);
         } else {
-            //TODO
-//            this.supplementaryButton = GraphicsUtil.initializeMSOEButton(sketch);
-//            sketch.hookControl(this.supplementaryButton);
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton.init(sketch);
+            sketch.hookControl(this.supplementaryButton);
         }
     }
 
@@ -143,17 +147,20 @@ public class PromptScene implements Scene {
             sketch.fill(0);
             if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
                 // Title
-                Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE
+                        * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
                 sketch.text(this.model.title, centerX, TITLE_Y,
                         sketch.width / 1.5f, sketch.height / 5f);
                 // Prompt
-                Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE
+                        * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), false);
                 sketch.text(this.model.prompt, centerX, PROMPT_Y,
                         sketch.width / 1.5f, sketch.height / 5f);
                 // Action
-                Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE * ((sketch.frameCount - startFrame) * 1.0
+                Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE
+                        * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
                 sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
                         sketch.width / 1.5f, sketch.height / 6f);
@@ -201,6 +208,8 @@ public class PromptScene implements Scene {
         if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
             homeButton.draw(sketch);
             backButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
         }
     }
 }

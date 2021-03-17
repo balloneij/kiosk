@@ -103,7 +103,7 @@ public class SpokeGraphPromptScene implements Scene {
             );
         }
 
-        var prompt = new ButtonModel();
+        ButtonModel prompt = new ButtonModel();
         prompt.isCircle = true;
         prompt.rgb = new int[]{ 0, 0, 0 };
         prompt.text = this.model.promptText;
@@ -149,21 +149,24 @@ public class SpokeGraphPromptScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         // Hook scene graph button clicks
-        for (var button : this.answerButtons) {
+        for (ButtonControl button : this.answerButtons) {
             sketch.hookControl(button);
         }
 
         if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton.setHomeOrBack(true);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            this.backButton.setHomeOrBack(true);
             sketch.hookControl(this.backButton);
         }
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (var button : this.answerButtons) {
+        // Check for button clicks on the scene graph
+        for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
@@ -187,7 +190,8 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.fill(255);
         sketch.stroke(255);
         Graphics.drawRoundedRectangle(sketch,
-                HEADER_X + HEADER_W / 2, HEADER_Y + HEADER_H / 2, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
+                HEADER_X + HEADER_W / 2, HEADER_Y + HEADER_H / 2,
+                HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
 
         Graphics.useSansSerifBold(sketch, 48);
 
@@ -208,12 +212,12 @@ public class SpokeGraphPromptScene implements Scene {
                 HEADER_W, HEADER_BODY_FONT_SIZE * 2);
 
         // Calculate answer location constants
-        var headerBottomY = HEADER_Y + HEADER_H + 2 * ANSWERS_PADDING;
-        var answersCenterX = SCREEN_W * 3 / 4;
-        var answersCenterY = headerBottomY + (SCREEN_H - headerBottomY) / 2 - ANSWERS_PADDING;
+        float headerBottomY = HEADER_Y + HEADER_H + 2 * ANSWERS_PADDING;
+        int answersCenterX = SCREEN_W * 3 / 4;
+        float answersCenterY = headerBottomY + (SCREEN_H - headerBottomY) / 2 - ANSWERS_PADDING;
 
         // Draw answer buttons
-        for (var answer : answerButtons) {
+        for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(ANSWERS_SPOKE_THICKNESS);
             sketch.stroke(255);
             sketch.line(answersCenterX, answersCenterY,

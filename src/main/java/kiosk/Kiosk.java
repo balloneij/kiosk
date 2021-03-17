@@ -83,7 +83,8 @@ public class Kiosk extends PApplet {
         Kiosk.settings = settings;
 
         if (!surveyPath.isEmpty()) {
-            var loadedSurveyModel = LoadedSurveyModel.readFromFile(new File(surveyPath));
+            LoadedSurveyModel loadedSurveyModel
+                    = LoadedSurveyModel.readFromFile(new File(surveyPath));
             this.sceneGraph = new SceneGraph(loadedSurveyModel);
         } else {
             List<SceneModel> defaultScenes = new ArrayList<>();
@@ -297,35 +298,40 @@ public class Kiosk extends PApplet {
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MouseClicked)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseClicked)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MouseDragged)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseDragged)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseEntered(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MouseEntered)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseEntered)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseExited(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MouseExited)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseExited)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MouseMoved)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseMoved)) {
             listener.invoke(event);
         }
     }
@@ -337,7 +343,8 @@ public class Kiosk extends PApplet {
      */
     @Override
     public void mousePressed(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MousePressed)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MousePressed)) {
             listener.invoke(event);
         }
     }
@@ -349,14 +356,16 @@ public class Kiosk extends PApplet {
      */
     @Override
     public void mouseReleased(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MouseReleased)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseReleased)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseWheel(MouseEvent event) {
-        for (var listener : this.mouseListeners.get(InputEvent.MouseWheel)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
     }

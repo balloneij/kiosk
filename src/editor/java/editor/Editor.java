@@ -74,9 +74,9 @@ public class Editor extends Kiosk {
      */
     protected static boolean applySettings(Settings newSettings) {
         newSettings.writeSettings();
-        var restartRequired =
+        boolean restartRequired =
             newSettings.screenH != Kiosk.settings.screenH
-            | newSettings.screenW != Kiosk.settings.screenW;
+            || newSettings.screenW != Kiosk.settings.screenW;
         Kiosk.settings.timeoutMillis = newSettings.timeoutMillis;
         return restartRequired;
     }

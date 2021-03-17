@@ -53,7 +53,7 @@ public class EmptySceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        var copy = new EmptySceneModel();
+        EmptySceneModel copy = new EmptySceneModel();
         copy.id = id;
         copy.name = name;
         copy.message = message;

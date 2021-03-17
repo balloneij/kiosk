@@ -119,7 +119,8 @@ public class Controller implements Initializable {
                 .addListener((observableValue, oldValue, newValue) -> {
                     // Ignore when the combo box is reset, or the scene type already matches.
                     if (newValue != null
-                        && !newValue.toString().equals(sceneGraph.getCurrentSceneModel().toString())) {
+                        && !newValue.toString().equals(
+                                sceneGraph.getCurrentSceneModel().toString())) {
                         String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
                         String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
 
