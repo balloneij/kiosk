@@ -42,6 +42,7 @@ public class PromptScene implements Scene {
     private final ButtonControl[] buttons;
     private ButtonControl homeButton;
     private ButtonControl backButton;
+    private ButtonControl supplementaryButton;
 
     public PromptScene(PromptSceneModel model) {
         this.model = model;
@@ -92,6 +93,9 @@ public class PromptScene implements Scene {
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
+        } else {
+            this.supplementaryButton = GraphicsUtil.initializeMSOEButton(sketch);
+            sketch.hookControl(this.supplementaryButton);
         }
     }
 

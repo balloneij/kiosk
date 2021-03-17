@@ -2,7 +2,9 @@ package graphics;
 
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
+import kiosk.models.ImageModel;
 import kiosk.scenes.ButtonControl;
+import kiosk.scenes.Image;
 
 public class GraphicsUtil {
 
@@ -59,4 +61,14 @@ public class GraphicsUtil {
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
         return nextButton;
     }
+
+    /**
+     * //TODO
+     */
+//    public static ButtonControl initializeMSOEButton(Kiosk sketch) {
+//        var MSOEButtonModel = new ButtonModel();
+//        ImageModel img = new ImageModel();
+//        MSOEButtonModel.image = Image.createImage(sketch, img);
+//        ButtonControl MSOEButton =
+//    }
 }
