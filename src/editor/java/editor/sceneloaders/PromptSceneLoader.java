@@ -70,7 +70,7 @@ public class PromptSceneLoader {
 
     // Adds a Node containing a text field for editing the title.
     private static Node getTitleBox(PromptSceneModel model, SceneGraph graph) {
-        var titleField = new TextField(model.title);
+        TextField titleField = new TextField(model.title);
 
         // Listener to update the title
         titleField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -78,14 +78,14 @@ public class PromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Title:"), titleField);
+        VBox vbox = new VBox(new Label("Title:"), titleField);
         vbox.setPadding(PADDING);
         return vbox;
     }
 
     // Adds a Node containing a text field for editing the prompt.
     private static Node getPromptBox(PromptSceneModel model, SceneGraph graph) {
-        var promptField = new TextField(model.prompt);
+        TextField promptField = new TextField(model.prompt);
 
         // Listener to update the prompt
         promptField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -93,14 +93,14 @@ public class PromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Prompt:"), promptField);
+        VBox vbox = new VBox(new Label("Prompt:"), promptField);
         vbox.setPadding(PADDING);
         return vbox;
     }
 
     // Adds a Node containing a text field for editing the actionPhrase.
     private static Node getActionBox(PromptSceneModel model, SceneGraph graph) {
-        var actionField = new TextField(model.actionPhrase);
+        TextField actionField = new TextField(model.actionPhrase);
 
         // Listener to update the action phrase
         actionField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -108,7 +108,7 @@ public class PromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Action Phrase:"), actionField);
+        VBox vbox = new VBox(new Label("Action Phrase:"), actionField);
         vbox.setPadding(PADDING);
         return vbox;
     }
@@ -126,7 +126,7 @@ public class PromptSceneLoader {
         // Add a separator to separate the "Answers:" label from the answer sections
         Separator separator = new Separator();
         separator.setPadding(new Insets(0, 0, 10, 0));
-        var vbox = new VBox(new Label("Answers:"), separator);
+        VBox vbox = new VBox(new Label("Answers:"), separator);
 
         // Create controls for each answer (and add them to the Node)
         for (ButtonModel answer : model.answers) {
@@ -141,7 +141,7 @@ public class PromptSceneLoader {
             // Add the new answer to the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
             answersList.add(newAnswer);
-            model.answers = answersList.toArray(ButtonModel[]::new);
+            model.answers = answersList.toArray(new ButtonModel[0]);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Add editing controls for the new answer
@@ -169,7 +169,7 @@ public class PromptSceneLoader {
                                          ButtonModel answer, VBox answersContainer,
                                          PromptSceneModel model, SceneGraph graph) {
         // Setup the text field for editing the answer
-        var answerField = new TextField(answer.text);
+        TextField answerField = new TextField(answer.text);
         answerField.textProperty().addListener((observable, oldValue, newValue) -> {
             answer.text = newValue;
             graph.registerSceneModel(model); // Re-register the model to update the scene
@@ -180,7 +180,7 @@ public class PromptSceneLoader {
         ColorPicker colorPicker = new ColorPicker(initialColor);
         colorPicker.setOnAction(event -> {
             // Set the answer color to the new color
-            var newColor = colorPicker.getValue();
+            Color newColor = colorPicker.getValue();
             answer.rgb[0] = (int) (newColor.getRed() * COLOR_RANGE);
             answer.rgb[1] = (int) (newColor.getGreen() * COLOR_RANGE);
             answer.rgb[2] = (int) (newColor.getBlue() * COLOR_RANGE);
@@ -202,7 +202,7 @@ public class PromptSceneLoader {
         Button imageChooseButton = new Button("Image");
         imageChooseButton.setOnAction(event -> {
             // Open the image file chooser
-            var file = imageFileChooser.showOpenDialog(null);
+            File file = imageFileChooser.showOpenDialog(null);
 
             // If null, no file was chosen
             if (file != null) {
@@ -222,7 +222,7 @@ public class PromptSceneLoader {
             }
         });
 
-        var answerVbox = new VBox(); // Contains all the editing controls for this answer
+        VBox answerVbox = new VBox(); // Contains all the editing controls for this answer
 
         // Setup the button for removing an answer
         Button removeButton = new Button("x");
@@ -230,7 +230,7 @@ public class PromptSceneLoader {
             // Remove the answer from the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
             answersList.remove(answer);
-            model.answers = answersList.toArray(ButtonModel[]::new);
+            model.answers = answersList.toArray(new ButtonModel[0]);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Remove the editing controls for this answer from the parent container

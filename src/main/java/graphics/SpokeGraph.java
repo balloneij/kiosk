@@ -208,11 +208,11 @@ public class SpokeGraph {
      */
     public void setDisabled(boolean disabled) {
         if (disabled) {
-            for (var button : buttonControls) {
+            for (ButtonControl button : buttonControls) {
                 button.setDisabled(true);
             }
         } else {
-            for (var button : buttonControls) {
+            for (ButtonControl button : buttonControls) {
                 button.setDisabled(false);
             }
         }

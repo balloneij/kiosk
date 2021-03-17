@@ -19,7 +19,7 @@ public class GraphicsUtil {
      * @return back button control
      */
     public static ButtonControl initializeBackButton(Kiosk sketch) {
-        var backButtonModel = new ButtonModel();
+        ButtonModel backButtonModel = new ButtonModel();
         // Rob fix your checkstyle
         backButtonModel.text = "\uD83E\uDC78 Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
@@ -35,7 +35,7 @@ public class GraphicsUtil {
      * @return back button control
      */
     public static ButtonControl initializeHomeButton() {
-        var homeButtonModel = new ButtonModel();
+        ButtonModel homeButtonModel = new ButtonModel();
         homeButtonModel.text = "⭯ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
         ButtonControl homeButton = new ButtonControl(homeButtonModel,
@@ -50,7 +50,7 @@ public class GraphicsUtil {
      * @return next button
      */
     public static ButtonControl initializeNextButton(Kiosk sketch) {
-        var nextButtonModel = new ButtonModel();
+        ButtonModel nextButtonModel = new ButtonModel();
         nextButtonModel.text = "Go! \uD83E\uDC7A";
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
         ButtonControl nextButton = new ButtonControl(nextButtonModel,

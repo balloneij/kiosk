@@ -30,14 +30,28 @@ public class UserScore {
      */
     public void add(Riasec category, boolean addToHistory) {
         switch (category) {
-            case Realistic -> this.realistic++;
-            case Investigative -> this.investigative++;
-            case Artistic -> this.artistic++;
-            case Social -> this.social++;
-            case Enterprising -> this.enterprising++;
-            case Conventional -> this.conventional++;
-            case None -> { }
-            default -> throw new IllegalStateException("Unexpected value: " + category);
+            case Realistic:
+                this.realistic++;
+                break;
+            case Investigative:
+                this.investigative++;
+                break;
+            case Artistic:
+                this.artistic++;
+                break;
+            case Social:
+                this.social++;
+                break;
+            case Enterprising:
+                this.enterprising++;
+                break;
+            case Conventional:
+                this.conventional++;
+                break;
+            case None:
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + category);
         }
         if (addToHistory) {
             this.history.push(new Pair<>(UserScoreOperation.Add, category));
@@ -60,14 +74,28 @@ public class UserScore {
      */
     public void subtract(Riasec category, boolean addToHistory) {
         switch (category) {
-            case Realistic -> this.realistic--;
-            case Investigative -> this.investigative--;
-            case Artistic -> this.artistic--;
-            case Social -> this.social--;
-            case Enterprising -> this.enterprising--;
-            case Conventional -> this.conventional--;
-            case None -> { }
-            default -> throw new IllegalStateException("Unexpected value: " + category);
+            case Realistic:
+                this.realistic--;
+                break;
+            case Investigative:
+                this.investigative--;
+                break;
+            case Artistic:
+                this.artistic--;
+                break;
+            case Social:
+                this.social--;
+                break;
+            case Enterprising:
+                this.enterprising--;
+                break;
+            case Conventional:
+                this.conventional--;
+                break;
+            case None:
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + category);
         }
         if (addToHistory) {
             this.history.push(new Pair<>(UserScoreOperation.Subtract, category));
@@ -155,13 +183,27 @@ public class UserScore {
     public int getCategoryScore(Riasec category) {
         int score;
         switch (category) {
-            case Realistic -> score = this.realistic;
-            case Investigative -> score = this.investigative;
-            case Artistic -> score = this.artistic;
-            case Social -> score = this.social;
-            case Enterprising -> score = this.enterprising;
-            case Conventional -> score = this.conventional;
-            default -> score = 0;
+            case Realistic:
+                score = this.realistic;
+                break;
+            case Investigative:
+                score = this.investigative;
+                break;
+            case Artistic:
+                score = this.artistic;
+                break;
+            case Social:
+                score = this.social;
+                break;
+            case Enterprising:
+                score = this.enterprising;
+                break;
+            case Conventional:
+                score = this.conventional;
+                break;
+            default:
+                score = 0;
+                break;
         }
 
         return score;

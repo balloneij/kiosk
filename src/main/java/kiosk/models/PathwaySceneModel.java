@@ -61,7 +61,7 @@ public class PathwaySceneModel implements SceneModel {
             answersCopy[i] = answer.deepCopy();
         }
 
-        var copy = new PathwaySceneModel();
+        PathwaySceneModel copy = new PathwaySceneModel();
         copy.id = this.id;
         copy.name = name;
         copy.headerTitle = this.headerTitle;

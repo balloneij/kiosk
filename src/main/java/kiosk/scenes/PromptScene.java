@@ -74,7 +74,7 @@ public class PromptScene implements Scene {
                 model.image.height = BUTTON_IMAGE_HEIGHT;
             }
 
-            var button = new ButtonControl(model, x, BUTTON_Y, width, height);
+            ButtonControl button = new ButtonControl(model, x, BUTTON_Y, width, height);
             button.init(sketch);
 
             sketch.hookControl(button);

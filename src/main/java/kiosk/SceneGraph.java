@@ -99,10 +99,10 @@ public class SceneGraph {
      * @param category selected by the previous scene
      */
     public synchronized void pushScene(String sceneModelId, Riasec category) {
-        var containsModel = sceneModels.containsKey(sceneModelId);
+        boolean containsModel = sceneModels.containsKey(sceneModelId);
 
         if (containsModel) {
-            var nextSceneModel = sceneModels.get(sceneModelId);
+            SceneModel nextSceneModel = sceneModels.get(sceneModelId);
             pushScene(nextSceneModel, category);
         } else {
             pushScene(new ErrorSceneModel(
@@ -130,7 +130,7 @@ public class SceneGraph {
         SceneModel next = this.history.peek();
 
         if (next == null) {
-            var errorScene = new ErrorSceneModel("Popped too far from history");
+            ErrorSceneModel errorScene = new ErrorSceneModel("Popped too far from history");
             this.currentScene = errorScene.createScene();
             this.onSceneChange(errorScene);
         } else {
@@ -159,7 +159,7 @@ public class SceneGraph {
      * @param sceneModel Returns the scene model at the ID, if one exists.
      */
     public synchronized void registerSceneModel(SceneModel sceneModel) {
-        var currentScene = history.peekFirst();
+        SceneModel currentScene = history.peekFirst();
 
         // If we are changing the current scene model, recreate the scene
         if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {

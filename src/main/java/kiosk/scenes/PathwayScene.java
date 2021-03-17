@@ -5,6 +5,7 @@ import graphics.GraphicsUtil;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
+import kiosk.models.ButtonModel;
 import kiosk.models.PathwaySceneModel;
 import processing.core.PConstants;
 
@@ -42,12 +43,12 @@ public class PathwayScene implements Scene {
      */
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
-        for (var buttonModel : model.buttonModels) {
-            buttonModel.isCircle = true;
+        for (ButtonModel careerModel : model.buttonModels) {
+            careerModel.isCircle = true;
         }
 
         // Create the spoke graph
-        var size = SCREEN_H - HEADER_Y - HEADER_H;
+        float size = SCREEN_H - HEADER_Y - HEADER_H;
         this.spokeGraph = new SpokeGraph(size,
                 SCREEN_W / 2f - size / 2,
                 HEADER_Y + HEADER_H,

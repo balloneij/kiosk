@@ -203,7 +203,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // If pressed, draw the text lower and don't draw the main button
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
-            if (!this.model.text.isBlank()) {
+            if (!this.model.text.equals("")) {
                 textWithOutline(this.model.text,
                     (float) this.rect.getCenterX(),
                     (float) this.rect.getCenterY() + this.rect.height / 10.f,
@@ -341,7 +341,7 @@ public class ButtonControl implements Control<MouseEvent> {
      * @return ButtonControl in the position of the model
      */
     public static ButtonControl createHomeButton() {
-        var homeButtonModel = new ButtonModel();
+        ButtonModel homeButtonModel = new ButtonModel();
         homeButtonModel.text = "Home";
         homeButtonModel.rgb = Color.DW_BLACK_RGB;
         return new ButtonControl(homeButtonModel,
@@ -354,7 +354,7 @@ public class ButtonControl implements Control<MouseEvent> {
      * @return ButtonControl in the position of the model
      */
     public static ButtonControl createBackButton() {
-        var backButtonModel = new ButtonModel();
+        ButtonModel backButtonModel = new ButtonModel();
         backButtonModel.text = "Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         return new ButtonControl(backButtonModel,

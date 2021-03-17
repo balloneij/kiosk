@@ -59,7 +59,7 @@ public class DetailsSceneLoader {
 
     // Adds a Node containing a text field for editing the title.
     private static Node getTitleBox(DetailsSceneModel model, SceneGraph graph) {
-        var titleField = new TextArea(model.title);
+        TextArea titleField = new TextArea(model.title);
         titleField.setMaxHeight(5);
 
         // Listener to update the title
@@ -68,13 +68,13 @@ public class DetailsSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Title:"), titleField);
+        VBox vbox = new VBox(new Label("Title:"), titleField);
         vbox.setPadding(PADDING);
         return vbox;
     }
 
     private static Node getDescriptionBox(DetailsSceneModel model, SceneGraph graph) {
-        var bodyField = new TextArea(model.title);
+        TextArea bodyField = new TextArea(model.title);
         bodyField.setMaxHeight(5);
 
         // Listener to update the title
@@ -83,7 +83,7 @@ public class DetailsSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Body:"), bodyField);
+        VBox vbox = new VBox(new Label("Body:"), bodyField);
         vbox.setPadding(PADDING);
         return vbox;
     }
@@ -93,7 +93,7 @@ public class DetailsSceneLoader {
         ButtonModel answer = model.button;
 
         // Setup the text field for editing the answer
-        var answerField = new TextArea(answer.text);
+        TextArea answerField = new TextArea(answer.text);
         answerField.setMaxHeight(5);
         answerField.textProperty().addListener((observable, oldValue, newValue) -> {
             answer.text = newValue;
@@ -105,7 +105,7 @@ public class DetailsSceneLoader {
         ColorPicker colorPicker = new ColorPicker(initialColor);
         colorPicker.setOnAction(event -> {
             // Set the answer color to the new color
-            var newColor = colorPicker.getValue();
+            Color newColor = colorPicker.getValue();
             answer.rgb[0] = (int) (newColor.getRed() * COLOR_RANGE);
             answer.rgb[1] = (int) (newColor.getGreen() * COLOR_RANGE);
             answer.rgb[2] = (int) (newColor.getBlue() * COLOR_RANGE);
@@ -127,7 +127,7 @@ public class DetailsSceneLoader {
         Button imageChooseButton = new Button("Image");
         imageChooseButton.setOnAction(event -> {
             // Open the image file chooser
-            var file = imageFileChooser.showOpenDialog(null);
+            File file = imageFileChooser.showOpenDialog(null);
 
             // If null, no file was chosenA
             if (file != null) {
@@ -178,7 +178,7 @@ public class DetailsSceneLoader {
         HBox targetsBox = new HBox(new Label("Target: "), targetComboBox);
         targetsBox.setPadding(new Insets(0, 0, 0, 5));
 
-        var answerVbox = new VBox(); // Contains all the editing controls for this answer
+        VBox answerVbox = new VBox(); // Contains all the editing controls for this answer
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton);
         answerVbox.getChildren().addAll(
