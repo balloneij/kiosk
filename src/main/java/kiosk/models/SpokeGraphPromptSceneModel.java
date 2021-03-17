@@ -64,7 +64,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
             answersCopy[i] = answer.deepCopy();
         }
 
-        var copy = new SpokeGraphPromptSceneModel();
+        SpokeGraphPromptSceneModel copy = new SpokeGraphPromptSceneModel();
         copy.id = this.id;
         copy.name = name;
         copy.headerTitle = this.headerTitle;

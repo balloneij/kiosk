@@ -1,6 +1,7 @@
 package editor;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -67,14 +68,14 @@ public class SurveySettingsController implements Initializable {
         widthSpinner.addEventHandler(Event.ANY, e -> {
             if (e.getEventType().getName().equals("KEY_RELEASED")
                     && !((KeyEvent) e).getText().isEmpty()) {
-                var newValue = 0;
+                int newValue = 0;
                 try {
-                    var textValue = ((Spinner) e.getSource()).getEditor().getText();
+                    String textValue = ((Spinner) e.getSource()).getEditor().getText();
                     newValue = Integer.parseInt(textValue);
                 } catch (NumberFormatException exception) {
                     newValue = widthSpinner.getValue();
                 }
-                var caretPosition = widthSpinner.getEditor().getCaretPosition();
+                int caretPosition = widthSpinner.getEditor().getCaretPosition();
                 widthSpinner.getValueFactory().setValue(newValue);
                 heightSpinner.getValueFactory().setValue(9 * newValue / 16);
                 widthSpinner.getEditor().positionCaret(caretPosition);
@@ -82,21 +83,21 @@ public class SurveySettingsController implements Initializable {
         });
         heightSpinner.addEventHandler(Event.ANY, e -> {
             if (e.getEventType().getName().equals("KEY_RELEASED")) {
-                var newValue = 0;
+                int newValue = 0;
                 try {
-                    var textValue = ((Spinner) e.getSource()).getEditor().getText();
+                    String textValue = ((Spinner) e.getSource()).getEditor().getText();
                     newValue = Integer.parseInt(textValue);
                 } catch (NumberFormatException exception) {
                     newValue = heightSpinner.getValue();
                 }
-                var caretPosition = heightSpinner.getEditor().getCaretPosition();
+                int caretPosition = heightSpinner.getEditor().getCaretPosition();
                 heightSpinner.getValueFactory().setValue(newValue);
                 widthSpinner.getValueFactory().setValue(16 * newValue / 9);
                 heightSpinner.getEditor().positionCaret(caretPosition);
             }
         });
 
-        var settings = currentSettings != null ? currentSettings : Kiosk.getSettings();
+        Settings settings = currentSettings != null ? currentSettings : Kiosk.getSettings();
         widthSpinner.getValueFactory().setValue(settings.screenW);
         heightSpinner.getValueFactory().setValue(settings.screenH);
         timeOutSpinner.setEditable(true);
@@ -137,7 +138,7 @@ public class SurveySettingsController implements Initializable {
             alert.setTitle("Restart Required");
             alert.setContentText("In order for all of these settings to apply, "
                 + "the editor must be closed and re-opened.");
-            var result = alert.showAndWait();
+            Optional<ButtonType> result = alert.showAndWait();
             Editor.applySettings(settings);
             SurveySettingsController.currentSettings = settings;
             if (result.get() == restartNow) {

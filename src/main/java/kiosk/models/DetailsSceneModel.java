@@ -1,6 +1,5 @@
 package kiosk.models;
 
-import graphics.Color;
 import kiosk.scenes.DetailsScene;
 import kiosk.scenes.Scene;
 
@@ -52,7 +51,7 @@ public class DetailsSceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        var copy = new DetailsSceneModel();
+        DetailsSceneModel copy = new DetailsSceneModel();
         copy.id = this.id;
         copy.name = name;
         copy.title = title;

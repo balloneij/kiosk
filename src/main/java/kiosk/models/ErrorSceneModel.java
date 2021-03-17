@@ -81,7 +81,7 @@ public class ErrorSceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        var copy = new ErrorSceneModel();
+        ErrorSceneModel copy = new ErrorSceneModel();
         copy.id = id;
         copy.name = name;
         copy.errorMsg = errorMsg;
