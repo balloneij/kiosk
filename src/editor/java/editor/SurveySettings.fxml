@@ -54,7 +54,49 @@
                         </padding>
                     </Label>
                 </HBox>
-                <HBox GridPane.RowIndex="3">
+                <Label text="Scene Animation Length: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    <padding> <Insets left="15" /> </padding>
+                    <Spinner fx:id="sceneAnimationSpinner">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="600"/>
+                        </valueFactory>
+                    </Spinner>
+                    <Label text="frames">
+                        <padding>
+                            <Insets left="5" right="15" />
+                        </padding>
+                    </Label>
+                </HBox>
+                <Label text="Button Animation Frequency: " GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+                    <padding> <Insets left="15" /> </padding>
+                    <Spinner fx:id="buttonAnimationSpinner">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="600"/>
+                        </valueFactory>
+                    </Spinner>
+                    <Label text="frames">
+                        <padding>
+                            <Insets left="5" right="15" />
+                        </padding>
+                    </Label>
+                </HBox>
+                <Label text="Button Animation Duration: " GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+                    <padding> <Insets left="15" /> </padding>
+                    <Spinner fx:id="buttonAnimationLengthSpinner">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="600"/>
+                        </valueFactory>
+                    </Spinner>
+                    <Label text="frames">
+                        <padding>
+                            <Insets left="5" right="15" />
+                        </padding>
+                    </Label>
+                </HBox>
+                <HBox GridPane.RowIndex="6">
                     <Button fx:id="okButton" text="OK" onAction="#onSubmit">
                     </Button>
                 </HBox>
