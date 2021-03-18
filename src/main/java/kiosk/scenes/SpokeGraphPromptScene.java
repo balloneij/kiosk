@@ -140,7 +140,7 @@ public class SpokeGraphPromptScene implements Scene {
             this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
 
-        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             this.backButton = ButtonControl.createBackButton();
             this.homeButton = ButtonControl.createHomeButton();
         }
@@ -153,12 +153,10 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.hookControl(button);
         }
 
-        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
-            this.homeButton.setHomeOrBack(true);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
-            this.backButton.setHomeOrBack(true);
             sketch.hookControl(this.backButton);
         }
     }
@@ -172,7 +170,7 @@ public class SpokeGraphPromptScene implements Scene {
             }
         }
 
-        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
@@ -231,7 +229,7 @@ public class SpokeGraphPromptScene implements Scene {
         // Draw the career spoke graph
         this.spokeGraph.draw(sketch);
 
-        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             // Draw the back and home buttons
             this.backButton.draw(sketch);
             this.homeButton.draw(sketch);

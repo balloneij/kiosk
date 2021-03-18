@@ -28,7 +28,8 @@ import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
-    protected static SceneGraph sceneGraph;
+    protected SceneGraph sceneGraph;
+    private static SceneModel rootSceneModel;
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
@@ -37,7 +38,7 @@ public class Kiosk extends PApplet {
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
-    private static boolean shouldTimeout = true;
+    private boolean shouldTimeout = true;
 
     private static JFileChooser fileChooser;
 
@@ -139,11 +140,11 @@ public class Kiosk extends PApplet {
         size(settings.screenW, settings.screenH);
     }
 
-    public static void enableTimeout() {
+    public void enableTimeout() {
         shouldTimeout = true;
     }
 
-    public static void disableTimeout() {
+    public void disableTimeout() {
         shouldTimeout = false;
     }
 
@@ -152,6 +153,7 @@ public class Kiosk extends PApplet {
         super.setup();
         this.lastMillis = millis();
         Graphics.loadFonts();
+        rootSceneModel = sceneGraph.getRootSceneModel();
     }
 
     @Override
@@ -374,8 +376,8 @@ public class Kiosk extends PApplet {
         return settings;
     }
 
-    public static SceneGraph getSceneGraph() {
-        return sceneGraph;
+    public static SceneModel getRootSceneModel() {
+        return rootSceneModel;
     }
 
     public void run() {

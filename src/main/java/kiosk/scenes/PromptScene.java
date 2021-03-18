@@ -90,12 +90,10 @@ public class PromptScene implements Scene {
             x += BUTTON_WIDTH + BUTTON_PADDING;
         }
 
-        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
             sketch.hookControl(this.homeButton);
-            this.homeButton.setHomeOrBack(true);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
-            this.backButton.setHomeOrBack(true);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
@@ -112,7 +110,7 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
@@ -129,6 +127,7 @@ public class PromptScene implements Scene {
         Graphics.drawBubbleBackground(sketch);
 
         //TODO MAKE ANIMATION LESS CHOPPY WHEN LESS FRAMES DESIRED
+        //     Implement Seth's idea of white box gradually revealing text
         //If this scene is new, animate the items to gradually show up on screen
         if (sketch.frameCount - startFrame < Kiosk.getSettings().sceneAnimationFrames) {
             // Draw the white foreground box
@@ -205,7 +204,7 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (!Kiosk.getSceneGraph().getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             homeButton.draw(sketch);
             backButton.draw(sketch);
         } else {

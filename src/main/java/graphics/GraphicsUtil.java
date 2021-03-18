@@ -27,7 +27,7 @@ public class GraphicsUtil {
         ButtonControl backButton = new ButtonControl(backButtonModel,
                 COMMON_BUTTON_PADDING, sketch.height
                 - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
-                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
         return backButton;
     }
 
@@ -41,7 +41,7 @@ public class GraphicsUtil {
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
         ButtonControl homeButton = new ButtonControl(homeButtonModel,
                 COMMON_BUTTON_PADDING, COMMON_BUTTON_PADDING,
-                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
         return homeButton;
     }
 
@@ -72,7 +72,7 @@ public class GraphicsUtil {
         ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
                 sketch.width - COMMON_BUTTON_PADDING * 2 - (723 / 6),
                 sketch.height - COMMON_BUTTON_PADDING - (883 / 6),
-                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_WIDTH * 3 / 4);
+                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_WIDTH * 3 / 4, false);
         msoeButton.setNoButton(true);
         //TODO If we make some type of credits scene, I imagine that this button takes you there.
         //     Then this should be enabled and lead to a new scene.
