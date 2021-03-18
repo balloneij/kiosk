@@ -1,6 +1,10 @@
 package editor;
 
-import editor.sceneloaders.*;
+import editor.sceneloaders.CareerPathwaySceneLoader;
+import editor.sceneloaders.DetailsSceneLoader;
+import editor.sceneloaders.PathwaySceneLoader;
+import editor.sceneloaders.PromptSceneLoader;
+import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +19,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -24,7 +34,15 @@ import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
-import kiosk.models.*;
+import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.DetailsSceneModel;
+import kiosk.models.EmptySceneModel;
+import kiosk.models.ErrorSceneModel;
+import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PathwaySceneModel;
+import kiosk.models.PromptSceneModel;
+import kiosk.models.SceneModel;
+import kiosk.models.SpokeGraphPromptSceneModel;
 
 public class Controller implements Initializable {
 
@@ -90,7 +108,8 @@ public class Controller implements Initializable {
                 .addListener((observableValue, oldValue, newValue) -> {
                     // Ignore when the combo box is reset, or the scene type already matches.
                     if (newValue != null
-                        && !newValue.toString().equals(sceneGraph.getCurrentSceneModel().toString())) {
+                        && !newValue.toString().equals(
+                                sceneGraph.getCurrentSceneModel().toString())) {
                         String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
                         String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
 

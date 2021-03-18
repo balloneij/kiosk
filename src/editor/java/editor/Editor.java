@@ -68,10 +68,7 @@ public class Editor extends Kiosk {
             System.exit(-1);
         }
 
-        // Create a new scene and attach the sketch
-        Scene scene = new Scene(root,
-                Editor.PREVIEW_WIDTH + Editor.TOOLBAR_WIDTH,
-                (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO));
+        // Attach the sketch canvas to the preview pane
         Map<String, Object> namespace = loader.getNamespace();  // Map of fx:id's
         StackPane previewPane = (StackPane) namespace.get("surveyPreviewPane");
         previewPane.getChildren().add(canvas);
@@ -80,12 +77,17 @@ public class Editor extends Kiosk {
         canvas.widthProperty().bind(previewPane.widthProperty());
         canvas.heightProperty().bind(previewPane.heightProperty());
 
+        // Create the new scene
+        Scene scene = new Scene(root,
+                Editor.PREVIEW_WIDTH + Editor.TOOLBAR_WIDTH,
+                (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO));
+
         // Delays these actions and runs them on the "correct" thread
         Platform.runLater(() -> {
+            stage.setScene(scene);
             stage.setTitle("Kiosk Editor-inator 3000");
             // A platypus?
             stage.setResizable(false);
-            stage.setScene(scene);
         });
 
         return surface;
