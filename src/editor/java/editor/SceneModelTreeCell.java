@@ -1,13 +1,7 @@
 package editor;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeCell;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.util.Duration;
 import kiosk.SceneGraph;
 import kiosk.models.SceneModel;
 
@@ -20,7 +14,7 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     Tooltip orphanInfo = new Tooltip("This scene cannot be reached "
             + "in the survey");
     Tooltip rootInfo = new Tooltip("This is the root scene");
-    private static Alert alert = new Alert(Alert.AlertType.ERROR);
+    private final Alert alert;
     public static SceneGraph sceneGraph;
 
     /**
@@ -40,6 +34,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         });
 
         editMenu.getItems().addAll(rootMenuItem, deleteMenuItem);
+
+        this.alert = new Alert(Alert.AlertType.ERROR);
     }
 
     @Override

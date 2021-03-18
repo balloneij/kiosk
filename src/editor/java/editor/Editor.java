@@ -1,12 +1,19 @@
 package editor;
 
 import java.io.File;
-import javafx.application.Application;
+import java.io.IOException;
+import java.util.Map;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import kiosk.Kiosk;
 import kiosk.Settings;
 import kiosk.models.LoadedSurveyModel;
 import processing.core.PSurface;
-import processing.javafx.PSurfaceFX;
 
 public class Editor extends Kiosk {
 
@@ -42,26 +49,45 @@ public class Editor extends Kiosk {
 
     @Override
     protected PSurface initSurface() {
-        g = createPrimaryGraphics();
-        PSurface genericSurface = g.createSurface();
-        PSurfaceFX fxSurface = (PSurfaceFX) genericSurface;
+        // Pull the secret sauce out of Processing 3
+        surface = super.initSurface();
+        final Canvas canvas = (Canvas) surface.getNative();
+        final Scene oldScene = canvas.getScene();
+        final Stage stage = (Stage) oldScene.getWindow();
 
-        fxSurface.sketch = this;
-        App.surface = fxSurface;
-        Controller.surface = fxSurface;
-        Controller.sceneGraph = this.sceneGraph;
+        // Attach the scene graph before initialization
+        Controller.sceneGraph = sceneGraph;
 
-        new Thread(() -> Application.launch(App.class)).start();
-
-        while (fxSurface.stage == null) {
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException e) {
-                System.out.println("Error sleeping");
-            }
+        // Load FXML and the controller
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Editor.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
         }
 
-        this.surface = fxSurface;
+        // Create a new scene and attach the sketch
+        Scene scene = new Scene(root,
+                Editor.PREVIEW_WIDTH + Editor.TOOLBAR_WIDTH,
+                (int) (Editor.PREVIEW_WIDTH / Editor.PREVIEW_ASPECT_RATIO));
+        Map<String, Object> namespace = loader.getNamespace();  // Map of fx:id's
+        StackPane previewPane = (StackPane) namespace.get("surveyPreviewPane");
+        previewPane.getChildren().add(canvas);
+
+        // Constrain the canvas by the preview size
+        canvas.widthProperty().bind(previewPane.widthProperty());
+        canvas.heightProperty().bind(previewPane.heightProperty());
+
+        // Delays these actions and runs them on the "correct" thread
+        Platform.runLater(() -> {
+            stage.setTitle("Kiosk Editor-inator 3000");
+            // A platypus?
+            stage.setResizable(false);
+            stage.setScene(scene);
+        });
+
         return surface;
     }
 
