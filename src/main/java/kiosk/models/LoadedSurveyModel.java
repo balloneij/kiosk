@@ -26,6 +26,17 @@ public class LoadedSurveyModel implements Serializable {
         new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
     };
 
+    // TODO there will need to be methods for adding new filters to this array once filter
+    //  creation/editing is implemented. The current filters are examples/placeholders.
+    public static FilterGroupModel[] filters = {
+        // "All" filter functionality is handled in FilterGroupModel.getCareers()
+        new FilterGroupModel("All"),
+        new FilterGroupModel("Nature Careers", "Realistic", "Investigative", "Social"),
+        new FilterGroupModel("Human Careers", "Realistic")
+    };
+
+
+
     /**
      * Creates a survey with a single, error scene.
      * This constructor should never be used directly. It is meant to

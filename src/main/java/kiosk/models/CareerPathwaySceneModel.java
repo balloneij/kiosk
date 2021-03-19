@@ -9,20 +9,12 @@ import kiosk.scenes.Scene;
  * Model for storing information about a CareerPathwayScene.
  */
 public class CareerPathwaySceneModel extends PathwaySceneModel {
-    public FilterGroupModel filter;
+    private FilterGroupModel filter;
     public CareerModel[] careers;
 
     public CareerPathwaySceneModel() {
         super();
-        // TODO make this a default "All" filter
-        filter = new FilterGroupModel("All", "Realistic",
-            "Investigative", "Artistic");
-
-        // Filter the list of careers
-        careers = Arrays.stream(LoadedSurveyModel.careers)
-            .filter(careerModel -> filter.getCareers().contains(careerModel.name))
-            .toArray(CareerModel[]::new);
-        createCareerButtons(Arrays.asList(careers));
+        setFilter(new FilterGroupModel("All"));
     }
 
     /**
@@ -36,6 +28,23 @@ public class CareerPathwaySceneModel extends PathwaySceneModel {
             String careerName = careerModels.get(i).name;
             buttonModels[i] = new ButtonModel(careerName, careerName);
         }
+    }
+
+    public FilterGroupModel getFilter() {
+        return filter;
+    }
+
+    /**
+     * Updates the list of careers using the new filter and re-creates the spoke-graph button
+     * models.
+     * @param filter The new FilterGroupModel to filter careers by.
+     */
+    public void setFilter(FilterGroupModel filter) {
+        this.filter = filter;
+
+        // Use the list of careers from the filter
+        careers = filter.getCareers().toArray(new CareerModel[] {});
+        createCareerButtons(Arrays.asList(careers));
     }
 
     @Override
@@ -58,6 +67,7 @@ public class CareerPathwaySceneModel extends PathwaySceneModel {
         copy.headerTitle = headerTitle;
         copy.headerBody = headerBody;
         copy.centerText = centerText;
+        copy.setFilter(filter);
 
         return copy;
     }
