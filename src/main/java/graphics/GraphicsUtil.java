@@ -23,11 +23,10 @@ public class GraphicsUtil {
         // Rob fix your checkstyle
         backButtonModel.text = "\uD83E\uDC78 Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
-        ButtonControl backButton = new ButtonControl(backButtonModel,
+        return new ButtonControl(backButtonModel,
                 COMMON_BUTTON_PADDING, sketch.height
                 - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
-        return backButton;
     }
 
     /**
