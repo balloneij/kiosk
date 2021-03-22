@@ -26,6 +26,16 @@ public class CareerModel {
         this.category = category;
     }
 
+    /**
+     * Default constructor for CareerModel (so that it can be saved properly).
+     */
+    public CareerModel() {
+        this.name = "Career";
+        this.riasecCategory = Riasec.None;
+        this.field = "Field";
+        this.category = "Category";
+    }
+
     public CareerModel deepCopy() {
         return new CareerModel(this.name, this.riasecCategory, this.field, this.category);
     }
