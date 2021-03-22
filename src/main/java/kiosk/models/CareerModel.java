@@ -12,6 +12,10 @@ public class CareerModel {
     public String field; // Computer engineering, biology, education, etc.
     public Riasec riasecCategory;
 
+    public CareerModel() {
+        this("Career", Riasec.Artistic, "field", "category");
+    }
+
     /**
      * Creates a CareerModel with the provided fields.
      * @param name The name of the career.
