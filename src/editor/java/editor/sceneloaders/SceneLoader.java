@@ -15,7 +15,6 @@ public class SceneLoader {
     // The default padding to space the editing Nodes
     static final Insets PADDING = new Insets(0, 0, 10, 10);
     static boolean ShowingNameAlert = false;
-    static Alert alert = new Alert(Alert.AlertType.ERROR);
 
     protected static Node getNameBox(Controller controller, SceneModel model, SceneGraph graph) {
         TextField nameField = new TextField(getEditableName(model));
@@ -43,6 +42,8 @@ public class SceneLoader {
             SceneGraph graph, TextField nameField) {
         String newValue = nameField.getText();
         String oldName = model.getName();
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setContentText(String.format("There is already a scene with the name %s."
                 + "\r\n Please try a different name.", newValue));
 

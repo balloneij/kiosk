@@ -19,9 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -45,13 +43,10 @@ import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
-import processing.javafx.PSurfaceFX;
 
 public class Controller implements Initializable {
 
-    public static PSurfaceFX surface;
     public static SceneGraph sceneGraph;
-    protected static Stage stage;
 
     private String previousId;
     private File surveyFile = null;
@@ -71,12 +66,6 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Canvas canvas = (Canvas) surface.getNative();
-        surface.fx.context = canvas.getGraphicsContext2D();
-        surveyPreviewPane.getChildren().add(canvas);
-        canvas.widthProperty().bind(surveyPreviewPane.widthProperty());
-        canvas.heightProperty().bind(surveyPreviewPane.heightProperty());
-
         sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
         previousId = null;
 
