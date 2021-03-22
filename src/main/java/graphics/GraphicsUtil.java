@@ -81,6 +81,12 @@ public class GraphicsUtil {
         return nextButton;
     }
 
+    /**
+     * Draws the header.
+     * @param sketch to draw to
+     * @param title text
+     * @param body text
+     */
     public static void drawHeader(Kiosk sketch, String title, String body) {
         // Draw the white header box
         sketch.fill(255);

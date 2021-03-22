@@ -36,6 +36,7 @@ public class CareerPathwaySceneLoader {
         toolbarBox.getChildren().clear();
         toolbarBox.getChildren().add(vbox);
     }
+
     // Adds a Node containing a text field for editing the header title.
     protected static Node getHeaderTitleBox(CareerPathwaySceneModel model, SceneGraph graph) {
         TextField titleField = new TextField(model.headerTitle);

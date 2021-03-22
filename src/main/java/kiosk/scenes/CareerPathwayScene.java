@@ -5,11 +5,10 @@ import graphics.GraphicsUtil;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.UserScore;
-import kiosk.models.*;
+import kiosk.models.ButtonModel;
+import kiosk.models.CareerModel;
+import kiosk.models.CareerPathwaySceneModel;
 import processing.core.PConstants;
-
-import java.util.List;
 
 /**
  * A scene that displays a spoke graph containing buttons for each of the careers currently in

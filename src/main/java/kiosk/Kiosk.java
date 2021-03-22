@@ -15,8 +15,12 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import kiosk.models.*;
+import kiosk.models.CareerModel;
+import kiosk.models.DefaultSceneModel;
+import kiosk.models.ErrorSceneModel;
+import kiosk.models.LoadedSurveyModel;
+import kiosk.models.SceneModel;
+import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import processing.core.PApplet;
@@ -26,7 +30,7 @@ import processing.event.MouseEvent;
 public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
-    private CareerModel[] careers;
+    private final CareerModel[] careers;
     private Scene lastScene;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;

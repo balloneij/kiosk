@@ -281,12 +281,12 @@ public class LoadedSurveyModel implements Serializable {
         LoadedSurveyModel survey = new LoadedSurveyModel(titleScreen.id, initialScenes);
 
         survey.careers = new CareerModel[]{
-                new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
-                new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
-                new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
-                new CareerModel("Social", Riasec.Social, "field", "category"),
-                new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
-                new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
+            new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
+            new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
+            new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
+            new CareerModel("Social", Riasec.Social, "field", "category"),
+            new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
+            new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
         };
 
         return survey;
