@@ -1,51 +1,102 @@
 package kiosk.scenes;
 
+import graphics.Graphics;
+import graphics.GraphicsUtil;
+import graphics.SpokeGraph;
+import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.UserScore;
-import kiosk.models.CareerModel;
-import kiosk.models.CareerPathwaySceneModel;
-import kiosk.models.LoadedSurveyModel;
+import kiosk.models.*;
+import processing.core.PConstants;
+
+import java.util.List;
 
 /**
  * A scene that displays a spoke graph containing buttons for each of the careers currently in
  * the list, weighted based on the career RIASEC type and the UserScore.
  */
-public class CareerPathwayScene extends PathwayScene {
+public class CareerPathwayScene implements Scene {
+
+
+    // Pull constants from the settings
+    private static final int SCREEN_W = Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+
+    private final CareerPathwaySceneModel model;
+    protected SpokeGraph spokeGraph;
+    private ButtonControl backButton;
+    private ButtonControl homeButton;
+
     /**
-     * Creates a new CareerPathwayScene using the given model.
-     * @param model A CareerPathwaySceneModel used to create the scene.
+     * Create a pathway scene.
+     * @param model to base the scene off of
      */
     public CareerPathwayScene(CareerPathwaySceneModel model) {
-        super(model);
-
-        CareerModel[] careers = LoadedSurveyModel.careers;
-        UserScore userScore = SceneGraph.getUserScore();
-
-        double[] weights = new double[careers.length];
-        for (int i = 0; i < careers.length; i++) {
-            CareerModel career = careers[i];
-            weights[i] = userScore.getCategoryScore(career.riasecCategory);
-        }
-        spokeGraph.setWeights(weights);
+        this.model = model;
+        this.backButton = ButtonControl.createBackButton();
+        this.homeButton = ButtonControl.createHomeButton();
     }
 
-//    // TODO
-//    @Override
-//    public void draw(Kiosk sketch) {
-//        Graphics.useSansSerifBold(sketch, 48);
-//        Graphics.drawBubbleBackground(sketch);
-//        drawHeader(sketch);
-//    }
+    @Override
+    public void init(Kiosk sketch) {
+        // Grab careers from the Kiosk and create buttons
+        CareerModel[] careers = sketch.getAllCareers();
+        ButtonModel[] buttons = new ButtonModel[careers.length];
+        for (int i = 0; i < careers.length; i++) {
+            String careerName = careers[i].name;
+            ButtonModel button = new ButtonModel(careerName, careerName);
+            button.isCircle = true;
+            buttons[i] = button;
+        }
 
-//    @Override
-//    public void update(float dt, SceneGraph sceneGraph) {
-//        super.update(dt, sceneGraph);
-//        // TODO I don't like having this here since it only needs to run once but this is the
-//        //  only place where we have access to the SceneGraph (which has the UserScore)
-//        // Update the career weights based on the career's Riasec category and the user's score
-//        for (int i = 0; i < weights.length; i++) {
-//            CareerModel career = LoadedSurveyModel.careers[i];
-//            weights[i] = sceneGraph.getUserScore().getCategoryScore(career.riasecCategory);
-//        }
-//    }
+        // Put career buttons into a spoke graph
+        float size = SCREEN_H - GraphicsUtil.HEADER_Y - GraphicsUtil.HEADER_H;
+        this.spokeGraph = new SpokeGraph(size,
+                SCREEN_W / 2f - size / 2,
+                GraphicsUtil.HEADER_Y + GraphicsUtil.HEADER_H,
+                model.centerText,
+                buttons);
+
+        // Create home and back button
+        this.homeButton = GraphicsUtil.initializeHomeButton();
+        sketch.hookControl(this.homeButton);
+        this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        sketch.hookControl(this.backButton);
+
+        // Attach user input hooks
+        for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
+            sketch.hookControl(careerOption);
+        }
+        sketch.hookControl(this.backButton);
+        sketch.hookControl(this.homeButton);
+    }
+
+    @Override
+    public void update(float dt, SceneGraph sceneGraph) {
+        for (ButtonControl button : this.spokeGraph.getButtonControls()) {
+            if (button.wasClicked()) {
+                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
+            }
+        }
+
+        if (this.homeButton.wasClicked()) {
+            sceneGraph.reset();
+        } else if (this.backButton.wasClicked()) {
+            sceneGraph.popScene();
+        }
+    }
+
+    @Override
+    public void draw(Kiosk sketch) {
+        Graphics.useGothic(sketch, 48, true);
+        // Text Properties
+        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+        sketch.fill(0);
+        Graphics.drawBubbleBackground(sketch);
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
+        this.spokeGraph.draw(sketch);
+
+        this.backButton.draw(sketch);
+        this.homeButton.draw(sketch);
+    }
 }

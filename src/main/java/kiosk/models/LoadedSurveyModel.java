@@ -17,14 +17,7 @@ public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
-    public static CareerModel[] careers = {
-        new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
-        new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
-        new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
-        new CareerModel("Social", Riasec.Social, "field", "category"),
-        new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
-        new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
-    };
+    public CareerModel[] careers;
 
     /**
      * Creates a survey with a single, error scene.
@@ -285,6 +278,17 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(pathway);
         initialScenes.add(spoke);
 
-        return new LoadedSurveyModel(titleScreen.id, initialScenes);
+        LoadedSurveyModel survey = new LoadedSurveyModel(titleScreen.id, initialScenes);
+
+        survey.careers = new CareerModel[]{
+                new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
+                new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
+                new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
+                new CareerModel("Social", Riasec.Social, "field", "category"),
+                new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
+                new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
+        };
+
+        return survey;
     }
 }
