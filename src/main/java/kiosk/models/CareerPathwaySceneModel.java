@@ -1,32 +1,18 @@
 package kiosk.models;
 
-import java.util.Arrays;
-import java.util.List;
 import kiosk.scenes.CareerPathwayScene;
 import kiosk.scenes.Scene;
 
 /**
  * Model for storing information about a CareerPathwayScene.
  */
-public class CareerPathwaySceneModel extends PathwaySceneModel {
+public class CareerPathwaySceneModel implements SceneModel {
 
-    public CareerPathwaySceneModel() {
-        super();
-        createCareerButtons(Arrays.asList(LoadedSurveyModel.careers));
-    }
-
-    /**
-     * Creates buttons for each of the careers in the provided list.
-     * @param careerModels A list of CareerModels to create buttons for.
-     */
-    public void createCareerButtons(List<CareerModel> careerModels) {
-        this.buttonModels = new ButtonModel[careerModels.size()];
-
-        for (int i = 0; i < careerModels.size(); i++) {
-            String careerName = careerModels.get(i).name;
-            buttonModels[i] = new ButtonModel(careerName, careerName);
-        }
-    }
+    public String id;
+    public String name = "Career Pathway Scene";
+    public String centerText = "Center";
+    public String headerTitle = "Title";
+    public String headerBody = "Heading";
 
     @Override
     public Scene createScene() {
@@ -34,22 +20,39 @@ public class CareerPathwaySceneModel extends PathwaySceneModel {
     }
 
     @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
     public SceneModel deepCopy() {
-        CareerPathwaySceneModel copy = new CareerPathwaySceneModel();
+        CareerPathwaySceneModel model = new CareerPathwaySceneModel();
+        model.id = id;
+        model.name = name;
+        model.centerText = centerText;
+        model.headerTitle = headerTitle;
+        model.headerBody = headerBody;
+        return model;
+    }
 
-        ButtonModel[] copiedButtonModels = new ButtonModel[buttonModels.length];
-        for (int i = 0; i < buttonModels.length; i++) {
-            copiedButtonModels[i] = buttonModels[i].deepCopy();
-        }
-
-        copy.buttonModels = copiedButtonModels;
-        copy.id = id;
-        copy.name = name;
-        copy.headerTitle = headerTitle;
-        copy.headerBody = headerBody;
-        copy.centerText = centerText;
-
-        return copy;
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 
     @Override

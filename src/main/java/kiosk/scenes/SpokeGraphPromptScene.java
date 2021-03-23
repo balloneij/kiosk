@@ -45,7 +45,7 @@ public class SpokeGraphPromptScene implements Scene {
     private final SpokeGraphPromptSceneModel model;
     private ButtonControl[] answerButtons;
     private final ButtonControl promptButton;
-    private final SpokeGraph spokeGraph;
+    private SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
 
@@ -115,6 +115,12 @@ public class SpokeGraphPromptScene implements Scene {
         );
         promptButton.setDisabled(true);
 
+        this.backButton = ButtonControl.createBackButton();
+        this.homeButton = ButtonControl.createHomeButton();
+    }
+
+    @Override
+    public void init(Kiosk sketch) {
         final int width = Settings.readSettings().screenW;
         final int height = Settings.readSettings().screenH;
 
@@ -122,7 +128,7 @@ public class SpokeGraphPromptScene implements Scene {
         final double availableHeight = (height - HEADER_Y - HEADER_H);
         final double size = Math.min(width, availableHeight);
 
-        CareerModel[] careers = LoadedSurveyModel.careers; // Reference to current list of careers
+        CareerModel[] careers = sketch.getAllCareers(); // Reference to current list of careers
         UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
@@ -136,19 +142,11 @@ public class SpokeGraphPromptScene implements Scene {
             careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
         }
 
+        // Create spoke graph
         this.spokeGraph = new SpokeGraph(size, 0, HEADER_Y + HEADER_H,
-            this.model.careerCenterText, careerButtons, careerWeights);
+                this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
 
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.backButton = ButtonControl.createBackButton();
-            this.homeButton = ButtonControl.createHomeButton();
-        }
-    }
-
-    @Override
-    public void init(Kiosk sketch) {
-        // Hook scene graph button clicks
         for (ButtonControl button : this.answerButtons) {
             sketch.hookControl(button);
         }

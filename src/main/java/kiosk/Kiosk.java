@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
@@ -30,6 +31,7 @@ public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private static SceneModel rootSceneModel;
+    private final CareerModel[] careers;
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
@@ -83,16 +85,16 @@ public class Kiosk extends PApplet {
 
         Kiosk.settings = settings;
 
+        LoadedSurveyModel survey;
         if (!surveyPath.isEmpty()) {
-            LoadedSurveyModel loadedSurveyModel
-                    = LoadedSurveyModel.readFromFile(new File(surveyPath));
-            this.sceneGraph = new SceneGraph(loadedSurveyModel);
+            survey = LoadedSurveyModel.readFromFile(new File(surveyPath));
         } else {
             List<SceneModel> defaultScenes = new ArrayList<>();
             defaultScenes.add(new DefaultSceneModel());
-
-            this.sceneGraph = new SceneGraph(new LoadedSurveyModel(defaultScenes));
+            survey = new LoadedSurveyModel(defaultScenes);
         }
+        this.sceneGraph = new SceneGraph(survey);
+        this.careers = survey.careers;
 
         this.mouseListeners = new LinkedHashMap<>();
 
@@ -223,6 +225,10 @@ public class Kiosk extends PApplet {
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.get(e).clear();
         }
+    }
+
+    public CareerModel[] getAllCareers() {
+        return careers;
     }
 
     /**
