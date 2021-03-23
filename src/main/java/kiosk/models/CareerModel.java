@@ -12,6 +12,10 @@ public class CareerModel {
     public String field; // Computer engineering, biology, education, etc.
     public Riasec riasecCategory;
 
+    public CareerModel() {
+        this("Career", Riasec.Artistic, "field", "category");
+    }
+
     /**
      * Creates a CareerModel with the provided fields.
      * @param name The name of the career.
@@ -24,16 +28,6 @@ public class CareerModel {
         this.riasecCategory = riasecCategory;
         this.field = field;
         this.category = category;
-    }
-
-    /**
-     * Default constructor for CareerModel (so that it can be saved properly).
-     */
-    public CareerModel() {
-        this.name = "Career";
-        this.riasecCategory = Riasec.None;
-        this.field = "Field";
-        this.category = "Category";
     }
 
     public CareerModel deepCopy() {

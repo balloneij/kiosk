@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="15.0.1" class="java.beans.XMLDecoder">
- <object class="kiosk.Settings"/>
+<java version="15.0.2" class="java.beans.XMLDecoder">
+ <object class="kiosk.Settings" id="Settings0">
+  <void class="kiosk.Settings" method="getField">
+   <string>timeoutMillis</string>
+   <void method="set">
+    <object idref="Settings0"/>
+    <int>300000</int>
+   </void>
+  </void>
+ </object>
 </java>

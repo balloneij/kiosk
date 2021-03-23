@@ -31,16 +31,22 @@ public class ErrorScene implements Scene {
         // Set background color depending on intensity of the error
         switch (this.model.intensity) {
             // Cadmium red
-            case SEVERE -> sketch.background(227, 0, 34);
+            case SEVERE:
+                sketch.background(227, 0, 34);
+                break;
             // Safety yellow
-            case WARNING -> {
+            case WARNING:
                 sketch.fill(0);
                 sketch.background(238, 210, 2);
-            }
+                break;
             // Winter wizard blue
-            case INFORMATION -> sketch.background(150, 221, 255);
+            case INFORMATION:
+                sketch.background(150, 221, 255);
+                break;
             // Black
-            default -> sketch.background(0);
+            default:
+                sketch.background(0);
+                break;
         }
 
         Graphics.useGothic(sketch, 16);

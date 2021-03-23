@@ -60,7 +60,7 @@ public class PathwaySceneLoader {
 
     // Adds a Node containing a text field for editing the header title.
     protected static Node getHeaderTitleBox(PathwaySceneModel model, SceneGraph graph) {
-        var titleField = new TextField(model.headerTitle);
+        TextField titleField = new TextField(model.headerTitle);
 
         // Listener to update the title
         titleField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -68,14 +68,14 @@ public class PathwaySceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Header Title:"), titleField);
+        VBox vbox = new VBox(new Label("Header Title:"), titleField);
         vbox.setPadding(PADDING);
         return vbox;
     }
 
     // Adds a Node containing a text field for editing the header body.
     protected static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
-        var bodyField = new TextField(model.headerBody);
+        TextField bodyField = new TextField(model.headerBody);
 
         // Listener to update the body
         bodyField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -83,13 +83,13 @@ public class PathwaySceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Header Body:"), bodyField);
+        VBox vbox = new VBox(new Label("Header Body:"), bodyField);
         vbox.setPadding(PADDING);
         return vbox;
     }
 
     protected static Node getCenterTextBox(PathwaySceneModel model, SceneGraph graph) {
-        var centerTextField = new TextField(model.centerText);
+        TextField centerTextField = new TextField(model.centerText);
 
         // Listeners to update the position
         centerTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -97,7 +97,7 @@ public class PathwaySceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        var vbox = new VBox(new Label("Center Text:"), centerTextField);
+        VBox vbox = new VBox(new Label("Center Text:"), centerTextField);
         vbox.setPadding(PADDING);
         return vbox;
 
@@ -116,7 +116,7 @@ public class PathwaySceneLoader {
         // Add a separator to separate the "Answers:" label from the answer sections
         Separator separator = new Separator();
         separator.setPadding(new Insets(0, 0, 10, 0));
-        var vbox = new VBox(new Label("Answers:"), separator);
+        VBox vbox = new VBox(new Label("Answers:"), separator);
 
         // Create controls for each answer (and add them to the Node)
         for (ButtonModel answer : model.buttonModels) {
@@ -131,7 +131,7 @@ public class PathwaySceneLoader {
             // Add the new answer to the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.buttonModels));
             answersList.add(newAnswer);
-            model.buttonModels = answersList.toArray(ButtonModel[]::new);
+            model.buttonModels = answersList.toArray(new ButtonModel[0]);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Add editing controls for the new answer
@@ -159,7 +159,7 @@ public class PathwaySceneLoader {
                                          ButtonModel answer, VBox answersContainer,
                                          PathwaySceneModel model, SceneGraph graph) {
         // Setup the text field for editing the answer
-        var answerField = new TextField(answer.text);
+        TextField answerField = new TextField(answer.text);
         answerField.textProperty().addListener((observable, oldValue, newValue) -> {
             answer.text = newValue;
             graph.registerSceneModel(model); // Re-register the model to update the scene
@@ -170,7 +170,7 @@ public class PathwaySceneLoader {
         ColorPicker colorPicker = new ColorPicker(initialColor);
         colorPicker.setOnAction(event -> {
             // Set the answer color to the new color
-            var newColor = colorPicker.getValue();
+            Color newColor = colorPicker.getValue();
             answer.rgb[0] = (int) (newColor.getRed() * COLOR_RANGE);
             answer.rgb[1] = (int) (newColor.getGreen() * COLOR_RANGE);
             answer.rgb[2] = (int) (newColor.getBlue() * COLOR_RANGE);
@@ -182,7 +182,7 @@ public class PathwaySceneLoader {
         Button imageChooseButton = new Button("Image");
         imageChooseButton.setOnAction(event -> {
             // Open the image file chooser
-            var file = imageFileChooser.showOpenDialog(null);
+            File file = imageFileChooser.showOpenDialog(null);
 
             // If null, no file was chosen
             if (file != null) {
@@ -203,7 +203,7 @@ public class PathwaySceneLoader {
             }
         });
 
-        var answerVbox = new VBox(); // Contains all the editing controls for this answer
+        VBox answerVbox = new VBox(); // Contains all the editing controls for this answer
 
         // Setup the button for removing an answer
         Button removeButton = new Button("x");
@@ -211,7 +211,7 @@ public class PathwaySceneLoader {
             // Remove the answer from the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.buttonModels));
             answersList.remove(answer);
-            model.buttonModels = answersList.toArray(ButtonModel[]::new);
+            model.buttonModels = answersList.toArray(new ButtonModel[0]);
             graph.registerSceneModel(model); // Re-register the model to update the scene
 
             // Remove the editing controls for this answer from the parent container

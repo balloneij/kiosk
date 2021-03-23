@@ -47,14 +47,14 @@ public class TimeoutScene implements Scene {
         final int sketchWidth = Kiosk.getSettings().screenW;
         final int sketchHeight = Kiosk.getSettings().screenH;
 
-        var homeButtonModel = new ButtonModel();
+        ButtonModel homeButtonModel = new ButtonModel();
         homeButtonModel.text = "Take me back to the beginning!";
         sketch.rectMode(PConstants.CENTER);
         this.homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING * 2, sketchHeight - BUTTON_PADDING * 5,
                 BUTTON_WIDTH * 3, BUTTON_HEIGHT * 3 / 4);
         sketch.hookControl(this.homeButton);
-        var backButtonModel = new ButtonModel();
+        ButtonModel backButtonModel = new ButtonModel();
         backButtonModel.text = "I'm still here!";
         sketch.rectMode(PConstants.CENTER);
         this.backButton = new ButtonControl(backButtonModel,

@@ -45,7 +45,7 @@ public class SpokeGraphPromptScene implements Scene {
     private final SpokeGraphPromptSceneModel model;
     private ButtonControl[] answerButtons;
     private final ButtonControl promptButton;
-    private final SpokeGraph spokeGraph;
+    private SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
 
@@ -103,7 +103,7 @@ public class SpokeGraphPromptScene implements Scene {
             );
         }
 
-        var prompt = new ButtonModel();
+        ButtonModel prompt = new ButtonModel();
         prompt.isCircle = true;
         prompt.rgb = new int[]{ 0, 0, 0 };
         prompt.text = this.model.promptText;
@@ -115,6 +115,12 @@ public class SpokeGraphPromptScene implements Scene {
         );
         promptButton.setDisabled(true);
 
+        this.backButton = ButtonControl.createBackButton();
+        this.homeButton = ButtonControl.createHomeButton();
+    }
+
+    @Override
+    public void init(Kiosk sketch) {
         final int width = Settings.readSettings().screenW;
         final int height = Settings.readSettings().screenH;
 
@@ -122,7 +128,7 @@ public class SpokeGraphPromptScene implements Scene {
         final double availableHeight = (height - HEADER_Y - HEADER_H);
         final double size = Math.min(width, availableHeight);
 
-        CareerModel[] careers = LoadedSurveyModel.careers; // Reference to current list of careers
+        CareerModel[] careers = sketch.getAllCareers(); // Reference to current list of careers
         UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
@@ -136,18 +142,13 @@ public class SpokeGraphPromptScene implements Scene {
             careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
         }
 
+        // Create spoke graph
         this.spokeGraph = new SpokeGraph(size, 0, HEADER_Y + HEADER_H,
-            this.model.careerCenterText, careerButtons, careerWeights);
+                this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
 
-        this.backButton = ButtonControl.createBackButton();
-        this.homeButton = ButtonControl.createHomeButton();
-    }
-
-    @Override
-    public void init(Kiosk sketch) {
         // Hook scene graph button clicks
-        for (var button : this.answerButtons) {
+        for (ButtonControl button : this.answerButtons) {
             sketch.hookControl(button);
         }
 
@@ -159,7 +160,8 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (var button : this.answerButtons) {
+        // Check for button clicks on the scene graph
+        for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget(), button.getModel().category);
             }
@@ -209,12 +211,12 @@ public class SpokeGraphPromptScene implements Scene {
                 HEADER_W, HEADER_BODY_FONT_SIZE * 2);
 
         // Calculate answer location constants
-        var headerBottomY = HEADER_Y + HEADER_H + 2 * ANSWERS_PADDING;
-        var answersCenterX = SCREEN_W * 3 / 4;
-        var answersCenterY = headerBottomY + (SCREEN_H - headerBottomY) / 2 - ANSWERS_PADDING;
+        float headerBottomY = HEADER_Y + HEADER_H + 2 * ANSWERS_PADDING;
+        int answersCenterX = SCREEN_W * 3 / 4;
+        float answersCenterY = headerBottomY + (SCREEN_H - headerBottomY) / 2 - ANSWERS_PADDING;
 
         // Draw answer buttons
-        for (var answer : answerButtons) {
+        for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(ANSWERS_SPOKE_THICKNESS);
             sketch.stroke(255);
             sketch.line(answersCenterX, answersCenterY,

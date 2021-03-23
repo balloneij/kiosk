@@ -1,33 +1,39 @@
 package kiosk.models;
 
-import java.util.Arrays;
-import java.util.List;
 import kiosk.scenes.CareerPathwayScene;
 import kiosk.scenes.Scene;
 
 /**
  * Model for storing information about a CareerPathwayScene.
  */
-public class CareerPathwaySceneModel extends PathwaySceneModel {
+public class CareerPathwaySceneModel implements SceneModel {
     private FilterGroupModel filter;
     public CareerModel[] careers;
+
+    public String id;
+    public String name = "Career Pathway Scene";
+    public String centerText = "Center";
+    public String headerTitle = "Title";
+    public String headerBody = "Heading";
+
+    @Override
+    public Scene createScene() {
+        return new CareerPathwayScene(this);
+    }
 
     public CareerPathwaySceneModel() {
         super();
         setFilter(new FilterGroupModel("All"));
     }
 
-    /**
-     * Creates buttons for each of the careers in the provided list.
-     * @param careerModels A list of CareerModels to create buttons for.
-     */
-    public void createCareerButtons(List<CareerModel> careerModels) {
-        this.buttonModels = new ButtonModel[careerModels.size()];
+    @Override
+    public String getId() {
+        return id;
+    }
 
-        for (int i = 0; i < careerModels.size(); i++) {
-            String careerName = careerModels.get(i).name;
-            buttonModels[i] = new ButtonModel(careerName, careerName);
-        }
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     public FilterGroupModel getFilter() {
@@ -44,32 +50,34 @@ public class CareerPathwaySceneModel extends PathwaySceneModel {
 
         // Use the list of careers from the filter
         careers = filter.getCareers().toArray(new CareerModel[] {});
-        createCareerButtons(Arrays.asList(careers));
+//        createCareerButtons(Arrays.asList(careers)); TODO
     }
 
     @Override
-    public Scene createScene() {
-        return new CareerPathwayScene(this);
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
     public SceneModel deepCopy() {
-        CareerPathwaySceneModel copy = new CareerPathwaySceneModel();
+        CareerPathwaySceneModel model = new CareerPathwaySceneModel();
+        model.id = id;
+        model.name = name;
+        model.centerText = centerText;
+        model.headerTitle = headerTitle;
+        model.headerBody = headerBody;
+        model.setFilter(filter);
+        return model;
+    }
 
-        ButtonModel[] copiedButtonModels = new ButtonModel[buttonModels.length];
-        for (int i = 0; i < buttonModels.length; i++) {
-            copiedButtonModels[i] = buttonModels[i].deepCopy();
-        }
-
-        copy.buttonModels = copiedButtonModels;
-        copy.id = id;
-        copy.name = name;
-        copy.headerTitle = headerTitle;
-        copy.headerBody = headerBody;
-        copy.centerText = centerText;
-        copy.setFilter(filter);
-
-        return copy;
+    @Override
+    public String[] getTargets() {
+        return new String[0];
     }
 
     @Override

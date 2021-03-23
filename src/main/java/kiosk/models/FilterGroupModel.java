@@ -36,9 +36,9 @@ public class FilterGroupModel {
 
         // Filter the list of career models based on the provided names
         List<String> careerNameList = Arrays.asList(careerNames);
-        this.careers = Arrays.stream(LoadedSurveyModel.careers)
-            .filter(careerModel -> careerNameList.contains(careerModel.name))
-            .collect(Collectors.toSet());
+//        this.careers = Arrays.stream(LoadedSurveyModel.careers)
+//            .filter(careerModel -> careerNameList.contains(careerModel.name))
+//            .collect(Collectors.toSet());
     }
 
     public void setCareers(Set<CareerModel> careers) {
@@ -56,12 +56,14 @@ public class FilterGroupModel {
      * @return The Set of CareerModels associated with the filter.
      */
     public Set<CareerModel> getCareers() {
-        if (name.equals("All")) {
-            // Return all careers in the survey if this is the "All" filter
-            return new HashSet<>(Arrays.asList(LoadedSurveyModel.careers));
-        } else {
-            return careers;
-        }
+        // TODO
+//        if (name.equals("All")) {
+//            // Return all careers in the survey if this is the "All" filter
+//            return new HashSet<>(Arrays.asList(LoadedSurveyModel.careers));
+//        } else {
+//            return careers;
+//        }
+        return new HashSet<CareerModel>(Arrays.asList(new CareerModel(), new CareerModel()));
     }
 
     public void setName(String name) {

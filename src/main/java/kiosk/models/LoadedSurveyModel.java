@@ -17,14 +17,7 @@ public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
-    public static CareerModel[] careers = {
-        new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
-        new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
-        new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
-        new CareerModel("Social", Riasec.Social, "field", "category"),
-        new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
-        new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
-    };
+    public CareerModel[] careers;
 
     // TODO there will need to be methods for adding new filters to this array once filter
     //  creation/editing is implemented. The current filters are examples/placeholders.
@@ -127,8 +120,8 @@ public class LoadedSurveyModel implements Serializable {
             if (!(surveyObject instanceof LoadedSurveyModel)) {
                 String errorMsg = "Successfully loaded the survey XML, but\n"
                         + "the root object is not of the type 'LoadedSurveyModel'";
-                var defaultScene = new ErrorSceneModel(errorMsg);
-                var defaultSceneList = new ArrayList<SceneModel>();
+                ErrorSceneModel defaultScene = new ErrorSceneModel(errorMsg);
+                ArrayList<SceneModel> defaultSceneList = new ArrayList<SceneModel>();
                 defaultSceneList.add(defaultScene);
                 LoadedSurveyModel errorSurvey = new LoadedSurveyModel(defaultSceneList);
                 return errorSurvey;
@@ -143,8 +136,8 @@ public class LoadedSurveyModel implements Serializable {
                     + "\nThe program can also be started from the command line with the command "
                     + "\n\"java -jar kiosk.jar <survey file>\""
                     + "\nwhere <survey file> is the path to the survey file.";
-            var defaultScene = new ErrorSceneModel(errorMsg);
-            var defaultSceneList = new ArrayList<SceneModel>();
+            ErrorSceneModel defaultScene = new ErrorSceneModel(errorMsg);
+            ArrayList<SceneModel> defaultSceneList = new ArrayList<SceneModel>();
             defaultSceneList.add(defaultScene);
             LoadedSurveyModel errorSurvey = new LoadedSurveyModel(defaultSceneList);
             return errorSurvey;
@@ -153,8 +146,8 @@ public class LoadedSurveyModel implements Serializable {
             String errorMsg = "Could not read from survey at '" + file.getPath()
                     + "'\nThe XML is probably deformed in some way."
                     + "\nRefer to the console for more specific details.";
-            var defaultScene = new ErrorSceneModel(errorMsg);
-            var defaultSceneList = new ArrayList<SceneModel>();
+            ErrorSceneModel defaultScene = new ErrorSceneModel(errorMsg);
+            ArrayList<SceneModel> defaultSceneList = new ArrayList<SceneModel>();
             defaultSceneList.add(defaultScene);
             LoadedSurveyModel errorSurvey = new LoadedSurveyModel(defaultSceneList);
             return errorSurvey;
@@ -256,7 +249,7 @@ public class LoadedSurveyModel implements Serializable {
         PathwaySceneModel pathway = new PathwaySceneModel();
         pathway.buttonModels = new ButtonModel[8];
         for (int i = 0; i < pathway.buttonModels.length; i++) {
-            var buttonModel = new ButtonModel();
+            ButtonModel buttonModel = new ButtonModel();
             buttonModel.isCircle = true;
             buttonModel.text = "Choice " + i;
             buttonModel.target = "spoke";
@@ -273,33 +266,40 @@ public class LoadedSurveyModel implements Serializable {
         spoke.headerBody = "Click the answer the best applies to you";
         spoke.promptText = "What's your favorite subject?";
 
-        var answer1 = new ButtonModel();
-        answer1.text = "Math!";
-        answer1.category = Riasec.Realistic;
-        answer1.target = "career pathway";
-        var answer2 = new ButtonModel();
-        answer2.text = "Art!";
-        answer2.category = Riasec.Artistic;
-        answer2.target = "career pathway";
-        var answer3 = new ButtonModel();
-        answer3.text = "Business!";
-        answer3.category = Riasec.Enterprising;
-        answer3.target = "career pathway";
+        ButtonModel answer1 = new ButtonModel();
+        answer1.text = "I like math";
+        ButtonModel answer2 = new ButtonModel();
+        answer2.text = "I like math";
+        ButtonModel answer3 = new ButtonModel();
+        answer3.text = "I like math";
         spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
 
-        // Create a career pathways scene
-        CareerPathwaySceneModel careerPathway = new CareerPathwaySceneModel();
-        careerPathway.id = "career pathway";
+        spoke.answers = new ButtonModel[8];
+        for (int i = 0; i < spoke.answers.length; i++) {
+            ButtonModel buttonModel = new ButtonModel();
+            buttonModel.text = "Career " + i;
+            spoke.answers[i] = buttonModel;
+        }
 
-        var initialScenes = new ArrayList<SceneModel>();
+        ArrayList<SceneModel> initialScenes = new ArrayList<SceneModel>();
         initialScenes.add(titleScreen);
         initialScenes.add(challengePrompt);
         initialScenes.add(agePrompt);
         initialScenes.add(pathPrompt);
         initialScenes.add(pathway);
         initialScenes.add(spoke);
-        initialScenes.add(careerPathway);
 
-        return new LoadedSurveyModel(titleScreen.id, initialScenes);
+        LoadedSurveyModel survey = new LoadedSurveyModel(titleScreen.id, initialScenes);
+
+        survey.careers = new CareerModel[]{
+            new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
+            new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
+            new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
+            new CareerModel("Social", Riasec.Social, "field", "category"),
+            new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
+            new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
+        };
+
+        return survey;
     }
 }
