@@ -96,7 +96,7 @@ public class GraphicsUtil {
         msoeButton.setNoButton(true);
         //TODO If we make some type of credits scene, I imagine that this button takes you there.
         //     Then this should be enabled and lead to a new scene.
-        msoeButton.setDisabled(true);
+        //msoeButton.setDisabled(false);
         return msoeButton;
     }
 
@@ -112,7 +112,8 @@ public class GraphicsUtil {
         sketch.stroke(255);
 
         Graphics.drawRoundedRectangle(sketch,
-                HEADER_X + HEADER_W / 2, HEADER_Y + HEADER_H / 2, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
+                HEADER_X + HEADER_W / 2, HEADER_Y + HEADER_H / 2,
+                HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
 
         // Draw the title and body
         sketch.fill(0);

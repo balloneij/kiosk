@@ -15,6 +15,7 @@ public class DetailsScene implements Scene {
     private ButtonControl nextButton;
     private ButtonControl homeButton;
     private ButtonControl backButton;
+    private ButtonControl supplementaryButton;
 
     // Buttons
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
@@ -57,6 +58,10 @@ public class DetailsScene implements Scene {
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
+        } else {
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton.init(sketch);
+            sketch.hookControl(this.supplementaryButton);
         }
 
         if (this.model.button.image != null) {
@@ -135,6 +140,8 @@ public class DetailsScene implements Scene {
         if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch); //TODO CHECK IF NEXT & MSOE BUTTONS OVERLAP
         }
     }
 }

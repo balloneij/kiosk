@@ -19,6 +19,7 @@ public class PathwayScene implements Scene {
     protected final SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
+    private ButtonControl supplementaryButton;
 
     /**
      * Create a pathway scene.
@@ -51,6 +52,10 @@ public class PathwayScene implements Scene {
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
+        } else {
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton.init(sketch);
+            sketch.hookControl(this.supplementaryButton);
         }
 
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
@@ -88,6 +93,9 @@ public class PathwayScene implements Scene {
         if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
             this.backButton.draw(sketch);
             this.homeButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
         }
+
     }
 }

@@ -210,18 +210,9 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[1] + COLOR_DELTA_ON_CLICK),
                     clampColor(this.model.rgb[2] + COLOR_DELTA_ON_CLICK));
             sketch.stroke(59, 58, 57, 63f);
-            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                    < Kiosk.getSettings().buttonAnimationLengthFrames && this.shouldAnimate) {
-                double offset = calculateAnimationOffset(sketch);
-                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
-                        (int) (this.rect.width * (1 + offset)), (int)
-                                (this.rect.height * (1 + offset)), DEFAULT_CORNER_RADIUS);
-            } else {
-                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
-                        this.rect.width, this.rect.height, DEFAULT_CORNER_RADIUS);
-            }
+            Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
+                    this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                    this.rect.width, this.rect.height, DEFAULT_CORNER_RADIUS);
         }
 
         // If pressed, draw the text lower and don't draw the main button
@@ -244,9 +235,10 @@ public class ButtonControl implements Control<MouseEvent> {
                     && !this.disabled && this.shouldAnimate) {
                 double offset = calculateAnimationOffset(sketch);
                 Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + this.rect.height / 2.f,
-                        (int) (this.rect.width * (1 + offset)), (int)
-                                (this.rect.height * (1 + offset)), DEFAULT_CORNER_RADIUS);
+                        this.rect.y + (float) (this.rect.height / 2.f
+                                + (this.rect.height / 10.f * offset)),
+                        (int) (this.rect.width), (int)
+                                (this.rect.height), DEFAULT_CORNER_RADIUS);
                 //TODO ANIMATE TEXT
                 textWithOutline(this.model.text,
                         (float) this.rect.getCenterX(),
@@ -284,7 +276,7 @@ public class ButtonControl implements Control<MouseEvent> {
 
             if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                     < Kiosk.getSettings().buttonAnimationLengthFrames && this.shouldAnimate) {
-                double offset = calculateAnimationOffset(sketch);
+                double offset = calculateAnimationOffset(sketch) / 8;
                 sketch.ellipse(this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                         (int) (this.rect.width * sizeMultiplier * (1 + offset)),
@@ -313,7 +305,7 @@ public class ButtonControl implements Control<MouseEvent> {
             if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                     < Kiosk.getSettings().buttonAnimationLengthFrames
                     && !this.disabled && this.shouldAnimate) {
-                double offset = calculateAnimationOffset(sketch);
+                double offset = calculateAnimationOffset(sketch) / 8;
                 sketch.ellipse(this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f,
                         (float) (this.rect.width * sizeMultiplier * (1 + offset)),
@@ -339,13 +331,13 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     /**
-     * Calculates how much the animation should change a button's height by
+     * Calculates how much the animation should change a button's height by.
      * Is essentially a parabola to ensure it pulses up and back down at a constant rate
      * @param sketch to draw to
      * @return the percentage difference between the normal value and this frame's value
      */
     private double calculateAnimationOffset(Kiosk sketch) {
-        return ((0 - (sketch.frameCount
+        return (8) * ((0 - (sketch.frameCount
                 % Kiosk.getSettings().buttonAnimationFrames)
                 * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames)
                 / Kiosk.getSettings().buttonAnimationIntensity) + ((sketch.frameCount

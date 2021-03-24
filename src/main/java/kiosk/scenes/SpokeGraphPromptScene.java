@@ -48,6 +48,7 @@ public class SpokeGraphPromptScene implements Scene {
     private SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
+    private ButtonControl supplementaryButton;
 
     /**
      * Creates a Spoke Graph Prompt Scene
@@ -156,6 +157,10 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
+        } else {
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton.init(sketch);
+            sketch.hookControl(this.supplementaryButton);
         }
     }
 
@@ -231,6 +236,8 @@ public class SpokeGraphPromptScene implements Scene {
             // Draw the back and home buttons
             this.backButton.draw(sketch);
             this.homeButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
         }
     }
 }

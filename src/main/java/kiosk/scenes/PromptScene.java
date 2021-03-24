@@ -5,6 +5,7 @@ import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
+import kiosk.models.CreditsSceneModel;
 import kiosk.models.PromptSceneModel;
 import processing.core.PConstants;
 
@@ -116,6 +117,10 @@ public class PromptScene implements Scene {
             } else if (this.backButton.wasClicked()) {
                 sceneGraph.popScene();
             }
+        } else if (this.supplementaryButton.wasClicked()) {
+            System.out.println("MSOE!");
+            CreditsSceneModel cs = new CreditsSceneModel();
+            sceneGraph.pushScene(new CreditsSceneModel());
         }
     }
 
