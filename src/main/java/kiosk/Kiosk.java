@@ -30,7 +30,6 @@ import processing.event.MouseEvent;
 public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
-    private static SceneModel rootSceneModel;
     private final CareerModel[] careers;
     private Scene lastScene;
     private SceneModel lastSceneModel;
@@ -155,7 +154,6 @@ public class Kiosk extends PApplet {
         super.setup();
         this.lastMillis = millis();
         Graphics.loadFonts();
-        rootSceneModel = sceneGraph.getRootSceneModel();
     }
 
     @Override
@@ -382,8 +380,8 @@ public class Kiosk extends PApplet {
         return settings;
     }
 
-    public static SceneModel getRootSceneModel() {
-        return rootSceneModel;
+    public SceneModel getRootSceneModel() {
+        return sceneGraph.getRootSceneModel();
     }
 
     public void run() {

@@ -58,7 +58,7 @@ public class CareerPathwayScene implements Scene {
                 buttons);
 
         // Create home and back button
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -102,7 +102,7 @@ public class CareerPathwayScene implements Scene {
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
         this.spokeGraph.draw(sketch);
 
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
         } else {

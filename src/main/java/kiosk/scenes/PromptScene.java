@@ -91,7 +91,7 @@ public class PromptScene implements Scene {
             x += BUTTON_WIDTH + BUTTON_PADDING;
         }
 
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -111,15 +111,13 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
                 sceneGraph.popScene();
             }
         } else if (this.supplementaryButton.wasClicked()) {
-            System.out.println("MSOE!");
-            CreditsSceneModel cs = new CreditsSceneModel();
             sceneGraph.pushScene(new CreditsSceneModel());
         }
     }
@@ -209,7 +207,7 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             homeButton.draw(sketch);
             backButton.draw(sketch);
         } else {

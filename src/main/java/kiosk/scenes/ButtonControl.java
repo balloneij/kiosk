@@ -218,7 +218,6 @@ public class ButtonControl implements Control<MouseEvent> {
         // If pressed, draw the text lower and don't draw the main button
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
-            //TODO ANIMATE TEXT
             textWithOutline(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY()
@@ -227,26 +226,38 @@ public class ButtonControl implements Control<MouseEvent> {
                 (float) this.rect.height,
                 sketch);
         } else {
-            sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-            sketch.stroke(59, 58, 57, 63f);
-
             if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                     < Kiosk.getSettings().buttonAnimationLengthFrames
                     && !this.disabled && this.shouldAnimate) {
                 double offset = calculateAnimationOffset(sketch);
+                if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                        < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
+                        && !this.disabled && this.shouldAnimate) {
+                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[1] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[2] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)));
+                } else {
+                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[1] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[2] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)));
+                }
+                sketch.stroke(59, 58, 57, 63f);
                 Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
                         this.rect.y + (float) (this.rect.height / 2.f
                                 + (this.rect.height / 10.f * offset)),
                         (int) (this.rect.width), (int)
                                 (this.rect.height), DEFAULT_CORNER_RADIUS);
-                //TODO ANIMATE TEXT
                 textWithOutline(this.model.text,
                         (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY(),
+                        (float) (this.rect.getCenterY() + (this.rect.height / 10.f * offset)),
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch);
             } else {
+                sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+                sketch.stroke(59, 58, 57, 63f);
                 Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f,
                         this.rect.width, this.rect.height, DEFAULT_CORNER_RADIUS);

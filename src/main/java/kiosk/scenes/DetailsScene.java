@@ -53,7 +53,7 @@ public class DetailsScene implements Scene {
         final int sketchHeight = Kiosk.getSettings().screenH;
         final int sketchWidth = Kiosk.getSettings().screenW;
 
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -86,7 +86,7 @@ public class DetailsScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
@@ -137,7 +137,7 @@ public class DetailsScene implements Scene {
 
         this.centerButton.draw(sketch);
         this.nextButton.draw(sketch);
-        if (!Kiosk.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
         } else {
