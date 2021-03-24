@@ -15,8 +15,6 @@ import processing.core.PConstants;
  * the list, weighted based on the career RIASEC type and the UserScore.
  */
 public class CareerPathwayScene implements Scene {
-
-
     // Pull constants from the settings
     private static final int SCREEN_W = Kiosk.getSettings().screenW;
     private static final int SCREEN_H = Kiosk.getSettings().screenH;
@@ -39,7 +37,7 @@ public class CareerPathwayScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         // Grab careers from the Kiosk and create buttons
-        CareerModel[] careers = sketch.getAllCareers();
+        CareerModel[] careers = model.filter.filter(sketch.getAllCareers());
         ButtonModel[] buttons = new ButtonModel[careers.length];
         for (int i = 0; i < careers.length; i++) {
             String careerName = careers[i].name;

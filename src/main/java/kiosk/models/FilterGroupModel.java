@@ -1,5 +1,6 @@
 package kiosk.models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -8,22 +9,21 @@ import java.util.stream.Collectors;
 
 /**
  * Class for storing a set of careers to filter by. Used by certain classes to filter which
- * careers appear in a spoke graph. FilterGroupModels named "All" will return all the careers in
- * the LoadedSurveyModel.
+ * careers appear in a spoke graph. FilterGroupModels named "All" will return all the available
+ * careers LoadedSurveyModel.
  */
 public class FilterGroupModel {
-    // TODO can these be private?
-    public String name;
-    public Set<CareerModel> careers;
+    private String name;
+    private Set<String> careerNames;
 
-    public FilterGroupModel(String name, Set<CareerModel> careers) {
+    public FilterGroupModel(String name, Set<String> careerNames) {
         this.name = name;
-        this.setCareers(careers);
+        this.setCareerNames(careerNames);
     }
 
-    public FilterGroupModel(String name, List<CareerModel> careers) {
+    public FilterGroupModel(String name, List<String> careerNames) {
         this.name = name;
-        this.setCareers(careers);
+        this.setCareerNames(careerNames);
     }
 
     /**
@@ -33,37 +33,19 @@ public class FilterGroupModel {
      */
     public FilterGroupModel(String name, String... careerNames) {
         this.name = name;
-
-        // Filter the list of career models based on the provided names
-        List<String> careerNameList = Arrays.asList(careerNames);
-//        this.careers = Arrays.stream(LoadedSurveyModel.careers)
-//            .filter(careerModel -> careerNameList.contains(careerModel.name))
-//            .collect(Collectors.toSet());
+        this.setCareerNames(Arrays.asList(careerNames));
     }
 
-    public void setCareers(Set<CareerModel> careers) {
-        this.careers = careers;
+    public void setCareerNames(Set<String> careerNames) {
+        this.careerNames = careerNames;
     }
 
-    public void setCareers(List<CareerModel> careers) {
-        this.setCareers(new HashSet<>(careers));
+    public void setCareerNames(List<String> careers) {
+        this.setCareerNames(new HashSet<>(careers));
     }
 
-    /**
-     * Returns the Set of CareerModels associated with the filter. Note that if the filter is
-     * named "All", this method will return ALL careers from the LoadedSurveyModel, even if they
-     * are not in the Set associated with the filter.
-     * @return The Set of CareerModels associated with the filter.
-     */
-    public Set<CareerModel> getCareers() {
-        // TODO
-//        if (name.equals("All")) {
-//            // Return all careers in the survey if this is the "All" filter
-//            return new HashSet<>(Arrays.asList(LoadedSurveyModel.careers));
-//        } else {
-//            return careers;
-//        }
-        return new HashSet<CareerModel>(Arrays.asList(new CareerModel(), new CareerModel()));
+    public Set<String> getCareerNames() {
+        return careerNames;
     }
 
     public void setName(String name) {
@@ -72,6 +54,38 @@ public class FilterGroupModel {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * Returns a filtered version of the original List, containing only CareerModels whose names
+     * are in the FilterGroupModel. FilterGroupModels named "All" will not apply any filtering.
+     * @param original The List of CareerModels to filter.
+     * @return Filtered version of the original List. FilterGroupModels named "All" will not
+     * apply any filtering.
+     */
+    public List<CareerModel> filter(List<CareerModel> original) {
+        List<CareerModel> filtered = new ArrayList<>(original); // Copy the original
+
+        // If filter is named "All", do not modify the copy
+        // Else perform an intersection of the copy and the careerNames
+        if (!name.equals("All")) {
+            filtered = filtered.stream()
+                .filter(careerModel -> careerNames.contains(careerModel.name))
+                .collect(Collectors.toList());
+        }
+
+        return filtered;
+    }
+
+    /**
+     * Returns a filtered version of the original array, containing only CareerModels whose names
+     * are in the FilterGroupModel. FilterGroupModels named "All" will not apply any filtering.
+     * @param original The array of CareerModels to filter.
+     * @return Filtered version of the original array. FilterGroupModels named "All" will not
+     * apply any filtering.
+     */
+    public CareerModel[] filter(CareerModel[] original) {
+        return filter(Arrays.asList(original)).toArray(new CareerModel[] {});
     }
 
     @Override

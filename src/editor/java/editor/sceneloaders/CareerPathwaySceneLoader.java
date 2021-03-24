@@ -1,6 +1,7 @@
 package editor.sceneloaders;
 
 import editor.Controller;
+import java.util.Arrays;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -12,15 +13,11 @@ import kiosk.SceneGraph;
 import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
-import kiosk.models.PathwaySceneModel;
-
-import java.util.Arrays;
 
 /**
  * Used to load the editing controls for the CareerPathwayScene.
  */
 public class CareerPathwaySceneLoader {
-
     static final Insets PADDING = new Insets(0, 0, 10, 10);
 
     /**
@@ -99,13 +96,13 @@ public class CareerPathwaySceneLoader {
         // Create a ComboBox with all the available filters
         ComboBox<FilterGroupModel> filterBox =
             new ComboBox<>(FXCollections.observableList(Arrays.asList(LoadedSurveyModel.filters)));
-        filterBox.setValue(model.getFilter()); // Set initial value to match the current filter
+        filterBox.setValue(model.filter); // Set initial value to match the current filter
 
         // On change, update the scenes filter (if it is different from the current filter)
         filterBox.setOnAction(event -> {
             FilterGroupModel target = filterBox.getValue();
-            if (!target.equals(model.getFilter())) {
-                model.setFilter(target);
+            if (!target.equals(model.filter)) {
+                model.filter = target;
                 graph.registerSceneModel(model); // Re-register the model to update the scene
             }
         });

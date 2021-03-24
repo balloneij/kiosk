@@ -1,5 +1,6 @@
 package kiosk.models;
 
+import java.util.Arrays;
 import kiosk.scenes.CareerPathwayScene;
 import kiosk.scenes.Scene;
 
@@ -7,23 +8,30 @@ import kiosk.scenes.Scene;
  * Model for storing information about a CareerPathwayScene.
  */
 public class CareerPathwaySceneModel implements SceneModel {
-    private FilterGroupModel filter;
-    public CareerModel[] careers;
-
     public String id;
-    public String name = "Career Pathway Scene";
-    public String centerText = "Center";
-    public String headerTitle = "Title";
-    public String headerBody = "Heading";
+    public String name;
+    public String centerText;
+    public String headerTitle;
+    public String headerBody;
+    public FilterGroupModel filter;
+    public CareerModel[] careers;
 
     @Override
     public Scene createScene() {
         return new CareerPathwayScene(this);
     }
 
+    /**
+     * Creates a CareerPathwaySceneModel with default values.
+     */
     public CareerPathwaySceneModel() {
-        super();
-        setFilter(new FilterGroupModel("All"));
+        id = IdGenerator.getInstance().getNextId();
+        name = "Career Pathway Scene";
+        centerText = "Center";
+        headerTitle = "Title";
+        headerBody = "Heading";
+        filter = new FilterGroupModel("All");
+        careers = new CareerModel[] {};
     }
 
     @Override
@@ -34,23 +42,6 @@ public class CareerPathwaySceneModel implements SceneModel {
     @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    public FilterGroupModel getFilter() {
-        return filter;
-    }
-
-    /**
-     * Updates the list of careers using the new filter and re-creates the spoke-graph button
-     * models.
-     * @param filter The new FilterGroupModel to filter careers by.
-     */
-    public void setFilter(FilterGroupModel filter) {
-        this.filter = filter;
-
-        // Use the list of careers from the filter
-        careers = filter.getCareers().toArray(new CareerModel[] {});
-//        createCareerButtons(Arrays.asList(careers)); TODO
     }
 
     @Override
@@ -71,7 +62,8 @@ public class CareerPathwaySceneModel implements SceneModel {
         model.centerText = centerText;
         model.headerTitle = headerTitle;
         model.headerBody = headerBody;
-        model.setFilter(filter);
+        model.filter = filter;
+        model.careers = Arrays.copyOf(careers, careers.length);
         return model;
     }
 
