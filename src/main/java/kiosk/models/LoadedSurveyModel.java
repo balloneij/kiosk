@@ -4,12 +4,16 @@ import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import kiosk.Riasec;
 
@@ -280,14 +284,24 @@ public class LoadedSurveyModel implements Serializable {
 
         LoadedSurveyModel survey = new LoadedSurveyModel(titleScreen.id, initialScenes);
 
-        survey.careers = new CareerModel[]{
-            new CareerModel("Realistic", Riasec.Realistic, "field", "category"),
-            new CareerModel("Investigative", Riasec.Investigative, "field", "category"),
-            new CareerModel("Artistic", Riasec.Artistic, "field", "category"),
-            new CareerModel("Social", Riasec.Social, "field", "category"),
-            new CareerModel("Enterprising", Riasec.Enterprising, "field", "category"),
-            new CareerModel("Conventional", Riasec.Conventional, "field", "category"),
-        };
+        LinkedList<CareerModel> careers = new LinkedList<>();
+        File careerCsv = new File("careers.csv");
+        if (careerCsv.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(careerCsv))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] values = line.split(",");
+                    Riasec riasec = Riasec.valueOf(values[0]);
+                    String field = values[1];
+                    String category = values[2];
+                    String name = values[3];
+                    careers.push(new CareerModel(name, riasec, field, category));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        survey.careers = careers.toArray(new CareerModel[0]);
 
         return survey;
     }
