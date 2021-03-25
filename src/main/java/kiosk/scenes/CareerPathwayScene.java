@@ -9,6 +9,7 @@ import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.CreditsSceneModel;
 import processing.core.PConstants;
 
 /**
@@ -24,6 +25,8 @@ public class CareerPathwayScene implements Scene {
     protected SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
+    private CareerModel[] careers;
+    private ButtonModel[] buttons;
     private ButtonControl supplementaryButton;
 
     /**
@@ -48,7 +51,7 @@ public class CareerPathwayScene implements Scene {
 
         for (int i = 0; i < careers.length; i++) {
             CareerModel career = careers[i];
-            ButtonModel button = new ButtonModel(career.name, career.name);
+            ButtonModel button = new ButtonModel(career.name, Kiosk.descriptionModel.id);
             button.isCircle = true;
             careerButtons[i] = button;
             careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
@@ -85,9 +88,11 @@ public class CareerPathwayScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (ButtonControl button : this.spokeGraph.getButtonControls()) {
-            if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
+        for (int i = 0; i <= this.spokeGraph.getButtonControls().length - 1; i++) {
+            if (this.spokeGraph.getButtonControls()[i].wasClicked()) {
+                sceneGraph.pushScene(this.spokeGraph.getButtonControls()[i].getTarget(),
+                        this.spokeGraph.getButtonControls()[i].getModel().category);
+                Kiosk.descriptionModel.careerModel = careers[i];
             }
         }
 

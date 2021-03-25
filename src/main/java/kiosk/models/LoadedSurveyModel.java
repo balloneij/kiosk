@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import kiosk.Riasec;
 
 public class LoadedSurveyModel implements Serializable {
@@ -284,8 +285,12 @@ public class LoadedSurveyModel implements Serializable {
         for (int i = 0; i < spoke.answers.length; i++) {
             ButtonModel buttonModel = new ButtonModel();
             buttonModel.text = "Career " + i;
+            buttonModel.target = "careerPathway";
             spoke.answers[i] = buttonModel;
         }
+
+        CareerPathwaySceneModel careerPathway = new CareerPathwaySceneModel();
+        careerPathway.id = "careerPathway";
 
         ArrayList<SceneModel> initialScenes = new ArrayList<SceneModel>();
         initialScenes.add(titleScreen);
@@ -294,6 +299,7 @@ public class LoadedSurveyModel implements Serializable {
         initialScenes.add(pathPrompt);
         initialScenes.add(pathway);
         initialScenes.add(spoke);
+        initialScenes.add(careerPathway);
 
         LoadedSurveyModel survey = new LoadedSurveyModel(titleScreen.id, initialScenes);
 
@@ -308,7 +314,9 @@ public class LoadedSurveyModel implements Serializable {
                     String field = values[1];
                     String category = values[2];
                     String name = values[3];
-                    careers.push(new CareerModel(name, riasec, field, category));
+                    //String description = values[4];
+                    String description = "Need to enter a description in the .csv"; //TODO remove this once descriptions are added and uncomment the line above
+                    careers.push(new CareerModel(name, riasec, field, category, description));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

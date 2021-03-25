@@ -43,7 +43,18 @@ import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
-import kiosk.models.*;
+import kiosk.models.CareerDescriptionModel;
+import kiosk.models.CareerModel;
+import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.DetailsSceneModel;
+import kiosk.models.EmptySceneModel;
+import kiosk.models.ErrorSceneModel;
+import kiosk.models.FilterGroupModel;
+import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PathwaySceneModel;
+import kiosk.models.PromptSceneModel;
+import kiosk.models.SceneModel;
+import kiosk.models.SpokeGraphPromptSceneModel;
 
 public class Controller implements Initializable {
 
@@ -100,7 +111,7 @@ public class Controller implements Initializable {
         // Add scene type options for user selection
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
                 new PromptSceneModel(),
-                new SpokeGraphPromptSceneModel(), 
+                new SpokeGraphPromptSceneModel(),
                 new PathwaySceneModel(),
                 new CareerPathwaySceneModel(),
                 new DetailsSceneModel()
@@ -111,8 +122,8 @@ public class Controller implements Initializable {
                 .addListener((observableValue, oldValue, newValue) -> {
                     // Ignore when the combo box is reset, or the scene type already matches.
                     if (newValue != null
-                        && !newValue.toString().equals(
-                                sceneGraph.getCurrentSceneModel().toString())) {
+                            && !newValue.toString().equals(
+                            sceneGraph.getCurrentSceneModel().toString())) {
                         String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
                         String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
 
@@ -149,11 +160,11 @@ public class Controller implements Initializable {
 
         sceneGraph.addSceneChangeCallback(newSceneModel -> {
             sceneTypeComboBox
-                .getItems()
-                .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
-                .stream()
-                .findFirst()
-                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
+                    .getItems()
+                    .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
+                    .stream()
+                    .findFirst()
+                    .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
         });
 
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
@@ -216,6 +227,12 @@ public class Controller implements Initializable {
             String nextOrphanId = unvisitedScenes.stream().findFirst().get();
             SceneModel nextOrphan = sceneGraph.getSceneById(nextOrphanId);
 
+            // Skip the end screen
+            if (nextOrphan.getClass().equals(CareerDescriptionModel.class)) {
+                unvisitedScenes.remove(nextOrphanId);
+                continue;
+            }
+
             // Check to see if this orphan is the parent of any other tree item in the hidden root
             Set<String> childIds = new HashSet<>(Arrays.asList(nextOrphan.getTargets()));
             Set<String> orphans = hiddenRoot
@@ -275,7 +292,6 @@ public class Controller implements Initializable {
             TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
             root.getChildren().add(buildSubtree(child, unvisitedScenes, depths, depth + 1));
         }
-
         return root;
     }
 
@@ -320,6 +336,7 @@ public class Controller implements Initializable {
      * Sets the specified SceneModel as the SceneGraph's
      * new Root Scene. This is called through the TreeCells'
      * Context Menus.
+     *
      * @param newRoot the SceneModel that becomes the Root
      */
     @FXML
@@ -338,6 +355,7 @@ public class Controller implements Initializable {
     /**
      * Deletes a specified SceneModel from the SceneGraph.
      * This is called through the TreeCells' Context Menus.
+     *
      * @param toDelete the SceneModel to be deleted
      */
     @FXML
@@ -390,7 +408,7 @@ public class Controller implements Initializable {
                         + "'\nThe XML is probably deformed in some way."
                         + "\nRefer to the console for more specific details.";
                 survey = new LoadedSurveyModel();
-                survey.scenes = new SceneModel[]{ new ErrorSceneModel(errorMsg) };
+                survey.scenes = new SceneModel[]{new ErrorSceneModel(errorMsg)};
 
                 exception.printStackTrace();
             }
@@ -458,6 +476,7 @@ public class Controller implements Initializable {
     /**
      * Saves a sample survey file in the user's working directory and shows them an alert
      * confirming it was saved.
+     *
      * @param event The event coming from the MenuItem for triggering the sample save.
      */
     @FXML
@@ -469,13 +488,13 @@ public class Controller implements Initializable {
 
             // Let the user know where it was saved
             Alert sampleSavedAlert = new Alert(Alert.AlertType.INFORMATION,
-                "Saved to " + sampleFile.getAbsolutePath());
+                    "Saved to " + sampleFile.getAbsolutePath());
             sampleSavedAlert.setHeaderText("Sample survey saved.");
             sampleSavedAlert.show();
         } catch (Exception exception) {
             // Push temporary scene describing error
             String errorMsg = "Could not save survey to '" + sampleFile.getAbsolutePath()
-                + "\nRefer to the console for more specific details.";
+                    + "\nRefer to the console for more specific details.";
             sceneGraph.pushScene(new ErrorSceneModel(errorMsg));
 
             exception.printStackTrace();
@@ -484,6 +503,7 @@ public class Controller implements Initializable {
 
     /**
      * Event method that pops up the survey settings editor window.
+     *
      * @throws IOException Can occur if the popup window's FXML file is missing.
      */
     @FXML

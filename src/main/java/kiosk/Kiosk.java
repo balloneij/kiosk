@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -31,7 +32,7 @@ import processing.event.MouseEvent;
 public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
-    private final CareerModel[] careers;
+    private CareerModel[] careers;
     private final FilterGroupModel[] filters;
     private Scene lastScene;
     private SceneModel lastSceneModel;
@@ -41,6 +42,8 @@ public class Kiosk extends PApplet {
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
+    // sceneGraph is protected; description model is here so that it's accessible to the rest of the survey
+    public static CareerDescriptionModel descriptionModel = new CareerDescriptionModel();
     private boolean shouldTimeout = true;
 
     private static JFileChooser fileChooser;
@@ -95,6 +98,8 @@ public class Kiosk extends PApplet {
             survey = new LoadedSurveyModel(defaultScenes);
         }
         this.sceneGraph = new SceneGraph(survey);
+        descriptionModel.createScene();
+        sceneGraph.registerSceneModel(descriptionModel);
         this.careers = survey.careers;
         this.filters = survey.filters;
 
@@ -132,6 +137,8 @@ public class Kiosk extends PApplet {
 
         // Update the scene graph
         sceneGraph.loadSurvey(survey);
+        sceneGraph.registerSceneModel(descriptionModel);
+        this.careers = survey.careers;
         sceneGraph.reset();
     }
 
