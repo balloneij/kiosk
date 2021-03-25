@@ -15,7 +15,6 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -42,9 +41,6 @@ public class Kiosk extends PApplet {
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
-    // sceneGraph is protected; description model is here
-    // so that it's accessible to the rest of the survey
-    public static CareerDescriptionModel descriptionModel = new CareerDescriptionModel();
     private boolean shouldTimeout = true;
 
     private static JFileChooser fileChooser;
