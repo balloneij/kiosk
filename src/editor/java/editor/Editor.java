@@ -114,7 +114,7 @@ public class Editor extends Kiosk {
      * @param args unused
      */
     public static void main(String[] args) {
-        Kiosk.disableTimeout();
+        //Kiosk.disableTimeout();
         // Create a sample survey file for demonstrating scenes
         File sampleSurveyFile = new File("sample_survey.xml");
         if (!sampleSurveyFile.exists()) {
