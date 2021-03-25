@@ -5,6 +5,7 @@ import graphics.GraphicsUtil;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
+import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
@@ -36,14 +37,20 @@ public class CareerPathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        // Grab careers from the Kiosk and create buttons
+        // Grab careers from the Kiosk and userScore from the SceneGraph
         CareerModel[] careers = model.filter.filter(sketch.getAllCareers());
-        ButtonModel[] buttons = new ButtonModel[careers.length];
+        UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
         for (int i = 0; i < careers.length; i++) {
-            String careerName = careers[i].name;
-            ButtonModel button = new ButtonModel(careerName, careerName);
+            CareerModel career = careers[i];
+            ButtonModel button = new ButtonModel(career.name, career.name);
             button.isCircle = true;
-            buttons[i] = button;
+            careerButtons[i] = button;
+            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
         }
 
         // Put career buttons into a spoke graph
@@ -52,7 +59,8 @@ public class CareerPathwayScene implements Scene {
                 SCREEN_W / 2f - size / 2,
                 GraphicsUtil.HEADER_Y + GraphicsUtil.HEADER_H,
                 model.centerText,
-                buttons);
+                careerButtons,
+                careerWeights);
 
         // Create home and back button
         this.homeButton = GraphicsUtil.initializeHomeButton();
