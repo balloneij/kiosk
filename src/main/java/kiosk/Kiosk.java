@@ -32,12 +32,14 @@ public class Kiosk extends PApplet {
     protected SceneGraph sceneGraph;
     private final CareerModel[] careers;
     private Scene lastScene;
+    private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
     protected static Settings settings;
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
+    private boolean shouldTimeout = true;
 
     private static JFileChooser fileChooser;
 
@@ -139,6 +141,14 @@ public class Kiosk extends PApplet {
         size(settings.screenW, settings.screenH);
     }
 
+    public void enableTimeout() {
+        shouldTimeout = true;
+    }
+
+    public void disableTimeout() {
+        shouldTimeout = false;
+    }
+
     @Override
     public void setup() {
         super.setup();
@@ -155,6 +165,7 @@ public class Kiosk extends PApplet {
 
         // Get the current scene and sceneModel
         Scene currentScene = this.sceneGraph.getCurrentScene();
+        SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
 
         // Initialize the current scene if it hasn't been
         if (currentScene != this.lastScene) {
@@ -169,6 +180,7 @@ public class Kiosk extends PApplet {
             this.newSceneMillis = currMillis;
 
             this.lastScene = currentScene;
+            this.lastSceneModel = currentSceneModel;
         }
 
         // Update and draw the scene
@@ -178,10 +190,15 @@ public class Kiosk extends PApplet {
         int currentSceneMillis = currMillis - this.newSceneMillis;
 
         // Check for timeout (since the current scene has been loaded)
-        // Make sure it's not the intro scene though first
-        SceneModel currentSceneModel = this.sceneGraph.getCurrentSceneModel();
+        // Make sure it's not the root scene though first
+        // Also make sure that we weren't previously on the root scene,
+        // otherwise we get the timeout popup immediately
+        currentSceneModel = this.sceneGraph.getCurrentSceneModel();
+        if (lastSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
+            currentSceneMillis = 0;
+        }
         if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())
-                && currentSceneMillis > Kiosk.settings.timeoutMillis) {
+                && currentSceneMillis > Kiosk.settings.timeoutMillis && shouldTimeout) {
             if (timeoutActive) {
                 // Clear the timeoutActive flag
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
@@ -287,35 +304,40 @@ public class Kiosk extends PApplet {
 
     @Override
     public void mouseClicked(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MouseClicked)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseClicked)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MouseDragged)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseDragged)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseEntered(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MouseEntered)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseEntered)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseExited(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MouseExited)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseExited)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MouseMoved)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseMoved)) {
             listener.invoke(event);
         }
     }
@@ -327,7 +349,8 @@ public class Kiosk extends PApplet {
      */
     @Override
     public void mousePressed(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MousePressed)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MousePressed)) {
             listener.invoke(event);
         }
     }
@@ -339,20 +362,26 @@ public class Kiosk extends PApplet {
      */
     @Override
     public void mouseReleased(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MouseReleased)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseReleased)) {
             listener.invoke(event);
         }
     }
 
     @Override
     public void mouseWheel(MouseEvent event) {
-        for (EventListener<MouseEvent> listener : this.mouseListeners.get(InputEvent.MouseWheel)) {
+        for (EventListener<MouseEvent> listener
+                : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
     }
 
     public static Settings getSettings() {
         return settings;
+    }
+
+    public SceneModel getRootSceneModel() {
+        return sceneGraph.getRootSceneModel();
     }
 
     public void run() {

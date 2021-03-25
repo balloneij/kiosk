@@ -74,10 +74,10 @@ public class Graphics {
     }
 
     /**
-     * Rob doesn't write documentation.
-     * @param sketch to draw to
-     * @param fontSize font size
-     * @param bold bold or not
+     * Use Gothic font.
+     * @param sketch sketch to apply the font to
+     * @param fontSize specify the font size
+     * @param bold specify if bold text is desired
      */
     public static void useGothic(Kiosk sketch, int fontSize, boolean bold) {
         if (bold) {
@@ -134,7 +134,7 @@ public class Graphics {
      */
     public static void drawRoundedRectangle(Kiosk sketch, float x, float y,
                                             float w, float h, float r) {
-        sketch.rectMode(PConstants.CORNER);
+        sketch.rectMode(PConstants.CENTER);
 
         // Draw the rounded rectangle
         sketch.rect(x, y, w, h, r);

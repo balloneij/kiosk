@@ -19,6 +19,7 @@ public class PathwayScene implements Scene {
     protected final SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
+    private ButtonControl supplementaryButton;
 
     /**
      * Create a pathway scene.
@@ -37,23 +38,24 @@ public class PathwayScene implements Scene {
                 GraphicsUtil.HEADER_Y + GraphicsUtil.HEADER_H,
                 this.model.centerText,
                 this.model.buttonModels);
-
-        this.backButton = ButtonControl.createBackButton();
-        this.homeButton = ButtonControl.createHomeButton();
     }
 
     @Override
     public void init(Kiosk sketch) {
-        this.homeButton = GraphicsUtil.initializeHomeButton();
-        sketch.hookControl(this.homeButton);
-        this.backButton = GraphicsUtil.initializeBackButton(sketch);
-        sketch.hookControl(this.backButton);
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            sketch.hookControl(this.homeButton);
+            this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            sketch.hookControl(this.backButton);
+        } else {
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton.init(sketch);
+            sketch.hookControl(this.supplementaryButton);
+        }
 
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
-        sketch.hookControl(this.backButton);
-        sketch.hookControl(this.homeButton);
     }
 
     @Override
@@ -64,10 +66,12 @@ public class PathwayScene implements Scene {
             }
         }
 
-        if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
-        } else if (this.backButton.wasClicked()) {
-            sceneGraph.popScene();
+        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
         }
     }
 
@@ -81,7 +85,12 @@ public class PathwayScene implements Scene {
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
         this.spokeGraph.draw(sketch);
 
-        this.backButton.draw(sketch);
-        this.homeButton.draw(sketch);
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            this.backButton.draw(sketch);
+            this.homeButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
+        }
+
     }
 }

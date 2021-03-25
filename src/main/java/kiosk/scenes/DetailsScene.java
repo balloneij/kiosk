@@ -15,6 +15,7 @@ public class DetailsScene implements Scene {
     private ButtonControl nextButton;
     private ButtonControl homeButton;
     private ButtonControl backButton;
+    private ButtonControl supplementaryButton;
 
     // Buttons
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
@@ -52,10 +53,16 @@ public class DetailsScene implements Scene {
         final int sketchHeight = Kiosk.getSettings().screenH;
         final int sketchWidth = Kiosk.getSettings().screenW;
 
-        this.homeButton = GraphicsUtil.initializeHomeButton();
-        sketch.hookControl(this.homeButton);
-        this.backButton = GraphicsUtil.initializeBackButton(sketch);
-        sketch.hookControl(this.backButton);
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            sketch.hookControl(this.homeButton);
+            this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            sketch.hookControl(this.backButton);
+        } else {
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton.init(sketch);
+            sketch.hookControl(this.supplementaryButton);
+        }
 
         if (this.model.button.image != null) {
             this.model.button.image.width = BUTTON_IMAGE_WIDTH;
@@ -79,11 +86,14 @@ public class DetailsScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
-        } else if (this.backButton.wasClicked()) {
-            sceneGraph.popScene();
-        } else if (this.centerButton.wasClicked()) {
+        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
+        }
+        if (this.centerButton.wasClicked()) {
             sceneGraph.pushScene(this.centerButton.getTarget());
         } else if (this.nextButton.wasClicked()) {
             sceneGraph.pushScene(this.centerButton.getTarget());
@@ -98,7 +108,8 @@ public class DetailsScene implements Scene {
         // Draw the white foreground box
         sketch.fill(255);
         Graphics.drawRoundedRectangle(sketch,
-            FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
+            FOREGROUND_X_PADDING + FOREGROUND_WIDTH / 2.f,
+                FOREGROUND_Y_PADDING + FOREGROUND_HEIGHT / 2.f,
             FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
             FOREGROUND_CURVE_RADIUS);
 
@@ -123,9 +134,14 @@ public class DetailsScene implements Scene {
         sketch.text(this.model.body, centerX, (int) (BODY_Y * 1.15),
                 (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
 
+
         this.centerButton.draw(sketch);
-        this.homeButton.draw(sketch);
-        this.backButton.draw(sketch);
         this.nextButton.draw(sketch);
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton.draw(sketch);
+            this.backButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch); //TODO CHECK IF NEXT & MSOE BUTTONS OVERLAP
+        }
     }
 }

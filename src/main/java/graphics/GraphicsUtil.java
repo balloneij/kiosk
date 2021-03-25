@@ -2,6 +2,7 @@ package graphics;
 
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
+import kiosk.models.ImageModel;
 import kiosk.scenes.ButtonControl;
 import processing.core.PConstants;
 
@@ -36,49 +37,67 @@ public class GraphicsUtil {
     public static final float InnerOuterCircleRatio = 4.f;
 
     /**
-     * Create home button.
+     * Initialize the back button's ButtonControl model.
      * @param sketch to draw to
      * @return back button control
      */
     public static ButtonControl initializeBackButton(Kiosk sketch) {
         ButtonModel backButtonModel = new ButtonModel();
         // Rob fix your checkstyle
-        backButtonModel.text = "\uD83E\uDC78 Back";
+        backButtonModel.text = "← Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         return new ButtonControl(backButtonModel,
                 COMMON_BUTTON_PADDING, sketch.height
                 - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
-                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
     }
 
     /**
-     * Create home button.
-     * @return back button control
+     * Initialize the home button's ButtonControl model.
+     * @return home button control
      */
     public static ButtonControl initializeHomeButton() {
         ButtonModel homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "⭯ Restart";
+        homeButtonModel.text = "◄◄ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
-        ButtonControl homeButton = new ButtonControl(homeButtonModel,
+        return new ButtonControl(homeButtonModel,
                 COMMON_BUTTON_PADDING, COMMON_BUTTON_PADDING,
-                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
-        return homeButton;
+                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
     }
 
     /**
-     * Create next button.
+     * Initialize the next button's ButtonControl model.
      * @param sketch to create on.
-     * @return next button
+     * @return next button control
      */
     public static ButtonControl initializeNextButton(Kiosk sketch) {
         ButtonModel nextButtonModel = new ButtonModel();
-        nextButtonModel.text = "Go! \uD83E\uDC7A";
+        nextButtonModel.text = "Go! →";
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
         ButtonControl nextButton = new ButtonControl(nextButtonModel,
                 sketch.width - COMMON_BUTTON_PADDING - COMMON_BUTTON_WIDTH * 3 / 4,
                 sketch.height - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
         return nextButton;
+    }
+
+    /**
+     * Initialize the MSOE button's ButtonControl model.
+     * @param sketch to create on.
+     * @return MSOE button control
+     */
+    public static ButtonControl initializeMsoeButton(Kiosk sketch) {
+        ButtonModel msoeButtonModel = new ButtonModel();
+        msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
+        ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
+                sketch.width - COMMON_BUTTON_PADDING * 2 - (723 / 6),
+                sketch.height - COMMON_BUTTON_PADDING - (883 / 6),
+                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_WIDTH * 3 / 4, false);
+        msoeButton.setNoButton(true);
+        //TODO If we make some type of credits scene, I imagine that this button takes you there.
+        //     Then this should be enabled and lead to a new scene.
+        //msoeButton.setDisabled(false);
+        return msoeButton;
     }
 
     /**
@@ -93,7 +112,8 @@ public class GraphicsUtil {
         sketch.stroke(255);
 
         Graphics.drawRoundedRectangle(sketch,
-                HEADER_X, HEADER_Y, HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
+                HEADER_X + HEADER_W / 2, HEADER_Y + HEADER_H / 2,
+                HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
 
         // Draw the title and body
         sketch.fill(0);
