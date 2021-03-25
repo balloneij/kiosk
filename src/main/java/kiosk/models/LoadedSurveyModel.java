@@ -23,16 +23,16 @@ public class LoadedSurveyModel implements Serializable {
     public String rootSceneId;
     public SceneModel[] scenes;
     public CareerModel[] careers = {
-        new CareerModel()
+            new CareerModel()
     };
 
     // TODO there will need to be methods for adding new filters to this array once filter
     //  creation/editing is implemented. The current filters are examples/placeholders.
     public FilterGroupModel[] filters = {
-        // "All" filter functionality is handled in FilterGroupModel.getCareers()
-        new FilterGroupModel("All"),
-        new FilterGroupModel("Nature Careers", "Realistic", "Investigative", "Social"),
-        new FilterGroupModel("Human Careers", "Artistic", "Enterprising", "Conventional")
+            // "All" filter functionality is handled in FilterGroupModel.getCareers()
+            new FilterGroupModel("All"),
+            new FilterGroupModel("Nature Careers", "Realistic", "Investigative", "Social"),
+            new FilterGroupModel("Human Careers", "Artistic", "Enterprising", "Conventional")
     };
 
 
@@ -45,7 +45,7 @@ public class LoadedSurveyModel implements Serializable {
      */
     public LoadedSurveyModel() {
         this.scenes = new SceneModel[]{
-            new ErrorSceneModel("Default, empty loaded survey model")
+                new ErrorSceneModel("Default, empty loaded survey model")
         };
         this.rootSceneId = this.scenes[0].getId();
     }
@@ -210,9 +210,9 @@ public class LoadedSurveyModel implements Serializable {
         adultButton.isCircle = true;
         adultButton.rgb = new int[] { 244, 80, 50 };
         agePrompt.answers = new ButtonModel[] {
-            gradeSchoolButton,
-            middleSchoolButton,
-            adultButton
+                gradeSchoolButton,
+                middleSchoolButton,
+                adultButton
         };
 
         PromptSceneModel pathPrompt = new PromptSceneModel();
@@ -227,30 +227,30 @@ public class LoadedSurveyModel implements Serializable {
         humanButton.target = "pathway";
         humanButton.isCircle = true;
         humanButton.rgb = new int[] { 152, 33, 107 };
-        humanButton.image = new ImageModel("assets/human.png", 80, 80);
+        humanButton.image = new ImageModel("assets/Human.png", 80, 80);
         ButtonModel natureButton = new ButtonModel();
         natureButton.text = "";
         natureButton.target = "pathway";
         natureButton.isCircle = true;
         natureButton.rgb = new int[] { 51, 108, 103 };
-        natureButton.image = new ImageModel("assets/nature.png", 80, 80);
+        natureButton.image = new ImageModel("assets/Nature.png", 80, 80);
         ButtonModel smartMachinesButton = new ButtonModel();
         smartMachinesButton.text = "";
         smartMachinesButton.target = "pathway";
         smartMachinesButton.isCircle = true;
         smartMachinesButton.rgb = new int[] { 219, 98, 38 };
-        smartMachinesButton.image = new ImageModel("assets/robot.png", 80, 80);
+        smartMachinesButton.image = new ImageModel("assets/SmartMachines.png", 80, 80);
         ButtonModel spaceButton = new ButtonModel();
         spaceButton.text = "";
         spaceButton.target = "pathway";
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
-        spaceButton.image = new ImageModel("assets/space.png", 80, 80);
+        spaceButton.image = new ImageModel("assets/Space.png", 80, 80);
         pathPrompt.answers = new ButtonModel[] {
-            humanButton,
-            natureButton,
-            smartMachinesButton,
-            spaceButton
+                humanButton,
+                natureButton,
+                smartMachinesButton,
+                spaceButton
         };
 
         PathwaySceneModel pathway = new PathwaySceneModel();
