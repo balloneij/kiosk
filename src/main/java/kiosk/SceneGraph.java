@@ -1,5 +1,6 @@
 package kiosk;
 
+import editor.ChildIdentifiers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class SceneGraph {
             this.registerSceneModel(sceneModel);
         }
 
-        this.root = this.sceneModels.get(survey.rootSceneId);
+        setRootSceneModel(this.sceneModels.get(survey.rootSceneId));
         this.currentScene = this.root.deepCopy().createScene();
         this.history.push(this.root);
     }
@@ -268,8 +269,23 @@ public class SceneGraph {
         return this.root;
     }
 
+    /**
+     * Sets the new root for the scene graph. Also takes care of naming conventions for the editor
+     * @param newRoot The scene which will become the launching point for the Kiosk.
+     */
     public synchronized void setRootSceneModel(SceneModel newRoot) {
+        // Remove root from original child
+        if (root != null) {
+            this.root.setName(this.root.getName()
+                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+        }
+        // Set new root and give em the special star
         this.root = newRoot;
+        this.root.setName(ChildIdentifiers.ROOT + this.root.getName());
+        if (this.root.getName().contains(ChildIdentifiers.ROOT)) {
+            this.root.setName(root.getName()
+                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+        }
     }
 
     /**

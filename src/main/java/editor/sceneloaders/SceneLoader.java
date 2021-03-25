@@ -1,5 +1,6 @@
 package editor.sceneloaders;
 
+import editor.ChildIdentifiers;
 import editor.Controller;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -61,7 +62,7 @@ public class SceneLoader {
 
     private static String getEditableName(SceneModel model) {
         String name = model.getName();
-        name = name.replaceAll("⦸", "");
-        return name.replaceAll("✪", "");
+        name = name.replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD);
+        return name.replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD);
     }
 }

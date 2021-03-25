@@ -52,8 +52,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         }
 
         String name = getName();
-        name = name.replaceAll("⦸", "");
-        name = name.replaceAll("✪", "");
+        name = name.replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD);
+        name = name.replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD);
         textField.setText(name);
         setText(name);
         setGraphic(textField);
@@ -95,9 +95,10 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
                 setContextMenu(editMenu);
             }
             // Add the ToolTip if it's not there already and if it's needed
-            if (getTooltip() == null && getItem().getName().contains("⦸")) {
+            if (getTooltip() == null && getItem().getName().contains(ChildIdentifiers.ORPHAN)) {
                 setTooltip(orphanInfo);
-            } else if (getTooltip() == null && getItem().getName().contains("✪")) {
+            } else if (getTooltip() == null
+                    && getItem().getName().contains(ChildIdentifiers.ROOT)) {
                 setTooltip(rootInfo);
             }
 
@@ -134,4 +135,5 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
     private String getName() {
         return getItem() == null ? "" : getItem().getName();
     }
+
 }
