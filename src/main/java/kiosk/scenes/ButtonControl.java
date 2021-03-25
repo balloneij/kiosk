@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Color;
 import graphics.Graphics;
+import graphics.GraphicsUtil;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
@@ -161,7 +162,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // If pressed, draw the text lower and don't draw the main button
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
-            textWithOutline(this.model.text,
+            GraphicsUtil.textWithOutline(this.model.text,
                 (float) this.rect.getCenterX() - (this.rect.width / 2.f),
                 (float) this.rect.getCenterY() - (this.rect.height / 2.f)
                     + this.rect.height / 10.f,
@@ -174,7 +175,7 @@ public class ButtonControl implements Control<MouseEvent> {
             Graphics.drawRoundedRectangle(sketch, this.rect.x, this.rect.y,
                     this.rect.width, this.rect.height, DEFAULT_CORNER_RADIUS);
 
-            textWithOutline(this.model.text,
+            GraphicsUtil.textWithOutline(this.model.text,
                 (float) this.rect.getCenterX() - (this.rect.width / 2.f),
                 (float) this.rect.getCenterY() - (this.rect.height / 2.f),
                 (float) this.rect.width,
@@ -204,7 +205,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
             if (!this.model.text.equals("")) {
-                textWithOutline(this.model.text,
+                GraphicsUtil.textWithOutline(this.model.text,
                     (float) this.rect.getCenterX(),
                     (float) this.rect.getCenterY() + this.rect.height / 10.f,
                     centerSquareSize, centerSquareSize,
@@ -215,26 +216,12 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(59, 58, 57, 63f);
             sketch.ellipse(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 
-            textWithOutline(this.model.text,
+            GraphicsUtil.textWithOutline(this.model.text,
                 (float) this.rect.getCenterX(),
                 (float) this.rect.getCenterY(),
                 centerSquareSize, centerSquareSize,
                 sketch);
         }
-    }
-
-    // TODO maybe this should be extracted to a graphics class
-    private void textWithOutline(String text, float x, float y, float w, float h, Kiosk sketch) {
-        // Draw multiple copies of the text shifted by a few pixels to create the outline
-        sketch.fill(0, 0, 0);
-        for (int delta = -1; delta < 2; delta++) {
-            sketch.text(text, x + delta, y, w, h);
-            sketch.text(text, x, y + delta, w, h);
-        }
-
-        // Draw the text
-        sketch.fill(255);
-        sketch.text(text, x, y, w, h);
     }
 
     public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
@@ -278,7 +265,7 @@ public class ButtonControl implements Control<MouseEvent> {
 
     // Helper method for updating the radius and calculating new centerSquareSize
     private void updateRadius() {
-        this.radius = Math.min(this.rect.width, this.rect.height);
+        this.radius = Math.min(this.rect.width / 2, this.rect.height / 2);
 
         // The text has to fit inside the largest square possible inside the circle
         // so we're using the Pythagorean theorem to get the sides of the square, and

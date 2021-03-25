@@ -157,9 +157,10 @@ public class SpokeGraph {
                 (float) (maxButtonRadius + minButtonRadius),
                 (float) (maxButtonRadius + minButtonRadius));
         sketch.fill(255);
-        sketch.text(this.centerText,
+
+        GraphicsUtil.textWithOutline(this.centerText,
                 centerX, centerY,
-                centerSquareSize, centerSquareSize);
+                centerSquareSize, centerSquareSize, sketch);
     }
 
     private static double lerp(double a, double b, double amount) {

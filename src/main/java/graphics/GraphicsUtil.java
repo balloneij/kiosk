@@ -109,4 +109,26 @@ public class GraphicsUtil {
         sketch.text(body, HEADER_CENTER_X,
                 (int) (HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
     }
+
+    /**
+     * Draw a text with an black outline.
+     * @param text to write
+     * @param x location
+     * @param y location
+     * @param w width bound
+     * @param h height bound
+     * @param sketch to draw to
+     */
+    public static void textWithOutline(String text, float x, float y, float w, float h, Kiosk sketch) {
+        // Draw multiple copies of the text shifted by a few pixels to create the outline
+        sketch.fill(0, 0, 0);
+        for (int delta = -1; delta < 2; delta++) {
+            sketch.text(text, x + delta, y, w, h);
+            sketch.text(text, x, y + delta, w, h);
+        }
+
+        // Draw the text
+        sketch.fill(255);
+        sketch.text(text, x, y, w, h);
+    }
 }
