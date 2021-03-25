@@ -61,7 +61,7 @@ public class FilterGroupModel {
      * are in the FilterGroupModel. FilterGroupModels named "All" will not apply any filtering.
      * @param original The List of CareerModels to filter.
      * @return Filtered version of the original List. FilterGroupModels named "All" will not
-     * apply any filtering.
+     *     apply any filtering.
      */
     public List<CareerModel> filter(List<CareerModel> original) {
         List<CareerModel> filtered = new ArrayList<>(original); // Copy the original
@@ -82,7 +82,7 @@ public class FilterGroupModel {
      * are in the FilterGroupModel. FilterGroupModels named "All" will not apply any filtering.
      * @param original The array of CareerModels to filter.
      * @return Filtered version of the original array. FilterGroupModels named "All" will not
-     * apply any filtering.
+     *     apply any filtering.
      */
     public CareerModel[] filter(CareerModel[] original) {
         return filter(Arrays.asList(original)).toArray(new CareerModel[] {});
