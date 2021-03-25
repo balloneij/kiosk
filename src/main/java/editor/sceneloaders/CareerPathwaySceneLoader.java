@@ -9,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import kiosk.SceneGraph;
 import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.FilterGroupModel;
@@ -32,7 +33,9 @@ public class CareerPathwaySceneLoader {
             getHeaderTitleBox(model, graph),
             getHeaderBodyBox(model, graph),
             getCenterTextBox(model, graph),
-            getFilterBox(model, graph, filters)
+            getFilterBox(model, graph, filters),
+                new Text(" This is the final scene in the survey;\n users"
+                        + " now learn about their recommended careers")
         );
 
         // Clear the editor pane and re-populate with the new Nodes

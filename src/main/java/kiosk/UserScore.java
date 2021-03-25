@@ -209,7 +209,7 @@ public class UserScore {
         return score;
     }
 
-    private enum UserScoreOperation {
+    public enum UserScoreOperation {
         Add,
         Subtract
     }
