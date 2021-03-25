@@ -17,7 +17,9 @@ public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
-    public CareerModel[] careers;
+    public CareerModel[] careers = {
+        new CareerModel()
+    };
 
     // TODO there will need to be methods for adding new filters to this array once filter
     //  creation/editing is implemented. The current filters are examples/placeholders.
