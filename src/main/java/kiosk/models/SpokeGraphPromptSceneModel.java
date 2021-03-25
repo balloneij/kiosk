@@ -12,6 +12,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String careerCenterText;
     public String promptText;
     public ButtonModel[] answers;
+    public FilterGroupModel filter;
 
     /**
      * Creates a new SG prompt scene model.
@@ -28,7 +29,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         this.careerCenterText = "";
         this.promptText = "";
         this.answers = new ButtonModel[]{};
-        this.id = "";
+        this.filter = new FilterGroupModel("All");
     }
 
     @Override
@@ -72,6 +73,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         copy.careerCenterText = this.careerCenterText;
         copy.promptText = this.promptText;
         copy.answers = answersCopy;
+        copy.filter = filter;
         return copy;
     }
 

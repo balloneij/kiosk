@@ -182,7 +182,7 @@ public class Controller implements Initializable {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof SpokeGraphPromptSceneModel) {
             SpokeGraphPromptSceneLoader.loadScene(this,
-                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph, filters);
         } else if (model instanceof CareerPathwaySceneModel) {
             CareerPathwaySceneLoader.loadScene(this, (CareerPathwaySceneModel) model,
                 toolbarBox, sceneGraph, filters);
