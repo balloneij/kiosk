@@ -12,7 +12,6 @@ import javafx.scene.layout.VBox;
 import kiosk.SceneGraph;
 import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.FilterGroupModel;
-import kiosk.models.LoadedSurveyModel;
 
 /**
  * Used to load the editing controls for the CareerPathwayScene.
@@ -35,7 +34,6 @@ public class CareerPathwaySceneLoader {
             getCenterTextBox(model, graph),
             getFilterBox(model, graph, filters)
         );
-        vbox.setPadding(PADDING);
 
         // Clear the editor pane and re-populate with the new Nodes
         toolbarBox.getChildren().clear();
@@ -109,6 +107,8 @@ public class CareerPathwaySceneLoader {
             }
         });
 
-        return filterBox;
+        VBox vbox = new VBox(new Label("Filter:"), filterBox);
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 }
