@@ -2,6 +2,8 @@ package editor;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -59,9 +61,11 @@ public class Editor extends Kiosk {
         Controller.sceneGraph = sceneGraph;
 
         // Load FXML and the controller
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Editor.fxml"));
+        FXMLLoader loader = null;
         Parent root = null;
         try {
+            File editorFxml = new File("src/main/java/editor/Editor.fxml");
+            loader = new FXMLLoader(editorFxml.toURI().toURL());
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
@@ -100,12 +104,17 @@ public class Editor extends Kiosk {
      * @return True indicates that the user needs to restart the program for
      *          some of the settings to apply.
      */
-    protected static boolean applySettings(Settings newSettings) {
+    public static boolean applySettings(Settings newSettings) {
         newSettings.writeSettings();
-        boolean restartRequired =
-            newSettings.screenH != Kiosk.settings.screenH
-            || newSettings.screenW != Kiosk.settings.screenW;
-        Kiosk.settings.timeoutMillis = newSettings.timeoutMillis;
+        boolean restartRequired = true;
+        if (Kiosk.settings != null) {
+            restartRequired =
+                    newSettings.screenH != Kiosk.settings.screenH
+                            || newSettings.screenW != Kiosk.settings.screenW;
+            Kiosk.settings.timeoutMillis = newSettings.timeoutMillis;
+        } else {
+            Kiosk.settings = newSettings;
+        }
         return restartRequired;
     }
 
