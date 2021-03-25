@@ -26,7 +26,8 @@ public class CareerModel {
      * @param category The category the career is a part of (Human, Nature, Space, Smart Machines)
      * @param description The description of the career itself
      */
-    public CareerModel(String name, Riasec riasecCategory, String field, String category, String description) {
+    public CareerModel(String name, Riasec riasecCategory,
+                       String field, String category, String description) {
         this.name = name;
         this.riasecCategory = riasecCategory;
         this.field = field;
@@ -35,6 +36,7 @@ public class CareerModel {
     }
 
     public CareerModel deepCopy() {
-        return new CareerModel(this.name, this.riasecCategory, this.field, this.category, this.description);
+        return new CareerModel(this.name, this.riasecCategory,
+                this.field, this.category, this.description);
     }
 }

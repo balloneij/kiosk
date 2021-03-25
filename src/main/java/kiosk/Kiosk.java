@@ -42,7 +42,8 @@ public class Kiosk extends PApplet {
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
-    // sceneGraph is protected; description model is here so that it's accessible to the rest of the survey
+    // sceneGraph is protected; description model is here
+    // so that it's accessible to the rest of the survey
     public static CareerDescriptionModel descriptionModel = new CareerDescriptionModel();
     private boolean shouldTimeout = true;
 

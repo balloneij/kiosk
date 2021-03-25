@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import kiosk.Riasec;
 
 public class LoadedSurveyModel implements Serializable {
@@ -23,16 +22,16 @@ public class LoadedSurveyModel implements Serializable {
     public String rootSceneId;
     public SceneModel[] scenes;
     public CareerModel[] careers = {
-            new CareerModel()
+        new CareerModel()
     };
 
     // TODO there will need to be methods for adding new filters to this array once filter
     //  creation/editing is implemented. The current filters are examples/placeholders.
     public FilterGroupModel[] filters = {
-            // "All" filter functionality is handled in FilterGroupModel.getCareers()
-            new FilterGroupModel("All"),
-            new FilterGroupModel("Nature Careers", "Realistic", "Investigative", "Social"),
-            new FilterGroupModel("Human Careers", "Artistic", "Enterprising", "Conventional")
+        // "All" filter functionality is handled in FilterGroupModel.getCareers()
+        new FilterGroupModel("All"),
+        new FilterGroupModel("Nature Careers", "Realistic", "Investigative", "Social"),
+        new FilterGroupModel("Human Careers", "Artistic", "Enterprising", "Conventional")
     };
 
 
@@ -45,7 +44,7 @@ public class LoadedSurveyModel implements Serializable {
      */
     public LoadedSurveyModel() {
         this.scenes = new SceneModel[]{
-                new ErrorSceneModel("Default, empty loaded survey model")
+            new ErrorSceneModel("Default, empty loaded survey model")
         };
         this.rootSceneId = this.scenes[0].getId();
     }
@@ -210,9 +209,9 @@ public class LoadedSurveyModel implements Serializable {
         adultButton.isCircle = true;
         adultButton.rgb = new int[] { 244, 80, 50 };
         agePrompt.answers = new ButtonModel[] {
-                gradeSchoolButton,
-                middleSchoolButton,
-                adultButton
+            gradeSchoolButton,
+            middleSchoolButton,
+            adultButton
         };
 
         PromptSceneModel pathPrompt = new PromptSceneModel();
@@ -247,10 +246,10 @@ public class LoadedSurveyModel implements Serializable {
         spaceButton.rgb = new int[] { 21, 97, 157 };
         spaceButton.image = new ImageModel("assets/Space.png", 80, 80);
         pathPrompt.answers = new ButtonModel[] {
-                humanButton,
-                natureButton,
-                smartMachinesButton,
-                spaceButton
+            humanButton,
+            natureButton,
+            smartMachinesButton,
+            spaceButton
         };
 
         PathwaySceneModel pathway = new PathwaySceneModel();
@@ -315,7 +314,8 @@ public class LoadedSurveyModel implements Serializable {
                     String category = values[2];
                     String name = values[3];
                     //String description = values[4];
-                    String description = "Need to enter a description in the .csv"; //TODO remove this once descriptions are added and uncomment the line above
+                    String description = "Need to enter a description in the .csv";
+                    //TODO remove this once descriptions are added and uncomment the line above
                     careers.push(new CareerModel(name, riasec, field, category, description));
                 }
             } catch (IOException e) {
