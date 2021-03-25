@@ -38,6 +38,7 @@ import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
+import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
@@ -47,6 +48,7 @@ import kiosk.models.SpokeGraphPromptSceneModel;
 public class Controller implements Initializable {
 
     public static SceneGraph sceneGraph;
+    public static FilterGroupModel[] filters;
 
     private String previousId;
     private File surveyFile = null;
@@ -183,7 +185,7 @@ public class Controller implements Initializable {
                     (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof CareerPathwaySceneModel) {
             CareerPathwaySceneLoader.loadScene(this, (CareerPathwaySceneModel) model,
-                toolbarBox, sceneGraph);
+                toolbarBox, sceneGraph, filters);
         } else if (model instanceof PathwaySceneModel) {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {

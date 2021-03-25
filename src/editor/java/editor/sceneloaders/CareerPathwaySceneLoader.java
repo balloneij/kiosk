@@ -26,15 +26,16 @@ public class CareerPathwaySceneLoader {
      * @param graph The scene graph used to manage application state.
      */
     public static void loadScene(Controller controller, CareerPathwaySceneModel model,
-                                 VBox toolbarBox, SceneGraph graph) {
+                                 VBox toolbarBox, SceneGraph graph, FilterGroupModel[] filters) {
         // Get the editing Nodes for the CareerPathwaySceneModel properties
         VBox vbox = new VBox(
             SceneLoader.getNameBox(controller, model, graph),
             getHeaderTitleBox(model, graph),
             getHeaderBodyBox(model, graph),
             getCenterTextBox(model, graph),
-            getFilterBox(model, graph)
+            getFilterBox(model, graph, filters)
         );
+        vbox.setPadding(PADDING);
 
         // Clear the editor pane and re-populate with the new Nodes
         toolbarBox.getChildren().clear();
@@ -92,10 +93,11 @@ public class CareerPathwaySceneLoader {
      * @param graph The SceneGraph to re-register the scene to.
      * @return ComboBox that can be used to change the filter the CareerPathwayScene is using.
      */
-    private static Node getFilterBox(CareerPathwaySceneModel model, SceneGraph graph) {
+    private static Node getFilterBox(CareerPathwaySceneModel model, SceneGraph graph,
+                                     FilterGroupModel[] filters) {
         // Create a ComboBox with all the available filters
         ComboBox<FilterGroupModel> filterBox =
-            new ComboBox<>(FXCollections.observableList(Arrays.asList(LoadedSurveyModel.filters)));
+            new ComboBox<>(FXCollections.observableList(Arrays.asList(filters)));
         filterBox.setValue(model.filter); // Set initial value to match the current filter
 
         // On change, update the scenes filter (if it is different from the current filter)
