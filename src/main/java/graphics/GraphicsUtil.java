@@ -119,7 +119,8 @@ public class GraphicsUtil {
      * @param h height bound
      * @param sketch to draw to
      */
-    public static void textWithOutline(String text, float x, float y, float w, float h, Kiosk sketch) {
+    public static void textWithOutline(String text,
+                                       float x, float y, float w, float h, Kiosk sketch) {
         // Draw multiple copies of the text shifted by a few pixels to create the outline
         sketch.fill(0, 0, 0);
         for (int delta = -1; delta < 2; delta++) {
