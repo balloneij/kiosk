@@ -93,10 +93,7 @@ public class GraphicsUtil {
                 sketch.width - COMMON_BUTTON_PADDING * 2 - (723 / 6),
                 sketch.height - COMMON_BUTTON_PADDING - (883 / 6),
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_WIDTH * 3 / 4, false);
-        msoeButton.setNoButton(true);
-        //TODO If we make some type of credits scene, I imagine that this button takes you there.
-        //     Then this should be enabled and lead to a new scene.
-        //msoeButton.setDisabled(false);
+        msoeButton.setDisabled(false);
         return msoeButton;
     }
 
@@ -128,5 +125,28 @@ public class GraphicsUtil {
         sketch.rectMode(PConstants.CENTER);
         sketch.text(body, HEADER_CENTER_X,
                 (int) (HEADER_BODY_Y * 1.15), (int) (HEADER_W * 0.95), HEADER_H / 2);
+    }
+
+    /**
+     * Draw a text with an black outline.
+     * @param text to write
+     * @param x location
+     * @param y location
+     * @param w width bound
+     * @param h height bound
+     * @param sketch to draw to
+     */
+    public static void textWithOutline(String text,
+                                       float x, float y, float w, float h, Kiosk sketch) {
+        // Draw multiple copies of the text shifted by a few pixels to create the outline
+        sketch.fill(0, 0, 0);
+        for (int delta = -1; delta < 2; delta++) {
+            sketch.text(text, x + delta, y, w, h);
+            sketch.text(text, x, y + delta, w, h);
+        }
+
+        // Draw the text
+        sketch.fill(255);
+        sketch.text(text, x, y, w, h);
     }
 }

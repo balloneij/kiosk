@@ -21,7 +21,20 @@ public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
-    public CareerModel[] careers;
+    public CareerModel[] careers = {
+        new CareerModel()
+    };
+
+    // TODO there will need to be methods for adding new filters to this array once filter
+    //  creation/editing is implemented. The current filters are examples/placeholders.
+    public FilterGroupModel[] filters = {
+        // "All" filter functionality is handled in FilterGroupModel.getCareers()
+        new FilterGroupModel("All"),
+        new FilterGroupModel("Nature Careers", "Realistic", "Investigative", "Social"),
+        new FilterGroupModel("Human Careers", "Artistic", "Enterprising", "Conventional")
+    };
+
+
 
     /**
      * Creates a survey with a single, error scene.

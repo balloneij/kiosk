@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Color;
 import graphics.Graphics;
+import graphics.GraphicsUtil;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
@@ -294,7 +295,7 @@ public class ButtonControl implements Control<MouseEvent> {
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
             if (!this.model.text.equals("")) {
-                textWithOutline(this.model.text,
+                GraphicsUtil.textWithOutline(this.model.text,
                     (float) this.rect.getCenterX(),
                     (float) this.rect.getCenterY() + this.rect.height / 10.f,
                     centerSquareSize, centerSquareSize,
@@ -447,7 +448,7 @@ public class ButtonControl implements Control<MouseEvent> {
 
     // Helper method for updating the radius and calculating new centerSquareSize
     private void updateRadius() {
-        this.radius = Math.min(this.rect.width, this.rect.height);
+        this.radius = Math.min(this.rect.width / 2, this.rect.height / 2);
 
         // The text has to fit inside the largest square possible inside the circle
         // so we're using the Pythagorean theorem to get the sides of the square, and

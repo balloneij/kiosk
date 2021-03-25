@@ -9,7 +9,6 @@ import kiosk.Settings;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
-import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
 
@@ -129,7 +128,8 @@ public class SpokeGraphPromptScene implements Scene {
         final double availableHeight = (height - HEADER_Y - HEADER_H);
         final double size = Math.min(width, availableHeight);
 
-        CareerModel[] careers = sketch.getAllCareers(); // Reference to current list of careers
+        // Reference to current list of careers
+        CareerModel[] careers = model.filter.filter(sketch.getAllCareers());
         UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)

@@ -18,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
+import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
@@ -31,6 +32,7 @@ public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private final CareerModel[] careers;
+    private final FilterGroupModel[] filters;
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
@@ -94,6 +96,7 @@ public class Kiosk extends PApplet {
         }
         this.sceneGraph = new SceneGraph(survey);
         this.careers = survey.careers;
+        this.filters = survey.filters;
 
         this.mouseListeners = new LinkedHashMap<>();
 
@@ -227,6 +230,10 @@ public class Kiosk extends PApplet {
 
     public CareerModel[] getAllCareers() {
         return careers;
+    }
+
+    public FilterGroupModel[] getFilters() {
+        return filters;
     }
 
     /**

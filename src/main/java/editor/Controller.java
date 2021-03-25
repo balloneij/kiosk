@@ -43,19 +43,13 @@ import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
-import kiosk.models.CareerPathwaySceneModel;
-import kiosk.models.DetailsSceneModel;
-import kiosk.models.EmptySceneModel;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.PathwaySceneModel;
-import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
-import kiosk.models.SpokeGraphPromptSceneModel;
+import kiosk.models.*;
 
 public class Controller implements Initializable {
 
     public static SceneGraph sceneGraph;
+    public static CareerModel[] careers;
+    public static FilterGroupModel[] filters;
 
     private String previousId;
     private File surveyFile = null;
@@ -189,10 +183,10 @@ public class Controller implements Initializable {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof SpokeGraphPromptSceneModel) {
             SpokeGraphPromptSceneLoader.loadScene(this,
-                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
+                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph, filters);
         } else if (model instanceof CareerPathwaySceneModel) {
             CareerPathwaySceneLoader.loadScene(this, (CareerPathwaySceneModel) model,
-                toolbarBox, sceneGraph);
+                toolbarBox, sceneGraph, filters);
         } else if (model instanceof PathwaySceneModel) {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
@@ -428,7 +422,7 @@ public class Controller implements Initializable {
                 file = new File(file.getPath() + ".xml");
             }
 
-            LoadedSurveyModel survey = sceneGraph.exportSurvey();
+            LoadedSurveyModel survey = createSurvey();
             try {
                 survey.writeToFile(file);
                 surveyFile = file;
@@ -449,7 +443,7 @@ public class Controller implements Initializable {
             this.saveSurveyAs();
         } else {
             try {
-                sceneGraph.exportSurvey().writeToFile(surveyFile);
+                createSurvey().writeToFile(surveyFile);
             } catch (Exception exception) {
                 // Push temporary scene describing error
                 String errorMsg = "Could not save survey to '" + surveyFile.getPath()
@@ -505,6 +499,13 @@ public class Controller implements Initializable {
         popupWindow.setTitle("Survey Settings");
 
         popupWindow.showAndWait();
+    }
+
+    private LoadedSurveyModel createSurvey() {
+        LoadedSurveyModel survey = sceneGraph.exportSurvey();
+        survey.careers = careers;
+        survey.filters = filters;
+        return survey;
     }
 
     private class EditorSceneChangeCallback implements EventListener<SceneModel> {
