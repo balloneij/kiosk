@@ -24,6 +24,7 @@ public class CareerPathwayScene implements Scene {
     protected SpokeGraph spokeGraph;
     private ButtonControl backButton;
     private ButtonControl homeButton;
+    private ButtonControl supplementaryButton;
 
     /**
      * Create a pathway scene.
@@ -63,10 +64,16 @@ public class CareerPathwayScene implements Scene {
                 careerWeights);
 
         // Create home and back button
-        this.homeButton = GraphicsUtil.initializeHomeButton();
-        sketch.hookControl(this.homeButton);
-        this.backButton = GraphicsUtil.initializeBackButton(sketch);
-        sketch.hookControl(this.backButton);
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            sketch.hookControl(this.homeButton);
+            this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            sketch.hookControl(this.backButton);
+        } else {
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton.init(sketch);
+            sketch.hookControl(this.supplementaryButton);
+        }
 
         // Attach user input hooks
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
@@ -101,7 +108,11 @@ public class CareerPathwayScene implements Scene {
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
         this.spokeGraph.draw(sketch);
 
-        this.backButton.draw(sketch);
-        this.homeButton.draw(sketch);
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            this.homeButton.draw(sketch);
+            this.backButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
+        }
     }
 }

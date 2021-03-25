@@ -7,6 +7,7 @@ public final class ButtonModel {
     public String text;
     public String target;
     public boolean isCircle;
+    public boolean noButton = false;
     public int[] rgb = new int[] { 112, 191, 76 };
     // Optional. Null is a valid value
     public ImageModel image;
