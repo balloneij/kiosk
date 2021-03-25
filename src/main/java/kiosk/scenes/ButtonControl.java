@@ -139,6 +139,16 @@ public class ButtonControl implements Control<MouseEvent> {
             } else {
                 this.drawRectangle(sketch, 1);
             }
+        } else {
+            if (this.model.image != null) {
+                sketch.imageMode(PConstants.CENTER);
+                if (this.isPressed && !this.disabled) {
+                    this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY() + this.rect.height / 10.f);
+                } else {
+                    this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+                }
+            }
         }
     }
 
@@ -173,6 +183,16 @@ public class ButtonControl implements Control<MouseEvent> {
             } else {
                 this.drawRectangle(sketch, sizeMultiplier);
             }
+        } else {
+            if (this.model.image != null) {
+                sketch.imageMode(PConstants.CENTER);
+                if (this.isPressed && !this.disabled) {
+                    this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY() + this.rect.height / 10.f);
+                } else {
+                    this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+                }
+            }
         }
     }
 
@@ -202,12 +222,12 @@ public class ButtonControl implements Control<MouseEvent> {
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
             textWithOutline(this.model.text,
-                (float) this.rect.getCenterX(),
-                (float) this.rect.getCenterY()
-                    + this.rect.height / 10.f,
-                (float) this.rect.width,
-                (float) this.rect.height,
-                sketch);
+                    (float) this.rect.getCenterX(),
+                    (float) this.rect.getCenterY()
+                            + this.rect.height / 10.f,
+                    (float) this.rect.width,
+                    (float) this.rect.height,
+                    sketch);
             if (this.model.image != null) {
                 sketch.imageMode(PConstants.CENTER);
                 if (this.isPressed && !this.disabled) {
@@ -225,14 +245,30 @@ public class ButtonControl implements Control<MouseEvent> {
                 if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                         < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
                         && !this.disabled && this.shouldAnimate) {
-                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[1] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[2] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK
+                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[1] + COLOR_DELTA_ON_CLICK
+                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[2] + COLOR_DELTA_ON_CLICK
+                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                             / (float) Kiosk.getSettings().buttonAnimationLengthFrames)));
                 } else {
-                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[1] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[2] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
+                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK
+                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                                    - (sketch.frameCount
+                                    % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[1] + COLOR_DELTA_ON_CLICK
+                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                                    - (sketch.frameCount
+                                    % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[2] + COLOR_DELTA_ON_CLICK
+                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                                    - (sketch.frameCount
+                                    % Kiosk.getSettings().buttonAnimationFrames))
                             / (float) Kiosk.getSettings().buttonAnimationLengthFrames)));
                 }
                 sketch.stroke(59, 58, 57, 63f);
@@ -296,17 +332,18 @@ public class ButtonControl implements Control<MouseEvent> {
         if (this.isPressed) {
             if (!this.model.text.equals("")) {
                 GraphicsUtil.textWithOutline(this.model.text,
-                    (float) this.rect.getCenterX(),
-                    (float) this.rect.getCenterY() + this.rect.height / 10.f,
-                    centerSquareSize, centerSquareSize,
-                    sketch);
+                        (float) this.rect.getCenterX(),
+                        (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                        centerSquareSize, centerSquareSize,
+                        sketch);
                 if (this.model.image != null) {
                     sketch.imageMode(PConstants.CENTER);
                     if (this.isPressed && !this.disabled) {
                         this.image.draw(sketch, (float) rect.getCenterX(),
                                 (float) rect.getCenterY() + this.rect.height / 10.f);
                     } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(), (float) (rect.getCenterY()));
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                                (float) (rect.getCenterY()));
                     }
                 }
             }
@@ -320,14 +357,30 @@ public class ButtonControl implements Control<MouseEvent> {
                 if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                         < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
                         && !this.disabled && this.shouldAnimate) {
-                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[1] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[2] + COLOR_DELTA_ON_CLICK * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK
+                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[1] + COLOR_DELTA_ON_CLICK
+                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[2] + COLOR_DELTA_ON_CLICK
+                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                             / (float) Kiosk.getSettings().buttonAnimationLengthFrames)));
                 } else {
-                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[1] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)), (this.model.rgb[2] + COLOR_DELTA_ON_CLICK * ((Kiosk.getSettings().buttonAnimationLengthFrames - (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames))
+                    sketch.fill((this.model.rgb[0] + COLOR_DELTA_ON_CLICK
+                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                                    - (sketch.frameCount
+                                    % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[1] + COLOR_DELTA_ON_CLICK
+                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                                    - (sketch.frameCount
+                                    % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)),
+                            (this.model.rgb[2] + COLOR_DELTA_ON_CLICK
+                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                                    - (sketch.frameCount
+                                    % Kiosk.getSettings().buttonAnimationFrames))
                             / (float) Kiosk.getSettings().buttonAnimationLengthFrames)));
                 }
                 sketch.ellipse(this.rect.x + this.rect.width / 2.f,
@@ -347,7 +400,8 @@ public class ButtonControl implements Control<MouseEvent> {
                         this.image.draw(sketch, (float) rect.getCenterX(),
                                 (float) (rect.getCenterY() + this.rect.height / 10.f));
                     } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(), (float) (rect.getCenterY() + (this.rect.height / 10.f * offset)));
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                                (float) (rect.getCenterY() + (this.rect.height / 10.f * offset)));
                     }
                 }
             } else {
@@ -366,7 +420,8 @@ public class ButtonControl implements Control<MouseEvent> {
                         this.image.draw(sketch, (float) rect.getCenterX(),
                                 (float) rect.getCenterY() + this.rect.height / 10.f);
                     } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(), (float) (rect.getCenterY()));
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                                (float) (rect.getCenterY()));
                     }
                 }
             }

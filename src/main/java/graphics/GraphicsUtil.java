@@ -93,7 +93,7 @@ public class GraphicsUtil {
                 sketch.width - COMMON_BUTTON_PADDING * 2 - (723 / 6),
                 sketch.height - COMMON_BUTTON_PADDING - (883 / 6),
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_WIDTH * 3 / 4, false);
-        msoeButton.setDisabled(false);
+        msoeButton.setNoButton(true);
         return msoeButton;
     }
 

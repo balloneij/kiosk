@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import kiosk.Riasec;
 
 public class LoadedSurveyModel implements Serializable {
@@ -227,25 +226,25 @@ public class LoadedSurveyModel implements Serializable {
         humanButton.target = "pathway";
         humanButton.isCircle = true;
         humanButton.rgb = new int[] { 152, 33, 107 };
-        humanButton.image = new ImageModel("assets/human.png", 80, 80);
+        humanButton.image = new ImageModel("assets/Human.png", 80, 80);
         ButtonModel natureButton = new ButtonModel();
         natureButton.text = "";
         natureButton.target = "pathway";
         natureButton.isCircle = true;
         natureButton.rgb = new int[] { 51, 108, 103 };
-        natureButton.image = new ImageModel("assets/nature.png", 80, 80);
+        natureButton.image = new ImageModel("assets/Nature.png", 80, 80);
         ButtonModel smartMachinesButton = new ButtonModel();
         smartMachinesButton.text = "";
         smartMachinesButton.target = "pathway";
         smartMachinesButton.isCircle = true;
         smartMachinesButton.rgb = new int[] { 219, 98, 38 };
-        smartMachinesButton.image = new ImageModel("assets/robot.png", 80, 80);
+        smartMachinesButton.image = new ImageModel("assets/SmartMachines.png", 80, 80);
         ButtonModel spaceButton = new ButtonModel();
         spaceButton.text = "";
         spaceButton.target = "pathway";
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
-        spaceButton.image = new ImageModel("assets/space.png", 80, 80);
+        spaceButton.image = new ImageModel("assets/Space.png", 80, 80);
         pathPrompt.answers = new ButtonModel[] {
             humanButton,
             natureButton,
@@ -315,7 +314,8 @@ public class LoadedSurveyModel implements Serializable {
                     String category = values[2];
                     String name = values[3];
                     //String description = values[4];
-                    String description = "Need to enter a description in the .csv"; //TODO remove this once descriptions are added and uncomment the line above
+                    String description = "Need to enter a description in the .csv";
+                    //TODO remove this once descriptions are added and uncomment the line above
                     careers.push(new CareerModel(name, riasec, field, category, description));
                 }
             } catch (IOException e) {
