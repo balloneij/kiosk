@@ -2,17 +2,9 @@ package kiosk.models;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import kiosk.Riasec;
@@ -166,6 +158,52 @@ public class LoadedSurveyModel implements Serializable {
      */
     public static LoadedSurveyModel createSampleSurvey() {
 
+        HashMap<String, FilterGroupModel> fieldFilters = new HashMap<>();
+        LinkedList<CareerModel> careers = new LinkedList<>();
+        File careerCsv = new File("careers.csv");
+        if (careerCsv.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(careerCsv))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] values = line.split(",");
+                    Riasec riasec = Riasec.valueOf(values[0]);
+                    String field = values[1];
+                    String category = values[2];
+                    String name = values[3];
+                    //String description = values[4];
+                    String description = "Career description . . .";
+                    //TODO remove this once descriptions are added and uncomment the line above
+                    careers.push(new CareerModel(name, riasec, field, category, description));
+
+                    FilterGroupModel filter;
+                    if (fieldFilters.containsKey(field)) {
+                        filter = fieldFilters.get(field);
+                    } else {
+                        filter = new FilterGroupModel();
+                        filter.name = field;
+                        fieldFilters.put(field, filter);
+                    }
+                    filter.addCareer(name);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Temporarily remove fields that only have one career
+        LinkedList<String> toRemove = new LinkedList<>();
+        for (String field : fieldFilters.keySet()) {
+            if (fieldFilters.get(field).careerNames.size() <= 1) {
+                toRemove.push(field);
+            }
+        }
+        for (String field : toRemove) {
+            fieldFilters.remove(field);
+        }
+        FilterGroupModel[] filters =
+                fieldFilters.values().toArray(new FilterGroupModel[0]);
+
         PromptSceneModel titleScreen = new PromptSceneModel();
         titleScreen.id = "introscene0";
         titleScreen.title = "Eye grabbing scene";
@@ -252,77 +290,61 @@ public class LoadedSurveyModel implements Serializable {
             spaceButton
         };
 
+        ArrayList<SceneModel> initialScenes = new ArrayList<SceneModel>();
+        initialScenes.add(titleScreen);
         PathwaySceneModel pathway = new PathwaySceneModel();
-        pathway.buttonModels = new ButtonModel[8];
-        for (int i = 0; i < pathway.buttonModels.length; i++) {
+        pathway.buttonModels = new ButtonModel[filters.length];
+        for (int i = 0; i < filters.length; i++) {
+            String fieldName = filters[i].name;
+
             ButtonModel buttonModel = new ButtonModel();
             buttonModel.isCircle = true;
-            buttonModel.text = "Choice " + i;
-            buttonModel.target = "spoke";
+            buttonModel.text = fieldName;
+            buttonModel.target = "spoke" + fieldName;
             pathway.buttonModels[i] = buttonModel;
+
+            SpokeGraphPromptSceneModel spoke = new SpokeGraphPromptSceneModel();
+            spoke.id = "spoke" + fieldName;
+            spoke.headerTitle = "Oh, so you are interested in " + fieldName + " ?";
+            spoke.headerBody = "Answer some questions";
+            spoke.promptText = "What's your favorite subject?";
+            spoke.filter = filters[i];
+
+            ButtonModel answer1 = new ButtonModel();
+            answer1.text = "I like math";
+            answer1.target = "careerPathway" + fieldName;
+            ButtonModel answer2 = new ButtonModel();
+            answer2.text = "I like math";
+            answer2.target = "careerPathway" + fieldName;
+            ButtonModel answer3 = new ButtonModel();
+            answer3.text = "I like math";
+            answer3.target = "careerPathway" + fieldName;
+            spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
+
+            CareerPathwaySceneModel careerPathway = new CareerPathwaySceneModel();
+            careerPathway.id = "careerPathway" + fieldName;
+            careerPathway.filter = filters[i];
+            careerPathway.centerText = fieldName;
+            careerPathway.headerTitle = "These are your potential careers!";
+            careerPathway.headerBody = "Click each for more information";
+
+            initialScenes.add(spoke);
+            initialScenes.add(careerPathway);
         }
         pathway.centerText = "Pick 1!";
         pathway.headerBody = "There are many options";
         pathway.headerTitle = "Choose one please";
         pathway.id = "pathway";
 
-        SpokeGraphPromptSceneModel spoke = new SpokeGraphPromptSceneModel();
-        spoke.id = "spoke";
-        spoke.headerTitle = "Answer some questions";
-        spoke.headerBody = "Click the answer the best applies to you";
-        spoke.promptText = "What's your favorite subject?";
-
-        ButtonModel answer1 = new ButtonModel();
-        answer1.text = "I like math";
-        ButtonModel answer2 = new ButtonModel();
-        answer2.text = "I like math";
-        ButtonModel answer3 = new ButtonModel();
-        answer3.text = "I like math";
-        spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
-
-        spoke.answers = new ButtonModel[8];
-        for (int i = 0; i < spoke.answers.length; i++) {
-            ButtonModel buttonModel = new ButtonModel();
-            buttonModel.text = "Career " + i;
-            buttonModel.target = "careerPathway";
-            spoke.answers[i] = buttonModel;
-        }
-
-        CareerPathwaySceneModel careerPathway = new CareerPathwaySceneModel();
-        careerPathway.id = "careerPathway";
-
-        ArrayList<SceneModel> initialScenes = new ArrayList<SceneModel>();
-        initialScenes.add(titleScreen);
         initialScenes.add(challengePrompt);
         initialScenes.add(agePrompt);
         initialScenes.add(pathPrompt);
         initialScenes.add(pathway);
-        initialScenes.add(spoke);
-        initialScenes.add(careerPathway);
 
         LoadedSurveyModel survey = new LoadedSurveyModel(titleScreen.id, initialScenes);
 
-        LinkedList<CareerModel> careers = new LinkedList<>();
-        File careerCsv = new File("careers.csv");
-        if (careerCsv.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(careerCsv))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] values = line.split(",");
-                    Riasec riasec = Riasec.valueOf(values[0]);
-                    String field = values[1];
-                    String category = values[2];
-                    String name = values[3];
-                    //String description = values[4];
-                    String description = "Need to enter a description in the .csv";
-                    //TODO remove this once descriptions are added and uncomment the line above
-                    careers.push(new CareerModel(name, riasec, field, category, description));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         survey.careers = careers.toArray(new CareerModel[0]);
+        survey.filters = filters;
 
         return survey;
     }
