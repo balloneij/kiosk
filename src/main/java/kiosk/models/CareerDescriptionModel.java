@@ -1,7 +1,5 @@
 package kiosk.models;
 
-import kiosk.Kiosk;
-import kiosk.SceneGraph;
 import kiosk.scenes.CareerDescriptionScene;
 import kiosk.scenes.Scene;
 
@@ -27,7 +25,7 @@ public class CareerDescriptionModel implements SceneModel {
                 + " you can either go back and explore other careers, or"
                 + " start over from the beginning.";
         this.careerModel = new CareerModel();
-        this.button = new ButtonModel("Print Ticket and Return to Beginning", "null");
+        this.button = new ButtonModel("Go to the beginning", "null");
     }
 
     @Override

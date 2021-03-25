@@ -99,8 +99,6 @@ public class Kiosk extends PApplet {
             survey = new LoadedSurveyModel(defaultScenes);
         }
         this.sceneGraph = new SceneGraph(survey);
-        descriptionModel.createScene();
-        sceneGraph.registerSceneModel(descriptionModel);
         this.careers = survey.careers;
         this.filters = survey.filters;
 
@@ -138,7 +136,6 @@ public class Kiosk extends PApplet {
 
         // Update the scene graph
         sceneGraph.loadSurvey(survey);
-        sceneGraph.registerSceneModel(descriptionModel);
         this.careers = survey.careers;
         sceneGraph.reset();
     }

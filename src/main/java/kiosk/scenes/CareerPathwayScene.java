@@ -9,7 +9,6 @@ import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
-import kiosk.models.CreditsSceneModel;
 import processing.core.PConstants;
 
 /**
@@ -42,7 +41,7 @@ public class CareerPathwayScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         // Grab careers from the Kiosk and userScore from the SceneGraph
-        CareerModel[] careers = model.filter.filter(sketch.getAllCareers());
+        careers = model.filter.filter(sketch.getAllCareers());
         UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
@@ -51,7 +50,7 @@ public class CareerPathwayScene implements Scene {
 
         for (int i = 0; i < careers.length; i++) {
             CareerModel career = careers[i];
-            ButtonModel button = new ButtonModel(career.name, Kiosk.descriptionModel.id);
+            ButtonModel button = new ButtonModel(career.name, "");
             button.isCircle = true;
             careerButtons[i] = button;
             careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
@@ -88,11 +87,15 @@ public class CareerPathwayScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        for (int i = 0; i <= this.spokeGraph.getButtonControls().length - 1; i++) {
-            if (this.spokeGraph.getButtonControls()[i].wasClicked()) {
-                sceneGraph.pushScene(this.spokeGraph.getButtonControls()[i].getTarget(),
-                        this.spokeGraph.getButtonControls()[i].getModel().category);
-                Kiosk.descriptionModel.careerModel = careers[i];
+        // Find which button was clicked in the spoke graph
+        ButtonControl[] buttons = this.spokeGraph.getButtonControls();
+        for (int i = 0; i < buttons.length; i++) {
+            ButtonControl button = buttons[i];
+
+            if (button.wasClicked()) {
+                // Go to the end scene
+                sceneGraph.pushEndScene(careers[i]);
+                break;
             }
         }
 

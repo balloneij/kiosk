@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import kiosk.models.CareerDescriptionModel;
+import kiosk.models.CareerModel;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
@@ -110,6 +112,15 @@ public class SceneGraph {
                     "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
                     Riasec.None);
         }
+    }
+
+    /**
+     * Pushes the end scene.
+     */
+    public void pushEndScene(CareerModel career) {
+        CareerDescriptionModel description = new CareerDescriptionModel();
+        description.careerModel = career;
+        pushScene(description);
     }
 
     public synchronized boolean containsScene(String sceneId) {
