@@ -28,6 +28,10 @@ public class CareerPathwaySceneModel implements SceneModel {
         // Left blank for the XML encoder
     }
 
+    /**
+     * Factory method.
+     * @return a new, default CareerPathwaySceneModel
+     */
     public static CareerPathwaySceneModel create() {
         CareerPathwaySceneModel model = new CareerPathwaySceneModel();
         model.id = IdGenerator.getInstance().getNextId();
