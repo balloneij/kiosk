@@ -13,8 +13,13 @@ import java.util.stream.Collectors;
  * careers LoadedSurveyModel.
  */
 public class FilterGroupModel {
-    private String name;
-    private Set<String> careerNames;
+    public String name;
+    public Set<String> careerNames;
+
+    public FilterGroupModel() {
+        name = "none";
+        careerNames = new HashSet<>();
+    }
 
     public FilterGroupModel(String name, Set<String> careerNames) {
         this.name = name;
@@ -54,6 +59,10 @@ public class FilterGroupModel {
 
     public String getName() {
         return name;
+    }
+
+    public void addCareer(String career) {
+        this.careerNames.add(career);
     }
 
     /**
