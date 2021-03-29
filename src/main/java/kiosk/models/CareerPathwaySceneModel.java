@@ -25,13 +25,19 @@ public class CareerPathwaySceneModel implements SceneModel {
      * Creates a CareerPathwaySceneModel with default values.
      */
     public CareerPathwaySceneModel() {
-        id = IdGenerator.getInstance().getNextId();
-        name = "Career Pathway Scene";
-        centerText = "Center";
-        headerTitle = "Title";
-        headerBody = "Heading";
-        filter = new FilterGroupModel("All");
-        careers = new CareerModel[] {};
+        // Left blank for the XML encoder
+    }
+
+    public static CareerPathwaySceneModel create() {
+        CareerPathwaySceneModel model = new CareerPathwaySceneModel();
+        model.id = IdGenerator.getInstance().getNextId();
+        model.name = "Career Pathway Scene";
+        model.centerText = "Center";
+        model.headerTitle = "Title";
+        model.headerBody = "Heading";
+        model.careers = new CareerModel[] {};
+        model.filter = FilterGroupModel.create();
+        return model;
     }
 
     @Override
@@ -56,7 +62,7 @@ public class CareerPathwaySceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        CareerPathwaySceneModel model = new CareerPathwaySceneModel();
+        CareerPathwaySceneModel model = create();
         model.id = id;
         model.name = name;
         model.centerText = centerText;

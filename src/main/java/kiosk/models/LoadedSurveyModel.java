@@ -2,7 +2,16 @@ package kiosk.models;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,20 +22,8 @@ public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
-    public CareerModel[] careers = {
-        new CareerModel()
-    };
-
-    // TODO there will need to be methods for adding new filters to this array once filter
-    //  creation/editing is implemented. The current filters are examples/placeholders.
-    public FilterGroupModel[] filters = {
-        // "All" filter functionality is handled in FilterGroupModel.getCareers()
-        new FilterGroupModel("All"),
-        new FilterGroupModel("Nature Careers", "Realistic", "Investigative", "Social"),
-        new FilterGroupModel("Human Careers", "Artistic", "Enterprising", "Conventional")
-    };
-
-
+    public CareerModel[] careers;
+    public FilterGroupModel[] filters;
 
     /**
      * Creates a survey with a single, error scene.
@@ -35,10 +32,24 @@ public class LoadedSurveyModel implements Serializable {
      * use the default constructor.
      */
     public LoadedSurveyModel() {
-        this.scenes = new SceneModel[]{
-            new ErrorSceneModel("Default, empty loaded survey model")
+        // Left blank for the XML Encoder
+    }
+
+    /**
+     * Factory method for a default model.
+     * @return model instance
+     */
+    public static LoadedSurveyModel create() {
+        LoadedSurveyModel model = new LoadedSurveyModel();
+        EmptySceneModel sceneModel = new EmptySceneModel();
+        sceneModel.message = "Default, empty loaded survey model";
+        model.scenes = new SceneModel[] {
+            sceneModel
         };
-        this.rootSceneId = this.scenes[0].getId();
+        model.rootSceneId = sceneModel.getId();
+        model.careers = new CareerModel[0];
+        model.filters = new FilterGroupModel[0];
+        return model;
     }
 
     /**
@@ -179,11 +190,11 @@ public class LoadedSurveyModel implements Serializable {
                     if (fieldFilters.containsKey(field)) {
                         filter = fieldFilters.get(field);
                     } else {
-                        filter = new FilterGroupModel();
+                        filter = FilterGroupModel.create();
                         filter.name = field;
                         fieldFilters.put(field, filter);
                     }
-                    filter.addCareer(name);
+                    filter.careerNames.add(name);
                 }
 
             } catch (IOException e) {
@@ -201,8 +212,6 @@ public class LoadedSurveyModel implements Serializable {
         for (String field : toRemove) {
             fieldFilters.remove(field);
         }
-        FilterGroupModel[] filters =
-                fieldFilters.values().toArray(new FilterGroupModel[0]);
 
         PromptSceneModel titleScreen = new PromptSceneModel();
         titleScreen.id = "introscene0";
@@ -293,6 +302,8 @@ public class LoadedSurveyModel implements Serializable {
         ArrayList<SceneModel> initialScenes = new ArrayList<SceneModel>();
         initialScenes.add(titleScreen);
         PathwaySceneModel pathway = new PathwaySceneModel();
+        FilterGroupModel[] filters =
+                fieldFilters.values().toArray(new FilterGroupModel[0]);
         pathway.buttonModels = new ButtonModel[filters.length];
         for (int i = 0; i < filters.length; i++) {
             String fieldName = filters[i].name;
@@ -303,7 +314,7 @@ public class LoadedSurveyModel implements Serializable {
             buttonModel.target = "spoke" + fieldName;
             pathway.buttonModels[i] = buttonModel;
 
-            SpokeGraphPromptSceneModel spoke = new SpokeGraphPromptSceneModel();
+            SpokeGraphPromptSceneModel spoke = SpokeGraphPromptSceneModel.create();
             spoke.id = "spoke" + fieldName;
             spoke.headerTitle = "Oh, so you are interested in " + fieldName + " ?";
             spoke.headerBody = "Answer some questions";
@@ -321,7 +332,7 @@ public class LoadedSurveyModel implements Serializable {
             answer3.target = "careerPathway" + fieldName;
             spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
 
-            CareerPathwaySceneModel careerPathway = new CareerPathwaySceneModel();
+            CareerPathwaySceneModel careerPathway = CareerPathwaySceneModel.create();
             careerPathway.id = "careerPathway" + fieldName;
             careerPathway.filter = filters[i];
             careerPathway.centerText = fieldName;
