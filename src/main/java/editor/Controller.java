@@ -40,6 +40,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import jogamp.opengl.glu.nurbs.CArrayOfArcs;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
@@ -320,7 +321,20 @@ public class Controller implements Initializable {
      * specified by TREE_VIEW_DEPTH.
      */
     public void rebuildSceneGraphTreeView() {
+        //todo STENZEL
+        //todo loop thought tree, record status of expanded in array
+        //todo once rebuilded, set status to what it once was
+        ArrayList expanded;
+        for (TreeItem sm : sceneGraphTreeView
+             ) {
+
+        }
+
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
+
+
+
+
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
             if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
                 SceneModel orphan = potentialOrphan.getValue();
