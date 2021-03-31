@@ -1,5 +1,9 @@
 package kiosk.models;
 
+import com.sun.xml.internal.fastinfoset.algorithm.UUIDEncodingAlgorithm;
+
+import java.util.UUID;
+
 public class IdGenerator {
 
     private static final IdGenerator instance = new IdGenerator();
@@ -8,14 +12,9 @@ public class IdGenerator {
         return instance;
     }
 
-    private int currentId;
-
-    public IdGenerator() {
-        currentId = 0;
-    }
+    public IdGenerator() {}
 
     public String getNextId() {
-        return "Generated" + currentId++;
+        return "Generated" + UUID.randomUUID();
     }
-
 }
