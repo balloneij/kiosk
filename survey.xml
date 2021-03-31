@@ -218,13 +218,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel0"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel0"/>
@@ -250,13 +243,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel0"/>
          <object idref="FilterGroupModel0"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel0"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -408,13 +394,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel1"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel1"/>
@@ -440,13 +419,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel1"/>
          <object idref="FilterGroupModel1"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel1"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -604,13 +576,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel2"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel2"/>
@@ -636,13 +601,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel2"/>
          <object idref="FilterGroupModel2"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel2"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -794,13 +752,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel3"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel3"/>
@@ -826,13 +777,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel3"/>
          <object idref="FilterGroupModel3"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel3"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -984,13 +928,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel4"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel4"/>
@@ -1016,13 +953,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel4"/>
          <object idref="FilterGroupModel4"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel4"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -1195,13 +1125,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel5"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel5"/>
@@ -1227,13 +1150,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel5"/>
          <object idref="FilterGroupModel5"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel5"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -1385,13 +1301,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel6"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel6"/>
@@ -1417,13 +1326,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel6"/>
          <object idref="FilterGroupModel6"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel6"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -1584,13 +1486,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel7"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel7"/>
@@ -1616,13 +1511,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel7"/>
          <object idref="FilterGroupModel7"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel7"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -1777,13 +1665,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel8"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel8"/>
@@ -1809,13 +1690,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel8"/>
          <object idref="FilterGroupModel8"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel8"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -1970,13 +1844,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel9"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel9"/>
@@ -2002,13 +1869,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel9"/>
          <object idref="FilterGroupModel9"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel9"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -2163,13 +2023,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel10"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel10"/>
@@ -2195,13 +2048,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel10"/>
          <object idref="FilterGroupModel10"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel10"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -2353,13 +2199,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel11"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel11"/>
@@ -2385,13 +2224,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel11"/>
          <object idref="FilterGroupModel11"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel11"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -2543,13 +2375,6 @@ attention. Maybe a fun animation or something?</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel12"/>
-         <string>Career Pathway Scene</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>centerText</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel12"/>
@@ -2575,13 +2400,6 @@ attention. Maybe a fun animation or something?</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel12"/>
          <object idref="FilterGroupModel12"/>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>careers</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel12"/>
-         <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
       </object>
@@ -5380,15 +5198,15 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
  <string>rgb</string>
  <void id="intArray0" method="get">
-  <object idref="ButtonModel44"/>
+  <object idref="ButtonModel45"/>
   <void index="1">
-   <int>33</int>
+   <int>108</int>
   </void>
   <void index="2">
-   <int>107</int>
+   <int>103</int>
   </void>
   <void index="0">
-   <int>152</int>
+   <int>51</int>
   </void>
  </void>
 </void>
@@ -5396,12 +5214,12 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field1" method="getField">
  <string>rgb</string>
  <void id="intArray1" method="get">
-  <object idref="ButtonModel43"/>
+  <object idref="ButtonModel42"/>
   <void index="1">
-   <int>80</int>
+   <int>117</int>
   </void>
   <void index="2">
-   <int>50</int>
+   <int>33</int>
   </void>
   <void index="0">
    <int>244</int>
@@ -5428,6 +5246,22 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field3" method="getField">
  <string>rgb</string>
  <void id="intArray3" method="get">
+  <object idref="ButtonModel44"/>
+  <void index="1">
+   <int>33</int>
+  </void>
+  <void index="2">
+   <int>107</int>
+  </void>
+  <void index="0">
+   <int>152</int>
+  </void>
+ </void>
+</void>
+<void idref="intArray3"/>
+<void class="kiosk.models.ButtonModel" id="Field4" method="getField">
+ <string>rgb</string>
+ <void id="intArray4" method="get">
   <object idref="ButtonModel46"/>
   <void index="1">
    <int>98</int>
@@ -5440,10 +5274,10 @@ You can always go back and begin again</string>
   </void>
  </void>
 </void>
-<void idref="intArray3"/>
-<void class="kiosk.models.ButtonModel" id="Field4" method="getField">
+<void idref="intArray4"/>
+<void class="kiosk.models.ButtonModel" id="Field5" method="getField">
  <string>rgb</string>
- <void id="intArray4" method="get">
+ <void id="intArray5" method="get">
   <object idref="ButtonModel47"/>
   <void index="1">
    <int>97</int>
@@ -5456,32 +5290,16 @@ You can always go back and begin again</string>
   </void>
  </void>
 </void>
-<void idref="intArray4"/>
-<void class="kiosk.models.ButtonModel" id="Field5" method="getField">
- <string>rgb</string>
- <void id="intArray5" method="get">
-  <object idref="ButtonModel45"/>
-  <void index="1">
-   <int>108</int>
-  </void>
-  <void index="2">
-   <int>103</int>
-  </void>
-  <void index="0">
-   <int>51</int>
-  </void>
- </void>
-</void>
 <void idref="intArray5"/>
 <void class="kiosk.models.ButtonModel" id="Field6" method="getField">
  <string>rgb</string>
  <void id="intArray6" method="get">
-  <object idref="ButtonModel42"/>
+  <object idref="ButtonModel43"/>
   <void index="1">
-   <int>117</int>
+   <int>80</int>
   </void>
   <void index="2">
-   <int>33</int>
+   <int>50</int>
   </void>
   <void index="0">
    <int>244</int>
