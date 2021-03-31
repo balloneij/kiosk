@@ -65,6 +65,7 @@ public class Controller implements Initializable {
 
     private String previousId;
     private File surveyFile = null;
+    private ArrayList<Boolean> expanded;
 
     @FXML
     AnchorPane rootPane;
@@ -213,6 +214,15 @@ public class Controller implements Initializable {
      * @return The new tree root.
      */
     public TreeItem<SceneModel> buildSceneGraphTreeView() {
+        expanded = new ArrayList<>();
+        for (int i = 0; i < sceneGraph.getAllSceneModels().size(); i++) {
+            if (sceneGraphTreeView.getTreeItem(i) != null) {
+                expanded.add(sceneGraphTreeView.getTreeItem(i).isExpanded());
+            } else {
+                break;
+            }
+        }
+
         TreeItem<SceneModel> hiddenRoot = new TreeItem<>();
         hiddenRoot.setExpanded(true);
 
@@ -321,19 +331,7 @@ public class Controller implements Initializable {
      * specified by TREE_VIEW_DEPTH.
      */
     public void rebuildSceneGraphTreeView() {
-        //todo STENZEL
-        //todo loop thought tree, record status of expanded in array
-        //todo once rebuilded, set status to what it once was
-        ArrayList expanded;
-        for (TreeItem sm : sceneGraphTreeView
-             ) {
-
-        }
-
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
-
-
-
 
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
             if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
@@ -344,6 +342,10 @@ public class Controller implements Initializable {
             }
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
+
+        for (int i = 0; i < expanded.size(); i++) {
+            this.sceneGraphTreeView.getTreeItem(i).setExpanded(expanded.get(i));
+        }
     }
 
     /**
