@@ -241,6 +241,7 @@ public class Controller implements Initializable {
     private TreeItem<SceneModel> buildSubtree(TreeItem<SceneModel> root, String rootParentId,
           Set<String> unvisitedScenes, HashMap<String, Integer> depths, int depth) {
         SceneModel rootModel = root.getValue();
+        rootModel.setName(rootModel.getName().replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD));
         unvisitedScenes.remove(rootModel.getId());
 
         // If we have a key for this, set it to the highest value available
