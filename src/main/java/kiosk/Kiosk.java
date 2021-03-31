@@ -143,7 +143,7 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        fullScreen();
+        //fullScreen();
         size(settings.screenW, settings.screenH);
     }
 
