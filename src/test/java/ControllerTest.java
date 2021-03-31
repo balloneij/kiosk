@@ -10,7 +10,6 @@ import kiosk.models.SceneModel;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -206,7 +205,7 @@ public class ControllerTest {
     }
 
     @Test
-    /**
+    /*
      * A -> B, C -> {D, E}
      */
     void orphanWithChildren() {
@@ -258,7 +257,7 @@ public class ControllerTest {
     }
 
     @Test
-    /**
+    /*
      * A->{B, A}
      */
     void selfReferentialLoop() {
@@ -344,5 +343,13 @@ public class ControllerTest {
 
         // Assertion
         assertEquals(2, hiddenRoot.getChildren().size());
+    }
+
+    @Test
+    /**
+     * A->Deleted
+     */
+    void simulateSceneDeletion() {
+        
     }
 }

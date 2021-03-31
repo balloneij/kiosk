@@ -8,16 +8,10 @@ import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -31,8 +25,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
@@ -55,7 +47,6 @@ import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
-import sun.reflect.generics.tree.Tree;
 
 public class Controller implements Initializable {
 
@@ -159,14 +150,12 @@ public class Controller implements Initializable {
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
 
-        sceneGraph.addSceneChangeCallback(newSceneModel -> {
-            sceneTypeComboBox
-                    .getItems()
-                    .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
-                    .stream()
-                    .findFirst()
-                    .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
-        });
+        sceneGraph.addSceneChangeCallback(newSceneModel -> sceneTypeComboBox
+                .getItems()
+                .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
+                .stream()
+                .findFirst()
+                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel)));
 
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
@@ -219,7 +208,6 @@ public class Controller implements Initializable {
         Set<String> unvisitedScenes = new HashSet<>(sceneGraph.getAllIds());
         HashMap<String, Integer> depths = new HashMap<>();
 
-        // Start with the root. Otherwise loops have no objective root and the function is non-deterministic
         TreeItem<SceneModel> rootTreeItem = new TreeItem<>();
         rootTreeItem.setValue(sceneGraph.getRootSceneModel());
         hiddenRoot.getChildren().add(buildSubtree(rootTreeItem, sceneGraph.getRootSceneModel().getId(),
@@ -239,6 +227,7 @@ public class Controller implements Initializable {
             TreeItem<SceneModel> orphanTreeItem = new TreeItem<>(nextOrphan);
             hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, nextOrphanId, unvisitedScenes, depths, 0));
         }
+
         // If we added any orhphans that turned out to later have parents, remove them here
         for (int i = hiddenRoot.getChildren().size() - 1; i >= 0; i--) {
             TreeItem<SceneModel> child = hiddenRoot.getChildren().get(i);
@@ -289,10 +278,8 @@ public class Controller implements Initializable {
                 depths.put(childId, depth + 1);
             }
             SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-            if (!childSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
-                childSceneModel.setName(childSceneModel.getName()
-                        .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-            }
+            childSceneModel.setName(childSceneModel.getName()
+                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
             TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
             root.getChildren().add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
         }
@@ -314,11 +301,12 @@ public class Controller implements Initializable {
      */
     public void rebuildSceneGraphTreeView() {
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
-        for (TreeItem<SceneModel> childTreeItem : hiddenRoot.getChildren()) {
-            SceneModel child = childTreeItem.getValue();
-            if (!child.getId().equals(sceneGraph.getRootSceneModel().getId())) {
-                String newName = child.getName().replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD);
-                child.setName(ChildIdentifiers.ORPHAN + newName);
+        for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
+            if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
+                SceneModel orphan = potentialOrphan.getValue();
+                if (!orphan.getName().contains(ChildIdentifiers.ORPHAN)) {
+                    orphan.setName(ChildIdentifiers.ORPHAN + orphan.getName());
+                }
             }
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
