@@ -331,10 +331,10 @@ public class ButtonControl implements Control<MouseEvent> {
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
             if (!this.model.text.equals("")) {
-                GraphicsUtil.textWithOutline(this.model.text,
+                textWithOutline(this.model.text,
                         (float) this.rect.getCenterX(),
                         (float) this.rect.getCenterY() + this.rect.height / 10.f,
-                        centerSquareSize, centerSquareSize,
+                        this.rect.width, this.rect.height,
                         sketch);
                 if (this.model.image != null) {
                     sketch.imageMode(PConstants.CENTER);
@@ -412,7 +412,7 @@ public class ButtonControl implements Control<MouseEvent> {
                 textWithOutline(this.model.text,
                         (float) this.rect.getCenterX(),
                         (float) this.rect.getCenterY(),
-                        centerSquareSize, centerSquareSize,
+                        this.rect.width, this.rect.height,
                         sketch);
                 if (this.model.image != null) {
                     sketch.imageMode(PConstants.CENTER);

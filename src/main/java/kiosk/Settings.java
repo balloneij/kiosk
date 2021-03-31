@@ -1,5 +1,6 @@
 package kiosk;
 
+import java.awt.*;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
@@ -35,8 +36,9 @@ public class Settings {
         buttonAnimationFrames = 80;
         buttonAnimationLengthFrames = 20;
         buttonAnimationIntensity = buttonAnimationFrames * buttonAnimationLengthFrames / 2.0;
-        screenW = 1280;
-        screenH = 720;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenW = (int) screenSize.getWidth();
+        screenH = (int) screenSize.getHeight();
     }
 
     /**
