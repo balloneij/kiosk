@@ -344,13 +344,5 @@ public class ControllerTest {
 
         // Assertion
         assertEquals(2, hiddenRoot.getChildren().size());
-        assertEquals(a.getId(), hiddenRoot.getChildren().get(0).getValue().getId());
-        TreeItem<SceneModel> bTI = hiddenRoot.getChildren().get(1);
-        assertEquals(b.getId(), bTI.getValue().getId());
-
-        TreeItem<SceneModel> cTI = bTI.getChildren().get(0);
-        assertEquals(c.getId(), cTI.getValue().getId());
-        TreeItem<SceneModel> dTI = cTI.getChildren().get(0);
-        assertEquals(d.getId(), dTI.getValue().getId());
     }
 }

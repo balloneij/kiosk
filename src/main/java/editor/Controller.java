@@ -222,7 +222,8 @@ public class Controller implements Initializable {
         // Start with the root. Otherwise loops have no objective root and the function is non-deterministic
         TreeItem<SceneModel> rootTreeItem = new TreeItem<>();
         rootTreeItem.setValue(sceneGraph.getRootSceneModel());
-        hiddenRoot.getChildren().add(buildSubtree(rootTreeItem, unvisitedScenes, depths, 0));
+        hiddenRoot.getChildren().add(buildSubtree(rootTreeItem, sceneGraph.getRootSceneModel().getId(),
+                unvisitedScenes, depths, 0));
 
         while (!unvisitedScenes.isEmpty()) {
             // Get the next potential orphan
@@ -235,29 +236,20 @@ public class Controller implements Initializable {
                 continue;
             }
 
-            // Check to see if this orphan is the parent of any other tree item in the hidden root
-            Set<String> childIds = new HashSet<>(Arrays.asList(nextOrphan.getTargets()));
-            Set<String> orphans = hiddenRoot
-                    .getChildren()
-                    .stream()
-                    .map(treeItem -> treeItem.getValue().getId())
-                    .collect(Collectors.toSet());
-            orphans.retainAll(childIds);
-
-            // Now we prune this subtree so that building the subtree works as intended
-            for (String childId : orphans) {
-                pruneHiddenRoot(hiddenRoot, childId, depths, unvisitedScenes);
-            }
-
             TreeItem<SceneModel> orphanTreeItem = new TreeItem<>(nextOrphan);
-            hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, unvisitedScenes, depths, 0));
+            hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, nextOrphanId, unvisitedScenes, depths, 0));
         }
         // If we added any orhphans that turned out to later have parents, remove them here
-        hiddenRoot.getChildren().removeIf(treeItem -> depths.get(treeItem.getValue().getId()) > 0);
+        for (int i = hiddenRoot.getChildren().size() - 1; i >= 0; i--) {
+            TreeItem<SceneModel> child = hiddenRoot.getChildren().get(i);
+            if (depths.get(child.getValue().getId()) > 0) {
+                hiddenRoot.getChildren().remove(i);
+            }
+        }
         return hiddenRoot;
     }
 
-    private TreeItem<SceneModel> buildSubtree(TreeItem<SceneModel> root,
+    private TreeItem<SceneModel> buildSubtree(TreeItem<SceneModel> root, String rootParentId,
           Set<String> unvisitedScenes, HashMap<String, Integer> depths, int depth) {
         SceneModel rootModel = root.getValue();
         unvisitedScenes.remove(rootModel.getId());
@@ -280,6 +272,10 @@ public class Controller implements Initializable {
 
                 if (depths.get(childId) < depth
                         || childId.equals(rootModel.getId())) {
+                    // This is how we determine if this is THE parent, or just a child that needs pruning
+                    if (depths.get(childId) == 0 && !childId.equals(rootParentId)) {
+                        depths.put(childId, depth + 1);
+                    }
                     SceneModel childSceneModel = sceneGraph.getSceneById(childId);
                     childSceneModel.setName(childSceneModel.getName()
                             .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
@@ -289,6 +285,8 @@ public class Controller implements Initializable {
                 } else if (depths.get(childId) < depth + 1) {
                     depths.put(childId, depth + 1);
                 }
+            } else {
+                depths.put(childId, depth + 1);
             }
             SceneModel childSceneModel = sceneGraph.getSceneById(childId);
             if (!childSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
@@ -296,20 +294,9 @@ public class Controller implements Initializable {
                         .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
             }
             TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
-            root.getChildren().add(buildSubtree(child, unvisitedScenes, depths, depth + 1));
+            root.getChildren().add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
         }
         return root;
-    }
-
-    private void pruneHiddenRoot(TreeItem<SceneModel> hiddenRoot, String childId,
-             HashMap<String, Integer> depths, Set<String> unvisitedScenes) {
-        hiddenRoot.getChildren()
-            .stream()
-            .filter(child -> child.getValue().getId().equals(childId))
-            .findFirst().ifPresent(extraChild -> {
-                resetChildDepths(extraChild, depths, unvisitedScenes);
-                hiddenRoot.getChildren().remove(extraChild);
-            });
     }
 
     private void resetChildDepths(TreeItem<SceneModel> root, HashMap<String,
