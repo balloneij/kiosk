@@ -29,9 +29,9 @@ public class GraphicsUtil {
     private static final int HEADER_BODY_FONT_SIZE = 16;
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
-    private static final int COMMON_BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static final int COMMON_BUTTON_HEIGHT = Kiosk.getSettings().screenH / 8;
-    private static final int COMMON_BUTTON_PADDING = 20;
+    private static final int COMMON_BUTTON_WIDTH = SCREEN_W / 8;
+    private static final int COMMON_BUTTON_HEIGHT = SCREEN_H / 8;
+    private static final int COMMON_BUTTON_PADDING = SCREEN_H / 20;
 
     public static final float TextRatioEstimate = 1.5f; // 1.7
     public static final float InnerOuterCircleRatio = 4.f;
@@ -90,8 +90,8 @@ public class GraphicsUtil {
         ButtonModel msoeButtonModel = new ButtonModel();
         msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
         ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
-                sketch.width - COMMON_BUTTON_PADDING * 2 - (723 / 6),
-                sketch.height - COMMON_BUTTON_PADDING - (883 / 6),
+                sketch.width - (COMMON_BUTTON_WIDTH * 3 / 4) - COMMON_BUTTON_PADDING,
+                sketch.height - (COMMON_BUTTON_HEIGHT * 5 / 4) - COMMON_BUTTON_PADDING,
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_WIDTH * 3 / 4, false);
         msoeButton.setNoButton(true);
         return msoeButton;
