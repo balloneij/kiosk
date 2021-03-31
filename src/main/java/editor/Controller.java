@@ -10,11 +10,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,8 +28,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
@@ -40,7 +35,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import jogamp.opengl.glu.nurbs.CArrayOfArcs;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
@@ -214,6 +208,7 @@ public class Controller implements Initializable {
      * @return The new tree root.
      */
     public TreeItem<SceneModel> buildSceneGraphTreeView() {
+        // TODO change to hash map that stores scenemodels' id's AND boolean
         expanded = new ArrayList<>();
         for (int i = 0; i < sceneGraph.getAllSceneModels().size(); i++) {
             if (sceneGraphTreeView.getTreeItem(i) != null) {
