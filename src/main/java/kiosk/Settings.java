@@ -36,8 +36,8 @@ public class Settings {
         buttonAnimationFrames = 80;
         buttonAnimationLengthFrames = 20;
         buttonAnimationIntensity = buttonAnimationFrames * buttonAnimationLengthFrames / 2.0;
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         try {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             screenW = (int) screenSize.getWidth();
             screenH = (int) screenSize.getHeight();
         } catch (HeadlessException e) {
