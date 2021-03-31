@@ -94,7 +94,6 @@ public class Kiosk extends PApplet {
             defaultScenes.add(new DefaultSceneModel());
             survey = new LoadedSurveyModel(defaultScenes);
         }
-        survey = LoadedSurveyModel.createSampleSurvey();
         this.sceneGraph = new SceneGraph(survey);
         this.careers = survey.careers;
         this.filters = survey.filters;
