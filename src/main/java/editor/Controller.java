@@ -252,10 +252,10 @@ public class Controller implements Initializable {
 
         for (String childId : rootModel.getTargets()) {
             if (!unvisitedScenes.contains(childId)) { // This scene has already been touched
-                // TODO: Remove this logic until we have an end screen
-                // Spoke graph prompt scenes return children with the null targetId
-                // Just ignore those for now
-                if (childId.equals("null")) {
+                if (childId.equals("null")) { // Spoke graph prompt scenes return children with the null targetId
+                    continue;
+                } else if (sceneGraph.getSceneById(childId).getClass().equals(ErrorSceneModel.class)) {
+                    root.getChildren().add(new TreeItem<>(new ErrorSceneModel()));
                     continue;
                 }
 

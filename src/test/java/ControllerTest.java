@@ -4,6 +4,7 @@ import javafx.scene.control.TreeItem;
 import kiosk.SceneGraph;
 import kiosk.Settings;
 import kiosk.models.ButtonModel;
+import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
@@ -350,6 +351,27 @@ public class ControllerTest {
      * A->Deleted
      */
     void simulateSceneDeletion() {
-        
+        // Setup
+        List<SceneModel> sceneModels = new ArrayList<>();
+        PromptSceneModel a = new PromptSceneModel();
+        a.answers = new ButtonModel[] {new ButtonModel("To some deleted scene", "Some deleted scene ID") };
+        sceneModels.add(a);
+
+        LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
+        Controller.sceneGraph = new SceneGraph(loadedSurveyModel);
+        Controller controller = new Controller();
+
+        // Execution
+        TreeItem<SceneModel> hiddenRoot = controller.buildSceneGraphTreeView();
+        // Of that call doesn't throw a null pointer exception we are good!
+
+        // Assertion
+        assertEquals(1, hiddenRoot.getChildren().size());
+
+        TreeItem<SceneModel> aTI = hiddenRoot.getChildren().get(0);
+        assertEquals(1, aTI.getChildren().size());
+
+        TreeItem<SceneModel> errorTI = aTI.getChildren().get(0);
+        assertEquals(ErrorSceneModel.class, errorTI.getValue().getClass());
     }
 }
