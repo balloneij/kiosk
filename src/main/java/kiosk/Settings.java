@@ -39,6 +39,13 @@ public class Settings {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenW = (int) screenSize.getWidth();
         screenH = (int) screenSize.getHeight();
+        try {
+            screenW = (int) screenSize.getWidth();
+            screenH = (int) screenSize.getHeight();
+        } catch (HeadlessException e) {
+            screenW = 1280;
+            screenH = 720;
+        }
     }
 
     /**
