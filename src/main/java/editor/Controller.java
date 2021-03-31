@@ -55,7 +55,6 @@ import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
-import sun.reflect.generics.tree.Tree;
 
 public class Controller implements Initializable {
 
@@ -219,7 +218,6 @@ public class Controller implements Initializable {
         Set<String> unvisitedScenes = new HashSet<>(sceneGraph.getAllIds());
         HashMap<String, Integer> depths = new HashMap<>();
 
-        // Start with the root. Otherwise loops have no objective root and the function is non-deterministic
         TreeItem<SceneModel> rootTreeItem = new TreeItem<>();
         rootTreeItem.setValue(sceneGraph.getRootSceneModel());
         hiddenRoot.getChildren().add(buildSubtree(rootTreeItem, unvisitedScenes, depths, 0));
@@ -252,8 +250,6 @@ public class Controller implements Initializable {
             TreeItem<SceneModel> orphanTreeItem = new TreeItem<>(nextOrphan);
             hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, unvisitedScenes, depths, 0));
         }
-        // If we added any orhphans that turned out to later have parents, remove them here
-        hiddenRoot.getChildren().removeIf(treeItem -> depths.get(treeItem.getValue().getId()) > 0);
         return hiddenRoot;
     }
 
@@ -291,10 +287,8 @@ public class Controller implements Initializable {
                 }
             }
             SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-            if (!childSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
-                childSceneModel.setName(childSceneModel.getName()
-                        .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-            }
+            childSceneModel.setName(childSceneModel.getName()
+                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
             TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
             root.getChildren().add(buildSubtree(child, unvisitedScenes, depths, depth + 1));
         }
@@ -304,12 +298,12 @@ public class Controller implements Initializable {
     private void pruneHiddenRoot(TreeItem<SceneModel> hiddenRoot, String childId,
              HashMap<String, Integer> depths, Set<String> unvisitedScenes) {
         hiddenRoot.getChildren()
-            .stream()
-            .filter(child -> child.getValue().getId().equals(childId))
-            .findFirst().ifPresent(extraChild -> {
-                resetChildDepths(extraChild, depths, unvisitedScenes);
-                hiddenRoot.getChildren().remove(extraChild);
-            });
+                .stream()
+                .filter(child -> child.getValue().getId().equals(childId))
+                .findFirst().ifPresent(extraChild -> {
+                    resetChildDepths(extraChild, depths, unvisitedScenes);
+                    hiddenRoot.getChildren().remove(extraChild);
+                });
     }
 
     private void resetChildDepths(TreeItem<SceneModel> root, HashMap<String,
@@ -327,11 +321,12 @@ public class Controller implements Initializable {
      */
     public void rebuildSceneGraphTreeView() {
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
-        for (TreeItem<SceneModel> childTreeItem : hiddenRoot.getChildren()) {
-            SceneModel child = childTreeItem.getValue();
-            if (!child.getId().equals(sceneGraph.getRootSceneModel().getId())) {
-                String newName = child.getName().replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD);
-                child.setName(ChildIdentifiers.ORPHAN + newName);
+        for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
+            if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
+                SceneModel orphan = potentialOrphan.getValue();
+                if (!orphan.getName().contains(ChildIdentifiers.ORPHAN)) {
+                    orphan.setName(ChildIdentifiers.ORPHAN + orphan.getName());
+                }
             }
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);

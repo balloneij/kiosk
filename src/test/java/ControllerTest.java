@@ -10,7 +10,6 @@ import kiosk.models.SceneModel;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -206,7 +205,7 @@ public class ControllerTest {
     }
 
     @Test
-    /**
+    /*
      * A -> B, C -> {D, E}
      */
     void orphanWithChildren() {
@@ -258,7 +257,7 @@ public class ControllerTest {
     }
 
     @Test
-    /**
+    /*
      * A->{B, A}
      */
     void selfReferentialLoop() {
@@ -313,44 +312,5 @@ public class ControllerTest {
         assertEquals(2, hiddenRoot.getChildren().size());
         assertEquals(a.getId(), hiddenRoot.getChildren().get(0).getValue().getId());
         assertEquals(c.getId(), hiddenRoot.getChildren().get(1).getValue().getId());
-    }
-
-    @Test
-    /**
-     * A, B->C->D
-     */
-    void nonOrphansNestProperly() {
-        // Setup
-        List<SceneModel> sceneModels = new ArrayList<>();
-        PromptSceneModel a = new PromptSceneModel();
-        PromptSceneModel b = new PromptSceneModel();
-        PromptSceneModel c = new PromptSceneModel();
-        PromptSceneModel d = new PromptSceneModel();
-
-        b.answers = new ButtonModel[] { new ButtonModel("To C", c.getId()) };
-        c.answers = new ButtonModel[] { new ButtonModel("To D", d.getId()) };
-
-        sceneModels.add(a);
-        sceneModels.add(b);
-        sceneModels.add(c);
-        sceneModels.add(d);
-
-        LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        Controller.sceneGraph = new SceneGraph(loadedSurveyModel);
-        Controller controller = new Controller();
-
-        // Execution
-        TreeItem<SceneModel> hiddenRoot = controller.buildSceneGraphTreeView();
-
-        // Assertion
-        assertEquals(2, hiddenRoot.getChildren().size());
-        assertEquals(a.getId(), hiddenRoot.getChildren().get(0).getValue().getId());
-        TreeItem<SceneModel> bTI = hiddenRoot.getChildren().get(1);
-        assertEquals(b.getId(), bTI.getValue().getId());
-
-        TreeItem<SceneModel> cTI = bTI.getChildren().get(0);
-        assertEquals(c.getId(), cTI.getValue().getId());
-        TreeItem<SceneModel> dTI = cTI.getChildren().get(0);
-        assertEquals(d.getId(), dTI.getValue().getId());
     }
 }

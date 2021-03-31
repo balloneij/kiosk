@@ -117,7 +117,7 @@ public class PromptScene implements Scene {
             } else if (this.backButton.wasClicked()) {
                 sceneGraph.popScene();
             }
-        } else if (this.supplementaryButton != null && this.supplementaryButton.wasClicked()) {
+        } else if (this.supplementaryButton.wasClicked()) {
             sceneGraph.pushScene(new CreditsSceneModel());
         }
     }
@@ -211,9 +211,7 @@ public class PromptScene implements Scene {
             homeButton.draw(sketch);
             backButton.draw(sketch);
         } else {
-            if (this.supplementaryButton != null) {
-                supplementaryButton.draw(sketch);
-            }
+            supplementaryButton.draw(sketch);
         }
     }
 }

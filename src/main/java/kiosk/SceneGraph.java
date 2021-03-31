@@ -292,7 +292,6 @@ public class SceneGraph {
         }
         // Set new root and give em the special star
         this.root = newRoot;
-        this.root.setName(this.root.getName().replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD));
         this.root.setName(ChildIdentifiers.ROOT + this.root.getName());
     }
 
