@@ -22,14 +22,24 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
      * - Weighted spoke graph on the left
      */
     public SpokeGraphPromptSceneModel() {
-        this.id = IdGenerator.getInstance().getNextId();
-        this.name = "Spoke Graph Prompt Scene";
-        this.headerTitle = "";
-        this.headerBody = "";
-        this.careerCenterText = "";
-        this.promptText = "";
-        this.answers = new ButtonModel[]{};
-        this.filter = new FilterGroupModel("All");
+        // Left blank for XMLEncoder
+    }
+
+    /**
+     * Factory method.
+     * @return a model with default values
+     */
+    public static SpokeGraphPromptSceneModel create() {
+        SpokeGraphPromptSceneModel model = new SpokeGraphPromptSceneModel();
+        model.id = IdGenerator.getInstance().getNextId();
+        model.name = "Spoke Graph Prompt Scene";
+        model.headerTitle = "";
+        model.headerBody = "";
+        model.careerCenterText = "";
+        model.promptText = "";
+        model.answers = new ButtonModel[]{};
+        model.filter = new FilterGroupModel();
+        return model;
     }
 
     @Override
@@ -65,7 +75,7 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
             answersCopy[i] = answer.deepCopy();
         }
 
-        SpokeGraphPromptSceneModel copy = new SpokeGraphPromptSceneModel();
+        SpokeGraphPromptSceneModel copy = SpokeGraphPromptSceneModel.create();
         copy.id = this.id;
         copy.name = name;
         copy.headerTitle = this.headerTitle;

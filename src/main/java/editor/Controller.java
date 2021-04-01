@@ -9,12 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -107,9 +105,9 @@ public class Controller implements Initializable {
         // Add scene type options for user selection
         sceneTypeComboBox.setItems(FXCollections.observableArrayList(
                 new PromptSceneModel(),
-                new SpokeGraphPromptSceneModel(),
+                SpokeGraphPromptSceneModel.create(),
                 new PathwaySceneModel(),
-                new CareerPathwaySceneModel(),
+                CareerPathwaySceneModel.create(),
                 new DetailsSceneModel()
         ));
 
@@ -154,14 +152,12 @@ public class Controller implements Initializable {
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
 
-        sceneGraph.addSceneChangeCallback(newSceneModel -> {
-            sceneTypeComboBox
-                    .getItems()
-                    .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
-                    .stream()
-                    .findFirst()
-                    .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
-        });
+        sceneGraph.addSceneChangeCallback(newSceneModel -> sceneTypeComboBox
+                .getItems()
+                .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
+                .stream()
+                .findFirst()
+                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel)));
 
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
@@ -226,7 +222,8 @@ public class Controller implements Initializable {
 
         TreeItem<SceneModel> rootTreeItem = new TreeItem<>();
         rootTreeItem.setValue(sceneGraph.getRootSceneModel());
-        hiddenRoot.getChildren().add(buildSubtree(rootTreeItem, unvisitedScenes, depths, 0));
+        hiddenRoot.getChildren().add(buildSubtree(rootTreeItem,
+                sceneGraph.getRootSceneModel().getId(), unvisitedScenes, depths, 0));
 
         while (!unvisitedScenes.isEmpty()) {
             // Get the next potential orphan
@@ -239,29 +236,27 @@ public class Controller implements Initializable {
                 continue;
             }
 
-            // Check to see if this orphan is the parent of any other tree item in the hidden root
-            Set<String> childIds = new HashSet<>(Arrays.asList(nextOrphan.getTargets()));
-            Set<String> orphans = hiddenRoot
-                    .getChildren()
-                    .stream()
-                    .map(treeItem -> treeItem.getValue().getId())
-                    .collect(Collectors.toSet());
-            orphans.retainAll(childIds);
-
-            // Now we prune this subtree so that building the subtree works as intended
-            for (String childId : orphans) {
-                pruneHiddenRoot(hiddenRoot, childId, depths, unvisitedScenes);
-            }
-
             TreeItem<SceneModel> orphanTreeItem = new TreeItem<>(nextOrphan);
-            hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, unvisitedScenes, depths, 0));
+            hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, nextOrphanId,
+                    unvisitedScenes, depths, 0));
+        }
+
+        // If we added any orhphans that turned out to later have parents, remove them here
+        for (int i = hiddenRoot.getChildren().size() - 1; i >= 0; i--) {
+            TreeItem<SceneModel> child = hiddenRoot.getChildren().get(i);
+            if (depths.get(child.getValue().getId()) > 0) {
+                hiddenRoot.getChildren().remove(i);
+            }
         }
         return hiddenRoot;
     }
 
-    private TreeItem<SceneModel> buildSubtree(TreeItem<SceneModel> root,
+    private TreeItem<SceneModel> buildSubtree(TreeItem<SceneModel> root, String rootParentId,
           Set<String> unvisitedScenes, HashMap<String, Integer> depths, int depth) {
         SceneModel rootModel = root.getValue();
+        rootModel.setName(rootModel
+                .getName()
+                .replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD));
         unvisitedScenes.remove(rootModel.getId());
 
         // If we have a key for this, set it to the highest value available
@@ -273,15 +268,22 @@ public class Controller implements Initializable {
 
         for (String childId : rootModel.getTargets()) {
             if (!unvisitedScenes.contains(childId)) { // This scene has already been touched
-                // TODO: Remove this logic until we have an end screen
                 // Spoke graph prompt scenes return children with the null targetId
-                // Just ignore those for now
                 if (childId.equals("null")) {
+                    continue;
+                } else if (sceneGraph.getSceneById(childId)
+                        .getClass().equals(ErrorSceneModel.class)) {
+                    root.getChildren().add(new TreeItem<>(new ErrorSceneModel()));
                     continue;
                 }
 
                 if (depths.get(childId) < depth
                         || childId.equals(rootModel.getId())) {
+                    // This is how we determine if this is THE parent,
+                    // or just a child that needs pruning
+                    if (depths.get(childId) == 0 && !childId.equals(rootParentId)) {
+                        depths.put(childId, depth + 1);
+                    }
                     SceneModel childSceneModel = sceneGraph.getSceneById(childId);
                     childSceneModel.setName(childSceneModel.getName()
                             .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
@@ -291,25 +293,17 @@ public class Controller implements Initializable {
                 } else if (depths.get(childId) < depth + 1) {
                     depths.put(childId, depth + 1);
                 }
+            } else {
+                depths.put(childId, depth + 1);
             }
             SceneModel childSceneModel = sceneGraph.getSceneById(childId);
             childSceneModel.setName(childSceneModel.getName()
                     .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
             TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
-            root.getChildren().add(buildSubtree(child, unvisitedScenes, depths, depth + 1));
+            root.getChildren()
+                    .add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
         }
         return root;
-    }
-
-    private void pruneHiddenRoot(TreeItem<SceneModel> hiddenRoot, String childId,
-             HashMap<String, Integer> depths, Set<String> unvisitedScenes) {
-        hiddenRoot.getChildren()
-                .stream()
-                .filter(child -> child.getValue().getId().equals(childId))
-                .findFirst().ifPresent(extraChild -> {
-                    resetChildDepths(extraChild, depths, unvisitedScenes);
-                    hiddenRoot.getChildren().remove(extraChild);
-                });
     }
 
     private void resetChildDepths(TreeItem<SceneModel> root, HashMap<String,
