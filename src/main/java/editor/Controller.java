@@ -210,8 +210,8 @@ public class Controller implements Initializable {
 
         TreeItem<SceneModel> rootTreeItem = new TreeItem<>();
         rootTreeItem.setValue(sceneGraph.getRootSceneModel());
-        hiddenRoot.getChildren().add(buildSubtree(rootTreeItem, sceneGraph.getRootSceneModel().getId(),
-                unvisitedScenes, depths, 0));
+        hiddenRoot.getChildren().add(buildSubtree(rootTreeItem,
+                sceneGraph.getRootSceneModel().getId(), unvisitedScenes, depths, 0));
 
         while (!unvisitedScenes.isEmpty()) {
             // Get the next potential orphan
@@ -225,7 +225,8 @@ public class Controller implements Initializable {
             }
 
             TreeItem<SceneModel> orphanTreeItem = new TreeItem<>(nextOrphan);
-            hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, nextOrphanId, unvisitedScenes, depths, 0));
+            hiddenRoot.getChildren().add(buildSubtree(orphanTreeItem, nextOrphanId,
+                    unvisitedScenes, depths, 0));
         }
 
         // If we added any orhphans that turned out to later have parents, remove them here
@@ -241,7 +242,9 @@ public class Controller implements Initializable {
     private TreeItem<SceneModel> buildSubtree(TreeItem<SceneModel> root, String rootParentId,
           Set<String> unvisitedScenes, HashMap<String, Integer> depths, int depth) {
         SceneModel rootModel = root.getValue();
-        rootModel.setName(rootModel.getName().replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD));
+        rootModel.setName(rootModel
+                .getName()
+                .replaceAll(ChildIdentifiers.ORPHAN, ChildIdentifiers.CHILD));
         unvisitedScenes.remove(rootModel.getId());
 
         // If we have a key for this, set it to the highest value available
@@ -253,16 +256,19 @@ public class Controller implements Initializable {
 
         for (String childId : rootModel.getTargets()) {
             if (!unvisitedScenes.contains(childId)) { // This scene has already been touched
-                if (childId.equals("null")) { // Spoke graph prompt scenes return children with the null targetId
+                // Spoke graph prompt scenes return children with the null targetId
+                if (childId.equals("null")) {
                     continue;
-                } else if (sceneGraph.getSceneById(childId).getClass().equals(ErrorSceneModel.class)) {
+                } else if (sceneGraph.getSceneById(childId)
+                        .getClass().equals(ErrorSceneModel.class)) {
                     root.getChildren().add(new TreeItem<>(new ErrorSceneModel()));
                     continue;
                 }
 
                 if (depths.get(childId) < depth
                         || childId.equals(rootModel.getId())) {
-                    // This is how we determine if this is THE parent, or just a child that needs pruning
+                    // This is how we determine if this is THE parent,
+                    // or just a child that needs pruning
                     if (depths.get(childId) == 0 && !childId.equals(rootParentId)) {
                         depths.put(childId, depth + 1);
                     }
@@ -282,7 +288,8 @@ public class Controller implements Initializable {
             childSceneModel.setName(childSceneModel.getName()
                     .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
             TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
-            root.getChildren().add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
+            root.getChildren()
+                    .add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
         }
         return root;
     }
