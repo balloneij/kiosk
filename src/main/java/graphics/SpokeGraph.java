@@ -87,6 +87,7 @@ public class SpokeGraph {
             double weight = normalWeights[i];
             final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
             final float diameter = radius * 2;
+            final double centerSquareSize = Math.sqrt(Math.pow(diameter, 2) / 2);
             final float buttonX = (float)
                     (centerX + Math.cos(STARTING_ANGLE + angleDelta * i) * (spokeLength + radius));
             final float buttonY = (float)
@@ -96,6 +97,10 @@ public class SpokeGraph {
             ButtonModel button = buttons[i];
             button.isCircle = true;
             button.rgb = lerpColor(rgbColor1, rgbColor2, weight);
+            if (button.image != null) {
+                button.image.width = (int) centerSquareSize;
+                button.image.height = (int) centerSquareSize;
+            }
 
             buttonControls[i] = new ButtonControl(button,
                     (int) (buttonX - radius), (int) (buttonY - radius),
