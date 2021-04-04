@@ -17,27 +17,30 @@ public class CareerDescriptionScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
 
+    private static final int SCREEN_W = Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+
     // Button
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 8;
+    private static final int BUTTON_WIDTH = SCREEN_W / 8;
+    private static final int BUTTON_HEIGHT = SCREEN_H / 8;
     private static final int BUTTON_PADDING = 20;
 
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
+    private static final int FOREGROUND_WIDTH = SCREEN_W * 2 / 3;
+    private static final int FOREGROUND_HEIGHT = SCREEN_H * 3 / 4;
     private static final int FOREGROUND_X_PADDING
-            = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
+            = SCREEN_W / 6 + FOREGROUND_WIDTH / 2;
     private static final int FOREGROUND_Y_PADDING
-            = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
+            = SCREEN_H / 8 + FOREGROUND_HEIGHT / 2;
     private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
-    private static final int INSTRUCTIONS_Y = Kiosk.getSettings().screenH * 3 / 8;
-    private static final int DESCRIPTION_Y = Kiosk.getSettings().screenH * 4 / 8;
-    private static final int TITLE_FONT_SIZE = 24;
-    private static final int INSTRUCTIONS_FONT_SIZE = 14;
-    private static final int DESCRIPTION_FONT_SIZE = 16;
+    private static final int TITLE_Y = SCREEN_H / 4;
+    private static final int INSTRUCTIONS_Y = SCREEN_H * 3 / 8;
+    private static final int DESCRIPTION_Y = SCREEN_H * 4 / 8;
+    private static final int TITLE_FONT_SIZE = SCREEN_W / 55;
+    private static final int INSTRUCTIONS_FONT_SIZE = SCREEN_W / 60;
+    private static final int DESCRIPTION_FONT_SIZE = SCREEN_W / 58;
 
     /**
      * Career Description Scene shows a title, body of text, and a button at the bottom.

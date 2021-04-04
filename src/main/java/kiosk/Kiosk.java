@@ -142,7 +142,9 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
-        //fullScreen();
+        if (settings.fullScreenDesired) {
+            fullScreen();
+        }
         size(settings.screenW, settings.screenH);
     }
 
@@ -279,6 +281,10 @@ public class Kiosk extends PApplet {
             } else if (event.getKeyCode() == 116) {
                 // F5 Key Press
                 this.sceneGraph.reset();
+            } else if (event.getKeyCode() == 122) {
+                // F11 Key Press
+                System.out.println("F11 KEYPRESS");
+                settings.toggleFullScreen();
             }
         }
 

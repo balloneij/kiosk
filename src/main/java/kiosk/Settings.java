@@ -23,6 +23,7 @@ public class Settings {
     public double buttonAnimationIntensity;
     public int screenW;
     public int screenH;
+    public boolean fullScreenDesired = false;
 
     /**
      * Default Constructor. This is used whenever
@@ -38,11 +39,16 @@ public class Settings {
         buttonAnimationFrames = 80;
         buttonAnimationLengthFrames = 20;
         buttonAnimationIntensity = buttonAnimationFrames * buttonAnimationLengthFrames / 2.0;
-//        try {
-//            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//            screenW = (int) screenSize.getWidth();
-//            screenH = (int) screenSize.getHeight();
-//        } catch (HeadlessException e) {
+//        if (fullScreenDesired) {
+//            try {
+//                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//                screenW = (int) screenSize.getWidth();
+//                screenH = (int) screenSize.getHeight();
+//            } catch (HeadlessException e) {
+//                screenW = 1280;
+//                screenH = 720;
+//            }
+//        } else {
             screenW = 1280;
             screenH = 720;
 //        }
@@ -73,6 +79,26 @@ public class Settings {
             return (Settings) decoder.readObject();
         } catch (FileNotFoundException | ClassCastException exc) {
             return new Settings();
+        }
+    }
+
+    /**
+     * Switches between windowed and fullscreen modes.
+     */
+    public void toggleFullScreen() {
+        fullScreenDesired = !fullScreenDesired;
+        if (fullScreenDesired) {
+            try {
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                screenW = (int) screenSize.getWidth();
+                screenH = (int) screenSize.getHeight();
+            } catch (HeadlessException e) {
+                screenW = 1280;
+                screenH = 720;
+            }
+        } else {
+            screenW = 1280;
+            screenH = 720;
         }
     }
 }

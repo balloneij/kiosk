@@ -12,31 +12,34 @@ import processing.core.PConstants;
 
 public class PromptScene implements Scene {
 
+    private static final int SCREEN_W =  Kiosk.getSettings().screenW;
+    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
+    private static final int FOREGROUND_WIDTH = SCREEN_W * 2 / 3;
+    private static final int FOREGROUND_HEIGHT = SCREEN_H * 3 / 4;
     private static final int FOREGROUND_X_PADDING
-            = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
+            = SCREEN_W / 6 + FOREGROUND_WIDTH / 2;
     private static final int FOREGROUND_Y_PADDING
-            = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
+            = SCREEN_H / 8 + FOREGROUND_HEIGHT / 2;
     private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 5;
-    private static final int TITLE_FONT_SIZE = 24;
-    private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 8;
-    private static final int PROMPT_FONT_SIZE = 16;
-    private static final int ACTION_Y = Kiosk.getSettings().screenH / 2;
-    private static final int ACTION_FONT_SIZE = 20;
+    private static final int TITLE_Y = SCREEN_H / 5;
+    private static final int TITLE_FONT_SIZE = SCREEN_W / 55;
+    private static final int PROMPT_Y = SCREEN_H * 3 / 8;
+    private static final int PROMPT_FONT_SIZE = SCREEN_W / 60;
+    private static final int ACTION_Y = SCREEN_H / 2;
+    private static final int ACTION_FONT_SIZE = SCREEN_W / 58;
 
     // Buttons
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
-    private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
+    private static final int BUTTON_WIDTH = SCREEN_W / 8;
+    private static final int BUTTON_HEIGHT = SCREEN_H / 6;
+    private static final int BUTTON_RADIUS = SCREEN_W / 8;
     private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_PADDING = 20;
-    private static final int BUTTON_Y = Kiosk.getSettings().screenH * 7 / 12;
+    private static final int BUTTON_Y = SCREEN_H * 7 / 12;
 
     //Animations
     private int startFrame = 0;

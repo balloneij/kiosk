@@ -18,16 +18,16 @@ public class ButtonControl implements Control<MouseEvent> {
     private static final int SCREEN_W = Kiosk.getSettings().screenW;
     private static final int SCREEN_H = Kiosk.getSettings().screenH;
 
-    private static final int FONT_SIZE = 16;
+    private static final int FONT_SIZE = SCREEN_W / 75;
     private static boolean FONT_SIZE_OVERWRITTEN = false;
-    // Radius of the rounded edge on rectangle buttons
-    private static final int DEFAULT_CORNER_RADIUS = 20;
     // Negative will make the color darker on click
     private static final int COLOR_DELTA_ON_CLICK = -25;
 
     // Constants for home and back button
     private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
     private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+    // Radius of the rounded edge on rectangle buttons
+    private static final int DEFAULT_CORNER_RADIUS = BUTTON_HEIGHT / 5;
     private static final int BUTTON_PADDING = 20;
 
     private float textSizeMultiplier = 1;

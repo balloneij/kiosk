@@ -29,15 +29,15 @@ public class SpokeGraphPromptScene implements Scene {
     private static final int HEADER_CURVE_RADIUS = 25;
 
     // Header title
-    private static final int HEADER_TITLE_FONT_SIZE = 24;
+    private static final int HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
     private static final float HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
 
     // Header body
-    private static final int HEADER_BODY_FONT_SIZE = 16;
+    private static final int HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
     private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     // Answers
-    private static final int ANSWERS_PADDING = 20;
+    private static final int ANSWERS_PADDING = SCREEN_W / 58;
     private static final float ANSWERS_SPOKE_THICKNESS = 2;
     private static final int ANSWERS_MAX = 4;
 

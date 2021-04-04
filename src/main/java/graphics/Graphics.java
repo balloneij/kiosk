@@ -151,7 +151,7 @@ public class Graphics {
 
         float spacing = width / 50f;
         float radius = spacing / 2.05f;
-        float radiusChipping = 0.5f;
+        float radiusChipping = 0.30f * (sketch.width / 1280f);
 
         sketch.ellipseMode(PConstants.CORNER);
         sketch.noStroke();
