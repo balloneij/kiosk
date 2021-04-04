@@ -283,6 +283,16 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch);
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed && !this.disabled) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY() + this.rect.height / 10.f);
+                    } else {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) (this.rect.getCenterY() + (this.rect.height / 10.f * offset)));
+                    }
+                }
             } else {
                 sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
                 sketch.stroke(59, 58, 57, 63f);
@@ -295,6 +305,15 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch);
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed && !this.disabled) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY() + this.rect.height / 10.f);
+                    } else {
+                        this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+                    }
+                }
             }
         }
     }
