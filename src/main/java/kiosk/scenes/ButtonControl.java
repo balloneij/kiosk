@@ -335,15 +335,6 @@ public class ButtonControl implements Control<MouseEvent> {
                     this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                     (int) (this.rect.width * sizeMultiplier),
                     (int) (this.rect.height * sizeMultiplier));
-            if (this.model.image != null) {
-                sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed && !this.disabled) {
-                    this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY() + this.rect.height / 10.f);
-                } else {
-                    this.image.draw(sketch, (float) rect.getCenterX(), (float) (rect.getCenterY()));
-                }
-            }
         }
 
         // If pressed, draw the text lower and don't draw the main button
