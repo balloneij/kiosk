@@ -13,47 +13,22 @@ import java.util.stream.Collectors;
  * careers LoadedSurveyModel.
  */
 public class FilterGroupModel {
-    private String name;
-    private Set<String> careerNames;
+    public String name;
+    public Set<String> careerNames;
 
-    public FilterGroupModel(String name, Set<String> careerNames) {
-        this.name = name;
-        this.setCareerNames(careerNames);
-    }
-
-    public FilterGroupModel(String name, List<String> careerNames) {
-        this.name = name;
-        this.setCareerNames(careerNames);
+    public FilterGroupModel() {
+        // Left blank for the XML Encoder
     }
 
     /**
-     * Creates a FilterGroupModel with the provided name and career names.
-     * @param name The name of the filter.
-     * @param careerNames The names of the careers to include in the filter.
+     * Factory method.
+     * @return a default FilterGroupModel
      */
-    public FilterGroupModel(String name, String... careerNames) {
-        this.name = name;
-        this.setCareerNames(Arrays.asList(careerNames));
-    }
-
-    public void setCareerNames(Set<String> careerNames) {
-        this.careerNames = careerNames;
-    }
-
-    public void setCareerNames(List<String> careers) {
-        this.setCareerNames(new HashSet<>(careers));
-    }
-
-    public Set<String> getCareerNames() {
-        return careerNames;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public static FilterGroupModel create() {
+        FilterGroupModel model = new FilterGroupModel();
+        model.name = "All";
+        model.careerNames = new HashSet<>();
+        return model;
     }
 
     /**

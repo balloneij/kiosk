@@ -64,6 +64,7 @@ public class PathwayScene implements Scene {
         for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
                 sceneGraph.pushScene(button.getTarget(), button.getModel().category);
+                break;
             }
         }
 
