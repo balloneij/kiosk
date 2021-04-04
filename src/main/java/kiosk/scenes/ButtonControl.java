@@ -311,7 +311,8 @@ public class ButtonControl implements Control<MouseEvent> {
                         this.image.draw(sketch, (float) rect.getCenterX(),
                             (float) rect.getCenterY() + this.rect.height / 10.f);
                     } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY());
                     }
                 }
             }
