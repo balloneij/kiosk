@@ -79,6 +79,7 @@ public class CareerPathwayScene implements Scene {
 
         // Attach user input hooks
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
+            careerOption.init(sketch);
             sketch.hookControl(careerOption);
         }
         sketch.hookControl(this.backButton);
