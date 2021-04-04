@@ -149,6 +149,7 @@ public class SpokeGraphPromptScene implements Scene {
         spokeGraph.setDisabled(true);
 
         for (ButtonControl button : this.answerButtons) {
+            button.init(sketch);
             sketch.hookControl(button);
         }
 
