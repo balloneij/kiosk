@@ -204,15 +204,6 @@ public class Controller implements Initializable {
      * @return The new tree root.
      */
     public TreeItem<SceneModel> buildSceneGraphTreeView() {
-        // TODO change to hash map that stores scenemodels' id's AND boolean
-        expanded = new ArrayList<>();
-        for (int i = 0; i < sceneGraph.getAllSceneModels().size(); i++) {
-            if (sceneGraphTreeView.getTreeItem(i) != null) {
-                expanded.add(sceneGraphTreeView.getTreeItem(i).isExpanded());
-            } else {
-                break;
-            }
-        }
 
         TreeItem<SceneModel> hiddenRoot = new TreeItem<>();
         hiddenRoot.setExpanded(true);
@@ -321,6 +312,16 @@ public class Controller implements Initializable {
      */
     public void rebuildSceneGraphTreeView() {
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
+
+        // TODO change to hash map that stores scenemodels' id's AND boolean
+        expanded = new ArrayList<>();
+        for (int i = 0; i < sceneGraph.getAllSceneModels().size(); i++) {
+            if (sceneGraphTreeView.getTreeItem(i) != null) {
+                expanded.add(sceneGraphTreeView.getTreeItem(i).isExpanded());
+            } else {
+                break;
+            }
+        }
 
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
             if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
