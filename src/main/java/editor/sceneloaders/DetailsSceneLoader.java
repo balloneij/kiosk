@@ -129,7 +129,7 @@ public class DetailsSceneLoader {
             // Open the image file chooser
             File file = imageFileChooser.showOpenDialog(null);
 
-            // If null, no file was chosenA
+            // If null, no file was chosen
             if (file != null) {
                 // Set the chooser to open in the same directory next time
                 String imagePath = new File("./").toURI().relativize(file.toURI()).getPath();

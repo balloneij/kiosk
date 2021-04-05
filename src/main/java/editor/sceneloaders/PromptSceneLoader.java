@@ -148,6 +148,7 @@ public class PromptSceneLoader {
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
             vbox.getChildren().add(index,
                     createAnswerNode(controller, newAnswer, vbox, model, graph));
+            controller.rebuildSceneGraphTreeView();
         });
 
         vbox.getChildren().add(addButton);
@@ -235,6 +236,7 @@ public class PromptSceneLoader {
 
             // Remove the editing controls for this answer from the parent container
             answersContainer.getChildren().remove(answerVbox);
+            controller.rebuildSceneGraphTreeView();
         });
 
         // Setup the combo-box for choosing the answers target scene
