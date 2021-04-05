@@ -162,7 +162,7 @@ public class Controller implements Initializable {
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
         newSceneMenuItem.setOnAction(t -> {
-            createNewScene();
+            createNewScene(true);
         });
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
@@ -382,9 +382,10 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void createNewScene() {
+    private void createNewScene(boolean intent) {
         EmptySceneModel model = new EmptySceneModel();
         model.message = "This scene is empty! Change the scene type on the left side";
+        model.intent = intent;
 
         // Add to the scene graph
         addNewScene(sceneGraphTreeView.getRoot(), model);

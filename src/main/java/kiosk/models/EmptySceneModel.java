@@ -8,6 +8,7 @@ public class EmptySceneModel implements SceneModel {
     public String id;
     public String name;
     public String message;
+    public boolean intent;
 
     /**
      * Constructs a new empty scene model.
@@ -24,6 +25,7 @@ public class EmptySceneModel implements SceneModel {
         this.id = uniqueId;
         this.name = "Empty Scene";
         this.message = message;
+        this.intent = false;
     }
 
     @Override
