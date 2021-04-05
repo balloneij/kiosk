@@ -137,6 +137,7 @@ public class PromptSceneLoader {
         Button addButton = new Button("+");
         addButton.setOnAction(event -> {
             ButtonModel newAnswer = new ButtonModel();
+            newAnswer.target = controller.createNewScene(false).getId();
 
             // Add the new answer to the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));

@@ -180,6 +180,7 @@ public class SpokeGraphPromptSceneLoader {
         Button addButton = new Button("+");
         addButton.setOnAction(event -> {
             ButtonModel newAnswer = new ButtonModel();
+            newAnswer.target = controller.createNewScene(false).getId();
 
             // Add the new answer to the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
@@ -191,6 +192,7 @@ public class SpokeGraphPromptSceneLoader {
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
             vbox.getChildren().add(index,
                     createAnswerNode(controller, newAnswer, vbox, model, graph));
+            controller.rebuildSceneGraphTreeView();
         });
 
         vbox.getChildren().add(addButton);
@@ -269,6 +271,7 @@ public class SpokeGraphPromptSceneLoader {
 
             // Remove the editing controls for this answer from the parent container
             answersContainer.getChildren().remove(answerVbox);
+            controller.rebuildSceneGraphTreeView();
         });
 
         // Setup the combo-box for choosing the answers target scene
