@@ -171,7 +171,7 @@ public class SpokeGraphPromptScene implements Scene {
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
@@ -180,6 +180,8 @@ public class SpokeGraphPromptScene implements Scene {
             this.supplementaryButton.init(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
+
+        this.promptButton.init(sketch);
     }
 
     @Override
