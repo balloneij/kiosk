@@ -34,6 +34,20 @@ public final class ButtonModel {
         this.isCircle = false;
         this.image = null;
     }
+    
+    /**
+     * Constructs a button model. Let's you set a RIASEC cateogry.
+     * @param text to display inside the button
+     * @param target the scene this button links to
+     * @param category RIASEC category to add to the user score
+     */
+    public ButtonModel(String text, String target, Riasec category) {
+        this.text = text;
+        this.target = target;
+        this.category = category;
+        this.isCircle = false;
+        this.image = null;
+    }
 
     /**
      * Create a deep copy of the button model. There should
