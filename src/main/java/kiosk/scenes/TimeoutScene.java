@@ -53,6 +53,7 @@ public class TimeoutScene implements Scene {
         this.homeButton = new ButtonControl(homeButtonModel,
                 BUTTON_PADDING * 2, sketchHeight - BUTTON_PADDING * 5,
                 BUTTON_WIDTH * 3, BUTTON_HEIGHT * 3 / 4);
+        this.homeButton.init(sketch);
         sketch.hookControl(this.homeButton);
         ButtonModel backButtonModel = new ButtonModel();
         backButtonModel.text = "I'm still here!";
@@ -61,6 +62,7 @@ public class TimeoutScene implements Scene {
                 sketchWidth - BUTTON_PADDING * 2 - BUTTON_WIDTH * 3,
                 sketchHeight - BUTTON_PADDING * 5,
                 BUTTON_WIDTH * 3, BUTTON_HEIGHT * 3 / 4);
+        this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
 
         this.model.title = "Are You Still There?";
