@@ -29,6 +29,9 @@ public class SpokeGraph {
     private final int[] rgbColor1 = new int[] { 0, 0, 255 };
     private final int[] rgbColor2 = new int[] { 255, 0, 0 };
 
+    private boolean wasInit = false;
+    private boolean initWarningPrinted = false;
+
     /**
      * Create a spoke graph.
      * @param size the square to fit the graph in
@@ -137,10 +140,23 @@ public class SpokeGraph {
     }
 
     /**
+     * Initializes the SpokeGraph.
+     * @param sketch Kiosk to initialize SpokeGraph for.
+     */
+    public void init(Kiosk sketch) {
+        for (ButtonControl buttonControl : buttonControls) {
+            buttonControl.init(sketch);
+        }
+        wasInit = true;
+    }
+
+    /**
      * Draw the spoke graph.
      * @param sketch to draw to
      */
     public void draw(Kiosk sketch) {
+        checkInit(); // Prints a warning if the SpokeGraph wasn't initialized
+
         // Draw the buttons and spokes
         for (ButtonControl buttonControl : this.buttonControls) {
             sketch.stroke(255);
@@ -220,6 +236,23 @@ public class SpokeGraph {
         } else {
             for (ButtonControl button : buttonControls) {
                 button.setDisabled(false);
+            }
+        }
+    }
+
+    /**
+     * Prints a warning & stack trace if the SpokeGraph has not been initialized. Meant to be called
+     * in the draw method.
+     */
+    private void checkInit() {
+        // Print warning if SpokeGraph was not init and warning hasn't been printed
+        if (!wasInit && !initWarningPrinted) {
+            try {
+                initWarningPrinted = true;
+                throw new RuntimeException("SpokeGraph was not init! Call SpokeGraph.init() in "
+                    + "the init method of the scene!");
+            } catch (RuntimeException e) {
+                e.printStackTrace();
             }
         }
     }
