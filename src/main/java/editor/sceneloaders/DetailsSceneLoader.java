@@ -91,6 +91,7 @@ public class DetailsSceneLoader {
     private static Node createButton(DetailsSceneModel model,
                                      SceneGraph graph, Controller controller) {
         ButtonModel answer = model.button;
+        answer.target = controller.createNewScene(false).getId();
 
         // Setup the text field for editing the answer
         TextArea answerField = new TextArea(answer.text);
