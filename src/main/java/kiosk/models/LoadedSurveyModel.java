@@ -217,17 +217,6 @@ public class LoadedSurveyModel implements Serializable {
             filter.careerNames.add(career.name);
         }
 
-        // Remove fields that only have one career
-        LinkedList<String> toRemove = new LinkedList<>();
-        for (String field : filters.keySet()) {
-            if (filters.get(field).careerNames.size() <= 1) {
-                toRemove.push(field);
-            }
-        }
-        for (String field : toRemove) {
-            filters.remove(field);
-        }
-
         // Create scenes
         LinkedList<SceneModel> scenes = new LinkedList<>();
 
@@ -306,22 +295,49 @@ public class LoadedSurveyModel implements Serializable {
         scenes.push(createFieldPicker(careers, Category.Space));
 
         // Construct a 6 question survey. One question for each category of RIASEC
+        final int questionCount = 6;
         for (String field : filters.keySet()) {
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < questionCount; i++) {
                 SpokeGraphPromptSceneModel scene = SpokeGraphPromptSceneModel.create();
                 scene.id = "fieldPrompt" + i + field;
                 scene.filter = filters.get(field);
                 scene.name = field + " Prompt " + i;
-                scene.headerTitle = "Let's talk about monke!";
+                scene.headerTitle = "Let's talk about " + field + "!";
                 scene.headerBody = "Select the answer that best applies to you";
-                scene.careerCenterText = "monke";
-                scene.answers = new ButtonModel[] {
-                    new ButtonModel("Bananas", "fieldPrompt" + (i + 1) + field, Riasec.Realistic),
-                    new ButtonModel("Bananas", "fieldPrompt" + (i + 1) + field, Riasec.Artistic),
-                    new ButtonModel("Bananas", "fieldPrompt" + (i + 1) + field, Riasec.Realistic)
-                };
+                scene.careerCenterText = field;
+                scene.promptText = "Select one";
+
+                // Alternate between the categories buttons provided
+                if (i % 2 == 0) {
+                    scene.answers = new ButtonModel[] {
+                        new ButtonModel("Artistic",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Artistic),
+                        new ButtonModel("Realistic",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Realistic),
+                        new ButtonModel("Conventional",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Conventional)
+                    };
+                } else {
+                    scene.answers = new ButtonModel[] {
+                        new ButtonModel("Enterprising",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Enterprising),
+                        new ButtonModel("Social",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Social),
+                        new ButtonModel("Investigative",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Investigative)
+                    };
+                }
+
                 scenes.push(scene);
             }
+
+            CareerPathwaySceneModel resultScene = CareerPathwaySceneModel.create();
+            resultScene.id = "fieldPrompt" + questionCount + field;
+            resultScene.filter = filters.get(field);
+            resultScene.name = field + " Result";
+            resultScene.headerTitle = "These are the career results";
+            resultScene.headerBody = "Click each one to find more information";
+            scenes.push(resultScene);
         }
 
         LoadedSurveyModel survey = LoadedSurveyModel.create();
