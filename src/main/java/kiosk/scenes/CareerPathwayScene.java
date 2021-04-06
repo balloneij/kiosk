@@ -64,6 +64,7 @@ public class CareerPathwayScene implements Scene {
                 model.centerText,
                 careerButtons,
                 careerWeights);
+        this.spokeGraph.init(sketch);
 
         // Create home and back button
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
@@ -79,7 +80,6 @@ public class CareerPathwayScene implements Scene {
 
         // Attach user input hooks
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
-            careerOption.init(sketch);
             sketch.hookControl(careerOption);
         }
         sketch.hookControl(this.backButton);

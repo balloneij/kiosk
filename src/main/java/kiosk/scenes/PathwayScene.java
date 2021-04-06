@@ -54,9 +54,10 @@ public class PathwayScene implements Scene {
         }
 
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
-            careerOption.init(sketch);
             sketch.hookControl(careerOption);
         }
+
+        spokeGraph.init(sketch);
     }
 
     @Override

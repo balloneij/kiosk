@@ -164,6 +164,7 @@ public class SpokeGraphPromptScene implements Scene {
         this.spokeGraph = new SpokeGraph(size, 0, HEADER_Y + HEADER_H,
                 this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
+        spokeGraph.init(sketch);
 
         for (ButtonControl button : this.answerButtons) {
             button.init(sketch);
