@@ -7,6 +7,7 @@ import editor.sceneloaders.PromptSceneLoader;
 import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
+import kiosk.scenes.EmptyScene;
 
 public class Controller implements Initializable {
 
@@ -326,6 +328,17 @@ public class Controller implements Initializable {
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
             if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
                 SceneModel orphan = potentialOrphan.getValue();
+                // check if orphan needs to find a new home (be removed)
+                // this happens if it's an empty scene, and there was no intent
+                if (orphan.getClass().equals(EmptySceneModel.class)) {
+                    EmptySceneModel emptyOrphan = (EmptySceneModel) orphan;
+                    if (!emptyOrphan.intent) {
+                        deleteScene(orphan);
+                        potentialOrphan.getParent().getChildren().remove(potentialOrphan);
+                        break;
+                    }
+                }
+                // else keep and mark it
                 if (!orphan.getName().contains(ChildIdentifiers.ORPHAN)) {
                     orphan.setName(ChildIdentifiers.ORPHAN + orphan.getName());
                 }
@@ -333,9 +346,10 @@ public class Controller implements Initializable {
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
 
-        for (int i = 0; i < expanded.size(); i++) {
-            this.sceneGraphTreeView.getTreeItem(i).setExpanded(expanded.get(i));
-        }
+        // TODO part 2
+//        for (int i = 0; i < expanded.size(); i++) {
+//            this.sceneGraphTreeView.getTreeItem(i).setExpanded(expanded.get(i));
+//        }
     }
 
     /**
