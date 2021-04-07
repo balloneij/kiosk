@@ -35,6 +35,9 @@ public class Editor extends Kiosk {
      */
     public static final int TOOLBAR_WIDTH = 320;
 
+    /**
+     * The instance of the stage. Used to set the title window.
+     */
     private static Stage stage;
 
     /**
