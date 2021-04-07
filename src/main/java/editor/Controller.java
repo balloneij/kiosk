@@ -328,6 +328,7 @@ public class Controller implements Initializable {
             }
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
+        this.hasPendingChanges = true;
     }
 
     /**
@@ -386,6 +387,7 @@ public class Controller implements Initializable {
     public void addNewScene(TreeItem<SceneModel> hiddenRoot, SceneModel newScene) {
         sceneGraph.registerSceneModel(newScene);
         hiddenRoot.getChildren().add(new TreeItem<>(newScene));
+        this.hasPendingChanges = true;
     }
 
     @FXML
@@ -418,12 +420,13 @@ public class Controller implements Initializable {
             sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
             sceneGraph.reset();
             rebuildSceneGraphTreeView();
+            this.hasPendingChanges = false;
         }
     }
 
     @FXML
     private void reloadSurvey() {
-        if (!hasPendingChanges) {
+        if (hasPendingChanges) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Unsaved Changes");
             alert.setContentText("You have unsaved changes. If you reload all of those changes will be lost!");
@@ -435,6 +438,7 @@ public class Controller implements Initializable {
                 sceneGraph.reset();
                 rebuildSceneGraphTreeView();
                 rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                this.hasPendingChanges = false;
             }
         }
     }
@@ -454,6 +458,7 @@ public class Controller implements Initializable {
             try {
                 survey.writeToFile(file);
                 surveyFile = file;
+                this.hasPendingChanges = false;
             } catch (Exception exception) {
                 // Push temporary scene describing error
                 String errorMsg = "Could not save survey to '" + surveyFile.getPath()
@@ -472,6 +477,7 @@ public class Controller implements Initializable {
         } else {
             try {
                 createSurvey().writeToFile(surveyFile);
+                this.hasPendingChanges = false;
             } catch (Exception exception) {
                 // Push temporary scene describing error
                 String errorMsg = "Could not save survey to '" + surveyFile.getPath()
