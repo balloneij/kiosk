@@ -1,5 +1,6 @@
 package editor;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import editor.sceneloaders.CareerPathwaySceneLoader;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
@@ -59,7 +60,6 @@ public class Controller implements Initializable {
 
     private String previousId;
     private File surveyFile = null;
-    private ArrayList<Boolean> expanded;
 
     @FXML
     AnchorPane rootPane;
@@ -313,17 +313,16 @@ public class Controller implements Initializable {
      * specified by TREE_VIEW_DEPTH.
      */
     public void rebuildSceneGraphTreeView() {
-        TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
-
-        // TODO change to hash map that stores scenemodels' id's AND boolean
-        expanded = new ArrayList<>();
-        for (int i = 0; i < sceneGraph.getAllSceneModels().size(); i++) {
-            if (sceneGraphTreeView.getTreeItem(i) != null) {
-                expanded.add(sceneGraphTreeView.getTreeItem(i).isExpanded());
-            } else {
-                break;
+        HashMap<String, Boolean> expanded = new HashMap<>();
+        if (sceneGraphTreeView.getRoot() != null) {
+            for (TreeItem<SceneModel> sm : sceneGraphTreeView.getRoot().getChildren()) {
+                expanded.put(sm.getValue().getId(), sm.isExpanded());
+                System.out.println("the scene name " + sm.getValue().getName());
+                System.out.println("was stored with a value of " + sm.isExpanded());
             }
         }
+
+        TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
 
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
             if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
@@ -346,10 +345,15 @@ public class Controller implements Initializable {
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
 
-        // TODO part 2
-//        for (int i = 0; i < expanded.size(); i++) {
-//            this.sceneGraphTreeView.getTreeItem(i).setExpanded(expanded.get(i));
-//        }
+        for (TreeItem<SceneModel> sm : sceneGraphTreeView.getRoot().getChildren()) {
+            System.out.println("testing an item with name " + sm.getValue().getName());
+            if (expanded.containsKey(sm.getValue().getId())) {
+                System.out.println("it matched. it's being set to " + expanded.get(sm.getValue().getId()));
+                sm.setExpanded(expanded.get(sm.getValue().getId()));
+                System.out.println("now it's " + sm.isExpanded() + "\n");
+
+            }
+        }
     }
 
     /**
@@ -404,6 +408,7 @@ public class Controller implements Initializable {
 
         // Add to the scene graph
         addNewScene(sceneGraphTreeView.getRoot(), model);
+        //rebuildSceneGraphTreeView();
         return model;
     }
 
