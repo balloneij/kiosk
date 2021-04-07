@@ -22,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
@@ -439,16 +440,33 @@ public class Controller implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Unsaved Changes");
             alert.setContentText("You have unsaved changes. If you reload all of those changes will be lost!");
+
+            ButtonType save = new ButtonType("Save");
+            ButtonType noSave = new ButtonType("Don't Save");
+            ButtonType cancel = new ButtonType("Cancel");
+
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(noSave, cancel, save);
+
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get().getButtonData().isDefaultButton()) {
-                LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
-                sceneGraph.loadSurvey(surveyModel);
-                sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
-                sceneGraph.reset();
-                rebuildSceneGraphTreeView();
-                rebuildToolbar(sceneGraph.getCurrentSceneModel());
-                this.hasPendingChanges = false;
-                Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
+            if (result.isPresent()) {
+                if (result.get() == save) {
+                    saveSurvey();
+                    sceneGraph.reset();
+                    rebuildSceneGraphTreeView();
+                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                    hasPendingChanges = false;
+                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
+                } else if (result.get() == noSave) {
+                    LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
+                    sceneGraph.loadSurvey(surveyModel);
+                    sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
+                    sceneGraph.reset();
+                    rebuildSceneGraphTreeView();
+                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                    this.hasPendingChanges = false;
+                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
+                }
             }
         }
     }
