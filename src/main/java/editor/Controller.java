@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.collections.FXCollections;
@@ -21,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -57,6 +59,8 @@ public class Controller implements Initializable {
     private String previousId;
     private File surveyFile = null;
 
+    private boolean hasPendingChanges;
+
     @FXML
     AnchorPane rootPane;
     @FXML
@@ -79,6 +83,7 @@ public class Controller implements Initializable {
         if (surveyFile.exists()) {
             this.surveyFile = surveyFile;
         }
+        hasPendingChanges = false;
 
         for (Node node : splitPane.lookupAll(".split-pane-divider")) {
             node.setVisible(true);
@@ -418,12 +423,20 @@ public class Controller implements Initializable {
 
     @FXML
     private void reloadSurvey() {
-        LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
-        sceneGraph.loadSurvey(surveyModel);
-        sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
-        sceneGraph.reset();
-        rebuildSceneGraphTreeView();
-        rebuildToolbar(sceneGraph.getCurrentSceneModel());
+        if (!hasPendingChanges) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Unsaved Changes");
+            alert.setContentText("You have unsaved changes. If you reload all of those changes will be lost!");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get().getButtonData().isDefaultButton()) {
+                LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
+                sceneGraph.loadSurvey(surveyModel);
+                sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
+                sceneGraph.reset();
+                rebuildSceneGraphTreeView();
+                rebuildToolbar(sceneGraph.getCurrentSceneModel());
+            }
+        }
     }
 
     @FXML
