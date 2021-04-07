@@ -2,10 +2,10 @@
 <java version="1.8.0_282" class="java.beans.XMLDecoder">
  <object class="kiosk.Settings" id="Settings0">
   <void class="kiosk.Settings" method="getField">
-   <string>timeoutMillis</string>
+   <string>gracePeriodMillis</string>
    <void method="set">
     <object idref="Settings0"/>
-    <int>300000</int>
+    <int>3000</int>
    </void>
   </void>
  </object>

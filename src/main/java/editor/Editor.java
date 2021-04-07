@@ -114,6 +114,7 @@ public class Editor extends Kiosk {
                     newSettings.screenH != Kiosk.settings.screenH
                             || newSettings.screenW != Kiosk.settings.screenW;
             Kiosk.settings.timeoutMillis = newSettings.timeoutMillis;
+            Kiosk.settings.gracePeriodMillis = newSettings.gracePeriodMillis;
         } else {
             Kiosk.settings = newSettings;
         }
@@ -137,6 +138,7 @@ public class Editor extends Kiosk {
         Settings settings = Settings.readSettings();
         Settings editorSettings = new Settings();
         editorSettings.timeoutMillis = settings.timeoutMillis;
+        editorSettings.gracePeriodMillis = settings.gracePeriodMillis;
 
         Editor editor = new Editor("survey.xml", editorSettings);
         editor.runSketch();

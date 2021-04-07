@@ -223,14 +223,13 @@ public class Kiosk extends PApplet {
         if (lastSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
             currentSceneMillis = 0;
         }
-        if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())
-                && currentSceneMillis > Kiosk.settings.timeoutMillis && shouldTimeout) {
-            if (timeoutActive) {
+        if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
+            if (timeoutActive && currentSceneMillis > Kiosk.settings.gracePeriodMillis) {
                 // Clear the timeoutActive flag
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
                 timeoutActive = false;
                 this.sceneGraph.reset();
-            } else {
+            } else if (currentSceneMillis > Kiosk.settings.timeoutMillis && shouldTimeout && !timeoutActive) {
                 // Create pop-up
                 // note that it gets drawn in the next draw() call
                 this.sceneGraph.pushScene(new TimeoutSceneModel());
