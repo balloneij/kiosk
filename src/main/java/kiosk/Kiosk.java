@@ -43,7 +43,7 @@ public class Kiosk extends PApplet {
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
     private boolean shouldTimeout = true;
-    private boolean isFullScreen = true;
+    private boolean isFullScreen = false;
 
     private static JFileChooser fileChooser;
 
