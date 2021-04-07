@@ -35,6 +35,8 @@ public class Editor extends Kiosk {
      */
     public static final int TOOLBAR_WIDTH = 320;
 
+    private static Stage stage;
+
     /**
      * Instantiates the editor and starts the sketch.
      */
@@ -49,13 +51,21 @@ public class Editor extends Kiosk {
         size(Kiosk.settings.screenW, Kiosk.settings.screenH, FX2D);
     }
 
+    /**
+     * Uses the current stage to set the title of the editor window.
+     * @param newTitle The new title.
+     */
+    public static void setTitle(String newTitle) {
+        stage.setTitle(newTitle);
+    }
+
     @Override
     protected PSurface initSurface() {
         // Pull the secret sauce out of Processing 3
         surface = super.initSurface();
         final Canvas canvas = (Canvas) surface.getNative();
         final Scene oldScene = canvas.getScene();
-        final Stage stage = (Stage) oldScene.getWindow();
+        stage = (Stage) oldScene.getWindow();
 
         // Attach the scene graph before initialization
         Controller.sceneGraph = sceneGraph;
@@ -91,7 +101,7 @@ public class Editor extends Kiosk {
         // Delays these actions and runs them on the "correct" thread
         Platform.runLater(() -> {
             stage.setScene(scene);
-            stage.setTitle("Kiosk Editor-inator 3000");
+            setTitle("Kiosk Editor-inator 3000");
             // A platypus?
             stage.setResizable(false);
         });
