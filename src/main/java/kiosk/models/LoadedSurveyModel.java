@@ -14,8 +14,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import kiosk.Riasec;
 
 public class LoadedSurveyModel implements Serializable {
@@ -163,200 +165,230 @@ public class LoadedSurveyModel implements Serializable {
         }
     }
 
+    private static List<CareerModel> loadCareers(File csvFile) {
+        // Read careers from the csv file
+        ArrayList<CareerModel> careersList = new ArrayList<>();
+        if (csvFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] values = line.split(",");
+
+                    // Get values from columns
+                    CareerModel career = new CareerModel();
+                    career.riasecCategory = Riasec.valueOf(values[0]);
+                    career.field = values[1];
+                    career.category = values[2];
+                    career.name = values[3];
+                    career.description = values[4];
+
+                    careersList.add(career);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                careersList = new ArrayList<>();
+            }
+        }
+
+        return careersList;
+    }
+
     /**
      * Creates a sample survey full of cats, dogs, coffee, yogurt, and caps.
      * @return a survey
      */
+    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     public static LoadedSurveyModel createSampleSurvey() {
+        HashMap<String, FilterGroupModel> filters = new HashMap<>();
 
-        HashMap<String, FilterGroupModel> fieldFilters = new HashMap<>();
-        LinkedList<CareerModel> careers = new LinkedList<>();
-        File careerCsv = new File("careers.csv");
-        if (careerCsv.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(careerCsv))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] values = line.split(",");
-                    Riasec riasec = Riasec.valueOf(values[0]);
-                    String field = values[1];
-                    String category = values[2];
-                    String name = values[3];
-                    //String description = values[4];
-                    String description = "Career description . . .";
-                    //TODO remove this once descriptions are added and uncomment the line above
-                    careers.push(new CareerModel(name, riasec, field, category, description));
+        // Load careers from CSV
+        List<CareerModel> careers = loadCareers(new File("sample_careers.csv"));
 
-                    FilterGroupModel filter;
-                    if (fieldFilters.containsKey(field)) {
-                        filter = fieldFilters.get(field);
-                    } else {
-                        filter = FilterGroupModel.create();
-                        filter.name = field;
-                        fieldFilters.put(field, filter);
-                    }
-                    filter.careerNames.add(name);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        // Create filters based off of the sample careers
+        for (CareerModel career : careers) {
+            FilterGroupModel filter;
+            if (filters.containsKey(career.field)) {
+                filter = filters.get(career.field);
+            } else {
+                filter = FilterGroupModel.create();
+                filter.name = career.field;
+                filters.put(career.field, filter);
             }
+            filter.careerNames.add(career.name);
         }
 
-        // Temporarily remove fields that only have one career
-        LinkedList<String> toRemove = new LinkedList<>();
-        for (String field : fieldFilters.keySet()) {
-            if (fieldFilters.get(field).careerNames.size() <= 1) {
-                toRemove.push(field);
-            }
-        }
-        for (String field : toRemove) {
-            fieldFilters.remove(field);
-        }
+        // Create scenes
+        LinkedList<SceneModel> scenes = new LinkedList<>();
 
-        PromptSceneModel titleScreen = new PromptSceneModel();
-        titleScreen.id = "introscene0";
-        titleScreen.title = "Eye grabbing scene";
-        titleScreen.prompt = "Eventually this should be a scene that grabs\n"
+        // Eye catching scene
+        PromptSceneModel eyeCatcher = new PromptSceneModel();
+        scenes.push(eyeCatcher);
+        eyeCatcher.name = "Eye Catcher";
+        eyeCatcher.title = "Eye grabbing scene";
+        eyeCatcher.prompt = "Eventually this should be a scene that grabs\n"
                 + "attention. Maybe a fun animation or something?";
-        ButtonModel titleScreenButton = new ButtonModel();
-        titleScreenButton.text = "Let's go";
-        titleScreenButton.target = "introscene1";
-        titleScreen.answers = new ButtonModel[]{ titleScreenButton };
+        ButtonModel eyeCatcherButton = new ButtonModel();
+        eyeCatcherButton.text = "Let's go";
+        eyeCatcherButton.target = "titleScene";
+        eyeCatcher.answers = new ButtonModel[]{ eyeCatcherButton };
 
-        PromptSceneModel challengePrompt = new PromptSceneModel();
-        challengePrompt.id = "introscene1";
-        challengePrompt.title = "What Challenge Do you Want to Take On?";
-        challengePrompt.prompt = "Everyone asks what you want to be when you grow up.\n"
+        // Title scene
+        PromptSceneModel titleScene = new PromptSceneModel();
+        scenes.push(titleScene);
+        titleScene.id = "titleScene";
+        titleScene.name = "Title Scene";
+        titleScene.title = "What Challenge Do you Want to Take On?";
+        titleScene.prompt = "Everyone asks what you want to be when you grow up.\n"
                 + "We're asking what challenges you want to take on.\n"
                 + "What big problem do you want to help solve?";
-        challengePrompt.actionPhrase = "Ready?";
-        ButtonModel challengeYesButton = new ButtonModel();
-        challengeYesButton.text = "Yes!";
-        challengeYesButton.target = "introscene2";
-        challengePrompt.answers = new ButtonModel[] { challengeYesButton };
+        titleScene.actionPhrase = "Ready?";
+        ButtonModel titleSceneButton = new ButtonModel();
+        titleSceneButton.text = "Yes!";
+        titleSceneButton.target = "categoryScene";
+        titleScene.answers = new ButtonModel[] { titleSceneButton };
 
-        PromptSceneModel agePrompt = new PromptSceneModel();
-        agePrompt.id = "introscene2";
-        agePrompt.title = "Awesome!";
-        agePrompt.prompt = "Are you in Grade School, Middle School, or\n"
-                + "High School? Or are you an adult?\n ";
-        ButtonModel gradeSchoolButton = new ButtonModel();
-        gradeSchoolButton.text = "Grade\nSchool";
-        gradeSchoolButton.target = "introscene3";
-        gradeSchoolButton.isCircle = true;
-        gradeSchoolButton.rgb = new int[] { 248, 153, 29 };
-        ButtonModel middleSchoolButton = new ButtonModel();
-        middleSchoolButton.text = "Middle\nSchool";
-        middleSchoolButton.target = "introscene3";
-        middleSchoolButton.isCircle = true;
-        middleSchoolButton.rgb = new int[] { 244, 117, 33 };
-        ButtonModel adultButton = new ButtonModel();
-        adultButton.text = "Adult";
-        adultButton.target = "introscene3";
-        adultButton.isCircle = true;
-        adultButton.rgb = new int[] { 244, 80, 50 };
-        agePrompt.answers = new ButtonModel[] {
-            gradeSchoolButton,
-            middleSchoolButton,
-            adultButton
-        };
-
-        PromptSceneModel pathPrompt = new PromptSceneModel();
-        pathPrompt.id = "introscene3";
-        pathPrompt.title = "Wonderful!";
-        pathPrompt.prompt = "How will you build the future?\n"
+        // Category scene
+        PromptSceneModel categoryScene = new PromptSceneModel();
+        scenes.push(categoryScene);
+        categoryScene.id = "categoryScene";
+        categoryScene.name = "Category Scene";
+        categoryScene.title = "Wonderful!";
+        categoryScene.prompt = "How will you build the future?\n"
                 + "What challenges do you want to take on?";
-        pathPrompt.actionPhrase = "Choose one of the Icons. Explore different paths.\n"
+        categoryScene.actionPhrase = "Choose one of the Icons. Explore different paths.\n"
                 + "You can always go back and begin again";
         ButtonModel humanButton = new ButtonModel();
         humanButton.text = "";
-        humanButton.target = "pathway";
+        humanButton.target = "fieldPickerHuman";
         humanButton.isCircle = true;
         humanButton.rgb = new int[] { 152, 33, 107 };
         humanButton.image = new ImageModel("assets/Human.png", 80, 80);
         ButtonModel natureButton = new ButtonModel();
         natureButton.text = "";
-        natureButton.target = "pathway";
+        natureButton.target = "fieldPickerNature";
         natureButton.isCircle = true;
         natureButton.rgb = new int[] { 51, 108, 103 };
         natureButton.image = new ImageModel("assets/Nature.png", 80, 80);
         ButtonModel smartMachinesButton = new ButtonModel();
         smartMachinesButton.text = "";
-        smartMachinesButton.target = "pathway";
+        smartMachinesButton.target = "fieldPickerSmartMachine";
         smartMachinesButton.isCircle = true;
         smartMachinesButton.rgb = new int[] { 219, 98, 38 };
         smartMachinesButton.image = new ImageModel("assets/SmartMachines.png", 80, 80);
         ButtonModel spaceButton = new ButtonModel();
         spaceButton.text = "";
-        spaceButton.target = "pathway";
+        spaceButton.target = "fieldPickerSpace";
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
         spaceButton.image = new ImageModel("assets/Space.png", 80, 80);
-        pathPrompt.answers = new ButtonModel[] {
+        categoryScene.answers = new ButtonModel[] {
             humanButton,
             natureButton,
             smartMachinesButton,
             spaceButton
         };
 
-        ArrayList<SceneModel> initialScenes = new ArrayList<SceneModel>();
-        initialScenes.add(titleScreen);
-        PathwaySceneModel pathway = new PathwaySceneModel();
-        FilterGroupModel[] filters =
-                fieldFilters.values().toArray(new FilterGroupModel[0]);
-        pathway.buttonModels = new ButtonModel[filters.length];
-        for (int i = 0; i < filters.length; i++) {
-            String fieldName = filters[i].name;
+        // Field picker for each category
+        scenes.push(createFieldPicker(careers, Category.Human));
+        scenes.push(createFieldPicker(careers, Category.Nature));
+        scenes.push(createFieldPicker(careers, Category.SmartMachine));
+        scenes.push(createFieldPicker(careers, Category.Space));
 
-            ButtonModel buttonModel = new ButtonModel();
-            buttonModel.isCircle = true;
-            buttonModel.text = fieldName;
-            buttonModel.target = "spoke" + fieldName;
-            pathway.buttonModels[i] = buttonModel;
+        // Construct a 6 question survey. One question for each category of RIASEC
+        final int questionCount = 6;
+        for (String field : filters.keySet()) {
+            for (int i = 0; i < questionCount; i++) {
+                SpokeGraphPromptSceneModel scene = SpokeGraphPromptSceneModel.create();
+                scene.id = "fieldPrompt" + i + field;
+                scene.filter = filters.get(field);
+                scene.name = field + " Prompt " + i;
+                scene.headerTitle = "Let's talk about " + field + "!";
+                scene.headerBody = "Select the answer that best applies to you";
+                scene.careerCenterText = field;
+                scene.promptText = "Select one";
 
-            SpokeGraphPromptSceneModel spoke = SpokeGraphPromptSceneModel.create();
-            spoke.id = "spoke" + fieldName;
-            spoke.headerTitle = "Oh, so you are interested in " + fieldName + " ?";
-            spoke.headerBody = "Answer some questions";
-            spoke.promptText = "What's your favorite subject?";
-            spoke.filter = filters[i];
+                // Alternate between the categories buttons provided
+                if (i % 2 == 0) {
+                    scene.answers = new ButtonModel[] {
+                        new ButtonModel("Artistic",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Artistic),
+                        new ButtonModel("Realistic",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Realistic),
+                        new ButtonModel("Conventional",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Conventional)
+                    };
+                } else {
+                    scene.answers = new ButtonModel[] {
+                        new ButtonModel("Enterprising",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Enterprising),
+                        new ButtonModel("Social",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Social),
+                        new ButtonModel("Investigative",
+                                "fieldPrompt" + (i + 1) + field, Riasec.Investigative)
+                    };
+                }
 
-            ButtonModel answer1 = new ButtonModel();
-            answer1.text = "I like math";
-            answer1.target = "careerPathway" + fieldName;
-            ButtonModel answer2 = new ButtonModel();
-            answer2.text = "I like math";
-            answer2.target = "careerPathway" + fieldName;
-            ButtonModel answer3 = new ButtonModel();
-            answer3.text = "I like math";
-            answer3.target = "careerPathway" + fieldName;
-            spoke.answers = new ButtonModel[] { answer1, answer2, answer3 };
+                scenes.push(scene);
+            }
 
-            CareerPathwaySceneModel careerPathway = CareerPathwaySceneModel.create();
-            careerPathway.id = "careerPathway" + fieldName;
-            careerPathway.filter = filters[i];
-            careerPathway.centerText = fieldName;
-            careerPathway.headerTitle = "These are your potential careers!";
-            careerPathway.headerBody = "Click each for more information";
-
-            initialScenes.add(spoke);
-            initialScenes.add(careerPathway);
+            CareerPathwaySceneModel resultScene = CareerPathwaySceneModel.create();
+            resultScene.id = "fieldPrompt" + questionCount + field;
+            resultScene.filter = filters.get(field);
+            resultScene.name = field + " Result";
+            resultScene.headerTitle = "These are the career results";
+            resultScene.headerBody = "Click each one to find more information";
+            scenes.push(resultScene);
         }
-        pathway.centerText = "Pick 1!";
-        pathway.headerBody = "There are many options";
-        pathway.headerTitle = "Choose one please";
-        pathway.id = "pathway";
 
-        initialScenes.add(challengePrompt);
-        initialScenes.add(agePrompt);
-        initialScenes.add(pathPrompt);
-        initialScenes.add(pathway);
-
-        LoadedSurveyModel survey = new LoadedSurveyModel(titleScreen.id, initialScenes);
-
+        LoadedSurveyModel survey = LoadedSurveyModel.create();
+        survey.rootSceneId = eyeCatcher.id;
+        survey.scenes = scenes.toArray(new SceneModel[0]);
         survey.careers = careers.toArray(new CareerModel[0]);
-        survey.filters = filters;
+        survey.filters = filters.values().toArray(new FilterGroupModel[0]);
 
         return survey;
+    }
+
+    private static SceneModel createFieldPicker(List<CareerModel> careers, Category category) {
+        final int maxFields = 8;
+
+        List<CareerModel> categoryCareers = careers
+                .stream()
+                .filter(career -> Category.valueOf(
+                        career.category.replace(" ", "")).equals(category))
+                .collect(Collectors.toList());
+
+        HashSet<String> uniqueFields = new HashSet<>();
+        for (CareerModel career : categoryCareers) {
+            uniqueFields.add(career.field);
+        }
+
+        PathwaySceneModel scene = new PathwaySceneModel();
+
+        scene.id = "fieldPicker" + category.name();
+        scene.name = "Field Picker " + category.name();
+
+        String[] fieldsArray = uniqueFields.toArray(new String[0]);
+        int fieldCount = Math.min(uniqueFields.size(), maxFields);
+        scene.buttonModels = new ButtonModel[fieldCount];
+        for (int i = 0; i < fieldCount; i++) {
+            ButtonModel button = new ButtonModel();
+            button.isCircle = true;
+            button.text = fieldsArray[i];
+            button.target = "fieldPrompt0" + fieldsArray[i];
+            scene.buttonModels[i] = button;
+        }
+        scene.centerText = "Pick one!";
+        scene.headerTitle = "Choose a field you are interested in!";
+        scene.headerBody = "You can always go back and change your answer.";
+
+        return scene;
+    }
+
+    private enum Category {
+        Human,
+        Nature,
+        SmartMachine,
+        Space
     }
 }
