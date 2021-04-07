@@ -516,8 +516,8 @@ public class Controller implements Initializable {
      */
     @FXML
     public void editSurveySettings() throws IOException {
-        File surveySettingsFile = new File("src/main/java/editor/SurveySettings.fxml");
-        FXMLLoader loader = new FXMLLoader(surveySettingsFile.toURI().toURL());
+        File editorFxml = new File("src/main/java/editor/SurveySettings.fxml");
+        FXMLLoader loader = new FXMLLoader(editorFxml.toURI().toURL());
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Stage popupWindow = new Stage();

@@ -14,6 +14,7 @@ public class Settings {
     public static final String DEFAULT_SAVE_PATH = "settings.xml";
 
     public int timeoutMillis;
+    public int gracePeriodMillis;
     public int sceneAnimationFrames;
     public int buttonAnimationFrames;
     public int buttonAnimationLengthFrames;
@@ -30,6 +31,7 @@ public class Settings {
      * to be written out in the xml file.
      */
     public Settings() {
+        gracePeriodMillis = 15000;
         timeoutMillis = 60000;
         sceneAnimationFrames = 0;
         buttonAnimationFrames = 80;

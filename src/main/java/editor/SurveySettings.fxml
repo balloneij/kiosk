@@ -54,8 +54,22 @@
                         </padding>
                     </Label>
                 </HBox>
-                <Label text="Scene Animation Length: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label text="Time Out Grace Period: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
                 <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    <padding> <Insets left="15" /> </padding>
+                    <Spinner fx:id="timeOutGraceSpinner">
+                        <valueFactory>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="600"/>
+                        </valueFactory>
+                    </Spinner>
+                    <Label text="seconds">
+                        <padding>
+                            <Insets left="5" right="15" />
+                        </padding>
+                    </Label>
+                </HBox>
+                <Label text="Scene Animation Length: " GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <padding> <Insets left="15" /> </padding>
                     <Spinner fx:id="sceneAnimationSpinner">
                         <valueFactory>
@@ -68,8 +82,8 @@
                         </padding>
                     </Label>
                 </HBox>
-                <Label text="Button Animation Frequency: " GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-                <HBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+                <Label text="Button Animation Frequency: " GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <padding> <Insets left="15" /> </padding>
                     <Spinner fx:id="buttonAnimationSpinner">
                         <valueFactory>
@@ -82,8 +96,8 @@
                         </padding>
                     </Label>
                 </HBox>
-                <Label text="Button Animation Duration: " GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-                <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+                <Label text="Button Animation Duration: " GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <padding> <Insets left="15" /> </padding>
                     <Spinner fx:id="buttonAnimationLengthSpinner">
                         <valueFactory>
@@ -96,7 +110,7 @@
                         </padding>
                     </Label>
                 </HBox>
-                <HBox GridPane.RowIndex="6">
+                <HBox GridPane.RowIndex="7">
                     <Button fx:id="okButton" text="OK" onAction="#onSubmit">
                     </Button>
                 </HBox>
