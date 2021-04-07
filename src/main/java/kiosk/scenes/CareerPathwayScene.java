@@ -17,8 +17,8 @@ import processing.core.PConstants;
  */
 public class CareerPathwayScene implements Scene {
     // Pull constants from the settings
-    private static int SCREEN_W = Kiosk.getSettings().screenW;
-    private static int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int screenW = Kiosk.getSettings().screenW;
+    private static int screenH = Kiosk.getSettings().screenH;
 
     private final CareerPathwaySceneModel model;
     protected SpokeGraph spokeGraph;
@@ -34,8 +34,8 @@ public class CareerPathwayScene implements Scene {
      */
     public CareerPathwayScene(CareerPathwaySceneModel model) {
         this.model = model;
-        SCREEN_W = Kiosk.getSettings().screenW;
-        SCREEN_H = Kiosk.getSettings().screenH;
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
         this.backButton = ButtonControl.createBackButton();
         this.homeButton = ButtonControl.createHomeButton();
     }
@@ -59,10 +59,10 @@ public class CareerPathwayScene implements Scene {
         }
 
         // Put career buttons into a spoke graph
-        float size = SCREEN_H - GraphicsUtil.HEADER_Y - GraphicsUtil.HEADER_H;
+        float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         this.spokeGraph = new SpokeGraph(size,
-                SCREEN_W / 2f - size / 2,
-                GraphicsUtil.HEADER_Y + GraphicsUtil.HEADER_H,
+                screenW / 2f - size / 2,
+                GraphicsUtil.headerY + GraphicsUtil.headerH,
                 model.centerText,
                 careerButtons,
                 careerWeights);

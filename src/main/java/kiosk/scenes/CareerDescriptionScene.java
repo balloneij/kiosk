@@ -17,30 +17,30 @@ public class CareerDescriptionScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
 
-    private static int SCREEN_W = Kiosk.getSettings().screenW;
-    private static int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int screenW = Kiosk.getSettings().screenW;
+    private static int screenH = Kiosk.getSettings().screenH;
 
     // Button
-    private static int BUTTON_WIDTH = SCREEN_W / 8;
-    private static int BUTTON_HEIGHT = SCREEN_H / 8;
-    private static int BUTTON_PADDING = 20;
+    private static int buttonWidth = screenW / 8;
+    private static int buttonHeight = screenH / 8;
+    private static int buttonPadding = 20;
 
     // White foreground
-    private static int FOREGROUND_WIDTH = SCREEN_W * 2 / 3;
-    private static int FOREGROUND_HEIGHT = SCREEN_H * 3 / 4;
-    private static int FOREGROUND_X_PADDING
-            = SCREEN_W / 6 + FOREGROUND_WIDTH / 2;
-    private static int FOREGROUND_Y_PADDING
-            = SCREEN_H / 8 + FOREGROUND_HEIGHT / 2;
-    private static int FOREGROUND_CURVE_RADIUS = 100;
+    private static int foregroundWidth = screenW * 2 / 3;
+    private static int foregroundHeight = screenH * 3 / 4;
+    private static int foregroundXPadding
+            = screenW / 6 + foregroundWidth / 2;
+    private static int foregroundYPadding
+            = screenH / 8 + foregroundHeight / 2;
+    private static int foregroundCurveRadius = 100;
 
     // Text
-    private static int TITLE_Y = SCREEN_H / 4;
-    private static int INSTRUCTIONS_Y = SCREEN_H * 3 / 8;
-    private static int DESCRIPTION_Y = SCREEN_H * 4 / 8;
-    private static int TITLE_FONT_SIZE = SCREEN_W / 55;
-    private static int INSTRUCTIONS_FONT_SIZE = SCREEN_W / 60;
-    private static int DESCRIPTION_FONT_SIZE = SCREEN_W / 58;
+    private static int titleY = screenH / 4;
+    private static int instructionsY = screenH * 3 / 8;
+    private static int descriptionY = screenH * 4 / 8;
+    private static int titleFontSize = screenW / 55;
+    private static int instructionsFontSize = screenW / 60;
+    private static int descriptionFontSize = screenW / 58;
 
     /**
      * Career Description Scene shows a title, body of text, and a button at the bottom.
@@ -48,30 +48,30 @@ public class CareerDescriptionScene implements Scene {
      */
     public CareerDescriptionScene(CareerDescriptionModel model) {
         this.model = model;
-        SCREEN_W = Kiosk.getSettings().screenW;
-        SCREEN_H = Kiosk.getSettings().screenH;
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
 
         // Button
-        BUTTON_WIDTH = SCREEN_W / 8;
-        BUTTON_HEIGHT = SCREEN_H / 8;
-        BUTTON_PADDING = 20;
+        buttonWidth = screenW / 8;
+        buttonHeight = screenH / 8;
+        buttonPadding = 20;
 
         // White foreground
-        FOREGROUND_WIDTH = SCREEN_W * 2 / 3;
-        FOREGROUND_HEIGHT = SCREEN_H * 3 / 4;
-        FOREGROUND_X_PADDING
-                = SCREEN_W / 6 + FOREGROUND_WIDTH / 2;
-        FOREGROUND_Y_PADDING
-                = SCREEN_H / 8 + FOREGROUND_HEIGHT / 2;
-        FOREGROUND_CURVE_RADIUS = 100;
+        foregroundWidth = screenW * 2 / 3;
+        foregroundHeight = screenH * 3 / 4;
+        foregroundXPadding
+                = screenW / 6 + foregroundWidth / 2;
+        foregroundYPadding
+                = screenH / 8 + foregroundHeight / 2;
+        foregroundCurveRadius = 100;
 
         // Text
-        TITLE_Y = SCREEN_H / 4;
-        INSTRUCTIONS_Y = SCREEN_H * 3 / 8;
-        DESCRIPTION_Y = SCREEN_H * 4 / 8;
-        TITLE_FONT_SIZE = SCREEN_W / 55;
-        INSTRUCTIONS_FONT_SIZE = SCREEN_W / 60;
-        DESCRIPTION_FONT_SIZE = SCREEN_W / 58;
+        titleY = screenH / 4;
+        instructionsY = screenH * 3 / 8;
+        descriptionY = screenH * 4 / 8;
+        titleFontSize = screenW / 55;
+        instructionsFontSize = screenW / 60;
+        descriptionFontSize = screenW / 58;
     }
 
     @Override
@@ -85,16 +85,16 @@ public class CareerDescriptionScene implements Scene {
         sketch.hookControl(this.backButton);
 
         if (this.model.button.image != null) {
-            this.model.button.image.width = BUTTON_WIDTH;
-            this.model.button.image.height = BUTTON_HEIGHT;
+            this.model.button.image.width = buttonWidth;
+            this.model.button.image.height = buttonHeight;
         }
 
         this.centerButton = new ButtonControl(
             this.model.button,
-            (sketchWidth / 2) - (BUTTON_WIDTH / 2),
+            (sketchWidth / 2) - (buttonWidth / 2),
             sketchHeight * 2 / 3,
-                BUTTON_WIDTH,
-                BUTTON_HEIGHT
+                buttonWidth,
+                buttonHeight
         );
         this.centerButton.init(sketch);
         sketch.hookControl(this.centerButton);
@@ -125,9 +125,9 @@ public class CareerDescriptionScene implements Scene {
         // Draw the white foreground box
         sketch.fill(255);
         Graphics.drawRoundedRectangle(sketch,
-            FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
-            FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
-            FOREGROUND_CURVE_RADIUS);
+                foregroundXPadding, foregroundYPadding,
+                foregroundWidth, foregroundHeight,
+                foregroundCurveRadius);
 
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -135,29 +135,29 @@ public class CareerDescriptionScene implements Scene {
 
 
         // Career Name
-        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
+        Graphics.useGothic(sketch, titleFontSize, true);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(33);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.careerModel.name, centerX, (int) (TITLE_Y * 1.15),
-                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
+        sketch.text(this.model.careerModel.name, centerX, (int) (titleY * 1.15),
+                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
 
         // What to do next
-        Graphics.useGothic(sketch, INSTRUCTIONS_FONT_SIZE, false);
+        Graphics.useGothic(sketch, instructionsFontSize, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(25);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.body, centerX, (int) (INSTRUCTIONS_Y * 1.15),
-                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
+        sketch.text(this.model.body, centerX, (int) (instructionsY * 1.15),
+                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
         // Career Description
-        Graphics.useGothic(sketch, DESCRIPTION_FONT_SIZE, false);
+        Graphics.useGothic(sketch, descriptionFontSize, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(25);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.careerModel.description, centerX, (int) (DESCRIPTION_Y * 1.15),
-                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
+        sketch.text(this.model.careerModel.description, centerX, (int) (descriptionY * 1.15),
+                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
 
 

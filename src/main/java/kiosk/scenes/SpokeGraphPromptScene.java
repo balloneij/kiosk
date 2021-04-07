@@ -5,7 +5,6 @@ import graphics.GraphicsUtil;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
-import kiosk.Settings;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
@@ -16,30 +15,30 @@ import processing.core.PConstants;
 public class SpokeGraphPromptScene implements Scene {
 
     // Pull constants from the settings
-    private static int SCREEN_W = Kiosk.getSettings().screenW;
-    private static int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int screenW = Kiosk.getSettings().screenW;
+    private static int screenH = Kiosk.getSettings().screenH;
 
     // Header
-    private static float HEADER_W = SCREEN_W * 3f / 4;
-    private static float HEADER_H = SCREEN_H / 6f;
-    private static float HEADER_X = (SCREEN_W - HEADER_W) / 2;
-    private static float HEADER_Y = SCREEN_H / 32f;
-    private static float HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
-    private static float HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
-    private static int HEADER_CURVE_RADIUS = 25;
+    private static float headerW = screenW * 3f / 4;
+    private static float headerH = screenH / 6f;
+    private static float headerX = (screenW - headerW) / 2;
+    private static float headerY = screenH / 32f;
+    private static float headerCenterX = headerX + (headerW / 2);
+    private static float headerCenterY = headerY + (headerH / 2);
+    private static int headerCurveRadius = 25;
 
     // Header title
-    private static int HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
-    private static float HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
+    private static int headerTitleFontSize = screenW / 55;
+    private static float headerTitleY = headerCenterY - headerTitleFontSize;
 
     // Header body
-    private static int HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
-    private static float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
+    private static int headerBodyFontSize = screenW / 60;
+    private static float headerBodyY = headerCenterY + headerBodyFontSize;
 
     // Answers
-    private static int ANSWERS_PADDING = SCREEN_W / 58;
-    private static float ANSWERS_SPOKE_THICKNESS = 2;
-    private static int ANSWERS_MAX = 4;
+    private static int answersPadding = screenW / 58;
+    private static float answersSpokeThickness = 2;
+    private static int answersMax = 4;
 
     private final SpokeGraphPromptSceneModel model;
     private ButtonControl[] answerButtons;
@@ -59,43 +58,43 @@ public class SpokeGraphPromptScene implements Scene {
         this.model = model;
 
         // Pull constants from the settings
-        SCREEN_W = Kiosk.getSettings().screenW;
-        SCREEN_H = Kiosk.getSettings().screenH;
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
 
         // Header
-        HEADER_W = SCREEN_W * 3f / 4;
-        HEADER_H = SCREEN_H / 6f;
-        HEADER_X = (SCREEN_W - HEADER_W) / 2;
-        HEADER_Y = SCREEN_H / 32f;
-        HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
-        HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
-        HEADER_CURVE_RADIUS = 25;
+        headerW = screenW * 3f / 4;
+        headerH = screenH / 6f;
+        headerX = (screenW - headerW) / 2;
+        headerY = screenH / 32f;
+        headerCenterX = headerX + (headerW / 2);
+        headerCenterY = headerY + (headerH / 2);
+        headerCurveRadius = 25;
 
         // Header title
-        HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
-        HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
+        headerTitleFontSize = screenW / 55;
+        headerTitleY = headerCenterY - headerTitleFontSize;
 
         // Header body
-        HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
-        HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
+        headerBodyFontSize = screenW / 60;
+        headerBodyY = headerCenterY + headerBodyFontSize;
 
         // Answers
-        ANSWERS_PADDING = SCREEN_W / 58;
-        ANSWERS_SPOKE_THICKNESS = 2;
-        ANSWERS_MAX = 4;
+        answersPadding = screenW / 58;
+        answersSpokeThickness = 2;
+        answersMax = 4;
 
         this.answerButtons = new ButtonControl[this.model.answers.length];
 
-        int headerBottomY = (int) (HEADER_Y + HEADER_H) + 40;
-        int answerDiameter = (SCREEN_H - headerBottomY) / 3;
+        int headerBottomY = (int) (headerY + headerH) + 40;
+        int answerDiameter = (screenH - headerBottomY) / 3;
         int answerRadius = answerDiameter / 2;
-        int halfHeight = (SCREEN_H - headerBottomY) / 2;
+        int halfHeight = (screenH - headerBottomY) / 2;
 
-        int answersCenterX = SCREEN_W * 3 / 4;
+        int answersCenterX = screenW * 3 / 4;
         int answersCenterY = headerBottomY + halfHeight - 20;
 
         int answersCount = this.model.answers.length;
-        this.answerButtons = new ButtonControl[Math.min(answersCount, ANSWERS_MAX)];
+        this.answerButtons = new ButtonControl[Math.min(answersCount, answersMax)];
 
         if (answersCount > 0) {
             this.answerButtons[0] = new ButtonControl(
@@ -150,8 +149,8 @@ public class SpokeGraphPromptScene implements Scene {
     public void init(Kiosk sketch) {
 
         // Define the size of the square that the spoke graph will fit in
-        final double availableHeight = (SCREEN_H - HEADER_Y - HEADER_H);
-        final double size = Math.min(SCREEN_W, availableHeight);
+        final double availableHeight = (screenH - headerY - headerH);
+        final double size = Math.min(screenW, availableHeight);
 
         // Reference to current list of careers
         CareerModel[] careers = model.filter.filter(sketch.getAllCareers());
@@ -169,7 +168,7 @@ public class SpokeGraphPromptScene implements Scene {
         }
 
         // Create spoke graph
-        this.spokeGraph = new SpokeGraph(size, 0, HEADER_Y + HEADER_H,
+        this.spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
                 this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
 
@@ -216,8 +215,8 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.fill(255);
         sketch.stroke(255);
         Graphics.drawRoundedRectangle(sketch,
-                HEADER_X + HEADER_W / 2, HEADER_Y + HEADER_H / 2,
-                HEADER_W, HEADER_H, HEADER_CURVE_RADIUS);
+                headerX + headerW / 2, headerY + headerH / 2,
+                headerW, headerH, headerCurveRadius);
 
         Graphics.useSansSerifBold(sketch, 48);
 
@@ -226,25 +225,25 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(0);
         sketch.stroke(0);
-        Graphics.useSansSerifBold(sketch, HEADER_TITLE_FONT_SIZE);
+        Graphics.useSansSerifBold(sketch, headerTitleFontSize);
         sketch.text(this.model.headerTitle,
-                HEADER_CENTER_X, HEADER_TITLE_Y,
-                HEADER_W, HEADER_TITLE_FONT_SIZE * 2);
+                headerCenterX, headerTitleY,
+                headerW, headerTitleFontSize * 2);
 
         // Draw the body text
-        Graphics.useSansSerif(sketch, HEADER_BODY_FONT_SIZE);
+        Graphics.useSansSerif(sketch, headerBodyFontSize);
         sketch.text(this.model.headerBody,
-                HEADER_CENTER_X, HEADER_BODY_Y,
-                HEADER_W, HEADER_BODY_FONT_SIZE * 2);
+                headerCenterX, headerBodyY,
+                headerW, headerBodyFontSize * 2);
 
         // Calculate answer location constants
-        float headerBottomY = HEADER_Y + HEADER_H + 2 * ANSWERS_PADDING;
-        int answersCenterX = SCREEN_W * 3 / 4;
-        float answersCenterY = headerBottomY + (SCREEN_H - headerBottomY) / 2 - ANSWERS_PADDING;
+        float headerBottomY = headerY + headerH + 2 * answersPadding;
+        int answersCenterX = screenW * 3 / 4;
+        float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
 
         // Draw answer buttons
         for (ButtonControl answer : answerButtons) {
-            sketch.strokeWeight(ANSWERS_SPOKE_THICKNESS);
+            sketch.strokeWeight(answersSpokeThickness);
             sketch.stroke(255);
             sketch.line(answersCenterX, answersCenterY,
                     answer.getCenterX(), answer.getCenterY());

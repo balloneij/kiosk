@@ -18,27 +18,27 @@ public class DetailsScene implements Scene {
     private ButtonControl supplementaryButton;
 
     // Buttons
-    private static int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
-    private static int BUTTON_PADDING = 20;
+    private static int buttonWidth = Kiosk.getSettings().screenW / 8;
+    private static int buttonHeight = Kiosk.getSettings().screenH / 6;
+    private static int buttonPadding = 20;
 
     // White foreground
-    private static int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
-    private static int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-    private static int FOREGROUND_CURVE_RADIUS = 100;
+    private static int foregroundWidth = Kiosk.getSettings().screenW * 2 / 3;
+    private static int foregroundHeight = Kiosk.getSettings().screenH * 3 / 4;
+    private static int foregroundXPadding = Kiosk.getSettings().screenW / 6;
+    private static int foregroundYPadding = Kiosk.getSettings().screenH / 8;
+    private static int foregroundCurveRadius = 100;
 
     // Text
-    private static int TITLE_Y = Kiosk.getSettings().screenH / 4;
-    private static int BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
-    private static int TITLE_FONT_SIZE = 24;
-    private static int BODY_FONT_SIZE = 16;
+    private static int titleY = Kiosk.getSettings().screenH / 4;
+    private static int bodyY = Kiosk.getSettings().screenH * 3 / 8;
+    private static int titleFontSize = 24;
+    private static int bodyFontSize = 16;
 
     // Button Image Props
-    private static int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
-    private static int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
-    private static int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+    private static int buttonRadius = Kiosk.getSettings().screenW / 8;
+    private static int buttonImageWidth = buttonRadius * 4 / 5;
+    private static int buttonImageHeight = buttonRadius * 4 / 5;
 
     /**
      * Detials Scene show a title, body of text, and a button at the bottom.
@@ -47,27 +47,27 @@ public class DetailsScene implements Scene {
     public DetailsScene(DetailsSceneModel model) {
         this.model = model;
         // Buttons
-        BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-        BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
-        BUTTON_PADDING = 20;
+        buttonWidth = Kiosk.getSettings().screenW / 8;
+        buttonHeight = Kiosk.getSettings().screenH / 6;
+        buttonPadding = 20;
 
         // White foreground
-        FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-        FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-        FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
-        FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-        FOREGROUND_CURVE_RADIUS = 100;
+        foregroundWidth = Kiosk.getSettings().screenW * 2 / 3;
+        foregroundHeight = Kiosk.getSettings().screenH * 3 / 4;
+        foregroundXPadding = Kiosk.getSettings().screenW / 6;
+        foregroundYPadding = Kiosk.getSettings().screenH / 8;
+        foregroundCurveRadius = 100;
 
         // Text
-        TITLE_Y = Kiosk.getSettings().screenH / 4;
-        BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
-        TITLE_FONT_SIZE = 24;
-        BODY_FONT_SIZE = 16;
+        titleY = Kiosk.getSettings().screenH / 4;
+        bodyY = Kiosk.getSettings().screenH * 3 / 8;
+        titleFontSize = 24;
+        bodyFontSize = 16;
 
         // Button Image Props
-        BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
-        BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
-        BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+        buttonRadius = Kiosk.getSettings().screenW / 8;
+        buttonImageWidth = buttonRadius * 4 / 5;
+        buttonImageHeight = buttonRadius * 4 / 5;
     }
 
     @Override
@@ -87,17 +87,17 @@ public class DetailsScene implements Scene {
         }
 
         if (this.model.button.image != null) {
-            this.model.button.image.width = BUTTON_IMAGE_WIDTH;
-            this.model.button.image.height = BUTTON_IMAGE_HEIGHT;
+            this.model.button.image.width = buttonImageWidth;
+            this.model.button.image.height = buttonImageHeight;
         }
 
         this.centerButton = new ButtonControl(
             this.model.button,
-            (sketchWidth / 2) - (BUTTON_WIDTH * 5 / 8),
-            FOREGROUND_Y_PADDING + FOREGROUND_HEIGHT
-                - (BUTTON_WIDTH * 5 / 4 + BUTTON_PADDING),
-                BUTTON_WIDTH * 5 / 4,
-                BUTTON_WIDTH * 5 / 4
+            (sketchWidth / 2) - (buttonWidth * 5 / 8),
+            foregroundYPadding + foregroundHeight
+                - (buttonWidth * 5 / 4 + buttonPadding),
+                buttonWidth * 5 / 4,
+                buttonWidth * 5 / 4
         );
         this.centerButton.init(sketch);
         sketch.hookControl(this.centerButton);
@@ -130,10 +130,10 @@ public class DetailsScene implements Scene {
         // Draw the white foreground box
         sketch.fill(255);
         Graphics.drawRoundedRectangle(sketch,
-            FOREGROUND_X_PADDING + FOREGROUND_WIDTH / 2.f,
-                FOREGROUND_Y_PADDING + FOREGROUND_HEIGHT / 2.f,
-            FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
-            FOREGROUND_CURVE_RADIUS);
+            foregroundXPadding + foregroundWidth / 2.f,
+                foregroundYPadding + foregroundHeight / 2.f,
+                foregroundWidth, foregroundHeight,
+                foregroundCurveRadius);
 
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -141,20 +141,20 @@ public class DetailsScene implements Scene {
 
 
         // Title
-        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
+        Graphics.useGothic(sketch, titleFontSize, true);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(33);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.title, centerX, (int) (TITLE_Y * 1.15),
-                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
+        sketch.text(this.model.title, centerX, (int) (titleY * 1.15),
+                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
         // Body
-        Graphics.useGothic(sketch, BODY_FONT_SIZE, false);
+        Graphics.useGothic(sketch, bodyFontSize, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.textLeading(25);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.body, centerX, (int) (BODY_Y * 1.15),
-                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 5);
+        sketch.text(this.model.body, centerX, (int) (bodyY * 1.15),
+                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
 
         this.centerButton.draw(sketch);
