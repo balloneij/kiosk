@@ -31,6 +31,7 @@ import processing.event.MouseEvent;
 public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
+    private String surveyPath;
     private CareerModel[] careers;
     private final FilterGroupModel[] filters;
     private Scene lastScene;
@@ -42,6 +43,7 @@ public class Kiosk extends PApplet {
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
     private boolean shouldTimeout = true;
+    private boolean isFullScreen = true;
 
     private static JFileChooser fileChooser;
 
@@ -51,6 +53,15 @@ public class Kiosk extends PApplet {
      */
     public Kiosk(String surveyPath) {
         this(surveyPath, Settings.readSettings());
+    }
+
+    /**
+     * Create a kiosk and loads the survey specified in the path provided.
+     * @param surveyPath to load from
+     * @param fullScreenDesired if this kiosk should be in fullscreen
+     */
+    public Kiosk(String surveyPath, boolean fullScreenDesired) {
+        this(surveyPath, Settings.readSettings(fullScreenDesired));
     }
 
     /**
@@ -87,6 +98,7 @@ public class Kiosk extends PApplet {
         Kiosk.settings = settings;
 
         LoadedSurveyModel survey;
+        this.surveyPath = surveyPath;
         if (!surveyPath.isEmpty()) {
             survey = LoadedSurveyModel.readFromFile(new File(surveyPath));
         } else {
@@ -143,7 +155,10 @@ public class Kiosk extends PApplet {
     @Override
     public void settings() {
         if (settings.fullScreenDesired) {
+            isFullScreen = true;
             fullScreen();
+        } else {
+            isFullScreen = false;
         }
         size(settings.screenW, settings.screenH);
     }
@@ -283,8 +298,12 @@ public class Kiosk extends PApplet {
                 this.sceneGraph.reset();
             } else if (event.getKeyCode() == 122) {
                 // F11 Key Press
-                System.out.println("F11 KEYPRESS");
-                settings.toggleFullScreen();
+                Settings s = new Settings(!isFullScreen);
+                Kiosk kioskNew = new Kiosk(this.surveyPath, s);
+                kioskNew.run();
+                this.noLoop();
+                this.getSurface().setVisible(false);
+
             }
         }
 

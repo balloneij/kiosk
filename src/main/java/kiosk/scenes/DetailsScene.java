@@ -18,27 +18,27 @@ public class DetailsScene implements Scene {
     private ButtonControl supplementaryButton;
 
     // Buttons
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
-    private static final int BUTTON_PADDING = 20;
+    private static int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+    private static int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+    private static int BUTTON_PADDING = 20;
 
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
-    private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-    private static final int FOREGROUND_CURVE_RADIUS = 100;
+    private static int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
+    private static int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
+    private static int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
+    private static int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
+    private static int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
-    private static final int BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
-    private static final int TITLE_FONT_SIZE = 24;
-    private static final int BODY_FONT_SIZE = 16;
+    private static int TITLE_Y = Kiosk.getSettings().screenH / 4;
+    private static int BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
+    private static int TITLE_FONT_SIZE = 24;
+    private static int BODY_FONT_SIZE = 16;
 
     // Button Image Props
-    private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+    private static int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
+    private static int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
+    private static int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
 
     /**
      * Detials Scene show a title, body of text, and a button at the bottom.
@@ -46,6 +46,28 @@ public class DetailsScene implements Scene {
      */
     public DetailsScene(DetailsSceneModel model) {
         this.model = model;
+        // Buttons
+        BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+        BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+        BUTTON_PADDING = 20;
+
+        // White foreground
+        FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
+        FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
+        FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
+        FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
+        FOREGROUND_CURVE_RADIUS = 100;
+
+        // Text
+        TITLE_Y = Kiosk.getSettings().screenH / 4;
+        BODY_Y = Kiosk.getSettings().screenH * 3 / 8;
+        TITLE_FONT_SIZE = 24;
+        BODY_FONT_SIZE = 16;
+
+        // Button Image Props
+        BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
+        BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
+        BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
     }
 
     @Override

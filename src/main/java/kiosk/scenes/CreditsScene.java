@@ -9,24 +9,27 @@ import processing.core.PConstants;
 
 public class CreditsScene implements Scene {
 
+    private static int SCREEN_W =  Kiosk.getSettings().screenW;
+    private static int SCREEN_H = Kiosk.getSettings().screenH;
+
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static final int FOREGROUND_X_PADDING
+    private static int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
+    private static int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
+    private static int FOREGROUND_X_PADDING
             = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
-    private static final int FOREGROUND_Y_PADDING
+    private static int FOREGROUND_Y_PADDING
             = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
-    private static final int FOREGROUND_CURVE_RADIUS = 100;
+    private static int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
-    private static final int TITLE_FONT_SIZE = 30;
-    private static final int CREATOR_X = Kiosk.getSettings().screenW / 3;
-    private static final int CREATOR_Y = Kiosk.getSettings().screenH * 4 / 9;
-    private static final int PROMPT_FONT_SIZE = 16;
-    private static final int SUPPORTER_X = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int SUPPORTER_Y = Kiosk.getSettings().screenH * 4 / 9;
-    private static final int ACTION_FONT_SIZE = 20;
+    private static int TITLE_Y = Kiosk.getSettings().screenH / 4;
+    private static int TITLE_FONT_SIZE = SCREEN_W / 55;
+    private static int CREATOR_X = Kiosk.getSettings().screenW / 3;
+    private static int CREATOR_Y = Kiosk.getSettings().screenH * 4 / 9;
+    private static int PROMPT_FONT_SIZE = SCREEN_W / 60;
+    private static int SUPPORTER_X = Kiosk.getSettings().screenW * 2 / 3;
+    private static int SUPPORTER_Y = Kiosk.getSettings().screenH * 4 / 9;
+    private static int ACTION_FONT_SIZE = SCREEN_W / 58;
 
     //Animations
     private int startFrame = 0;
@@ -34,8 +37,31 @@ public class CreditsScene implements Scene {
     private final CreditsSceneModel model;
     private ButtonControl backButton;
 
+    /**
+     * Default constructor.
+     * @param model the model to make
+     */
     public CreditsScene(CreditsSceneModel model) {
         this.model = model;
+
+        // White foreground
+        FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
+        FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
+        FOREGROUND_X_PADDING
+                = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
+        FOREGROUND_Y_PADDING
+                = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
+        FOREGROUND_CURVE_RADIUS = 100;
+
+        // Text
+        TITLE_Y = Kiosk.getSettings().screenH / 4;
+        TITLE_FONT_SIZE = Kiosk.getSettings().screenW / 55;
+        CREATOR_X = Kiosk.getSettings().screenW / 3;
+        CREATOR_Y = Kiosk.getSettings().screenH * 4 / 9;
+        PROMPT_FONT_SIZE = Kiosk.getSettings().screenW / 60;
+        SUPPORTER_X = Kiosk.getSettings().screenW * 2 / 3;
+        SUPPORTER_Y = Kiosk.getSettings().screenH * 4 / 9;
+        ACTION_FONT_SIZE = Kiosk.getSettings().screenW / 58;
     }
 
     @Override

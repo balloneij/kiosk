@@ -16,30 +16,30 @@ import processing.core.PConstants;
 public class SpokeGraphPromptScene implements Scene {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Kiosk.getSettings().screenW;
-    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int SCREEN_W = Kiosk.getSettings().screenW;
+    private static int SCREEN_H = Kiosk.getSettings().screenH;
 
     // Header
-    private static final float HEADER_W = SCREEN_W * 3f / 4;
-    private static final float HEADER_H = SCREEN_H / 6f;
-    private static final float HEADER_X = (SCREEN_W - HEADER_W) / 2;
-    private static final float HEADER_Y = SCREEN_H / 32f;
-    private static final float HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
-    private static final float HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
-    private static final int HEADER_CURVE_RADIUS = 25;
+    private static float HEADER_W = SCREEN_W * 3f / 4;
+    private static float HEADER_H = SCREEN_H / 6f;
+    private static float HEADER_X = (SCREEN_W - HEADER_W) / 2;
+    private static float HEADER_Y = SCREEN_H / 32f;
+    private static float HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
+    private static float HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
+    private static int HEADER_CURVE_RADIUS = 25;
 
     // Header title
-    private static final int HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
-    private static final float HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
+    private static int HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
+    private static float HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
 
     // Header body
-    private static final int HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
-    private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
+    private static int HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
+    private static float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
     // Answers
-    private static final int ANSWERS_PADDING = SCREEN_W / 58;
-    private static final float ANSWERS_SPOKE_THICKNESS = 2;
-    private static final int ANSWERS_MAX = 4;
+    private static int ANSWERS_PADDING = SCREEN_W / 58;
+    private static float ANSWERS_SPOKE_THICKNESS = 2;
+    private static int ANSWERS_MAX = 4;
 
     private final SpokeGraphPromptSceneModel model;
     private ButtonControl[] answerButtons;
@@ -57,6 +57,33 @@ public class SpokeGraphPromptScene implements Scene {
      */
     public SpokeGraphPromptScene(SpokeGraphPromptSceneModel model) {
         this.model = model;
+
+        // Pull constants from the settings
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        // Header
+        HEADER_W = SCREEN_W * 3f / 4;
+        HEADER_H = SCREEN_H / 6f;
+        HEADER_X = (SCREEN_W - HEADER_W) / 2;
+        HEADER_Y = SCREEN_H / 32f;
+        HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
+        HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
+        HEADER_CURVE_RADIUS = 25;
+
+        // Header title
+        HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
+        HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
+
+        // Header body
+        HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
+        HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
+
+        // Answers
+        ANSWERS_PADDING = SCREEN_W / 58;
+        ANSWERS_SPOKE_THICKNESS = 2;
+        ANSWERS_MAX = 4;
+
         this.answerButtons = new ButtonControl[this.model.answers.length];
 
         int headerBottomY = (int) (HEADER_Y + HEADER_H) + 40;
@@ -121,12 +148,10 @@ public class SpokeGraphPromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        final int width = Settings.readSettings().screenW;
-        final int height = Settings.readSettings().screenH;
 
         // Define the size of the square that the spoke graph will fit in
-        final double availableHeight = (height - HEADER_Y - HEADER_H);
-        final double size = Math.min(width, availableHeight);
+        final double availableHeight = (SCREEN_H - HEADER_Y - HEADER_H);
+        final double size = Math.min(SCREEN_W, availableHeight);
 
         // Reference to current list of careers
         CareerModel[] careers = model.filter.filter(sketch.getAllCareers());

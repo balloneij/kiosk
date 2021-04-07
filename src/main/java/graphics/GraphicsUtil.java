@@ -9,32 +9,32 @@ import processing.core.PConstants;
 public class GraphicsUtil {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Kiosk.getSettings().screenW;
-    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int SCREEN_W = Kiosk.getSettings().screenW;
+    private static int SCREEN_H = Kiosk.getSettings().screenH;
 
     // Header
-    public static final float HEADER_W = SCREEN_W * 3f / 4;
-    public static final float HEADER_H = SCREEN_H / 6f;
-    public static final float HEADER_X = (SCREEN_W - HEADER_W) / 2;
-    public static final float HEADER_Y = SCREEN_H / 32f;
-    private static final float HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
-    private static final float HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
-    private static final int HEADER_CURVE_RADIUS = (int) (HEADER_H);
+    public static float HEADER_W = SCREEN_W * 3f / 4;
+    public static float HEADER_H = SCREEN_H / 6f;
+    public static float HEADER_X = (SCREEN_W - HEADER_W) / 2;
+    public static float HEADER_Y = SCREEN_H / 32f;
+    private static float HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
+    private static float HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
+    private static int HEADER_CURVE_RADIUS = (int) (HEADER_H);
 
     // Header title
-    private static final int HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
-    private static final float HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
+    private static int HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
+    private static float HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
 
     // Header body
-    private static final int HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
-    private static final float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
+    private static int HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
+    private static float HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
 
-    private static final int COMMON_BUTTON_WIDTH = SCREEN_W / 8;
-    private static final int COMMON_BUTTON_HEIGHT = SCREEN_H / 8;
-    private static final int COMMON_BUTTON_PADDING = SCREEN_H / 20;
+    private static int COMMON_BUTTON_WIDTH = SCREEN_W / 8;
+    private static int COMMON_BUTTON_HEIGHT = SCREEN_H / 8;
+    private static int COMMON_BUTTON_PADDING = SCREEN_H / 20;
 
-    public static final float TextRatioEstimate = 1.5f; // 1.7
-    public static final float InnerOuterCircleRatio = 4.f;
+    public static float TextRatioEstimate = 1.5f; // 1.7
+    public static float InnerOuterCircleRatio = 4.f;
 
     /**
      * Initialize the back button's ButtonControl model.
@@ -42,6 +42,14 @@ public class GraphicsUtil {
      * @return back button control
      */
     public static ButtonControl initializeBackButton(Kiosk sketch) {
+
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        COMMON_BUTTON_WIDTH = SCREEN_W / 8;
+        COMMON_BUTTON_HEIGHT = SCREEN_H / 8;
+        COMMON_BUTTON_PADDING = SCREEN_H / 20;
+
         ButtonModel backButtonModel = new ButtonModel();
         // Rob fix your checkstyle
         backButtonModel.text = "← Back";
@@ -57,6 +65,14 @@ public class GraphicsUtil {
      * @return home button control
      */
     public static ButtonControl initializeHomeButton() {
+
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        COMMON_BUTTON_WIDTH = SCREEN_W / 8;
+        COMMON_BUTTON_HEIGHT = SCREEN_H / 8;
+        COMMON_BUTTON_PADDING = SCREEN_H / 20;
+
         ButtonModel homeButtonModel = new ButtonModel();
         homeButtonModel.text = "◄◄ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
@@ -71,6 +87,14 @@ public class GraphicsUtil {
      * @return next button control
      */
     public static ButtonControl initializeNextButton(Kiosk sketch) {
+
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        COMMON_BUTTON_WIDTH = SCREEN_W / 8;
+        COMMON_BUTTON_HEIGHT = SCREEN_H / 8;
+        COMMON_BUTTON_PADDING = SCREEN_H / 20;
+
         ButtonModel nextButtonModel = new ButtonModel();
         nextButtonModel.text = "Go! →";
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
@@ -87,6 +111,14 @@ public class GraphicsUtil {
      * @return MSOE button control
      */
     public static ButtonControl initializeMsoeButton(Kiosk sketch) {
+
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        COMMON_BUTTON_WIDTH = SCREEN_W / 8;
+        COMMON_BUTTON_HEIGHT = SCREEN_H / 8;
+        COMMON_BUTTON_PADDING = SCREEN_H / 20;
+
         ButtonModel msoeButtonModel = new ButtonModel();
         msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
         ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
@@ -104,6 +136,26 @@ public class GraphicsUtil {
      * @param body text
      */
     public static void drawHeader(Kiosk sketch, String title, String body) {
+
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        HEADER_W = SCREEN_W * 3f / 4;
+        HEADER_H = SCREEN_H / 6f;
+        HEADER_X = (SCREEN_W - HEADER_W) / 2;
+        HEADER_Y = SCREEN_H / 32f;
+        HEADER_CENTER_X = HEADER_X + (HEADER_W / 2);
+        HEADER_CENTER_Y = HEADER_Y + (HEADER_H / 2);
+        HEADER_CURVE_RADIUS = (int) (HEADER_H);
+
+        // Header title
+        HEADER_TITLE_FONT_SIZE = SCREEN_W / 55;
+        HEADER_TITLE_Y = HEADER_CENTER_Y - HEADER_TITLE_FONT_SIZE;
+
+        // Header body
+        HEADER_BODY_FONT_SIZE = SCREEN_W / 60;
+        HEADER_BODY_Y = HEADER_CENTER_Y + HEADER_BODY_FONT_SIZE;
+
         // Draw the white header box
         sketch.fill(255);
         sketch.stroke(255);

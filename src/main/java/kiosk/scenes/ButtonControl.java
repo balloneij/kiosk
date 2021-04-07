@@ -15,20 +15,20 @@ import processing.event.MouseEvent;
 
 public class ButtonControl implements Control<MouseEvent> {
 
-    private static final int SCREEN_W = Kiosk.getSettings().screenW;
-    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int SCREEN_W = Kiosk.getSettings().screenW;
+    private static int SCREEN_H = Kiosk.getSettings().screenH;
 
-    private static final int FONT_SIZE = SCREEN_W / 75;
+    private static int FONT_SIZE = SCREEN_W / 75;
     private static boolean FONT_SIZE_OVERWRITTEN = false;
     // Negative will make the color darker on click
-    private static final int COLOR_DELTA_ON_CLICK = -25;
+    private static int COLOR_DELTA_ON_CLICK = -25;
 
     // Constants for home and back button
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+    private static int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+    private static int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
     // Radius of the rounded edge on rectangle buttons
-    private static final int DEFAULT_CORNER_RADIUS = BUTTON_HEIGHT / 5;
-    private static final int BUTTON_PADDING = 20;
+    private static int DEFAULT_CORNER_RADIUS = BUTTON_HEIGHT / 5;
+    private static int BUTTON_PADDING = 20;
 
     private float textSizeMultiplier = 1;
     private final ButtonModel model;
@@ -72,6 +72,21 @@ public class ButtonControl implements Control<MouseEvent> {
         this.disabled = false;
         this.shouldAnimate = doesAnimate;
 
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        FONT_SIZE = SCREEN_W / 75;
+        FONT_SIZE_OVERWRITTEN = false;
+        // Negative will make the color darker on click
+        COLOR_DELTA_ON_CLICK = -25;
+
+        // Constants for home and back button
+        BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+        BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+        // Radius of the rounded edge on rectangle buttons
+        DEFAULT_CORNER_RADIUS = BUTTON_HEIGHT / 5;
+        BUTTON_PADDING = 20;
+
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
@@ -104,6 +119,21 @@ public class ButtonControl implements Control<MouseEvent> {
         this.image = null;
         this.disabled = false;
         shouldAnimate = doesAnimate;
+
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        FONT_SIZE = SCREEN_W / 75;
+        FONT_SIZE_OVERWRITTEN = false;
+        // Negative will make the color darker on click
+        COLOR_DELTA_ON_CLICK = -25;
+
+        // Constants for home and back button
+        BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+        BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
+        // Radius of the rounded edge on rectangle buttons
+        DEFAULT_CORNER_RADIUS = BUTTON_HEIGHT / 5;
+        BUTTON_PADDING = 20;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);

@@ -12,34 +12,34 @@ import processing.core.PConstants;
 
 public class PromptScene implements Scene {
 
-    private static final int SCREEN_W =  Kiosk.getSettings().screenW;
-    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int SCREEN_W =  Kiosk.getSettings().screenW;
+    private static int SCREEN_H = Kiosk.getSettings().screenH;
 
     // White foreground
-    private static final int FOREGROUND_WIDTH = SCREEN_W * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = SCREEN_H * 3 / 4;
-    private static final int FOREGROUND_X_PADDING
+    private static int FOREGROUND_WIDTH = SCREEN_W * 2 / 3;
+    private static int FOREGROUND_HEIGHT = SCREEN_H * 3 / 4;
+    private static int FOREGROUND_X_PADDING
             = SCREEN_W / 6 + FOREGROUND_WIDTH / 2;
-    private static final int FOREGROUND_Y_PADDING
+    private static int FOREGROUND_Y_PADDING
             = SCREEN_H / 8 + FOREGROUND_HEIGHT / 2;
-    private static final int FOREGROUND_CURVE_RADIUS = 100;
+    private static int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = SCREEN_H / 5;
-    private static final int TITLE_FONT_SIZE = SCREEN_W / 55;
-    private static final int PROMPT_Y = SCREEN_H * 3 / 8;
-    private static final int PROMPT_FONT_SIZE = SCREEN_W / 60;
-    private static final int ACTION_Y = SCREEN_H / 2;
-    private static final int ACTION_FONT_SIZE = SCREEN_W / 58;
+    private static int TITLE_Y = SCREEN_H / 5;
+    private static int TITLE_FONT_SIZE = SCREEN_W / 55;
+    private static int PROMPT_Y = SCREEN_H * 3 / 8;
+    private static int PROMPT_FONT_SIZE = SCREEN_W / 60;
+    private static int ACTION_Y = SCREEN_H / 2;
+    private static int ACTION_FONT_SIZE = SCREEN_W / 58;
 
     // Buttons
-    private static final int BUTTON_WIDTH = SCREEN_W / 8;
-    private static final int BUTTON_HEIGHT = SCREEN_H / 6;
-    private static final int BUTTON_RADIUS = SCREEN_W / 8;
-    private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_PADDING = 20;
-    private static final int BUTTON_Y = SCREEN_H * 7 / 12;
+    private static int BUTTON_WIDTH = SCREEN_W / 8;
+    private static int BUTTON_HEIGHT = SCREEN_H / 6;
+    private static int BUTTON_RADIUS = SCREEN_W / 8;
+    private static int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
+    private static int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+    private static int BUTTON_PADDING = 20;
+    private static int BUTTON_Y = SCREEN_H * 7 / 12;
 
     //Animations
     private int startFrame = 0;
@@ -50,9 +50,41 @@ public class PromptScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
 
+    /**
+     * Default constructor.
+     * @param model the model to make
+     */
     public PromptScene(PromptSceneModel model) {
         this.model = model;
         this.buttons = new ButtonControl[this.model.answers.length];
+        SCREEN_W =  Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
+
+        // White foreground
+        FOREGROUND_WIDTH = SCREEN_W * 2 / 3;
+        FOREGROUND_HEIGHT = SCREEN_H * 3 / 4;
+        FOREGROUND_X_PADDING
+                = SCREEN_W / 6 + FOREGROUND_WIDTH / 2;
+        FOREGROUND_Y_PADDING
+                = SCREEN_H / 8 + FOREGROUND_HEIGHT / 2;
+        FOREGROUND_CURVE_RADIUS = 100;
+
+        // Text
+        TITLE_Y = SCREEN_H / 5;
+        TITLE_FONT_SIZE = SCREEN_W / 55;
+        PROMPT_Y = SCREEN_H * 3 / 8;
+        PROMPT_FONT_SIZE = SCREEN_W / 60;
+        ACTION_Y = SCREEN_H / 2;
+        ACTION_FONT_SIZE = SCREEN_W / 58;
+
+        // Buttons
+        BUTTON_WIDTH = SCREEN_W / 8;
+        BUTTON_HEIGHT = SCREEN_H / 6;
+        BUTTON_RADIUS = SCREEN_W / 8;
+        BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
+        BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+        BUTTON_PADDING = 20;
+        BUTTON_Y = SCREEN_H * 7 / 12;
     }
 
     @Override

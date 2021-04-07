@@ -17,8 +17,8 @@ import processing.core.PConstants;
  */
 public class CareerPathwayScene implements Scene {
     // Pull constants from the settings
-    private static final int SCREEN_W = Kiosk.getSettings().screenW;
-    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int SCREEN_W = Kiosk.getSettings().screenW;
+    private static int SCREEN_H = Kiosk.getSettings().screenH;
 
     private final CareerPathwaySceneModel model;
     protected SpokeGraph spokeGraph;
@@ -34,6 +34,8 @@ public class CareerPathwayScene implements Scene {
      */
     public CareerPathwayScene(CareerPathwaySceneModel model) {
         this.model = model;
+        SCREEN_W = Kiosk.getSettings().screenW;
+        SCREEN_H = Kiosk.getSettings().screenH;
         this.backButton = ButtonControl.createBackButton();
         this.homeButton = ButtonControl.createHomeButton();
     }
