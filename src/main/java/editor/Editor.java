@@ -62,6 +62,14 @@ public class Editor extends Kiosk {
         stage.setTitle(newTitle);
     }
 
+    /**
+     * Gets the current title of the window.
+     * @return The title.
+     */
+    public static String getTitle() {
+        return stage.getTitle();
+    }
+
     @Override
     protected PSurface initSurface() {
         // Pull the secret sauce out of Processing 3
@@ -104,7 +112,6 @@ public class Editor extends Kiosk {
         // Delays these actions and runs them on the "correct" thread
         Platform.runLater(() -> {
             stage.setScene(scene);
-            setTitle("Kiosk Editor-inator 3000");
             // A platypus?
             stage.setResizable(false);
         });

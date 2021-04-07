@@ -82,8 +82,8 @@ public class Controller implements Initializable {
         File surveyFile = new File("survey.xml");
         if (surveyFile.exists()) {
             this.surveyFile = surveyFile;
+            Editor.setTitle("survey.xml");
         }
-        hasPendingChanges = false;
 
         for (Node node : splitPane.lookupAll(".split-pane-divider")) {
             node.setVisible(true);
@@ -174,6 +174,8 @@ public class Controller implements Initializable {
         });
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
+        hasPendingChanges = false;
+        Editor.setTitle(surveyFile.getName());
     }
 
     /**
@@ -329,6 +331,7 @@ public class Controller implements Initializable {
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
         this.hasPendingChanges = true;
+        Editor.setTitle("*" + Editor.getTitle().replaceAll("\\*", ""));
     }
 
     /**
@@ -388,6 +391,7 @@ public class Controller implements Initializable {
         sceneGraph.registerSceneModel(newScene);
         hiddenRoot.getChildren().add(new TreeItem<>(newScene));
         this.hasPendingChanges = true;
+        Editor.setTitle("*" + Editor.getTitle().replaceAll("\\*", ""));
     }
 
     @FXML
@@ -402,6 +406,7 @@ public class Controller implements Initializable {
                 // Attempt to load from file
                 survey = LoadedSurveyModel.readFromFile(file);
                 this.surveyFile = file;
+                Editor.setTitle(file.getName());
             } catch (Exception exception) {
                 // Survey could not be created, so make an error survey
                 String errorMsg = "Could not read from survey at '" + file.getPath()
@@ -421,6 +426,7 @@ public class Controller implements Initializable {
             sceneGraph.reset();
             rebuildSceneGraphTreeView();
             this.hasPendingChanges = false;
+            Editor.setTitle(surveyFile.getName());
         }
     }
 
@@ -439,6 +445,7 @@ public class Controller implements Initializable {
                 rebuildSceneGraphTreeView();
                 rebuildToolbar(sceneGraph.getCurrentSceneModel());
                 this.hasPendingChanges = false;
+                Editor.setTitle(surveyFile.getName());
             }
         }
     }
@@ -459,6 +466,7 @@ public class Controller implements Initializable {
                 survey.writeToFile(file);
                 surveyFile = file;
                 this.hasPendingChanges = false;
+                Editor.setTitle(surveyFile.getName());
             } catch (Exception exception) {
                 // Push temporary scene describing error
                 String errorMsg = "Could not save survey to '" + surveyFile.getPath()
@@ -478,6 +486,7 @@ public class Controller implements Initializable {
             try {
                 createSurvey().writeToFile(surveyFile);
                 this.hasPendingChanges = false;
+                Editor.setTitle(surveyFile.getName());
             } catch (Exception exception) {
                 // Push temporary scene describing error
                 String errorMsg = "Could not save survey to '" + surveyFile.getPath()
