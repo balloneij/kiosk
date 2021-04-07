@@ -75,6 +75,11 @@ public class Controller implements Initializable {
         sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
         previousId = null;
 
+        File surveyFile = new File("survey.xml");
+        if (surveyFile.exists()) {
+            this.surveyFile = surveyFile;
+        }
+
         for (Node node : splitPane.lookupAll(".split-pane-divider")) {
             node.setVisible(true);
         }
@@ -413,8 +418,12 @@ public class Controller implements Initializable {
 
     @FXML
     private void reloadSurvey() {
+        LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
+        sceneGraph.loadSurvey(surveyModel);
+        sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
         sceneGraph.reset();
         rebuildSceneGraphTreeView();
+        rebuildToolbar(sceneGraph.getCurrentSceneModel());
     }
 
     @FXML
