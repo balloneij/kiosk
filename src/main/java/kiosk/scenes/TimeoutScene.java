@@ -1,5 +1,6 @@
 package kiosk.scenes;
 
+import graphics.Color;
 import graphics.Graphics;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
@@ -18,25 +19,32 @@ public class TimeoutScene implements Scene {
     private static final int FOREGROUND_CURVE_RADIUS = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
-    private static final int TITLE_FONT_SIZE = 24;
-    private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 6;
-    private static final int PROMPT_FONT_SIZE = 16;
-    private static final int ACTION_Y = Kiosk.getSettings().screenH / 2;
-    private static final int ACTION_FONT_SIZE = 20;
+    private static final int TITLE_Y = Kiosk.getSettings().screenH * 1 / 4;
+    private static final int TITLE_FONT_SIZE = 28;
+    private int warningY = Kiosk.getSettings().screenH * 3 / 6;
+    private int warningFontSize = 16;
+    private int timerY = Kiosk.getSettings().screenH * 5 / 8;
+    private int timerFontSize = 20;
 
     // Buttons
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
+    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 4;
     private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
     private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
     private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
     private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_PADDING = 20;
-    private static final int BUTTON_Y = Kiosk.getSettings().screenH * 7 / 12;
+    private int buttonPadding = Kiosk.getSettings().screenW / 60;
+    private int buttonY = Kiosk.getSettings().screenH * 17 / 24;
+
+    // Image
+    private int imageY = Kiosk.getSettings().screenH * 9 / 24;
+    private int imageX = Kiosk.getSettings().screenW / 2;
 
     private final TimeoutSceneModel model;
     private ButtonControl homeButton;
     private ButtonControl backButton;
+    private Image image;
+
+    public int remainingTime = 0;
 
     public TimeoutScene(TimeoutSceneModel model) {
         this.model = model;
@@ -48,29 +56,29 @@ public class TimeoutScene implements Scene {
         final int sketchHeight = Kiosk.getSettings().screenH;
 
         ButtonModel homeButtonModel = new ButtonModel();
-        homeButtonModel.text = "Take me back to the beginning!";
+        homeButtonModel.text = "Let's Start Over";
+        homeButtonModel.rgb = Color.DW_MAROON_RGB;
         sketch.rectMode(PConstants.CENTER);
         this.homeButton = new ButtonControl(homeButtonModel,
-                BUTTON_PADDING * 2, sketchHeight - BUTTON_PADDING * 5,
-                BUTTON_WIDTH * 3, BUTTON_HEIGHT * 3 / 4);
+                FOREGROUND_X_PADDING + buttonPadding * 2, buttonY,
+                BUTTON_WIDTH, BUTTON_HEIGHT * 3 / 4);
         this.homeButton.init(sketch);
         sketch.hookControl(this.homeButton);
         ButtonModel backButtonModel = new ButtonModel();
         backButtonModel.text = "I'm still here!";
         sketch.rectMode(PConstants.CENTER);
         this.backButton = new ButtonControl(backButtonModel,
-                sketchWidth - BUTTON_PADDING * 2 - BUTTON_WIDTH * 3,
-                sketchHeight - BUTTON_PADDING * 5,
-                BUTTON_WIDTH * 3, BUTTON_HEIGHT * 3 / 4);
+                sketchWidth - buttonPadding * 2 - BUTTON_WIDTH - FOREGROUND_X_PADDING,
+                buttonY,
+                BUTTON_WIDTH, BUTTON_HEIGHT * 3 / 4);
         this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
 
         this.model.title = "Are You Still There?";
-        this.model.prompt = "\n\n\n If you still want to complete the survey, click "
-                + "\n \"I'm still here!\" "
-                + "\n Careful, if you don't choose an option, "
-                + "\n the survey will automatically reset "
-                + "\n after a little while!";
+        this.model.warning = "When the survey starts over, all your progress will be lost!";
+        this.model.timerText = "The survey will start over in ";
+
+        image = Image.createImage(sketch, model.imageModel);
     }
 
     @Override
@@ -107,11 +115,21 @@ public class TimeoutScene implements Scene {
         sketch.text(this.model.title, centerX, TITLE_Y,
                 (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
 
-        // Prompt
-        Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
+        // Warning
+        Graphics.useGothic(sketch, warningFontSize, false);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.prompt, centerX, PROMPT_Y,
+        sketch.text(this.model.warning, centerX, warningY,
                 (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
+
+        // Timer
+        Graphics.useGothic(sketch, timerFontSize, false);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.fill(256, 0, 0);
+        sketch.text(this.model.timerText + ((remainingTime / 1000) + 1) + " seconds",
+                centerX, timerY, (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
+
+        // Image
+        image.draw(sketch, imageX, imageY);
 
         homeButton.draw(sketch);
         backButton.draw(sketch);
