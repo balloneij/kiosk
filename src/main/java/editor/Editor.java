@@ -59,7 +59,9 @@ public class Editor extends Kiosk {
      * @param newTitle The new title.
      */
     public static void setTitle(String newTitle) {
-        stage.setTitle(newTitle);
+        if (stage != null) {
+            stage.setTitle(newTitle);
+        }
     }
 
     /**
@@ -67,7 +69,11 @@ public class Editor extends Kiosk {
      * @return The title.
      */
     public static String getTitle() {
-        return stage.getTitle();
+        if (stage != null) {
+            return stage.getTitle();
+        } else {
+            return "No stage set";
+        }
     }
 
     @Override
