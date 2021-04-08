@@ -43,7 +43,7 @@ public class DetailsSceneLoader {
                 SceneLoader.getNameBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getDescriptionBox(model, graph),
-                createButton(model, graph, controller)
+                getButton(model, graph, controller)
         );
         toolbarBox.getChildren().add(vbox);
 
@@ -88,10 +88,13 @@ public class DetailsSceneLoader {
         return vbox;
     }
 
-    private static Node createButton(DetailsSceneModel model,
+    private static Node getButton(DetailsSceneModel model,
                                      SceneGraph graph, Controller controller) {
         ButtonModel answer = model.button;
-        answer.target = controller.createNewScene(false).getId();
+
+        if (answer.target.equals("null")) {
+            answer.target = controller.createNewScene(false).getId();
+        }
 
         // Setup the text field for editing the answer
         TextArea answerField = new TextArea(answer.text);

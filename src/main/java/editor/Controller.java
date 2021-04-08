@@ -60,6 +60,7 @@ public class Controller implements Initializable {
 
     private String previousId;
     private File surveyFile = null;
+    private HashMap<String, Boolean> expanded; // todo find where and how to create this
 
     @FXML
     AnchorPane rootPane;
@@ -131,6 +132,7 @@ public class Controller implements Initializable {
                         sceneGraph.registerSceneModel(newModel);
 
                         rebuildToolbar(newModel);
+                        rebuildSceneGraphTreeView(); //todo
                     }
                 });
 
@@ -166,6 +168,7 @@ public class Controller implements Initializable {
         newSceneMenuItem.setOnAction(t -> {
             createNewScene(true);
         });
+        // todo maybe add a listener for expansion, then set HashMap?
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
     }
@@ -313,22 +316,13 @@ public class Controller implements Initializable {
      * specified by TREE_VIEW_DEPTH.
      */
     public void rebuildSceneGraphTreeView() {
-        HashMap<String, Boolean> expanded = new HashMap<>();
-        if (sceneGraphTreeView.getRoot() != null) {
-            for (TreeItem<SceneModel> sm : sceneGraphTreeView.getRoot().getChildren()) {
-                expanded.put(sm.getValue().getId(), sm.isExpanded());
-                System.out.println("the scene name " + sm.getValue().getName());
-                System.out.println("was stored with a value of " + sm.isExpanded());
-            }
-        }
-
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
 
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
             if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
                 SceneModel orphan = potentialOrphan.getValue();
                 // check if orphan needs to find a new home (be removed)
-                // this happens if it's an empty scene, and there was no intent
+                // this happens if it's an empty scene, and there was no intent of creation
                 if (orphan.getClass().equals(EmptySceneModel.class)) {
                     EmptySceneModel emptyOrphan = (EmptySceneModel) orphan;
                     if (!emptyOrphan.intent) {
@@ -345,15 +339,12 @@ public class Controller implements Initializable {
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
 
-        for (TreeItem<SceneModel> sm : sceneGraphTreeView.getRoot().getChildren()) {
-            System.out.println("testing an item with name " + sm.getValue().getName());
-            if (expanded.containsKey(sm.getValue().getId())) {
-                System.out.println("it matched. it's being set to " + expanded.get(sm.getValue().getId()));
-                sm.setExpanded(expanded.get(sm.getValue().getId()));
-                System.out.println("now it's " + sm.isExpanded() + "\n");
-
-            }
-        }
+        // todo needs to be more than just form the root's children though
+//        for (TreeItem<SceneModel> sm : sceneGraphTreeView.getRoot().getChildren()) {
+//            if (expanded.containsKey(sm.getValue().getId())) {
+//                sm.setExpanded(expanded.get(sm.getValue().getId()));
+//            }
+//        }
     }
 
     /**
@@ -408,7 +399,7 @@ public class Controller implements Initializable {
 
         // Add to the scene graph
         addNewScene(sceneGraphTreeView.getRoot(), model);
-        //rebuildSceneGraphTreeView();
+        //rebuildSceneGraphTreeView(); //todo
         return model;
     }
 
