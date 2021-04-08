@@ -72,10 +72,6 @@ public class SpokeGraphPromptScene implements Scene {
         this.answerButtons = new ButtonControl[Math.min(answersCount, ANSWERS_MAX)];
 
         if (answersCount > 0) {
-            if (model.answers[0].image != null) {
-                model.answers[0].image.width = answerDiameter - ANSWER_IMAGE_PADDING;
-                model.answers[0].image.height = answerDiameter - ANSWER_IMAGE_PADDING;
-            }
             this.answerButtons[0] = new ButtonControl(
                     model.answers[0],
                     answersCenterX - answerDiameter * 3 / 2,
@@ -84,10 +80,6 @@ public class SpokeGraphPromptScene implements Scene {
             );
         }
         if (answersCount > 1) {
-            if (model.answers[1].image != null) {
-                model.answers[1].image.width = answerDiameter - ANSWER_IMAGE_PADDING;
-                model.answers[1].image.height = answerDiameter - ANSWER_IMAGE_PADDING;
-            }
             this.answerButtons[1] = new ButtonControl(
                     model.answers[1],
                     answersCenterX + answerRadius,
@@ -96,10 +88,6 @@ public class SpokeGraphPromptScene implements Scene {
             );
         }
         if (answersCount > 2) {
-            if (model.answers[2].image != null) {
-                model.answers[2].image.width = answerDiameter - ANSWER_IMAGE_PADDING;
-                model.answers[2].image.height = answerDiameter - ANSWER_IMAGE_PADDING;
-            }
             this.answerButtons[2] = new ButtonControl(
                     model.answers[2],
                     answersCenterX + answerRadius,
@@ -108,16 +96,19 @@ public class SpokeGraphPromptScene implements Scene {
             );
         }
         if (answersCount > 3) {
-            if (model.answers[3].image != null) {
-                model.answers[3].image.width = answerDiameter - ANSWER_IMAGE_PADDING;
-                model.answers[3].image.height = answerDiameter - ANSWER_IMAGE_PADDING;
-            }
             this.answerButtons[3] = new ButtonControl(
                     model.answers[3],
                     answersCenterX - answerDiameter * 3 / 2,
                     answersCenterY - answerDiameter * 3 / 2,
                     answerRadius
             );
+        }
+
+        for (int i = 0; i < answersCount; i++) {
+            if (model.answers[i].image != null) {
+                model.answers[i].image.width = answerDiameter - ANSWER_IMAGE_PADDING;
+                model.answers[i].image.height = answerDiameter - ANSWER_IMAGE_PADDING;
+            }
         }
 
         ButtonModel prompt = new ButtonModel();
