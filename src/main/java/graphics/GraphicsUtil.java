@@ -46,23 +46,27 @@ public class GraphicsUtil {
         // Rob fix your checkstyle
         backButtonModel.text = "← Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
-        return new ButtonControl(backButtonModel,
-                COMMON_BUTTON_PADDING, sketch.height
-                - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
-                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
+        ButtonControl backButton = new ButtonControl(backButtonModel,
+            COMMON_BUTTON_PADDING, sketch.height
+            - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
+            COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
+        backButton.init(sketch);
+        return backButton;
     }
 
     /**
      * Initialize the home button's ButtonControl model.
      * @return home button control
      */
-    public static ButtonControl initializeHomeButton() {
+    public static ButtonControl initializeHomeButton(Kiosk sketch) {
         ButtonModel homeButtonModel = new ButtonModel();
         homeButtonModel.text = "◄◄ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
-        return new ButtonControl(homeButtonModel,
-                COMMON_BUTTON_PADDING, COMMON_BUTTON_PADDING,
-                COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
+        ButtonControl homeButton = new ButtonControl(homeButtonModel,
+            COMMON_BUTTON_PADDING, COMMON_BUTTON_PADDING,
+            COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4, false);
+        homeButton.init(sketch);
+        return homeButton;
     }
 
     /**
@@ -78,6 +82,7 @@ public class GraphicsUtil {
                 sketch.width - COMMON_BUTTON_PADDING - COMMON_BUTTON_WIDTH * 3 / 4,
                 sketch.height - (COMMON_BUTTON_HEIGHT * 3 / 4) - COMMON_BUTTON_PADDING,
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_HEIGHT * 3 / 4);
+        nextButton.init(sketch);
         return nextButton;
     }
 
@@ -94,6 +99,7 @@ public class GraphicsUtil {
                 sketch.height - COMMON_BUTTON_PADDING - (883 / 6),
                 COMMON_BUTTON_WIDTH * 3 / 4, COMMON_BUTTON_WIDTH * 3 / 4, false);
         msoeButton.setNoButton(true);
+        msoeButton.init(sketch);
         return msoeButton;
     }
 

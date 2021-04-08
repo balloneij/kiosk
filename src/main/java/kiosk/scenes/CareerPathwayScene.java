@@ -64,10 +64,11 @@ public class CareerPathwayScene implements Scene {
                 model.centerText,
                 careerButtons,
                 careerWeights);
+        this.spokeGraph.init(sketch);
 
         // Create home and back button
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
