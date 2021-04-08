@@ -247,13 +247,9 @@ public class SpokeGraph {
     private void checkInit() {
         // Print warning if SpokeGraph was not init and warning hasn't been printed
         if (!wasInit && !initWarningPrinted) {
-            try {
-                initWarningPrinted = true;
-                throw new RuntimeException("SpokeGraph was not init! Call SpokeGraph.init() in "
-                    + "the init method of the scene!");
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
+            initWarningPrinted = true;
+            throw new IllegalStateException("SpokeGraph was not init! Call SpokeGraph.init() in "
+                + "the init method of the scene!");
         }
     }
 }

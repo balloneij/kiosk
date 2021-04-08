@@ -618,13 +618,9 @@ public class ButtonControl implements Control<MouseEvent> {
     private void checkInit() {
         // Print warning if button was not init and warning hasn't ben printed
         if (!wasInit && !initWarningPrinted) {
-            try {
-                initWarningPrinted = true;
-                throw new RuntimeException("Button was not init! Call ButtonControl.init() in the "
-                    + "init method of the scene!");
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-            }
+            initWarningPrinted = true;
+            throw new IllegalStateException("Button was not init! Call ButtonControl.init() "
+                + "in the init method of the scene!");
         }
     }
 }
