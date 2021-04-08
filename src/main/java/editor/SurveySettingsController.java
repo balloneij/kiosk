@@ -201,13 +201,12 @@ public class SurveySettingsController implements Initializable {
         int width = widthSpinner.getValue();
         int height = heightSpinner.getValue();
         int timeOut = timeOutSpinner.getValue();
-        int gracePeriod = timeOutGraceSpinner.getValue();
 
         Settings settings = new Settings();
         settings.screenH = height;
         settings.screenW = width;
         settings.timeoutMillis = timeOut * 1000; // Convert ms to seconds
-        settings.gracePeriodMillis = gracePeriod * 1000; // Convert ms to seconds
+        settings.gracePeriodMillis = timeOutGraceSpinner.getValue() * 1000; // Convert ms to seconds
         settings.sceneAnimationFrames = sceneAnimationSpinner.getValue();
         settings.buttonAnimationFrames = buttonAnimationSpinner.getValue();
         settings.buttonAnimationLengthFrames = buttonAnimationLengthSpinner.getValue();

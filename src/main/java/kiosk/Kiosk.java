@@ -24,6 +24,7 @@ import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
+import kiosk.scenes.TimeoutScene;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -207,13 +208,19 @@ public class Kiosk extends PApplet {
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
                 timeoutActive = false;
                 this.sceneGraph.reset();
-            } else if (currentSceneMillis > Kiosk.settings.timeoutMillis && shouldTimeout && !timeoutActive) {
+            } else if (currentSceneMillis > Kiosk.settings.timeoutMillis
+                    && shouldTimeout && !timeoutActive) {
                 // Create pop-up
                 // note that it gets drawn in the next draw() call
                 this.sceneGraph.pushScene(new TimeoutSceneModel());
+                ((TimeoutScene) this.sceneGraph.getCurrentScene()).remainingTime =
+                        Kiosk.settings.gracePeriodMillis;
 
                 // Set the timeoutActive flag so this doesn't get called twice
                 timeoutActive = true;
+            } else if (timeoutActive && this.sceneGraph.getCurrentScene() instanceof TimeoutScene) {
+                ((TimeoutScene) this.sceneGraph.getCurrentScene()).remainingTime =
+                        Kiosk.settings.gracePeriodMillis - currentSceneMillis;
             }
         }
     }
