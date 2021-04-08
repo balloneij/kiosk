@@ -167,6 +167,7 @@ public class Controller implements Initializable {
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
         newSceneMenuItem.setOnAction(t -> {
             createNewScene(true);
+            rebuildSceneGraphTreeView();
         });
         // todo maybe add a listener for expansion, then set HashMap?
 
@@ -391,6 +392,17 @@ public class Controller implements Initializable {
         deleteScene(sceneGraph.getCurrentSceneModel());
     }
 
+    /**
+     * Creates a new scene.
+     *
+     * @return the newly-created scene
+     * @apiNote  It's a good idea to call rebuildSceneGraphTreeView()
+     *      soon after using this method
+     * @implNote   rebuildSceneGraphTreeView() cannot be called __in__ this
+     *     method because the returned SceneModel needs to actually be returned
+     *     before the tree view can be rebuilt; otherwise, if intent is false,
+     *     the SceneModel will be deleted before it can even be returned.
+     */
     @FXML
     public SceneModel createNewScene(boolean intent) {
         EmptySceneModel model = new EmptySceneModel();
@@ -399,7 +411,6 @@ public class Controller implements Initializable {
 
         // Add to the scene graph
         addNewScene(sceneGraphTreeView.getRoot(), model);
-        //rebuildSceneGraphTreeView(); //todo
         return model;
     }
 
