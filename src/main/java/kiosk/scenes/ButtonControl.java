@@ -244,15 +244,6 @@ public class ButtonControl implements Control<MouseEvent> {
 
         // If it's clickable, draw the darker button behind the main one to add 3D effect
         if (!this.disabled) {
-
-            //Draw a shadow behind the clickable button to add 3D effects
-            sketch.imageMode(PConstants.CENTER);
-            ImageModel imgModel = new ImageModel("assets/shadow.png",
-                    this.rect.width * 2,
-                    this.rect.width * 2);
-            Image img = Image.createImage(sketch, imgModel);
-            img.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
-
             //Draw the darker button behind the button to add 3D effects
             sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
                     clampColor(this.model.rgb[1] + colorDeltaOnClick),
@@ -374,15 +365,6 @@ public class ButtonControl implements Control<MouseEvent> {
 
         // If it's clickable, draw the darker button behind the main one to add 3D effect
         if (!disabled) {
-
-            //Draw a shadow behind the clickable button to add 3D effects
-            sketch.imageMode(PConstants.CENTER);
-            ImageModel imgModel = new ImageModel("assets/shadow.png",
-                    this.rect.width * 2,
-                    this.rect.width * 2);
-            Image img = Image.createImage(sketch, imgModel);
-            img.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
-
             sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
                     clampColor(this.model.rgb[1] + colorDeltaOnClick),
                     clampColor(this.model.rgb[2] + colorDeltaOnClick));
