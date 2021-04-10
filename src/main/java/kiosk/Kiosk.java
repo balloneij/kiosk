@@ -176,6 +176,8 @@ public class Kiosk extends PApplet {
 
     @Override
     public void draw() {
+        // Clear out the previous frame
+        this.background(0);
         // Compute the time delta in seconds
         int currMillis = millis();
         float dt = (float) (currMillis - this.lastMillis) / 1000;

@@ -186,32 +186,32 @@ public class Graphics {
      * @param sketch to draw to
      */
     public static void drawTheBoopBoi(Kiosk sketch) {
-        final int width = sketch.getSettings().screenW;
-        final int height = sketch.getSettings().screenH;
-        final int boopHeight = height / 10;
+        final int width = Kiosk.getSettings().screenW;
+        final int height = Kiosk.getSettings().screenH;
+        final int boopDimens = height / 10;
 
-        ImageModel lbFootModel = new ImageModel("assets/boop/LeftBackFoot.png", boopHeight, boopHeight);
+        ImageModel lbFootModel = new ImageModel("assets/boop/LeftBackFoot.png", boopDimens, boopDimens);
         Image lbFoot = Image.createImage(sketch, lbFootModel);
-        lbFoot.draw(sketch, width / 2f, height - boopHeight / 2f);
+        lbFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
 
-        ImageModel lfFootModel = new ImageModel("assets/boop/LeftFrontFoot.png", boopHeight, boopHeight);
+        ImageModel lfFootModel = new ImageModel("assets/boop/LeftFrontFoot.png", boopDimens, boopDimens);
         Image lfFoot = Image.createImage(sketch, lfFootModel);
-        lfFoot.draw(sketch, width / 2f, height - boopHeight / 2f);
+        lfFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
 
-        ImageModel rbFootModel = new ImageModel("assets/boop/RightBackFoot.png", boopHeight, boopHeight);
+        ImageModel rbFootModel = new ImageModel("assets/boop/RightBackFoot.png", boopDimens, boopDimens);
         Image rbFoot = Image.createImage(sketch, rbFootModel);
-        rbFoot.draw(sketch, width / 2f, height - boopHeight / 2f);
+        rbFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
 
-        ImageModel rfFootModel = new ImageModel("assets/boop/RightFrontFoot.png", boopHeight, boopHeight);
+        ImageModel rfFootModel = new ImageModel("assets/boop/RightFrontFoot.png", boopDimens, boopDimens);
         Image rfFoot = Image.createImage(sketch, rfFootModel);
-        rfFoot.draw(sketch, width / 2f, height - boopHeight / 2f);
+        rfFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
 
-        ImageModel shellModel = new ImageModel("assets/boop/Shell.png", boopHeight, boopHeight);
+        ImageModel shellModel = new ImageModel("assets/boop/Shell.png", boopDimens, boopDimens);
         Image shell = Image.createImage(sketch, shellModel);
-        shell.draw(sketch, width / 2f, height - boopHeight / 2f);
+        shell.draw(sketch, width / 2f, height - boopDimens / 2f);
 
-        ImageModel headModel = new ImageModel("assets/boop/Head.png", boopHeight, boopHeight);
+        ImageModel headModel = new ImageModel("assets/boop/Head.png", boopDimens, boopDimens);
         Image head = Image.createImage(sketch, headModel);
-        head.draw(sketch, width / 2f, height - boopHeight / 2f);
+        head.draw(sketch, width / 2f, height - boopDimens / 2f);
     }
 }
