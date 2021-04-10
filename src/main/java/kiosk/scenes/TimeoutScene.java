@@ -12,26 +12,26 @@ import processing.core.PConstants;
 public class TimeoutScene implements Scene {
 
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static final int FOREGROUND_X_PADDING = Kiosk.getSettings().screenW / 6;
-    private static final int FOREGROUND_Y_PADDING = Kiosk.getSettings().screenH / 8;
-    private static final int FOREGROUND_CURVE_RADIUS = 100;
+    private static int foregroundWidth = Kiosk.getSettings().screenW * 2 / 3;
+    private static int foregroundHeight = Kiosk.getSettings().screenH * 3 / 4;
+    private static int foregroundXPadding = Kiosk.getSettings().screenW / 6;
+    private static int foregroundYPadding = Kiosk.getSettings().screenH / 8;
+    private static int foregroundCurveRadius = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH * 1 / 4;
-    private static final int TITLE_FONT_SIZE = 28;
+    private static int titleY = Kiosk.getSettings().screenH / 4;
+    private static int titleFontSize = Kiosk.getSettings().screenW / 55;
     private int warningY = Kiosk.getSettings().screenH * 3 / 6;
-    private int warningFontSize = 16;
+    private int warningFontSize = Kiosk.getSettings().screenW / 60;
     private int timerY = Kiosk.getSettings().screenH * 5 / 8;
-    private int timerFontSize = 20;
+    private int timerFontSize = Kiosk.getSettings().screenW / 58;
 
     // Buttons
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 4;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
-    private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
+    private static int buttonWidth = Kiosk.getSettings().screenW / 4;
+    private static int buttonHeight = Kiosk.getSettings().screenH / 6;
+    private static int buttonRadius = Kiosk.getSettings().screenW / 8;
+    private static int buttonImageWidth = buttonRadius * 4 / 5;
+    private static int buttonImageHeight = buttonRadius * 4 / 5;
     private int buttonPadding = Kiosk.getSettings().screenW / 60;
     private int buttonY = Kiosk.getSettings().screenH * 17 / 24;
 
@@ -46,8 +46,35 @@ public class TimeoutScene implements Scene {
 
     public int remainingTime = 0;
 
+    /**
+     * Default constructor.
+     * @param model the model to make
+     */
     public TimeoutScene(TimeoutSceneModel model) {
         this.model = model;
+        // White foreground
+        foregroundWidth = Kiosk.getSettings().screenW * 2 / 3;
+        foregroundHeight = Kiosk.getSettings().screenH * 3 / 4;
+        foregroundXPadding = Kiosk.getSettings().screenW / 6;
+        foregroundYPadding = Kiosk.getSettings().screenH / 8;
+        foregroundCurveRadius = 100;
+
+        // Text
+        titleY = Kiosk.getSettings().screenH / 4;
+        titleFontSize = Kiosk.getSettings().screenW / 55;
+        warningY = Kiosk.getSettings().screenH * 3 / 6;
+        warningFontSize = Kiosk.getSettings().screenW / 60;
+        timerY = Kiosk.getSettings().screenH * 5 / 8;
+        timerFontSize = Kiosk.getSettings().screenW / 58;
+
+        // Buttons
+        buttonWidth = Kiosk.getSettings().screenW / 4;
+        buttonHeight = Kiosk.getSettings().screenH / 6;
+        buttonRadius = Kiosk.getSettings().screenW / 8;
+        buttonImageWidth = buttonRadius * 4 / 5;
+        buttonImageHeight = buttonRadius * 4 / 5;
+        buttonPadding = Kiosk.getSettings().screenW / 60;
+        buttonY = Kiosk.getSettings().screenH * 17 / 24;
     }
 
     @Override
@@ -60,17 +87,16 @@ public class TimeoutScene implements Scene {
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
         sketch.rectMode(PConstants.CENTER);
         this.homeButton = new ButtonControl(homeButtonModel,
-                FOREGROUND_X_PADDING + buttonPadding * 2, buttonY,
-                BUTTON_WIDTH, BUTTON_HEIGHT * 3 / 4);
+                foregroundXPadding + buttonPadding * 2, buttonY,
+                buttonWidth, buttonHeight * 3 / 4);
         this.homeButton.init(sketch);
         sketch.hookControl(this.homeButton);
         ButtonModel backButtonModel = new ButtonModel();
         backButtonModel.text = "I'm still here!";
         sketch.rectMode(PConstants.CENTER);
         this.backButton = new ButtonControl(backButtonModel,
-                sketchWidth - buttonPadding * 2 - BUTTON_WIDTH - FOREGROUND_X_PADDING,
-                buttonY,
-                BUTTON_WIDTH, BUTTON_HEIGHT * 3 / 4);
+                sketchWidth - buttonPadding * 2 - buttonWidth - foregroundXPadding,
+                buttonY, buttonWidth, buttonHeight * 3 / 4);
         this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
 
@@ -100,33 +126,38 @@ public class TimeoutScene implements Scene {
         // Draw the white foreground box
         sketch.fill(255);
         Graphics.drawRoundedRectangle(sketch,
-                FOREGROUND_X_PADDING + FOREGROUND_WIDTH / 2.f,
-                FOREGROUND_Y_PADDING + FOREGROUND_HEIGHT / 2.f,
-                FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
-                FOREGROUND_CURVE_RADIUS);
+                foregroundXPadding + foregroundWidth / 2.f,
+                foregroundYPadding + foregroundHeight / 2.f,
+                foregroundWidth, foregroundHeight,
+                foregroundCurveRadius);
 
         // Draw text
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(0);
 
         // Title
-        Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
+        Graphics.useGothic(sketch, titleFontSize, true);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.title, centerX, TITLE_Y,
-                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
+        sketch.text(this.model.title, centerX, titleY,
+                (int) (foregroundWidth * 0.95), foregroundHeight / 2);
 
         // Warning
         Graphics.useGothic(sketch, warningFontSize, false);
         sketch.rectMode(PConstants.CENTER);
         sketch.text(this.model.warning, centerX, warningY,
-                (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
+                (int) (foregroundWidth * 0.95), foregroundHeight / 2f);
 
         // Timer
         Graphics.useGothic(sketch, timerFontSize, false);
         sketch.rectMode(PConstants.CENTER);
         sketch.fill(256, 0, 0);
-        sketch.text(this.model.timerText + ((remainingTime / 1000) + 1) + " seconds",
-                centerX, timerY, (int) (FOREGROUND_WIDTH * 0.95), FOREGROUND_HEIGHT / 2);
+        if (((remainingTime / 1000) + 1) == 1) {
+            sketch.text(this.model.timerText + ((remainingTime / 1000) + 1) + " second",
+                    centerX, timerY, (int) (foregroundWidth * 0.95), foregroundHeight / 2f);
+        } else {
+            sketch.text(this.model.timerText + ((remainingTime / 1000) + 1) + " seconds",
+                    centerX, timerY, (int) (foregroundWidth * 0.95), foregroundHeight / 2f);
+        }
 
         // Image
         image.draw(sketch, imageX, imageY);

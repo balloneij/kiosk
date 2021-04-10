@@ -146,12 +146,12 @@ public class Graphics {
      * @param sketch to draw to
      */
     public static void drawBubbleBackground(Kiosk sketch) {
-        final int width = sketch.width;
-        final int height = sketch.height;
+        final int width = sketch.getSettings().screenW;
+        final int height = sketch.getSettings().screenH;
 
         float spacing = width / 50f;
         float radius = spacing / 2.05f;
-        float radiusChipping = 0.2825f;
+        float radiusChipping = 0.30f * (width / 1280f);
 
         sketch.ellipseMode(PConstants.CORNER);
         sketch.noStroke();

@@ -12,8 +12,8 @@ import processing.core.PConstants;
 public class PathwayScene implements Scene {
 
     // Pull constants from the settings
-    private static final int SCREEN_W = Kiosk.getSettings().screenW;
-    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int screenW = Kiosk.getSettings().screenW;
+    private static int screenH = Kiosk.getSettings().screenH;
 
     private final PathwaySceneModel model;
     protected final SpokeGraph spokeGraph;
@@ -27,15 +27,17 @@ public class PathwayScene implements Scene {
      */
     public PathwayScene(PathwaySceneModel model) {
         this.model = model;
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
         for (ButtonModel careerModel : model.buttonModels) {
             careerModel.isCircle = true;
         }
 
         // Create the spoke graph
-        float size = SCREEN_H - GraphicsUtil.HEADER_Y - GraphicsUtil.HEADER_H;
+        float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         this.spokeGraph = new SpokeGraph(size,
-                SCREEN_W / 2f - size / 2,
-                GraphicsUtil.HEADER_Y + GraphicsUtil.HEADER_H,
+                screenW / 2f - size / 2,
+                GraphicsUtil.headerY + GraphicsUtil.headerH,
                 this.model.centerText,
                 this.model.buttonModels);
     }
@@ -43,9 +45,11 @@ public class PathwayScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton.init(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);

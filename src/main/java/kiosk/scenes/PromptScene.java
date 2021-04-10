@@ -12,31 +12,34 @@ import processing.core.PConstants;
 
 public class PromptScene implements Scene {
 
+    private static int screenW =  Kiosk.getSettings().screenW;
+    private static int screenH = Kiosk.getSettings().screenH;
+
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static final int FOREGROUND_X_PADDING
-            = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
-    private static final int FOREGROUND_Y_PADDING
-            = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
-    private static final int FOREGROUND_CURVE_RADIUS = 100;
+    private static int foregroundWidth = screenW * 2 / 3;
+    private static int foregroundHeight = screenH * 3 / 4;
+    private static int foregroundXPadding
+            = screenW / 6 + foregroundWidth / 2;
+    private static int foregroundYPadding
+            = screenH / 8 + foregroundHeight / 2;
+    private static int foregroundCurveRadius = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 5;
-    private static final int TITLE_FONT_SIZE = 24;
-    private static final int PROMPT_Y = Kiosk.getSettings().screenH * 3 / 8;
-    private static final int PROMPT_FONT_SIZE = 16;
-    private static final int ACTION_Y = Kiosk.getSettings().screenH / 2;
-    private static final int ACTION_FONT_SIZE = 20;
+    private static int titleY = screenH / 5;
+    private static int titleFontSize = screenW / 55;
+    private static int promptY = screenH * 3 / 8;
+    private static int promptFontSize = screenW / 60;
+    private static int actionY = screenH / 2;
+    private static int actionFontSize = screenW / 58;
 
     // Buttons
-    private static final int BUTTON_WIDTH = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_HEIGHT = Kiosk.getSettings().screenH / 6;
-    private static final int BUTTON_RADIUS = Kiosk.getSettings().screenW / 8;
-    private static final int BUTTON_IMAGE_WIDTH = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_IMAGE_HEIGHT = BUTTON_RADIUS * 4 / 5;
-    private static final int BUTTON_PADDING = 20;
-    private static final int BUTTON_Y = Kiosk.getSettings().screenH * 7 / 12;
+    private static int buttonWidth = screenW / 8;
+    private static int buttonHeight = screenH / 6;
+    private static int buttonRadius = screenW / 8;
+    private static int buttonImageWidth = buttonRadius * 4 / 5;
+    private static int buttonImageHeight = buttonRadius * 4 / 5;
+    private static int buttonPadding = 20;
+    private static int buttonY = screenH * 7 / 12;
 
     //Animations
     private int startFrame = 0;
@@ -47,9 +50,41 @@ public class PromptScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
 
+    /**
+     * Default constructor.
+     * @param model the model to make
+     */
     public PromptScene(PromptSceneModel model) {
         this.model = model;
         this.buttons = new ButtonControl[this.model.answers.length];
+        screenW =  Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
+
+        // White foreground
+        foregroundWidth = screenW * 2 / 3;
+        foregroundHeight = screenH * 3 / 4;
+        foregroundXPadding
+                = screenW / 6 + foregroundWidth / 2;
+        foregroundYPadding
+                = screenH / 8 + foregroundHeight / 2;
+        foregroundCurveRadius = 100;
+
+        // Text
+        titleY = screenH / 5;
+        titleFontSize = screenW / 55;
+        promptY = screenH * 3 / 8;
+        promptFontSize = screenW / 60;
+        actionY = screenH / 2;
+        actionFontSize = screenW / 58;
+
+        // Buttons
+        buttonWidth = screenW / 8;
+        buttonHeight = screenH / 6;
+        buttonRadius = screenW / 8;
+        buttonImageWidth = buttonRadius * 4 / 5;
+        buttonImageHeight = buttonRadius * 4 / 5;
+        buttonPadding = 20;
+        buttonY = screenH * 7 / 12;
     }
 
     @Override
@@ -60,8 +95,8 @@ public class PromptScene implements Scene {
         // Start the X on the far left so we simply need to add
         // button width and padding to get the next X
         int x = Kiosk.getSettings().screenW / 2
-                - (BUTTON_WIDTH * this.buttons.length
-                + BUTTON_PADDING * (this.buttons.length - 1)) / 2;
+                - (buttonWidth * this.buttons.length
+                + buttonPadding * (this.buttons.length - 1)) / 2;
         for (int i = 0; i < this.model.answers.length; i++) {
             ButtonModel model = this.model.answers[i];
 
@@ -69,32 +104,34 @@ public class PromptScene implements Scene {
             int height;
 
             if (model.isCircle) {
-                width = BUTTON_RADIUS;
-                height = BUTTON_RADIUS;
+                width = buttonRadius;
+                height = buttonRadius;
             } else {
-                width = BUTTON_WIDTH;
-                height = BUTTON_HEIGHT;
+                width = buttonWidth;
+                height = buttonHeight;
             }
 
             // Modify the image so it fits inside the button
             if (model.image != null) {
-                model.image.width = BUTTON_IMAGE_WIDTH;
-                model.image.height = BUTTON_IMAGE_HEIGHT;
+                model.image.width = buttonImageWidth;
+                model.image.height = buttonImageHeight;
             }
 
-            ButtonControl button = new ButtonControl(model, x, BUTTON_Y, width, height);
+            ButtonControl button = new ButtonControl(model, x, buttonY, width, height);
             button.init(sketch);
 
             sketch.hookControl(button);
             this.buttons[i] = button;
 
-            x += BUTTON_WIDTH + BUTTON_PADDING;
+            x += buttonWidth + buttonPadding;
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
+            this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton.init(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
@@ -136,12 +173,12 @@ public class PromptScene implements Scene {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
-                    (float) (FOREGROUND_WIDTH * ((sketch.frameCount - startFrame) * 1.0
+                    foregroundXPadding, foregroundYPadding,
+                    (float) (foregroundWidth * ((sketch.frameCount - startFrame) * 1.0
                             / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (FOREGROUND_HEIGHT * ((sketch.frameCount - startFrame) * 1.0
+                    (float) (foregroundHeight * ((sketch.frameCount - startFrame) * 1.0
                             / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (FOREGROUND_CURVE_RADIUS * ((sketch.frameCount - startFrame) * 1.0
+                    (float) (foregroundCurveRadius * ((sketch.frameCount - startFrame) * 1.0
                             / Kiosk.getSettings().sceneAnimationFrames)));
             // Draw text
             sketch.rectMode(PConstants.CENTER);
@@ -149,22 +186,22 @@ public class PromptScene implements Scene {
             sketch.fill(0);
             if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
                 // Title
-                Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE
+                Graphics.useGothic(sketch, (int) (titleFontSize
                         * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.title, centerX, TITLE_Y,
+                sketch.text(this.model.title, centerX, titleY,
                         sketch.width / 1.5f, sketch.height / 5f);
                 // Prompt
-                Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE
+                Graphics.useGothic(sketch, (int) (promptFontSize
                         * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), false);
-                sketch.text(this.model.prompt, centerX, PROMPT_Y,
+                sketch.text(this.model.prompt, centerX, promptY,
                         sketch.width / 1.5f, sketch.height / 5f);
                 // Action
-                Graphics.useGothic(sketch, (int) (ACTION_FONT_SIZE
+                Graphics.useGothic(sketch, (int) (actionFontSize
                         * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
+                sketch.text(this.model.actionPhrase, centerX, actionY,
                         sketch.width / 1.5f, sketch.height / 6f);
             }
             if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
@@ -177,9 +214,9 @@ public class PromptScene implements Scene {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
-                    FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
-                    FOREGROUND_CURVE_RADIUS);
+                    foregroundXPadding, foregroundYPadding,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
 
             // Draw text
             sketch.rectMode(PConstants.CENTER);
@@ -187,18 +224,18 @@ public class PromptScene implements Scene {
             sketch.fill(0);
 
             // Title
-            Graphics.useGothic(sketch, TITLE_FONT_SIZE, true);
-            sketch.text(this.model.title, centerX, TITLE_Y,
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.text(this.model.title, centerX, titleY,
                     sketch.width / 1.5f, sketch.height / 5f);
 
             // Prompt
-            Graphics.useGothic(sketch, PROMPT_FONT_SIZE, false);
-            sketch.text(this.model.prompt, centerX, PROMPT_Y,
+            Graphics.useGothic(sketch, promptFontSize, false);
+            sketch.text(this.model.prompt, centerX, promptY,
                     sketch.width / 1.5f, sketch.height / 5f);
 
             // Action
-            Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
-            sketch.text(this.model.actionPhrase, centerX, ACTION_Y,
+            Graphics.useGothic(sketch, actionFontSize, true);
+            sketch.text(this.model.actionPhrase, centerX, actionY,
                     sketch.width / 1.5f, sketch.height / 6f);
 
             // Draw buttons
