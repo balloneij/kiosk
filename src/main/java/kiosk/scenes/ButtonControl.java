@@ -41,6 +41,8 @@ public class ButtonControl implements Control<MouseEvent> {
     private float centerSquareSize = 0;
     private boolean disabled = false;
     private boolean shouldAnimate;
+    private boolean wasInit = false;
+    private boolean initWarningPrinted = false;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -149,6 +151,7 @@ public class ButtonControl implements Control<MouseEvent> {
         if (this.model.image != null) {
             this.image = Image.createImage(sketch, model.image);
         }
+        wasInit = true;
     }
 
     /**
@@ -160,6 +163,7 @@ public class ButtonControl implements Control<MouseEvent> {
     public void draw(Kiosk sketch) {
         if (!fontSizeOverwritten) {
             Graphics.useGothic(sketch, fontSize, true);
+            checkInit(); // Prints a warning if the button wasn't initialized
             textSizeMultiplier = 1;
         }
         fontSizeOverwritten = false;
@@ -206,6 +210,7 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public void draw(Kiosk sketch, double sizeMultiplier) {
         Graphics.useGothic(sketch, (int) (fontSize * sizeMultiplier), true);
+        checkInit(); // Prints a warning if the button wasn't initialized
         textSizeMultiplier = (float) sizeMultiplier;
         if (!this.model.noButton) {
             if (this.model.isCircle) {
@@ -313,6 +318,16 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed && !this.disabled) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY() + this.rect.height / 10.f);
+                    } else {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) (this.rect.getCenterY() + (this.rect.height / 10.f * offset)));
+                    }
+                }
             } else {
                 sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
                 sketch.stroke(59, 58, 57, 63f);
@@ -325,6 +340,16 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed && !this.disabled) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY() + this.rect.height / 10.f);
+                    } else {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                            (float) rect.getCenterY());
+                    }
+                }
             }
         }
     }
@@ -346,15 +371,6 @@ public class ButtonControl implements Control<MouseEvent> {
                     this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                     (int) (this.rect.width * sizeMultiplier),
                     (int) (this.rect.height * sizeMultiplier));
-            if (this.model.image != null) {
-                sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed && !this.disabled) {
-                    this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY() + this.rect.height / 10.f);
-                } else {
-                    this.image.draw(sketch, (float) rect.getCenterX(), (float) (rect.getCenterY()));
-                }
-            }
         }
 
         // If pressed, draw the text lower and don't draw the main button
@@ -610,5 +626,18 @@ public class ButtonControl implements Control<MouseEvent> {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    /**
+     * Prints a warning & stack trace if the button has not been initialized. Meant to be called
+     * in the draw method.
+     */
+    private void checkInit() {
+        // Print warning if button was not init and warning hasn't ben printed
+        if (!wasInit && !initWarningPrinted) {
+            initWarningPrinted = true;
+            throw new IllegalStateException("Button was not init! Call ButtonControl.init() "
+                + "in the init method of the scene!");
+        }
     }
 }

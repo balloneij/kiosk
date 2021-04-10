@@ -80,8 +80,10 @@ public class CareerDescriptionScene implements Scene {
         final int sketchWidth = Kiosk.getSettings().screenW;
 
         this.homeButton = GraphicsUtil.initializeHomeButton();
+        this.homeButton.init(sketch);
         sketch.hookControl(this.homeButton);
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
 
         if (this.model.button.image != null) {

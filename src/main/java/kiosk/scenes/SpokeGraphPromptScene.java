@@ -37,6 +37,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     // Answers
     private static int answersPadding = screenW / 58;
+    private static final int ANSWER_IMAGE_PADDING = 20;
     private static float answersSpokeThickness = 2;
     private static int answersMax = 4;
 
@@ -129,6 +130,13 @@ public class SpokeGraphPromptScene implements Scene {
             );
         }
 
+        for (int i = 0; i < answersCount; i++) {
+            if (model.answers[i].image != null) {
+                model.answers[i].image.width = answerDiameter - ANSWER_IMAGE_PADDING;
+                model.answers[i].image.height = answerDiameter - ANSWER_IMAGE_PADDING;
+            }
+        }
+
         ButtonModel prompt = new ButtonModel();
         prompt.isCircle = true;
         prompt.rgb = new int[]{ 0, 0, 0 };
@@ -168,21 +176,27 @@ public class SpokeGraphPromptScene implements Scene {
         this.spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
                 this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
+        spokeGraph.init(sketch);
 
         for (ButtonControl button : this.answerButtons) {
+            button.init(sketch);
             sketch.hookControl(button);
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton.init(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
             this.supplementaryButton.init(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
+
+        this.promptButton.init(sketch);
     }
 
     @Override

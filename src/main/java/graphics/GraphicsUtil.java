@@ -98,11 +98,10 @@ public class GraphicsUtil {
         ButtonModel nextButtonModel = new ButtonModel();
         nextButtonModel.text = "Go! →";
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
-        ButtonControl nextButton = new ButtonControl(nextButtonModel,
+        return new ButtonControl(nextButtonModel,
                 sketch.width - commonButtonPadding - commonButtonWidth * 3 / 4,
                 sketch.height - (commonButtonHeight * 3 / 4) - commonButtonPadding,
                 commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4);
-        return nextButton;
     }
 
     /**
@@ -126,6 +125,7 @@ public class GraphicsUtil {
                 sketch.height - (commonButtonHeight * 5 / 4) - commonButtonPadding,
                 commonButtonWidth * 3 / 4, commonButtonWidth * 3 / 4, false);
         msoeButton.setNoButton(true);
+        msoeButton.init(sketch);
         return msoeButton;
     }
 

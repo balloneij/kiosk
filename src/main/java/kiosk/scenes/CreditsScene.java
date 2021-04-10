@@ -78,6 +78,7 @@ public class CreditsScene implements Scene {
         startFrame = sketch.frameCount;
 
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
     }
 

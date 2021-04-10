@@ -46,8 +46,10 @@ public class PathwayScene implements Scene {
     public void init(Kiosk sketch) {
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton.init(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
@@ -58,6 +60,8 @@ public class PathwayScene implements Scene {
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
+
+        spokeGraph.init(sketch);
     }
 
     @Override
