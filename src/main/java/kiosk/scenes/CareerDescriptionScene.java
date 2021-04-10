@@ -132,6 +132,7 @@ public class CareerDescriptionScene implements Scene {
                 foregroundCurveRadius);
 
         // Text Properties
+        sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
         sketch.fill(0);
 
@@ -139,7 +140,6 @@ public class CareerDescriptionScene implements Scene {
         // Career Name
         Graphics.useGothic(sketch, titleFontSize, true);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.textLeading(33);
         sketch.rectMode(PConstants.CENTER);
         sketch.text(this.model.careerModel.name, centerX, (int) (titleY * 1.15),
                 (int) (foregroundWidth * 0.95), foregroundHeight / 5);
@@ -148,7 +148,6 @@ public class CareerDescriptionScene implements Scene {
         // What to do next
         Graphics.useGothic(sketch, instructionsFontSize, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.textLeading(25);
         sketch.rectMode(PConstants.CENTER);
         sketch.text(this.model.body, centerX, (int) (instructionsY * 1.15),
                 (int) (foregroundWidth * 0.95), foregroundHeight / 5);
@@ -156,7 +155,6 @@ public class CareerDescriptionScene implements Scene {
         // Career Description
         Graphics.useGothic(sketch, descriptionFontSize, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.textLeading(25);
         sketch.rectMode(PConstants.CENTER);
         sketch.text(this.model.careerModel.description, centerX, (int) (descriptionY * 1.15),
                 (int) (foregroundWidth * 0.95), foregroundHeight / 5);

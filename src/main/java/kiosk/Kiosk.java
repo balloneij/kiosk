@@ -58,15 +58,6 @@ public class Kiosk extends PApplet {
     }
 
     /**
-     * Create a kiosk and loads the survey specified in the path provided.
-     * @param surveyPath to load from
-     * @param fullScreenDesired if this kiosk should be in fullscreen
-     */
-    public Kiosk(String surveyPath, boolean fullScreenDesired) {
-        this(surveyPath, Settings.readSettings(fullScreenDesired));
-    }
-
-    /**
      * For use in the editor when the width and height of the kiosk
      * needs to be different than what's specified in the settings file.
      * @param surveyPath the path of the survey XML

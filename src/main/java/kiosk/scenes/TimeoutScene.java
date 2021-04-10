@@ -20,14 +20,14 @@ public class TimeoutScene implements Scene {
 
     // Text
     private static int titleY = Kiosk.getSettings().screenH / 4;
-    private static int titleFontSize = 24;
+    private static int titleFontSize = Kiosk.getSettings().screenW / 55;
     private int warningY = Kiosk.getSettings().screenH * 3 / 6;
-    private int warningFontSize = 16;
+    private int warningFontSize = Kiosk.getSettings().screenW / 60;
     private int timerY = Kiosk.getSettings().screenH * 5 / 8;
-    private int timerFontSize = 20;
+    private int timerFontSize = Kiosk.getSettings().screenW / 58;
 
     // Buttons
-    private static int buttonWidth = Kiosk.getSettings().screenW / 8;
+    private static int buttonWidth = Kiosk.getSettings().screenW / 4;
     private static int buttonHeight = Kiosk.getSettings().screenH / 6;
     private static int buttonRadius = Kiosk.getSettings().screenW / 8;
     private static int buttonImageWidth = buttonRadius * 4 / 5;
@@ -61,20 +61,20 @@ public class TimeoutScene implements Scene {
 
         // Text
         titleY = Kiosk.getSettings().screenH / 4;
-        titleFontSize = 24;
+        titleFontSize = Kiosk.getSettings().screenW / 55;
         warningY = Kiosk.getSettings().screenH * 3 / 6;
-        warningFontSize = 16;
-        timerY = Kiosk.getSettings().screenH / 2;
-        timerFontSize = 20;
+        warningFontSize = Kiosk.getSettings().screenW / 60;
+        timerY = Kiosk.getSettings().screenH * 5 / 8;
+        timerFontSize = Kiosk.getSettings().screenW / 58;
 
         // Buttons
-        buttonWidth = Kiosk.getSettings().screenW / 8;
+        buttonWidth = Kiosk.getSettings().screenW / 4;
         buttonHeight = Kiosk.getSettings().screenH / 6;
         buttonRadius = Kiosk.getSettings().screenW / 8;
         buttonImageWidth = buttonRadius * 4 / 5;
         buttonImageHeight = buttonRadius * 4 / 5;
-        buttonPadding = 20;
-        buttonY = Kiosk.getSettings().screenH * 7 / 12;
+        buttonPadding = Kiosk.getSettings().screenW / 60;
+        buttonY = Kiosk.getSettings().screenH * 17 / 24;
     }
 
     @Override
@@ -87,17 +87,16 @@ public class TimeoutScene implements Scene {
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
         sketch.rectMode(PConstants.CENTER);
         this.homeButton = new ButtonControl(homeButtonModel,
-                buttonPadding * 2, sketchHeight - buttonPadding * 5,
-                buttonWidth * 3, buttonHeight * 3 / 4);
+                foregroundXPadding + buttonPadding * 2, buttonY,
+                buttonWidth, buttonHeight * 3 / 4);
         this.homeButton.init(sketch);
         sketch.hookControl(this.homeButton);
         ButtonModel backButtonModel = new ButtonModel();
         backButtonModel.text = "I'm still here!";
         sketch.rectMode(PConstants.CENTER);
         this.backButton = new ButtonControl(backButtonModel,
-                sketchWidth - buttonPadding * 2 - buttonWidth * 3,
-                sketchHeight - buttonPadding * 5,
-                buttonWidth * 3, buttonHeight * 3 / 4);
+                sketchWidth - buttonPadding * 2 - buttonWidth - foregroundXPadding,
+                buttonY, buttonWidth, buttonHeight * 3 / 4);
         this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
 
@@ -152,8 +151,13 @@ public class TimeoutScene implements Scene {
         Graphics.useGothic(sketch, timerFontSize, false);
         sketch.rectMode(PConstants.CENTER);
         sketch.fill(256, 0, 0);
-        sketch.text(this.model.timerText + ((remainingTime / 1000) + 1) + " seconds",
-                centerX, timerY, (int) (foregroundWidth * 0.95), foregroundHeight / 2f);
+        if (((remainingTime / 1000) + 1) == 1) {
+            sketch.text(this.model.timerText + ((remainingTime / 1000) + 1) + " second",
+                    centerX, timerY, (int) (foregroundWidth * 0.95), foregroundHeight / 2f);
+        } else {
+            sketch.text(this.model.timerText + ((remainingTime / 1000) + 1) + " seconds",
+                    centerX, timerY, (int) (foregroundWidth * 0.95), foregroundHeight / 2f);
+        }
 
         // Image
         image.draw(sketch, imageX, imageY);
