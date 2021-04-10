@@ -140,9 +140,6 @@ public class SpokeGraphPromptScene implements Scene {
                 answerRadius
         );
         promptButton.setDisabled(true);
-
-        this.backButton = ButtonControl.createBackButton();
-        this.homeButton = ButtonControl.createHomeButton();
     }
 
     @Override
@@ -209,32 +206,11 @@ public class SpokeGraphPromptScene implements Scene {
     @Override
     public void draw(Kiosk sketch) {
         Graphics.useGothic(sketch, 48, true);
-        Graphics.drawBubbleBackground(sketch);
-
-        // Draw the white header box
-        sketch.fill(255);
-        sketch.stroke(255);
-        Graphics.drawRoundedRectangle(sketch,
-                headerX + headerW / 2, headerY + headerH / 2,
-                headerW, headerH, headerCurveRadius);
-
-        Graphics.useSansSerifBold(sketch, 48);
-
-        // Draw the title text
-        sketch.rectMode(PConstants.CENTER);
-        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+        // Text Properties
+        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        sketch.stroke(0);
-        Graphics.useSansSerifBold(sketch, headerTitleFontSize);
-        sketch.text(this.model.headerTitle,
-                headerCenterX, headerTitleY,
-                headerW, headerTitleFontSize * 2);
-
-        // Draw the body text
-        Graphics.useSansSerif(sketch, headerBodyFontSize);
-        sketch.text(this.model.headerBody,
-                headerCenterX, headerBodyY,
-                headerW, headerBodyFontSize * 2);
+        Graphics.drawBubbleBackground(sketch);
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
 
         // Calculate answer location constants
         float headerBottomY = headerY + headerH + 2 * answersPadding;

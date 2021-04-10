@@ -36,8 +36,6 @@ public class CareerPathwayScene implements Scene {
         this.model = model;
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
-        this.backButton = ButtonControl.createBackButton();
-        this.homeButton = ButtonControl.createHomeButton();
     }
 
     @Override
