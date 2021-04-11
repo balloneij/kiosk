@@ -1,5 +1,6 @@
 package kiosk;
 
+import graphics.Boop;
 import graphics.Color;
 import graphics.Graphics;
 import java.awt.Component;
@@ -168,7 +169,8 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
-        if(!fontsLoaded) {
+        Boop.loadVariables(this);
+        if (!fontsLoaded) {
             Graphics.loadFonts();
             fontsLoaded = true;
         }
@@ -238,6 +240,7 @@ public class Kiosk extends PApplet {
                         Kiosk.settings.gracePeriodMillis - currentSceneMillis;
             }
         }
+        Boop.movementLogic(this);
     }
 
     /**

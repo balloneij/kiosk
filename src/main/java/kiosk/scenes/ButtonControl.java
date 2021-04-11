@@ -2,7 +2,6 @@ package kiosk.scenes;
 
 import graphics.Color;
 import graphics.Graphics;
-
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +43,8 @@ public class ButtonControl implements Control<MouseEvent> {
     private boolean shouldAnimate;
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
+    private ImageModel shadowImageModel;
+    private Image shadowImage;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -74,6 +75,9 @@ public class ButtonControl implements Control<MouseEvent> {
         this.image = null;
         this.disabled = false;
         this.shouldAnimate = doesAnimate;
+
+        this.shadowImageModel = new ImageModel("assets/shadow.png",
+                this.rect.width * 2, this.rect.height * 2);
 
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
@@ -123,6 +127,9 @@ public class ButtonControl implements Control<MouseEvent> {
         this.disabled = false;
         shouldAnimate = doesAnimate;
 
+        this.shadowImageModel = new ImageModel("assets/shadow.png",
+                this.rect.width * 2, this.rect.height * 2);
+
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
 
@@ -152,6 +159,7 @@ public class ButtonControl implements Control<MouseEvent> {
         if (this.model.image != null) {
             this.image = Image.createImage(sketch, model.image);
         }
+        this.shadowImage = Image.createImage(sketch, this.shadowImageModel);
         wasInit = true;
     }
 
@@ -244,6 +252,9 @@ public class ButtonControl implements Control<MouseEvent> {
 
         // If it's clickable, draw the darker button behind the main one to add 3D effect
         if (!this.disabled) {
+            //Draw the shadow behind clickable buttons to add 3D effects
+            this.shadowImage.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+
             //Draw the darker button behind the button to add 3D effects
             sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
                     clampColor(this.model.rgb[1] + colorDeltaOnClick),
@@ -365,6 +376,10 @@ public class ButtonControl implements Control<MouseEvent> {
 
         // If it's clickable, draw the darker button behind the main one to add 3D effect
         if (!disabled) {
+            //Draw the shadow behind clickable buttons to add 3D effects
+            this.shadowImage.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
+
+            //Draw the darker button behind the button to add 3D effects
             sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
                     clampColor(this.model.rgb[1] + colorDeltaOnClick),
                     clampColor(this.model.rgb[2] + colorDeltaOnClick));
@@ -497,7 +512,8 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     // TODO maybe this should be extracted to a graphics class
-    private void textWithOutline(String text, float x, float y, float w, float h, Kiosk sketch, boolean blackTextDesired) {
+    private void textWithOutline(String text, float x, float y, float w, float h,
+                                 Kiosk sketch, boolean blackTextDesired) {
         if (blackTextDesired) {
             // Draw multiple copies of the text shifted by a few pixels to create the outline
             sketch.fill(Color.DW_WHITE_RGB[0], Color.DW_WHITE_RGB[1], Color.DW_WHITE_RGB[2]);

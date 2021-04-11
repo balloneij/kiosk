@@ -177,41 +177,5 @@ public class Graphics {
             stagger = !stagger;
         }
         bubbleOffset = bubbleOffset + 0.125f;
-        drawTheBoopBoi(sketch);
-    }
-
-    /**
-     * Draws Boop the Turtle on the bottom of the screen.
-     * Boop will walk back and forth, and react to touches.
-     * @param sketch to draw to
-     */
-    public static void drawTheBoopBoi(Kiosk sketch) {
-        final int width = Kiosk.getSettings().screenW;
-        final int height = Kiosk.getSettings().screenH;
-        final int boopDimens = height / 10;
-
-        ImageModel lbFootModel = new ImageModel("assets/boop/LeftBackFoot.png", boopDimens, boopDimens);
-        Image lbFoot = Image.createImage(sketch, lbFootModel);
-        lbFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
-
-        ImageModel lfFootModel = new ImageModel("assets/boop/LeftFrontFoot.png", boopDimens, boopDimens);
-        Image lfFoot = Image.createImage(sketch, lfFootModel);
-        lfFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
-
-        ImageModel rbFootModel = new ImageModel("assets/boop/RightBackFoot.png", boopDimens, boopDimens);
-        Image rbFoot = Image.createImage(sketch, rbFootModel);
-        rbFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
-
-        ImageModel rfFootModel = new ImageModel("assets/boop/RightFrontFoot.png", boopDimens, boopDimens);
-        Image rfFoot = Image.createImage(sketch, rfFootModel);
-        rfFoot.draw(sketch, width / 2f, height - boopDimens / 2f);
-
-        ImageModel shellModel = new ImageModel("assets/boop/Shell.png", boopDimens, boopDimens);
-        Image shell = Image.createImage(sketch, shellModel);
-        shell.draw(sketch, width / 2f, height - boopDimens / 2f);
-
-        ImageModel headModel = new ImageModel("assets/boop/Head.png", boopDimens, boopDimens);
-        Image head = Image.createImage(sketch, headModel);
-        head.draw(sketch, width / 2f, height - boopDimens / 2f);
     }
 }
