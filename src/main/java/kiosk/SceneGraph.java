@@ -10,13 +10,14 @@ import java.util.Set;
 import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CareerModel;
 import kiosk.models.ErrorSceneModel;
+import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
 
-    private static final UserScore userScore = new UserScore();
+    private final UserScore userScore;
     private SceneModel root;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
@@ -29,6 +30,7 @@ public class SceneGraph {
      * @param survey model to load from
      */
     public SceneGraph(LoadedSurveyModel survey) {
+        this.userScore = new UserScore(survey.careers);
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
         this.sceneChangeCallbacks = new LinkedList<>();
@@ -71,7 +73,7 @@ public class SceneGraph {
     }
 
     public synchronized void pushScene(SceneModel sceneModel) {
-        this.pushScene(sceneModel, Riasec.None);
+        this.pushScene(sceneModel, Riasec.None, null);
     }
 
     /**
@@ -79,11 +81,14 @@ public class SceneGraph {
      * from the model provided
      * @param sceneModel to create a scene from
      * @param category selected by the previous scene
+     * @param nullOrFilter career filter to apply, or none
      */
-    public synchronized void pushScene(SceneModel sceneModel, Riasec category) {
+    public synchronized void pushScene(SceneModel sceneModel,
+                                       Riasec category,
+                                       FilterGroupModel nullOrFilter) {
         // Update the user score from the category selected on the
         // previous scene
-        userScore.add(category);
+        userScore.apply(category, nullOrFilter);
 
         // Add the new scene
         this.currentScene = sceneModel.deepCopy().createScene();
@@ -92,7 +97,7 @@ public class SceneGraph {
     }
 
     public synchronized void pushScene(String sceneModelId) {
-        this.pushScene(sceneModelId, Riasec.None);
+        this.pushScene(sceneModelId, Riasec.None, null);
     }
 
     /**
@@ -100,17 +105,20 @@ public class SceneGraph {
      * from the scene model id.
      * @param sceneModelId The id of the registered scene to push.
      * @param category selected by the previous scene
+     * @param nullOrFilter career filter to apply, or none
      */
-    public synchronized void pushScene(String sceneModelId, Riasec category) {
+    public synchronized void pushScene(String sceneModelId,
+                                       Riasec category,
+                                       FilterGroupModel nullOrFilter) {
         boolean containsModel = sceneModels.containsKey(sceneModelId);
 
         if (containsModel) {
             SceneModel nextSceneModel = sceneModels.get(sceneModelId);
-            pushScene(nextSceneModel, category);
+            pushScene(nextSceneModel, category, nullOrFilter);
         } else {
             pushScene(new ErrorSceneModel(
                     "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
-                    Riasec.None);
+                    Riasec.None, null);
         }
     }
 
@@ -307,7 +315,7 @@ public class SceneGraph {
         return sceneModels.values();
     }
 
-    public static UserScore getUserScore() {
+    public UserScore getUserScore() {
         return userScore;
     }
 

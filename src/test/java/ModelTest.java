@@ -66,37 +66,7 @@ public class ModelTest {
 
         // Assert
         assertEquals(model.careers.length, modelRead.careers.length);
-        assertEquals(model.filters.length, modelRead.filters.length);
         assertEquals(model.rootSceneId, modelRead.rootSceneId);
-    }
-
-    @Test
-    public void careerPathwaySceneModel() {
-        // Arrange
-        CareerPathwaySceneModel model = new CareerPathwaySceneModel();
-        model.filter = new FilterGroupModel();
-        model.filter.name = "Joe Mama";
-        ModelWriter<CareerPathwaySceneModel> writer = new ModelWriter<>(model);
-
-        // Act
-        CareerPathwaySceneModel modelRead = writer.test();
-
-        // Assert
-        assertEquals(model.filter.name, modelRead.filter.name);
-    }
-
-    @Test
-    public void filterGroupModel() {
-        // Arrange
-        FilterGroupModel model = new FilterGroupModel();
-        model.name = "test test test";
-        ModelWriter<FilterGroupModel> writer = new ModelWriter<>(model);
-
-        // Act
-        FilterGroupModel modelRead = writer.test();
-
-        // Assert
-        assertEquals(model.name, modelRead.name);
     }
 
     @Test

@@ -22,18 +22,18 @@ public class CareerPathwaySceneLoader {
 
     /**
      * Populates the editor pane with fields for editing the provided SceneModel.
+     *
      * @param model The current scene model we want to modify.
      * @param graph The scene graph used to manage application state.
      */
     public static void loadScene(Controller controller, CareerPathwaySceneModel model,
-                                 VBox toolbarBox, SceneGraph graph, FilterGroupModel[] filters) {
+                                 VBox toolbarBox, SceneGraph graph) {
         // Get the editing Nodes for the CareerPathwaySceneModel properties
         VBox vbox = new VBox(
-            SceneLoader.getNameBox(controller, model, graph),
-            getHeaderTitleBox(model, graph),
-            getHeaderBodyBox(model, graph),
-            getCenterTextBox(model, graph),
-            getFilterBox(model, graph, filters),
+                SceneLoader.getNameBox(controller, model, graph),
+                getHeaderTitleBox(model, graph),
+                getHeaderBodyBox(model, graph),
+                getCenterTextBox(model, graph),
                 new Text(" This is the final scene in the survey;\n users"
                         + " now learn about their recommended careers")
         );
@@ -86,32 +86,5 @@ public class CareerPathwaySceneLoader {
         vbox.setPadding(PADDING);
         return vbox;
 
-    }
-
-    /**
-     * Returns a ComboBox that can be used to change the filter the CareerPathwayScene is using.
-     * @param model The model of the CareerPathwayScene being edited.
-     * @param graph The SceneGraph to re-register the scene to.
-     * @return ComboBox that can be used to change the filter the CareerPathwayScene is using.
-     */
-    private static Node getFilterBox(CareerPathwaySceneModel model, SceneGraph graph,
-                                     FilterGroupModel[] filters) {
-        // Create a ComboBox with all the available filters
-        ComboBox<FilterGroupModel> filterBox =
-            new ComboBox<>(FXCollections.observableList(Arrays.asList(filters)));
-        filterBox.setValue(model.filter); // Set initial value to match the current filter
-
-        // On change, update the scenes filter (if it is different from the current filter)
-        filterBox.setOnAction(event -> {
-            FilterGroupModel target = filterBox.getValue();
-            if (!target.equals(model.filter)) {
-                model.filter = target;
-                graph.registerSceneModel(model); // Re-register the model to update the scene
-            }
-        });
-
-        VBox vbox = new VBox(new Label("Filter:"), filterBox);
-        vbox.setPadding(PADDING);
-        return vbox;
     }
 }

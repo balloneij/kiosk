@@ -1,7 +1,11 @@
 package kiosk;
 
+import java.util.HashMap;
 import java.util.LinkedList;
-import javafx.util.Pair;
+import java.util.Set;
+
+import kiosk.models.CareerModel;
+import kiosk.models.FilterGroupModel;
 
 public class UserScore {
 
@@ -12,23 +16,80 @@ public class UserScore {
     private int enterprising = 0;
     private int conventional = 0;
 
-    private final LinkedList<Pair<UserScoreOperation, Riasec>> history = new LinkedList<>();
+    private final HashMap<String, CareerModel> allCareers = new HashMap<>();
+    private final HashMap<String, CareerModel> includedCareers = new HashMap<>();
+    private final LinkedList<ScoreOperation> history = new LinkedList<>();
 
     /**
-     * Add a point from the specified category.
-     * @param category to add to
+     * Create a new user score object.
+     * @param careers that are available to the user
      */
-    public void add(Riasec category) {
-        this.add(category, true);
+    public UserScore(CareerModel[] careers) {
+        if (careers != null) {
+            for (CareerModel career : careers) {
+                this.allCareers.put(career.name, career);
+                this.includedCareers.put(career.name, career);
+            }
+        }
+    }
+
+    /**
+     * Apply a category and filter to the user score. Intended to
+     * be called every time the user makes a selection in the survey.
+     * @param category score to add to
+     * @param filterOrNull careers to filter out. Null if none
+     */
+    public void apply(Riasec category, FilterGroupModel filterOrNull) {
+        // Apply RIASEC score
+        this.add(category);
+
+        // Apply filter
+        if (filterOrNull != null) {
+            // Filter careers and store the removed careers in a list
+            // for undo history
+            final LinkedList<String> removedCareers = new LinkedList<>();
+            Set<String> includedKeySet = includedCareers.keySet();
+
+            includedKeySet.removeIf(career -> {
+                if (!filterOrNull.careerNames.contains(career)) {
+                    removedCareers.add(career);
+                    return true;
+                }
+                return false;
+            });
+
+            // Push to history
+            this.history.push(new ScoreOperation(category, removedCareers));
+        } else {
+            // Push to history
+            this.history.push(new ScoreOperation(category, null));
+        }
+    }
+
+    /**
+     * Undo the last apply. Intended to be called every time the user moves
+     * backwards in the survey.
+     */
+    public void undo() {
+        ScoreOperation operation = this.history.pop();
+
+        // Careers were removed in the previous operation, so add them back
+        if (operation.careersRemoved != null) {
+            for (String career : operation.careersRemoved) {
+                includedCareers.put(career, allCareers.get(career));
+            }
+        }
+
+        // Undo RIASEC operation
+        this.subtract(operation.category);
     }
 
     /**
      * Add a point from the specified category. Specify
      * whether it will affect history or not.
      * @param category to add to
-     * @param addToHistory true if it should be undo-able
      */
-    public void add(Riasec category, boolean addToHistory) {
+    private void add(Riasec category) {
         switch (category) {
             case Realistic:
                 this.realistic++;
@@ -51,28 +112,16 @@ public class UserScore {
             case None:
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + category);
+                throw new IllegalArgumentException("Unexpected value: " + category);
         }
-        if (addToHistory) {
-            this.history.push(new Pair<>(UserScoreOperation.Add, category));
-        }
-    }
-
-    /**
-     * Remove a point from the specified category.
-     * @param category to remove from
-     */
-    public void subtract(Riasec category) {
-        this.subtract(category, true);
     }
 
     /**
      * Remove a point from the specified category. Specify
      * whether it will affect history or not.
      * @param category to remove from
-     * @param addToHistory true if it should be undo-able
      */
-    public void subtract(Riasec category, boolean addToHistory) {
+    private void subtract(Riasec category) {
         switch (category) {
             case Realistic:
                 this.realistic--;
@@ -95,32 +144,7 @@ public class UserScore {
             case None:
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + category);
-        }
-        if (addToHistory) {
-            this.history.push(new Pair<>(UserScoreOperation.Subtract, category));
-        }
-    }
-
-    /**
-     * Undo the previous operation.
-     */
-    public void undo() {
-        if (this.history.isEmpty()) {
-            System.err.println("There are no more UserScore operations to undo!");
-            return;
-        }
-
-        Pair<UserScoreOperation, Riasec> lastOperationPair = this.history.pop();
-        UserScoreOperation operation = lastOperationPair.getKey();
-        Riasec category = lastOperationPair.getValue();
-
-        // Do the opposite of the previous operation in order
-        // to revert back to the previous state
-        if (operation == UserScoreOperation.Add) {
-            this.subtract(category, false);
-        } else {
-            this.add(category, false);
+                throw new IllegalArgumentException("Unexpected value: " + category);
         }
     }
 
@@ -136,6 +160,13 @@ public class UserScore {
         this.conventional = 0;
 
         this.history.clear();
+        for (String career : this.allCareers.keySet()) {
+            this.includedCareers.put(career, this.allCareers.get(career));
+        }
+    }
+
+    public CareerModel[] getCareers() {
+        return this.includedCareers.values().toArray(new CareerModel[0]);
     }
 
     public int getRealistic() {
@@ -209,8 +240,13 @@ public class UserScore {
         return score;
     }
 
-    public enum UserScoreOperation {
-        Add,
-        Subtract
+    private static class ScoreOperation {
+        private final Riasec category;
+        private final LinkedList<String> careersRemoved;
+
+        private ScoreOperation(Riasec category, LinkedList<String> careersRemoved) {
+            this.category = category;
+            this.careersRemoved = careersRemoved;
+        }
     }
 }

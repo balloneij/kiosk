@@ -33,7 +33,6 @@ public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private CareerModel[] careers;
-    private final FilterGroupModel[] filters;
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
@@ -95,9 +94,9 @@ public class Kiosk extends PApplet {
             defaultScenes.add(new DefaultSceneModel());
             survey = new LoadedSurveyModel(defaultScenes);
         }
+        survey = LoadedSurveyModel.createSampleSurvey();
         this.sceneGraph = new SceneGraph(survey);
         this.careers = survey.careers;
-        this.filters = survey.filters;
 
         this.mouseListeners = new LinkedHashMap<>();
 
@@ -235,12 +234,12 @@ public class Kiosk extends PApplet {
         }
     }
 
-    public CareerModel[] getAllCareers() {
-        return careers;
+    public UserScore getUserScore() {
+        return this.sceneGraph.getUserScore();
     }
 
-    public FilterGroupModel[] getFilters() {
-        return filters;
+    public CareerModel[] getAllCareers() {
+        return careers;
     }
 
     /**

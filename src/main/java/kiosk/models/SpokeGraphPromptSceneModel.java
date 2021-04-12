@@ -12,7 +12,6 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String careerCenterText;
     public String promptText;
     public ButtonModel[] answers;
-    public FilterGroupModel filter;
 
     /**
      * Creates a new SG prompt scene model.
@@ -38,7 +37,6 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         model.careerCenterText = "";
         model.promptText = "";
         model.answers = new ButtonModel[]{};
-        model.filter = new FilterGroupModel();
         return model;
     }
 
@@ -83,7 +81,6 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         copy.careerCenterText = this.careerCenterText;
         copy.promptText = this.promptText;
         copy.answers = answersCopy;
-        copy.filter = filter;
         return copy;
     }
 

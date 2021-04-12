@@ -3,9 +3,11 @@ package kiosk.scenes;
 import graphics.Graphics;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.CreditsSceneModel;
+import kiosk.models.FilterGroupModel;
 import kiosk.models.PromptSceneModel;
 import processing.core.PConstants;
 
@@ -107,7 +109,11 @@ public class PromptScene implements Scene {
     public void update(float dt, SceneGraph sceneGraph) {
         for (ButtonControl button : this.buttons) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
+                String scene = button.getTarget();
+                Riasec riasec = button.getModel().category;
+                FilterGroupModel filter = button.getModel().filter;
+                sceneGraph.pushScene(scene, riasec, filter);
+                break;
             }
         }
 
