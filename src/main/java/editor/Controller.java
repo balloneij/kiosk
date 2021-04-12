@@ -177,9 +177,6 @@ public class Controller implements Initializable {
     /**
      * Rebuild the toolbar. Public because the toolbar can need to
      * be remade under various circumstances (not just when switching scenes.)
-     * todo might be able to be replaced with just an "updateSceneName" method,
-     * todo as that is (currently) the only other way of rebuilding besides
-     * todo switching scenes
      */
     public void rebuildToolbar(SceneModel model) {
         // Clear the scene type selector if we changed scenes
