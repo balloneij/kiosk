@@ -132,7 +132,7 @@ public class Controller implements Initializable {
                         sceneGraph.registerSceneModel(newModel);
 
                         rebuildToolbar(newModel);
-                        rebuildSceneGraphTreeView(); //todo
+                        rebuildSceneGraphTreeView();
                     }
                 });
 
