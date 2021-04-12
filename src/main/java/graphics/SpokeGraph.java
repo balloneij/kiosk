@@ -29,6 +29,9 @@ public class SpokeGraph {
     private final int[] rgbColor1 = new int[] { 0, 0, 255 };
     private final int[] rgbColor2 = new int[] { 255, 0, 0 };
 
+    private boolean wasInit = false;
+    private boolean initWarningPrinted = false;
+
     /**
      * Create a spoke graph.
      * @param size the square to fit the graph in
@@ -87,6 +90,7 @@ public class SpokeGraph {
             double weight = normalWeights[i];
             final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
             final float diameter = radius * 2;
+            final double centerSquareSize = Math.sqrt(Math.pow(diameter, 2) / 2);
             final float buttonX = (float)
                     (centerX + Math.cos(STARTING_ANGLE + angleDelta * i) * (spokeLength + radius));
             final float buttonY = (float)
@@ -96,6 +100,10 @@ public class SpokeGraph {
             ButtonModel button = buttons[i];
             button.isCircle = true;
             button.rgb = lerpColor(rgbColor1, rgbColor2, weight);
+            if (button.image != null) {
+                button.image.width = (int) centerSquareSize;
+                button.image.height = (int) centerSquareSize;
+            }
 
             buttonControls[i] = new ButtonControl(button,
                     (int) (buttonX - radius), (int) (buttonY - radius),
@@ -132,10 +140,23 @@ public class SpokeGraph {
     }
 
     /**
+     * Initializes the SpokeGraph.
+     * @param sketch Kiosk to initialize SpokeGraph for.
+     */
+    public void init(Kiosk sketch) {
+        for (ButtonControl buttonControl : buttonControls) {
+            buttonControl.init(sketch);
+        }
+        wasInit = true;
+    }
+
+    /**
      * Draw the spoke graph.
      * @param sketch to draw to
      */
     public void draw(Kiosk sketch) {
+        checkInit(); // Prints a warning if the SpokeGraph wasn't initialized
+
         // Draw the buttons and spokes
         for (ButtonControl buttonControl : this.buttonControls) {
             sketch.stroke(255);
@@ -216,6 +237,19 @@ public class SpokeGraph {
             for (ButtonControl button : buttonControls) {
                 button.setDisabled(false);
             }
+        }
+    }
+
+    /**
+     * Prints a warning & stack trace if the SpokeGraph has not been initialized. Meant to be called
+     * in the draw method.
+     */
+    private void checkInit() {
+        // Print warning if SpokeGraph was not init and warning hasn't been printed
+        if (!wasInit && !initWarningPrinted) {
+            initWarningPrinted = true;
+            throw new IllegalStateException("SpokeGraph was not init! Call SpokeGraph.init() in "
+                + "the init method of the scene!");
         }
     }
 }
