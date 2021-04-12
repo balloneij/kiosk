@@ -60,7 +60,7 @@ public class Controller implements Initializable {
     private String previousId;
     private File surveyFile = null;
 
-    private boolean hasPendingChanges;
+    public static boolean hasPendingChanges;
 
     @FXML
     AnchorPane rootPane;
@@ -214,6 +214,20 @@ public class Controller implements Initializable {
     }
 
     /**
+     * Sets the flag to track if we have pending changs.
+     * Also adds or removes the star from the window indicating pending changes.
+     * @param hasPendingChanges True if we have unsaved changes, false otherwise.
+     */
+    public static void setHasPendingChanges(boolean hasPendingChanges) {
+        Controller.hasPendingChanges = hasPendingChanges;
+        if (Controller.hasPendingChanges) {
+            Editor.setTitle("*" + Editor.getTitle().replaceAll("\\*", ""));
+        } else {
+            Editor.setTitle(Editor.getTitle().replaceAll("\\*", ""));
+        }
+    }
+
+    /**
      * Constructs a brand new hidden root for the tree view to use.
      * @return The new tree root.
      */
@@ -334,8 +348,7 @@ public class Controller implements Initializable {
             }
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
-        this.hasPendingChanges = true;
-        Editor.setTitle("*" + Editor.getTitle().replaceAll("\\*", ""));
+        Controller.setHasPendingChanges(true);
     }
 
     /**
@@ -394,8 +407,7 @@ public class Controller implements Initializable {
     public void addNewScene(TreeItem<SceneModel> hiddenRoot, SceneModel newScene) {
         sceneGraph.registerSceneModel(newScene);
         hiddenRoot.getChildren().add(new TreeItem<>(newScene));
-        this.hasPendingChanges = true;
-        Editor.setTitle("*" + Editor.getTitle().replaceAll("\\*", ""));
+        Controller.setHasPendingChanges(true);
     }
 
     @FXML

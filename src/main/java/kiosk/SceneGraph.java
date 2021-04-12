@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import editor.Controller;
 import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CareerModel;
 import kiosk.models.ErrorSceneModel;
@@ -180,6 +182,7 @@ public class SceneGraph {
         }
 
         sceneModels.put(sceneModel.getId(), sceneModel);
+        Controller.setHasPendingChanges(true);
     }
 
     /**
