@@ -60,7 +60,6 @@ public class Controller implements Initializable {
 
     private String previousId;
     private File surveyFile = null;
-    private HashMap<String, Boolean> expanded; // todo find where and how to create this
 
     @FXML
     AnchorPane rootPane;
@@ -314,6 +313,22 @@ public class Controller implements Initializable {
      * specified by TREE_VIEW_DEPTH.
      */
     public void rebuildSceneGraphTreeView() {
+        // doesn't need to be a hashMap; every item in here is expanded
+        // and we simply don't record the ones that are not expanded
+        ArrayList<String> expandedItems = new ArrayList<>();
+
+        // because the tree view is the way we want it here, it's fine to
+        // loop through just the tree items - this is simpler, and/but
+        // causes "hidden expanded items" to no be remembered on refresh
+        if (sceneGraphTreeView.getRoot() != null) {
+            for (int i = 0; i < sceneGraphTreeView.getExpandedItemCount(); i++) {
+                TreeItem<SceneModel> treeItem = sceneGraphTreeView.getTreeItem(i);
+                if (treeItem.isExpanded()) {
+                    expandedItems.add(treeItem.getValue().getId());
+                }
+            }
+        }
+
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
 
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
@@ -337,12 +352,20 @@ public class Controller implements Initializable {
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
 
-        // todo needs to be more than just form the root's children though
-//        for (TreeItem<SceneModel> sm : sceneGraphTreeView.getRoot().getChildren()) {
-//            if (expanded.containsKey(sm.getValue().getId())) {
-//                sm.setExpanded(expanded.get(sm.getValue().getId()));
-//            }
-//        }
+        // null check for safety; should be initialized already (from above)
+        if (sceneGraphTreeView.getRoot() != null) {
+            for (int i = 0; i < expandedItems.size(); i++) {
+                for (TreeItem<SceneModel> treeItem : sceneGraphTreeView.getRoot().getChildren()) { // todo not getRoot; getRow()()()()()()()()!!!
+                    if (expandedItems.contains(treeItem.getValue().getId())) {
+                        System.out.println(treeItem.getValue().getName()+"was found in expanded items");
+                        treeItem.setExpanded(true);
+                        expandedItems.remove(treeItem.getValue().getId());
+                        System.out.println(treeItem.getValue().getName()+"has been removed now");
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
