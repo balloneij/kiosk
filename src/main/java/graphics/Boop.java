@@ -51,6 +51,7 @@ public class Boop {
     private static boolean isMoving;
     private static boolean isTapped;
     private static boolean isHappy;
+    private static boolean insideHappyState;
     private static boolean choseDirection;
     private static boolean choseLeft;
     private static boolean choseSlow;
@@ -72,11 +73,14 @@ public class Boop {
      * @param sketch to draw to
      */
     public static void movementLogic(Kiosk sketch, String currentSceneName) {
-        if (firstHappyFrame == 0 && currentSceneName.contains("CareerDescriptionScene")) {
+        if (currentSceneName.contains("CareerDescriptionScene") && !insideHappyState && firstHappyFrame != -1) {
             firstHappyFrame = sketch.frameCount;
             isHappy = true;
             Random rand = new Random();
-            additional_happy_frames = rand.nextInt(10);
+            additional_happy_frames = rand.nextInt(30) + 15;
+        }
+        if (!currentSceneName.contains("CareerDescriptionScene")) {
+            firstHappyFrame = 0;
         }
         if (currentX >= width * (SCREEN_BOUNDARY_FRACTION - 1 / SCREEN_BOUNDARY_FRACTION)) {
             //Boop is too close to the right edge of the screen!
@@ -570,6 +574,7 @@ public class Boop {
                     rfFoot.draw(sketch, currentX, currentY);
                     shell.draw(sketch, currentX, currentY);
                     headHappy.draw(sketch, currentX, currentY);
+                    insideHappyState = true;
                 } else {
                     //TODO INCLUDE OFFICIAL HAPPY ANIMATION,
                     // IF JODI GIVES US THE FILES
@@ -582,12 +587,15 @@ public class Boop {
                     rfFoot_r.draw(sketch, currentX, currentY);
                     shell_r.draw(sketch, currentX, currentY);
                     headHappy_r.draw(sketch, currentX, currentY);
+                    insideHappyState = true;
                 }
                 if (sketch.frameCount >= firstHappyFrame
                         + MINIMUM_HAPPY_FRAMES + additional_happy_frames) {
                     //Boop is currently experiencing depression...
                     //He's been happy for more than enough frames, put him out of his misery..
                     isHappy = false;
+                    insideHappyState = false;
+                    firstHappyFrame = -1;
                 }
             }
         } else {
