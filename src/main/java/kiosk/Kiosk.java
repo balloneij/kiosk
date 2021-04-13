@@ -240,7 +240,7 @@ public class Kiosk extends PApplet {
                         Kiosk.settings.gracePeriodMillis - currentSceneMillis;
             }
         }
-        Boop.movementLogic(this);
+        Boop.movementLogic(this, currentScene.toString());
     }
 
     /**
@@ -348,6 +348,7 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MouseClicked)) {
             listener.invoke(event);
         }
+        Boop.checkTap(this, event);
     }
 
     @Override
