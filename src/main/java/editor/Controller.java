@@ -451,6 +451,8 @@ public class Controller implements Initializable {
             sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
             sceneGraph.reset();
             rebuildSceneGraphTreeView();
+            // If we load a file, the toolbar can hold old values. Rebuild toolbar to clear them all out
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
             this.hasPendingChanges = false;
             Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
