@@ -30,7 +30,7 @@ public class Settings {
      * Default constructor.
      */
     public Settings() {
-        this(true);
+        this(false);
     }
 
     /**
