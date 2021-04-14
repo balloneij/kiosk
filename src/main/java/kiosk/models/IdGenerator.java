@@ -1,7 +1,5 @@
 package kiosk.models;
 
-import com.sun.xml.internal.fastinfoset.algorithm.UUIDEncodingAlgorithm;
-
 import java.util.UUID;
 
 public class IdGenerator {
