@@ -1,6 +1,7 @@
 package kiosk;
 
 import editor.ChildIdentifiers;
+import editor.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -180,6 +181,7 @@ public class SceneGraph {
         }
 
         sceneModels.put(sceneModel.getId(), sceneModel);
+        Controller.setHasPendingChanges(true);
     }
 
     /**

@@ -512,8 +512,8 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     // TODO maybe this should be extracted to a graphics class
-    private void textWithOutline(String text, float x, float y, float w, float h,
-                                 Kiosk sketch, boolean blackTextDesired) {
+    private void textWithOutline(String text, float x, float y, float w,
+                                 float h, Kiosk sketch, boolean blackTextDesired) {
         if (blackTextDesired) {
             // Draw multiple copies of the text shifted by a few pixels to create the outline
             sketch.fill(Color.DW_WHITE_RGB[0], Color.DW_WHITE_RGB[1], Color.DW_WHITE_RGB[2]);
