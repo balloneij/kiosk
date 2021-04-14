@@ -17,8 +17,8 @@ import processing.core.PConstants;
  */
 public class CareerPathwayScene implements Scene {
     // Pull constants from the settings
-    private static final int SCREEN_W = Kiosk.getSettings().screenW;
-    private static final int SCREEN_H = Kiosk.getSettings().screenH;
+    private static int screenW = Kiosk.getSettings().screenW;
+    private static int screenH = Kiosk.getSettings().screenH;
 
     private final CareerPathwaySceneModel model;
     protected SpokeGraph spokeGraph;
@@ -34,8 +34,8 @@ public class CareerPathwayScene implements Scene {
      */
     public CareerPathwayScene(CareerPathwaySceneModel model) {
         this.model = model;
-        this.backButton = ButtonControl.createBackButton();
-        this.homeButton = ButtonControl.createHomeButton();
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
     }
 
     @Override
@@ -57,19 +57,22 @@ public class CareerPathwayScene implements Scene {
         }
 
         // Put career buttons into a spoke graph
-        float size = SCREEN_H - GraphicsUtil.HEADER_Y - GraphicsUtil.HEADER_H;
+        float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         this.spokeGraph = new SpokeGraph(size,
-                SCREEN_W / 2f - size / 2,
-                GraphicsUtil.HEADER_Y + GraphicsUtil.HEADER_H,
+                screenW / 2f - size / 2,
+                GraphicsUtil.headerY + GraphicsUtil.headerH,
                 model.centerText,
                 careerButtons,
                 careerWeights);
+        this.spokeGraph.init(sketch);
 
         // Create home and back button
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton();
+            this.homeButton.init(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
+            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);

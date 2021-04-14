@@ -8,7 +8,9 @@ public final class TimeoutSceneModel implements SceneModel {
     public String id;
     public String name;
     public String title;
-    public String prompt;
+    public String warning;
+    public String timerText;
+    public ImageModel imageModel;
 
     /**
      * Creates an empty PromptSceneModel.
@@ -17,7 +19,9 @@ public final class TimeoutSceneModel implements SceneModel {
         this.id = IdGenerator.getInstance().getNextId();
         this.id = "Timeout Scene";
         this.title = "";
-        this.prompt = "\n\n";
+        this.warning = "\n\n";
+        this.timerText = "\n\n";
+        this.imageModel = new ImageModel("assets/penguin.png", 723 / 6, 883 / 6);
     }
 
     @Override
@@ -51,7 +55,7 @@ public final class TimeoutSceneModel implements SceneModel {
         copy.id = this.id;
         copy.name = name;
         copy.title = this.title;
-        copy.prompt = this.prompt;
+        copy.warning = this.warning;
 
         return copy;
     }
