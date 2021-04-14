@@ -20,7 +20,7 @@ public class Boop {
     private static final float SPEED_SLOW = 0.5f;
     private static final float SPEED_FAST = 0.75f;
     private static final int MINIMUM_SHELL_FRAMES = 30;
-    private static final int MINIMUM_HAPPY_FRAMES = 30;
+    private static final int MINIMUM_HAPPY_FRAMES = 100;
 
     private static int width;
     private static int height;
