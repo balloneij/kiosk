@@ -396,6 +396,7 @@ public class Controller implements Initializable {
                 }
             }
         }
+        
         Controller.setHasPendingChanges(true);
     }
 
