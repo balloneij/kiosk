@@ -2,14 +2,17 @@ package editor;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import kiosk.Kiosk;
@@ -36,6 +39,11 @@ public class Editor extends Kiosk {
     public static final int TOOLBAR_WIDTH = 320;
 
     /**
+     * The instance of the stage. Used to set the title window.
+     */
+    private static Stage stage;
+
+    /**
      * Instantiates the editor and starts the sketch.
      */
     public Editor(String surveyPath, Settings settings) {
@@ -49,13 +57,49 @@ public class Editor extends Kiosk {
         size(Kiosk.settings.screenW, Kiosk.settings.screenH, FX2D);
     }
 
+    /**
+     * Uses the current stage to set the title of the editor window.
+     * @param newTitle The new title.
+     */
+    public static void setTitle(String newTitle) {
+        if (stage != null) {
+            stage.setTitle(newTitle);
+        }
+    }
+
+    /**
+     * Gets the current title of the window.
+     * @return The title.
+     */
+    public static String getTitle() {
+        if (stage != null) {
+            return stage.getTitle();
+        } else {
+            return "No stage set";
+        }
+    }
+
     @Override
     protected PSurface initSurface() {
         // Pull the secret sauce out of Processing 3
         surface = super.initSurface();
         final Canvas canvas = (Canvas) surface.getNative();
         final Scene oldScene = canvas.getScene();
-        final Stage stage = (Stage) oldScene.getWindow();
+        stage = (Stage) oldScene.getWindow();
+        stage.setOnCloseRequest(new EventHandler<javafx.stage.WindowEvent>() {
+            @Override
+            public void handle(javafx.stage.WindowEvent event) {
+                if (Controller.hasPendingChanges) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                        "You have unsaved changes! Are you sure you want to exit?");
+                    Optional<ButtonType> optional = alert.showAndWait();
+                    if (!optional.isPresent()
+                            || optional.get().getButtonData() != ButtonBar.ButtonData.OK_DONE) {
+                        event.consume();
+                    }
+                }
+            }
+        });
 
         // Attach the scene graph before initialization
         Controller.sceneGraph = sceneGraph;
@@ -91,7 +135,6 @@ public class Editor extends Kiosk {
         // Delays these actions and runs them on the "correct" thread
         Platform.runLater(() -> {
             stage.setScene(scene);
-            stage.setTitle("Kiosk Editor-inator 3000");
             // A platypus?
             stage.setResizable(false);
         });
