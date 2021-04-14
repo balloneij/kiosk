@@ -168,7 +168,6 @@ public class Controller implements Initializable {
             createNewScene(true);
             rebuildSceneGraphTreeView();
         });
-        // todo maybe add a listener for expansion, then set HashMap?
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
     }
@@ -354,15 +353,17 @@ public class Controller implements Initializable {
 
         // null check for safety; should be initialized already (from above)
         if (sceneGraphTreeView.getRoot() != null) {
-            for (int i = 0; i < expandedItems.size(); i++) {
-                for (TreeItem<SceneModel> treeItem : sceneGraphTreeView.getRoot().getChildren()) { // todo not getRoot; getRow()()()()()()()()!!!
+            int numToExpand = expandedItems.size();
+            for (int i = 0; i < numToExpand; i++) {
+                int j = 0;
+                TreeItem<SceneModel> treeItem = sceneGraphTreeView.getTreeItem(j);
+                while (treeItem != null) {
                     if (expandedItems.contains(treeItem.getValue().getId())) {
-                        System.out.println(treeItem.getValue().getName()+"was found in expanded items");
                         treeItem.setExpanded(true);
                         expandedItems.remove(treeItem.getValue().getId());
-                        System.out.println(treeItem.getValue().getName()+"has been removed now");
                         break;
                     }
+                    treeItem = sceneGraphTreeView.getTreeItem(++j);
                 }
             }
         }
