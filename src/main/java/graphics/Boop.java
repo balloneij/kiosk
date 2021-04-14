@@ -17,8 +17,8 @@ public class Boop {
     private static final int STOPPING_BREAK_IN_FRAMES = 25;
     private static final int MOVEMENT_PERCENTAGE = 75;
     private static final int LIMB_MOVEMENT_RANGE = 1;
-    private static final int SPEED_SLOW = 1;
-    private static final int SPEED_FAST = 2;
+    private static final float SPEED_SLOW = 0.5f;
+    private static final float SPEED_FAST = 0.75f;
     private static final int MINIMUM_SHELL_FRAMES = 30;
     private static final int MINIMUM_HAPPY_FRAMES = 30;
 
@@ -73,7 +73,8 @@ public class Boop {
      * @param sketch to draw to
      */
     public static void movementLogic(Kiosk sketch, String currentSceneName) {
-        if (currentSceneName.contains("CareerDescriptionScene") && !insideHappyState && firstHappyFrame != -1) {
+        if (currentSceneName.contains("CareerDescriptionScene")
+                && !insideHappyState && firstHappyFrame != -1) {
             firstHappyFrame = sketch.frameCount;
             isHappy = true;
             Random rand = new Random();
@@ -179,7 +180,7 @@ public class Boop {
      * @param sketch to draw to
      * @param amountToMove the amount that Boop should move across the screen each frame
      */
-    public static void drawBoop(Kiosk sketch, int amountToMove) {
+    public static void drawBoop(Kiosk sketch, float amountToMove) {
         if (!isTapped) {
             if (!isHappy) {
                 if (choseDirection) {
@@ -274,8 +275,9 @@ public class Boop {
                             // IF JODI GIVES US THE FILES
                             //Boop is currently moving left...
                             //Animate Boop with the "TipToe" method...
-                            int frameNumber = (sketch.frameCount - firstMovementFrame) % 16;
-                            if (frameNumber == 0 || frameNumber == 1) {
+                            int frameNumber = (sketch.frameCount - firstMovementFrame) % 32;
+                            if (frameNumber == 0 || frameNumber == 1
+                                    || frameNumber == 2 || frameNumber == 3) {
                                 //Right front foot up
                                 lbFoot.draw(sketch, currentX - amountToMove, currentY);
                                 lfFoot.draw(sketch, currentX - amountToMove, currentY);
@@ -285,7 +287,8 @@ public class Boop {
                                 shell.draw(sketch, currentX - amountToMove, currentY);
                                 headLook.draw(sketch, currentX - amountToMove, currentY);
                                 currentX = currentX - amountToMove;
-                            } else if (frameNumber == 2 || frameNumber == 3) {
+                            } else if (frameNumber == 4 || frameNumber == 5
+                                    || frameNumber == 6 || frameNumber == 7) {
                                 //Right front foot and left back foot up
                                 lbFoot.draw(sketch, currentX - amountToMove,
                                         currentY - LIMB_MOVEMENT_RANGE * 2);
@@ -296,7 +299,8 @@ public class Boop {
                                 shell.draw(sketch, currentX - amountToMove, currentY);
                                 headLook.draw(sketch, currentX - amountToMove, currentY);
                                 currentX = currentX - amountToMove;
-                            } else if (frameNumber == 4 || frameNumber == 5) {
+                            } else if (frameNumber == 8 || frameNumber == 9
+                                    || frameNumber == 10 || frameNumber == 11) {
                                 //Left back foot up
                                 lbFoot.draw(sketch, currentX - amountToMove,
                                         currentY - LIMB_MOVEMENT_RANGE * 2);
@@ -306,8 +310,10 @@ public class Boop {
                                 shell.draw(sketch, currentX - amountToMove, currentY);
                                 headLook.draw(sketch, currentX - amountToMove, currentY);
                                 currentX = currentX - amountToMove;
-                            } else if (frameNumber == 6 || frameNumber == 7
-                                    || frameNumber == 14 || frameNumber == 15) {
+                            } else if (frameNumber == 12 || frameNumber == 13
+                                    || frameNumber == 14 || frameNumber == 15
+                                    || frameNumber == 28 || frameNumber == 29
+                                    || frameNumber == 30 || frameNumber == 31) {
                                 //All feet down
                                 lbFoot.draw(sketch, currentX - amountToMove, currentY);
                                 lfFoot.draw(sketch, currentX - amountToMove, currentY);
@@ -316,7 +322,8 @@ public class Boop {
                                 shell.draw(sketch, currentX - amountToMove, currentY);
                                 headLook.draw(sketch, currentX - amountToMove, currentY);
                                 currentX = currentX - amountToMove;
-                            } else if (frameNumber == 8 || frameNumber == 9) {
+                            } else if (frameNumber == 16 || frameNumber == 17
+                                    || frameNumber == 18 || frameNumber == 19) {
                                 //Left front foot up
                                 lbFoot.draw(sketch, currentX - amountToMove, currentY);
                                 lfFoot.draw(sketch, currentX - amountToMove,
@@ -326,7 +333,8 @@ public class Boop {
                                 shell.draw(sketch, currentX - amountToMove, currentY);
                                 headLook.draw(sketch, currentX - amountToMove, currentY);
                                 currentX = currentX - amountToMove;
-                            } else if (frameNumber == 10 || frameNumber == 11) {
+                            } else if (frameNumber == 20 || frameNumber == 21
+                                    || frameNumber == 22 || frameNumber == 23) {
                                 //Left front foot and right back foot up
                                 lbFoot.draw(sketch, currentX - amountToMove, currentY);
                                 lfFoot.draw(sketch, currentX - amountToMove,
@@ -337,7 +345,8 @@ public class Boop {
                                 shell.draw(sketch, currentX - amountToMove, currentY);
                                 headLook.draw(sketch, currentX - amountToMove, currentY);
                                 currentX = currentX - amountToMove;
-                            } else if (frameNumber == 12 || frameNumber == 13) {
+                            } else if (frameNumber == 24 || frameNumber == 25
+                                    || frameNumber == 26 || frameNumber == 27) {
                                 //Right back foot up
                                 lbFoot.draw(sketch, currentX - amountToMove, currentY);
                                 lfFoot.draw(sketch, currentX - amountToMove, currentY);
@@ -445,8 +454,9 @@ public class Boop {
                             // IF JODI GIVES US THE FILES
                             //Boop is currently moving right...
                             //Animate Boop using the "TipToe" method...
-                            int frameNumber = (sketch.frameCount - firstMovementFrame) % 16;
-                            if (frameNumber == 0 || frameNumber == 1) {
+                            int frameNumber = (sketch.frameCount - firstMovementFrame) % 32;
+                            if (frameNumber == 0 || frameNumber == 1
+                                    || frameNumber == 2 || frameNumber == 3) {
                                 //Right front foot up
                                 lbFoot_r.draw(sketch, currentX + amountToMove, currentY);
                                 lfFoot_r.draw(sketch, currentX + amountToMove, currentY);
@@ -456,7 +466,8 @@ public class Boop {
                                 shell_r.draw(sketch, currentX + amountToMove, currentY);
                                 headLook_r.draw(sketch, currentX + amountToMove, currentY);
                                 currentX = currentX + amountToMove;
-                            } else if (frameNumber == 2 || frameNumber == 3) {
+                            } else if (frameNumber == 4 || frameNumber == 5
+                                    || frameNumber == 6 || frameNumber == 7) {
                                 //Right front foot and left back foot up
                                 lbFoot_r.draw(sketch, currentX + amountToMove,
                                         currentY - LIMB_MOVEMENT_RANGE * 2);
@@ -467,7 +478,8 @@ public class Boop {
                                 shell_r.draw(sketch, currentX + amountToMove, currentY);
                                 headLook_r.draw(sketch, currentX + amountToMove, currentY);
                                 currentX = currentX + amountToMove;
-                            } else if (frameNumber == 4 || frameNumber == 5) {
+                            } else if (frameNumber == 8 || frameNumber == 9
+                                    || frameNumber == 10 || frameNumber == 11) {
                                 //Left back foot up
                                 lbFoot_r.draw(sketch, currentX + amountToMove,
                                         currentY - LIMB_MOVEMENT_RANGE * 2);
@@ -477,8 +489,10 @@ public class Boop {
                                 shell_r.draw(sketch, currentX + amountToMove, currentY);
                                 headLook_r.draw(sketch, currentX + amountToMove, currentY);
                                 currentX = currentX + amountToMove;
-                            } else if (frameNumber == 6 || frameNumber == 7
-                                    || frameNumber == 14 || frameNumber == 15) {
+                            } else if (frameNumber == 12 || frameNumber == 13
+                                    || frameNumber == 14 || frameNumber == 15
+                                    || frameNumber == 28 || frameNumber == 29
+                                    || frameNumber == 30 || frameNumber == 31) {
                                 //All feet down
                                 lbFoot_r.draw(sketch, currentX + amountToMove, currentY);
                                 lfFoot_r.draw(sketch, currentX + amountToMove, currentY);
@@ -487,7 +501,8 @@ public class Boop {
                                 shell_r.draw(sketch, currentX + amountToMove, currentY);
                                 headLook_r.draw(sketch, currentX + amountToMove, currentY);
                                 currentX = currentX + amountToMove;
-                            } else if (frameNumber == 8 || frameNumber == 9) {
+                            } else if (frameNumber == 16 || frameNumber == 17
+                                    || frameNumber == 18 || frameNumber == 19) {
                                 //Left front foot up
                                 lbFoot_r.draw(sketch, currentX + amountToMove, currentY);
                                 lfFoot_r.draw(sketch, currentX + amountToMove,
@@ -497,7 +512,8 @@ public class Boop {
                                 shell_r.draw(sketch, currentX + amountToMove, currentY);
                                 headLook_r.draw(sketch, currentX + amountToMove, currentY);
                                 currentX = currentX + amountToMove;
-                            } else if (frameNumber == 10 || frameNumber == 11) {
+                            } else if (frameNumber == 20 || frameNumber == 21
+                                    || frameNumber == 22 || frameNumber == 23) {
                                 //Left front foot and right back foot up
                                 lbFoot_r.draw(sketch, currentX + amountToMove, currentY);
                                 lfFoot_r.draw(sketch, currentX + amountToMove,
@@ -508,7 +524,8 @@ public class Boop {
                                 shell_r.draw(sketch, currentX + amountToMove, currentY);
                                 headLook_r.draw(sketch, currentX + amountToMove, currentY);
                                 currentX = currentX + amountToMove;
-                            } else if (frameNumber == 12 || frameNumber == 13) {
+                            } else if (frameNumber == 24 || frameNumber == 25
+                                    || frameNumber == 26 || frameNumber == 27) {
                                 //Right back foot up
                                 lbFoot_r.draw(sketch, currentX + amountToMove, currentY);
                                 lfFoot_r.draw(sketch, currentX + amountToMove, currentY);
@@ -611,7 +628,7 @@ public class Boop {
                 if (frameNumber <= ((MINIMUM_SHELL_FRAMES + additional_shell_frames) / 2f)) {
                     shell.draw(sketch, currentX, currentY + boopDimens / 10f);
                 } else {
-                    if (sketch.frameCount % 2 == 0) {
+                    if (sketch.frameCount % 5 == 0) {
                         //TODO BOOP'S LOOKING OUT OF SHELL ANIMATION
                         // IF JODI GIVES US THE FILES
                         shell_r.draw(sketch, currentX, currentY + boopDimens / 10f);
@@ -632,7 +649,7 @@ public class Boop {
                 if (frameNumber <= ((MINIMUM_SHELL_FRAMES + additional_shell_frames) / 2f)) {
                     shell_r.draw(sketch, currentX, currentY + boopDimens / 10f);
                 } else {
-                    if (sketch.frameCount % 2 == 0) {
+                    if (sketch.frameCount % 5 == 0) {
                         //TODO BOOP'S LOOKING OUT OF SHELL ANIMATION,
                         // IF JODI GIVES US THE FILES
                         shell.draw(sketch, currentX, currentY + boopDimens / 10f);
