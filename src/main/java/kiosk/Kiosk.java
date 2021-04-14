@@ -15,8 +15,6 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import javafx.scene.input.KeyCode;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -173,7 +171,7 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
-        if(!fontsLoaded) {
+        if (!fontsLoaded) {
             Graphics.loadFonts();
             fontsLoaded = true;
         }

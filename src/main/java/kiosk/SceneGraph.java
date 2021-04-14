@@ -1,14 +1,13 @@
 package kiosk;
 
 import editor.ChildIdentifiers;
+import editor.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import editor.Controller;
 import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CareerModel;
 import kiosk.models.ErrorSceneModel;

@@ -93,7 +93,8 @@ public class Editor extends Kiosk {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                         "You have unsaved changes! Are you sure you want to exit?");
                     Optional<ButtonType> optional = alert.showAndWait();
-                    if (!optional.isPresent() || optional.get().getButtonData() != ButtonBar.ButtonData.OK_DONE) {
+                    if (!optional.isPresent()
+                            || optional.get().getButtonData() != ButtonBar.ButtonData.OK_DONE) {
                         event.consume();
                     }
                 }

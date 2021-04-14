@@ -177,7 +177,7 @@ public class Controller implements Initializable {
         if (sceneGraph.getRootSceneModel() instanceof ErrorSceneModel) {
             Editor.setTitle("No file loaded");
         } else {
-            Editor.setTitle(surveyFile != null ?surveyFile.getName() : "No file loaded");
+            Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
     }
 
@@ -403,6 +403,11 @@ public class Controller implements Initializable {
         addNewScene(sceneGraphTreeView.getRoot(), model);
     }
 
+    /**
+     * Adds a new scene to the hidden root.
+     * @param hiddenRoot The root, invisible tree item.
+     * @param newScene The scene we want to add to the survey.
+     */
     public void addNewScene(TreeItem<SceneModel> hiddenRoot, SceneModel newScene) {
         sceneGraph.registerSceneModel(newScene);
         hiddenRoot.getChildren().add(new TreeItem<>(newScene));
@@ -451,7 +456,8 @@ public class Controller implements Initializable {
             sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
             sceneGraph.reset();
             rebuildSceneGraphTreeView();
-            // If we load a file, the toolbar can hold old values. Rebuild toolbar to clear them all out
+            // If we load a file, the toolbar can hold old values.
+            // Rebuild toolbar to clear them all out
             rebuildToolbar(sceneGraph.getCurrentSceneModel());
             this.hasPendingChanges = false;
             Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
