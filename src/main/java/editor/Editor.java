@@ -2,14 +2,17 @@ package editor;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
+import java.util.Optional;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import kiosk.Kiosk;
@@ -83,6 +86,19 @@ public class Editor extends Kiosk {
         final Canvas canvas = (Canvas) surface.getNative();
         final Scene oldScene = canvas.getScene();
         stage = (Stage) oldScene.getWindow();
+        stage.setOnCloseRequest(new EventHandler<javafx.stage.WindowEvent>() {
+            @Override
+            public void handle(javafx.stage.WindowEvent event) {
+                if (Controller.hasPendingChanges) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                        "You have unsaved changes! Are you sure you want to exit?");
+                    Optional<ButtonType> optional = alert.showAndWait();
+                    if (!optional.isPresent() || optional.get().getButtonData() != ButtonBar.ButtonData.OK_DONE) {
+                        event.consume();
+                    }
+                }
+            }
+        });
 
         // Attach the scene graph before initialization
         Controller.sceneGraph = sceneGraph;
