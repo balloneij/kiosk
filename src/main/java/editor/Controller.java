@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import javafx.collections.FXCollections;
@@ -24,6 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -61,6 +63,8 @@ public class Controller implements Initializable {
     private String previousId;
     private File surveyFile = null;
 
+    public static boolean hasPendingChanges;
+
     @FXML
     AnchorPane rootPane;
     @FXML
@@ -78,6 +82,11 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
         previousId = null;
+
+        File surveyFile = new File("survey.xml");
+        if (surveyFile.exists()) {
+            this.surveyFile = surveyFile;
+        }
 
         for (Node node : splitPane.lookupAll(".split-pane-divider")) {
             node.setVisible(true);
@@ -170,6 +179,12 @@ public class Controller implements Initializable {
         });
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
+        hasPendingChanges = false;
+        if (sceneGraph.getRootSceneModel() instanceof ErrorSceneModel) {
+            Editor.setTitle("No file loaded");
+        } else {
+            Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
+        }
     }
 
     /**
@@ -197,6 +212,20 @@ public class Controller implements Initializable {
             DetailsSceneLoader.loadScene(this, (DetailsSceneModel) model, toolbarBox, sceneGraph);
         } else {
             toolbarBox.getChildren().clear();
+        }
+    }
+
+    /**
+     * Sets the flag to track if we have pending changs.
+     * Also adds or removes the star from the window indicating pending changes.
+     * @param hasPendingChanges True if we have unsaved changes, false otherwise.
+     */
+    public static void setHasPendingChanges(boolean hasPendingChanges) {
+        Controller.hasPendingChanges = hasPendingChanges;
+        if (Controller.hasPendingChanges) {
+            Editor.setTitle("*" + Editor.getTitle().replaceAll("\\*", ""));
+        } else {
+            Editor.setTitle(Editor.getTitle().replaceAll("\\*", ""));
         }
     }
 
@@ -367,6 +396,7 @@ public class Controller implements Initializable {
                 }
             }
         }
+        Controller.setHasPendingChanges(true);
     }
 
     /**
@@ -435,13 +465,30 @@ public class Controller implements Initializable {
         return model;
     }
 
+    /**
+     * Adds a new scene to the hidden root.
+     * @param hiddenRoot The root, invisible tree item.
+     * @param newScene The scene we want to add to the survey.
+     */
     public void addNewScene(TreeItem<SceneModel> hiddenRoot, SceneModel newScene) {
         sceneGraph.registerSceneModel(newScene);
         hiddenRoot.getChildren().add(new TreeItem<>(newScene));
+        Controller.setHasPendingChanges(true);
     }
 
     @FXML
     private void loadSurvey() {
+        if (Controller.hasPendingChanges) {
+            Optional<ButtonType> result = UnsavedChangesAlert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == UnsavedChangesAlert.SAVE) {
+                    saveSurveyAs();
+                } else if (result.get() == UnsavedChangesAlert.CANCEL) {
+                    return;
+                }
+            }
+        }
+
         // Ask user for a survey file
         File file = Editor.showFileOpener();
 
@@ -452,6 +499,7 @@ public class Controller implements Initializable {
                 // Attempt to load from file
                 survey = LoadedSurveyModel.readFromFile(file);
                 this.surveyFile = file;
+                Editor.setTitle(file.getName());
             } catch (Exception exception) {
                 // Survey could not be created, so make an error survey
                 String errorMsg = "Could not read from survey at '" + file.getPath()
@@ -470,13 +518,38 @@ public class Controller implements Initializable {
             sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
             sceneGraph.reset();
             rebuildSceneGraphTreeView();
+            // If we load a file, the toolbar can hold old values.
+            // Rebuild toolbar to clear them all out
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
+            this.hasPendingChanges = false;
+            Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
     }
 
     @FXML
     private void reloadSurvey() {
-        sceneGraph.reset();
-        rebuildSceneGraphTreeView();
+        if (hasPendingChanges) {
+            Optional<ButtonType> result = UnsavedChangesAlert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == UnsavedChangesAlert.SAVE) {
+                    saveSurvey();
+                    sceneGraph.reset();
+                    rebuildSceneGraphTreeView();
+                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                    hasPendingChanges = false;
+                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
+                } else if (result.get() == UnsavedChangesAlert.NO_SAVE) {
+                    LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
+                    sceneGraph.loadSurvey(surveyModel);
+                    sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
+                    sceneGraph.reset();
+                    rebuildSceneGraphTreeView();
+                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                    this.hasPendingChanges = false;
+                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
+                }
+            }
+        }
     }
 
     @FXML
@@ -494,6 +567,8 @@ public class Controller implements Initializable {
             try {
                 survey.writeToFile(file);
                 surveyFile = file;
+                this.hasPendingChanges = false;
+                Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
             } catch (Exception exception) {
                 // Push temporary scene describing error
                 String errorMsg = "Could not save survey to '" + surveyFile.getPath()
@@ -512,6 +587,8 @@ public class Controller implements Initializable {
         } else {
             try {
                 createSurvey().writeToFile(surveyFile);
+                this.hasPendingChanges = false;
+                Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
             } catch (Exception exception) {
                 // Push temporary scene describing error
                 String errorMsg = "Could not save survey to '" + surveyFile.getPath()

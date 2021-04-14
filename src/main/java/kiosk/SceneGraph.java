@@ -1,6 +1,7 @@
 package kiosk;
 
 import editor.ChildIdentifiers;
+import editor.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -180,6 +181,7 @@ public class SceneGraph {
         }
 
         sceneModels.put(sceneModel.getId(), sceneModel);
+        Controller.setHasPendingChanges(true);
     }
 
     /**
@@ -285,13 +287,13 @@ public class SceneGraph {
      * @param newRoot The scene which will become the launching point for the Kiosk.
      */
     public synchronized void setRootSceneModel(SceneModel newRoot) {
+        this.root = newRoot;
         // Remove root from original child
         if (root != null) {
             this.root.setName(this.root.getName()
                     .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
         }
         // Set new root and give em the special star
-        this.root = newRoot;
         this.root.setName(ChildIdentifiers.ROOT + this.root.getName());
     }
 
