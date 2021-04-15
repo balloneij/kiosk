@@ -43,6 +43,7 @@ public class Kiosk extends PApplet {
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
     private boolean shouldTimeout = true;
+    private File loadedFile;
     private boolean isFullScreen = false;
     private boolean fontsLoaded = false;
 
@@ -92,7 +93,8 @@ public class Kiosk extends PApplet {
         LoadedSurveyModel survey;
         this.surveyPath = surveyPath;
         if (!surveyPath.isEmpty()) {
-            survey = LoadedSurveyModel.readFromFile(new File(surveyPath));
+            this.loadedFile = new File(surveyPath);
+            survey = LoadedSurveyModel.readFromFile(loadedFile);
         } else {
             List<SceneModel> defaultScenes = new ArrayList<>();
             defaultScenes.add(new DefaultSceneModel());
@@ -116,6 +118,7 @@ public class Kiosk extends PApplet {
      * @param file to try loading from
      */
     public void loadSurveyFile(File file) {
+        this.loadedFile = file;
         LoadedSurveyModel survey;
         try {
             // Load the survey
@@ -166,7 +169,7 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
-        if(!fontsLoaded) {
+        if (!fontsLoaded) {
             Graphics.loadFonts();
             fontsLoaded = true;
         }
@@ -294,6 +297,10 @@ public class Kiosk extends PApplet {
                 }
             } else if (event.getKeyCode() == 116) {
                 // F5 Key Press
+                if (loadedFile != null) {
+                    reloadSettings();
+                    loadSurveyFile(loadedFile);
+                }
                 this.sceneGraph.reset();
             } else if (event.getKeyCode() == 122) {
                 // F11 Key Press
