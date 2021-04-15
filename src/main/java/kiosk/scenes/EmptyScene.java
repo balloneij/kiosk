@@ -36,7 +36,7 @@ public class EmptyScene implements Scene {
         sketch.background(0);
         sketch.rectMode(PConstants.CENTER);
         sketch.text("Empty scene",
-                this.textX, this.textY, sketch.width / 2f, sketch.height / 3f);
+                this.textX, this.textY - 32, sketch.width / 2f, sketch.height / 3f);
         sketch.text(this.model.message,
                 this.textX, this.textY + 32, sketch.width / 2f, sketch.height / 3f);
     }

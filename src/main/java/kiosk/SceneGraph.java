@@ -5,24 +5,30 @@ import editor.Controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CareerModel;
 import kiosk.models.ErrorSceneModel;
+import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
 
-    private static final UserScore userScore = new UserScore();
+    private final UserScore userScore;
     private SceneModel root;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
     private LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
+    private final Set<String> careerCategories = new HashSet<>();
+    // K: category V: fields inside that category
+    private final HashMap<String, Set<String>> careerFields = new HashMap<>();
+    private final CareerModel[] allCareers;
 
     /**
      * Creates a scene graph which holds the root scene model, and
@@ -30,10 +36,26 @@ public class SceneGraph {
      * @param survey model to load from
      */
     public SceneGraph(LoadedSurveyModel survey) {
+        this.userScore = new UserScore(survey.careers);
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
         this.sceneChangeCallbacks = new LinkedList<>();
         this.loadSurvey(survey);
+
+        // Store careers, categories, and fields
+        this.allCareers = survey.careers;
+        for (CareerModel career : survey.careers) {
+            careerCategories.add(career.category);
+
+            Set<String> fields;
+            if (!careerFields.containsKey(career.category)) {
+                fields = new HashSet<>();
+                careerFields.put(career.category, fields);
+            } else {
+                fields = careerFields.get(career.category);
+            }
+            fields.add(career.field);
+        }
     }
 
     /**
@@ -72,7 +94,7 @@ public class SceneGraph {
     }
 
     public synchronized void pushScene(SceneModel sceneModel) {
-        this.pushScene(sceneModel, Riasec.None);
+        this.pushScene(sceneModel, Riasec.None, null);
     }
 
     /**
@@ -80,11 +102,14 @@ public class SceneGraph {
      * from the model provided
      * @param sceneModel to create a scene from
      * @param category selected by the previous scene
+     * @param nullOrFilter career filter to apply, or none
      */
-    public synchronized void pushScene(SceneModel sceneModel, Riasec category) {
+    public synchronized void pushScene(SceneModel sceneModel,
+                                       Riasec category,
+                                       FilterGroupModel nullOrFilter) {
         // Update the user score from the category selected on the
         // previous scene
-        userScore.add(category);
+        userScore.apply(category, nullOrFilter);
 
         // Add the new scene
         this.currentScene = sceneModel.deepCopy().createScene();
@@ -93,7 +118,7 @@ public class SceneGraph {
     }
 
     public synchronized void pushScene(String sceneModelId) {
-        this.pushScene(sceneModelId, Riasec.None);
+        this.pushScene(sceneModelId, Riasec.None, null);
     }
 
     /**
@@ -101,17 +126,20 @@ public class SceneGraph {
      * from the scene model id.
      * @param sceneModelId The id of the registered scene to push.
      * @param category selected by the previous scene
+     * @param nullOrFilter career filter to apply, or none
      */
-    public synchronized void pushScene(String sceneModelId, Riasec category) {
+    public synchronized void pushScene(String sceneModelId,
+                                       Riasec category,
+                                       FilterGroupModel nullOrFilter) {
         boolean containsModel = sceneModels.containsKey(sceneModelId);
 
         if (containsModel) {
             SceneModel nextSceneModel = sceneModels.get(sceneModelId);
-            pushScene(nextSceneModel, category);
+            pushScene(nextSceneModel, category, nullOrFilter);
         } else {
             pushScene(new ErrorSceneModel(
                     "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
-                    Riasec.None);
+                    Riasec.None, null);
         }
     }
 
@@ -287,13 +315,13 @@ public class SceneGraph {
      * @param newRoot The scene which will become the launching point for the Kiosk.
      */
     public synchronized void setRootSceneModel(SceneModel newRoot) {
+        this.root = newRoot;
         // Remove root from original child
         if (root != null) {
             this.root.setName(this.root.getName()
                     .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
         }
         // Set new root and give em the special star
-        this.root = newRoot;
         this.root.setName(ChildIdentifiers.ROOT + this.root.getName());
     }
 
@@ -309,7 +337,7 @@ public class SceneGraph {
         return sceneModels.values();
     }
 
-    public static UserScore getUserScore() {
+    public UserScore getUserScore() {
         return userScore;
     }
 
@@ -323,5 +351,51 @@ public class SceneGraph {
             .values().stream()
             .filter(sceneModel -> sceneModel.getName().equals(sceneName))
             .findFirst().orElse(null);
+    }
+
+    /**
+     * Get career categories.
+     * @return a set of unique categories
+     */
+    public Set<String> getCareerCategories() {
+        return this.careerCategories;
+    }
+
+    /**
+     * Get the career fields defined in the survey.
+     * @param category the fields belong to
+     * @return a set of unique fields
+     */
+    public Set<String> getCareerFields(String category) {
+        if (this.careerFields.containsKey(category)) {
+            return this.careerFields.get(category);
+        } else {
+            return new HashSet<>();
+        }
+    }
+
+    /**
+     * Get the careers that belong to category and field.
+     * @param category to filter by
+     * @param field to filter by
+     * @return a set of unique careers
+     */
+    public Set<String> findCareers(String category, String field) {
+        boolean allFields = field.equals("All");
+
+        if (!careerCategories.contains(category)) {
+            return new HashSet<>();
+        }
+        if (!allFields && !careerFields.get(category).contains(field)) {
+            return new HashSet<>();
+        }
+
+        HashSet<String> careers = new HashSet<>();
+        for (CareerModel career : allCareers) {
+            if (career.category.equals(category) && (allFields || career.field.equals(field))) {
+                careers.add(career.name);
+            }
+        }
+        return careers;
     }
 }

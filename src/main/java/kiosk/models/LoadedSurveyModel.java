@@ -25,7 +25,6 @@ public class LoadedSurveyModel implements Serializable {
     public String rootSceneId;
     public SceneModel[] scenes;
     public CareerModel[] careers;
-    public FilterGroupModel[] filters;
 
     /**
      * Creates a survey with a single, error scene.
@@ -50,7 +49,6 @@ public class LoadedSurveyModel implements Serializable {
         };
         model.rootSceneId = sceneModel.getId();
         model.careers = new CareerModel[0];
-        model.filters = new FilterGroupModel[0];
         return model;
     }
 
@@ -69,6 +67,7 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = sceneModels.get(0).getId();
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
+        this.careers = new CareerModel[0];
     }
 
     /**
@@ -97,6 +96,7 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = rootSceneId;
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
+        this.careers = new CareerModel[0];
     }
 
     /**
@@ -199,22 +199,35 @@ public class LoadedSurveyModel implements Serializable {
      */
     @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     public static LoadedSurveyModel createSampleSurvey() {
-        HashMap<String, FilterGroupModel> filters = new HashMap<>();
+        HashMap<String, FilterGroupModel> fieldFilters = new HashMap<>();
+        HashMap<String, FilterGroupModel> categoryFilters = new HashMap<>();
 
         // Load careers from CSV
         List<CareerModel> careers = loadCareers(new File("sample_careers.csv"));
 
         // Create filters based off of the sample careers
         for (CareerModel career : careers) {
-            FilterGroupModel filter;
-            if (filters.containsKey(career.field)) {
-                filter = filters.get(career.field);
+            FilterGroupModel fieldFilter;
+            if (fieldFilters.containsKey(career.field)) {
+                fieldFilter = fieldFilters.get(career.field);
+                fieldFilter.category = career.category;
+                fieldFilter.field = career.field;
             } else {
-                filter = FilterGroupModel.create();
-                filter.name = career.field;
-                filters.put(career.field, filter);
+                fieldFilter = FilterGroupModel.create();
+                fieldFilters.put(career.field, fieldFilter);
             }
-            filter.careerNames.add(career.name);
+            fieldFilter.careerNames.add(career.name);
+
+            FilterGroupModel categoryFilter;
+            if (categoryFilters.containsKey(career.category)) {
+                categoryFilter = categoryFilters.get(career.category);
+                categoryFilter.category = career.category;
+                categoryFilter.field = "All";
+            } else {
+                categoryFilter = FilterGroupModel.create();
+                categoryFilters.put(career.category, categoryFilter);
+            }
+            categoryFilter.careerNames.add(career.name);
         }
 
         // Create scenes
@@ -263,24 +276,28 @@ public class LoadedSurveyModel implements Serializable {
         humanButton.isCircle = true;
         humanButton.rgb = new int[] { 152, 33, 107 };
         humanButton.image = new ImageModel("assets/Human.png", 80, 80);
+        humanButton.filter = categoryFilters.get("Human");
         ButtonModel natureButton = new ButtonModel();
         natureButton.text = "";
         natureButton.target = "fieldPickerNature";
         natureButton.isCircle = true;
         natureButton.rgb = new int[] { 51, 108, 103 };
         natureButton.image = new ImageModel("assets/Nature.png", 80, 80);
+        natureButton.filter = categoryFilters.get("Nature");
         ButtonModel smartMachinesButton = new ButtonModel();
         smartMachinesButton.text = "";
         smartMachinesButton.target = "fieldPickerSmartMachine";
         smartMachinesButton.isCircle = true;
         smartMachinesButton.rgb = new int[] { 219, 98, 38 };
         smartMachinesButton.image = new ImageModel("assets/SmartMachines.png", 80, 80);
+        smartMachinesButton.filter = categoryFilters.get("Smart Machine");
         ButtonModel spaceButton = new ButtonModel();
         spaceButton.text = "";
         spaceButton.target = "fieldPickerSpace";
         spaceButton.isCircle = true;
         spaceButton.rgb = new int[] { 21, 97, 157 };
         spaceButton.image = new ImageModel("assets/Space.png", 80, 80);
+        spaceButton.filter = categoryFilters.get("Space");
         categoryScene.answers = new ButtonModel[] {
             humanButton,
             natureButton,
@@ -289,52 +306,48 @@ public class LoadedSurveyModel implements Serializable {
         };
 
         // Field picker for each category
-        scenes.push(createFieldPicker(careers, Category.Human));
-        scenes.push(createFieldPicker(careers, Category.Nature));
-        scenes.push(createFieldPicker(careers, Category.SmartMachine));
-        scenes.push(createFieldPicker(careers, Category.Space));
+        scenes.push(createFieldPicker(fieldFilters, careers, Category.Human));
+        scenes.push(createFieldPicker(fieldFilters, careers, Category.Nature));
+        scenes.push(createFieldPicker(fieldFilters, careers, Category.SmartMachine));
+        scenes.push(createFieldPicker(fieldFilters, careers, Category.Space));
 
         // Construct a 6 question survey. One question for each category of RIASEC
         final int questionCount = 6;
-        for (String field : filters.keySet()) {
-            for (int i = 0; i < questionCount; i++) {
-                SpokeGraphPromptSceneModel scene = SpokeGraphPromptSceneModel.create();
-                scene.id = "fieldPrompt" + i + field;
-                scene.filter = filters.get(field);
-                scene.name = field + " Prompt " + i;
-                scene.headerTitle = "Let's talk about " + field + "!";
-                scene.headerBody = "Select the answer that best applies to you";
-                scene.careerCenterText = field;
-                scene.promptText = "Select one";
+        for (int i = 0; i < questionCount; i++) {
+            SpokeGraphPromptSceneModel scene = SpokeGraphPromptSceneModel.create();
+            scene.id = "fieldPrompt" + i;
+            scene.name = "Prompt " + i;
+            scene.headerTitle = "Let's talk about your field!";
+            scene.headerBody = "Select the answer that best applies to you";
+            scene.careerCenterText = "Fields";
+            scene.promptText = "Select one";
 
-                // Alternate between the categories buttons provided
-                if (i % 2 == 0) {
-                    scene.answers = new ButtonModel[] {
-                        new ButtonModel("Artistic",
-                                "fieldPrompt" + (i + 1) + field, Riasec.Artistic),
-                        new ButtonModel("Realistic",
-                                "fieldPrompt" + (i + 1) + field, Riasec.Realistic),
-                        new ButtonModel("Conventional",
-                                "fieldPrompt" + (i + 1) + field, Riasec.Conventional)
-                    };
-                } else {
-                    scene.answers = new ButtonModel[] {
-                        new ButtonModel("Enterprising",
-                                "fieldPrompt" + (i + 1) + field, Riasec.Enterprising),
-                        new ButtonModel("Social",
-                                "fieldPrompt" + (i + 1) + field, Riasec.Social),
-                        new ButtonModel("Investigative",
-                                "fieldPrompt" + (i + 1) + field, Riasec.Investigative)
-                    };
-                }
-
-                scenes.push(scene);
+            // Alternate between the categories buttons provided
+            if (i % 2 == 0) {
+                scene.answers = new ButtonModel[] {
+                    new ButtonModel("Artistic",
+                            "fieldPrompt" + (i + 1), Riasec.Artistic),
+                    new ButtonModel("Realistic",
+                            "fieldPrompt" + (i + 1), Riasec.Realistic),
+                    new ButtonModel("Conventional",
+                            "fieldPrompt" + (i + 1), Riasec.Conventional)
+                };
+            } else {
+                scene.answers = new ButtonModel[] {
+                    new ButtonModel("Enterprising",
+                            "fieldPrompt" + (i + 1), Riasec.Enterprising),
+                    new ButtonModel("Social",
+                            "fieldPrompt" + (i + 1), Riasec.Social),
+                    new ButtonModel("Investigative",
+                            "fieldPrompt" + (i + 1), Riasec.Investigative)
+                };
             }
 
+            scenes.push(scene);
+
             CareerPathwaySceneModel resultScene = CareerPathwaySceneModel.create();
-            resultScene.id = "fieldPrompt" + questionCount + field;
-            resultScene.filter = filters.get(field);
-            resultScene.name = field + " Result";
+            resultScene.id = "fieldPrompt" + questionCount;
+            resultScene.name = "Result";
             resultScene.headerTitle = "These are the career results";
             resultScene.headerBody = "Click each one to find more information";
             scenes.push(resultScene);
@@ -344,12 +357,13 @@ public class LoadedSurveyModel implements Serializable {
         survey.rootSceneId = eyeCatcher.id;
         survey.scenes = scenes.toArray(new SceneModel[0]);
         survey.careers = careers.toArray(new CareerModel[0]);
-        survey.filters = filters.values().toArray(new FilterGroupModel[0]);
 
         return survey;
     }
 
-    private static SceneModel createFieldPicker(List<CareerModel> careers, Category category) {
+    private static SceneModel createFieldPicker(HashMap<String, FilterGroupModel> fieldFilters,
+                                                List<CareerModel> careers,
+                                                Category category) {
         final int maxFields = 8;
 
         List<CareerModel> categoryCareers = careers
@@ -375,7 +389,8 @@ public class LoadedSurveyModel implements Serializable {
             ButtonModel button = new ButtonModel();
             button.isCircle = true;
             button.text = fieldsArray[i];
-            button.target = "fieldPrompt0" + fieldsArray[i];
+            button.target = "fieldPrompt0";
+            button.filter = fieldFilters.get(fieldsArray[i]);
             scene.buttonModels[i] = button;
         }
         scene.centerText = "Pick one!";

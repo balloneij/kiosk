@@ -127,6 +127,7 @@ public class PathwaySceneLoader {
         Button addButton = new Button("+");
         addButton.setOnAction(event -> {
             ButtonModel newAnswer = new ButtonModel();
+            newAnswer.target = controller.createNewScene(false).getId();
 
             // Add the new answer to the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.buttonModels));
@@ -138,6 +139,7 @@ public class PathwaySceneLoader {
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
             vbox.getChildren().add(index,
                     createAnswerNode(controller, newAnswer, vbox, model, graph));
+            controller.rebuildSceneGraphTreeView();
         });
 
         vbox.getChildren().add(addButton);
@@ -216,6 +218,7 @@ public class PathwaySceneLoader {
 
             // Remove the editing controls for this answer from the parent container
             answersContainer.getChildren().remove(answerVbox);
+            controller.rebuildSceneGraphTreeView();
         });
 
         // Setup the combo-box for choosing the answers target scene
@@ -228,7 +231,7 @@ public class PathwaySceneLoader {
         }
 
         ComboBox<SceneTarget> targetComboBox =
-                new ComboBox<>(FXCollections.observableList(sceneTargets));
+                new ComboBox<>(FXCollections.observableList(sceneTargets).sorted());
 
         SceneTarget currentAnswer = new SceneTarget(answer.target,
                 graph.getSceneById(answer.target).getName());
@@ -255,7 +258,8 @@ public class PathwaySceneLoader {
 
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, removeButton);
-        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
+        answerVbox.getChildren().addAll(answerField, editingControls,
+                targetsBox, SceneLoader.getFilterBox(graph, model, answer), separator);
         return answerVbox;
     }
 }

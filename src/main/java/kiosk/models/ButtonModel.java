@@ -12,6 +12,7 @@ public final class ButtonModel {
     // Optional. Null is a valid value
     public ImageModel image;
     public Riasec category = Riasec.None;
+    public FilterGroupModel filter = null;
 
     private static int buttonCount = 1; // Un-named buttons will be numbered
 
@@ -63,6 +64,9 @@ public final class ButtonModel {
         newButton.rgb = this.rgb.clone();
         newButton.image = this.image == null ? null : this.image.deepCopy();
         newButton.category = this.category;
+        if (this.filter != null) {
+            newButton.filter = this.filter.deepCopy();
+        }
         return newButton;
     }
 }

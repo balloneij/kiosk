@@ -76,15 +76,12 @@ public class DetailsScene implements Scene {
         final int sketchWidth = Kiosk.getSettings().screenW;
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton();
-            this.homeButton.init(sketch);
+            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
-            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
-            this.supplementaryButton.init(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
 

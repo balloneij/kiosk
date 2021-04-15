@@ -4,9 +4,12 @@ import graphics.Graphics;
 import graphics.GraphicsUtil;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
+import kiosk.models.FilterGroupModel;
 import kiosk.models.PathwaySceneModel;
+import kiosk.models.SceneModel;
 import processing.core.PConstants;
 
 public class PathwayScene implements Scene {
@@ -45,15 +48,12 @@ public class PathwayScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton();
-            this.homeButton.init(sketch);
+            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
-            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
-            this.supplementaryButton.init(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
 
@@ -68,7 +68,10 @@ public class PathwayScene implements Scene {
     public void update(float dt, SceneGraph sceneGraph) {
         for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
+                String scene = button.getTarget();
+                Riasec riasec = button.getModel().category;
+                FilterGroupModel filter = button.getModel().filter;
+                sceneGraph.pushScene(scene, riasec, filter);
                 break;
             }
         }

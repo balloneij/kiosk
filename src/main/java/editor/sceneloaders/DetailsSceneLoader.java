@@ -43,7 +43,7 @@ public class DetailsSceneLoader {
                 SceneLoader.getNameBox(controller, model, graph),
                 getTitleBox(model, graph),
                 getDescriptionBox(model, graph),
-                createButton(model, graph, controller)
+                getButton(model, graph, controller)
         );
         toolbarBox.getChildren().add(vbox);
 
@@ -88,9 +88,13 @@ public class DetailsSceneLoader {
         return vbox;
     }
 
-    private static Node createButton(DetailsSceneModel model,
+    private static Node getButton(DetailsSceneModel model,
                                      SceneGraph graph, Controller controller) {
         ButtonModel answer = model.button;
+
+        if (answer.target.equals("null")) {
+            answer.target = controller.createNewScene(false).getId();
+        }
 
         // Setup the text field for editing the answer
         TextArea answerField = new TextArea(answer.text);
@@ -129,7 +133,7 @@ public class DetailsSceneLoader {
             // Open the image file chooser
             File file = imageFileChooser.showOpenDialog(null);
 
-            // If null, no file was chosenA
+            // If null, no file was chosen
             if (file != null) {
                 // Set the chooser to open in the same directory next time
                 String imagePath = new File("./").toURI().relativize(file.toURI()).getPath();
@@ -157,7 +161,7 @@ public class DetailsSceneLoader {
         }
 
         ComboBox<SceneTarget> targetComboBox =
-                new ComboBox<>(FXCollections.observableList(sceneTargets));
+                new ComboBox<>(FXCollections.observableList(sceneTargets).sorted());
 
         SceneTarget currentAnswer = new SceneTarget(answer.target,
                 graph.getSceneById(answer.target).getName());

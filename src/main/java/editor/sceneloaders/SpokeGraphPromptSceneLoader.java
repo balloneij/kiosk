@@ -44,7 +44,7 @@ public class SpokeGraphPromptSceneLoader {
      * @param graph The scene graph used to manage application state.
      */
     public static void loadScene(Controller controller, SpokeGraphPromptSceneModel model,
-                                 VBox toolbarBox, SceneGraph graph, FilterGroupModel[] filters) {
+                                 VBox toolbarBox, SceneGraph graph) {
         toolbarBox.getChildren().clear();
 
         // Get the editing Nodes for the SpokeGraphPromptsSceneModel properties
@@ -54,7 +54,6 @@ public class SpokeGraphPromptSceneLoader {
                 getHeaderBodyBox(model, graph),
                 getCareerBox(model, graph),
                 getPromptBox(model, graph),
-                getFilterBox(model, graph, filters),
                 getAnswersBox(controller, model, graph)
         );
 
@@ -130,33 +129,6 @@ public class SpokeGraphPromptSceneLoader {
     }
 
     /**
-     * Returns a ComboBox that can be used to change the filter the scene is using.
-     * @param model The model of the SpokeGraphPromptScene being edited.
-     * @param graph The SceneGraph to re-register the scene to.
-     * @return ComboBox that can be used to change the filter the scene is using.
-     */
-    private static Node getFilterBox(SpokeGraphPromptSceneModel model, SceneGraph graph,
-                                     FilterGroupModel[] filters) {
-        // Create a ComboBox with all the available filters
-        ComboBox<FilterGroupModel> filterBox =
-            new ComboBox<>(FXCollections.observableList(Arrays.asList(filters)));
-        filterBox.setValue(model.filter); // Set initial value to match the current filter
-
-        // On change, update the scenes filter (if it is different from the current filter)
-        filterBox.setOnAction(event -> {
-            FilterGroupModel target = filterBox.getValue();
-            if (!target.equals(model.filter)) {
-                model.filter = target;
-                graph.registerSceneModel(model); // Re-register the model to update the scene
-            }
-        });
-
-        VBox vbox = new VBox(new Label("Filter:"), filterBox);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
-
-    /**
      * Creates a Node with editing controls for all the answers, as well as a button to add
      * additional answers. See createAnswerNode for more information on answer editing controls.
      * @param model The PromptSceneModel being edited.
@@ -180,6 +152,7 @@ public class SpokeGraphPromptSceneLoader {
         Button addButton = new Button("+");
         addButton.setOnAction(event -> {
             ButtonModel newAnswer = new ButtonModel();
+            newAnswer.target = controller.createNewScene(false).getId();
 
             // Add the new answer to the PromptSceneModel's answers
             ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
@@ -191,6 +164,7 @@ public class SpokeGraphPromptSceneLoader {
             int index = vbox.getChildren().size() - 1; // Add controls just before the add button
             vbox.getChildren().add(index,
                     createAnswerNode(controller, newAnswer, vbox, model, graph));
+            controller.rebuildSceneGraphTreeView();
         });
 
         vbox.getChildren().add(addButton);
@@ -269,6 +243,7 @@ public class SpokeGraphPromptSceneLoader {
 
             // Remove the editing controls for this answer from the parent container
             answersContainer.getChildren().remove(answerVbox);
+            controller.rebuildSceneGraphTreeView();
         });
 
         // Setup the combo-box for choosing the answers target scene
@@ -281,7 +256,7 @@ public class SpokeGraphPromptSceneLoader {
         }
 
         ComboBox<SceneTarget> targetComboBox =
-                new ComboBox<>(FXCollections.observableList(sceneTargets));
+                new ComboBox<>(FXCollections.observableList(sceneTargets).sorted());
 
         SceneTarget currentAnswer = new SceneTarget(answer.target,
                 graph.getSceneById(answer.target).getName());
