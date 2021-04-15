@@ -54,7 +54,6 @@ public class Controller implements Initializable {
 
     public static SceneGraph sceneGraph;
     public static CareerModel[] careers;
-    public static FilterGroupModel[] filters;
 
     private String previousId;
     private File surveyFile = null;
@@ -199,10 +198,10 @@ public class Controller implements Initializable {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof SpokeGraphPromptSceneModel) {
             SpokeGraphPromptSceneLoader.loadScene(this,
-                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph, filters);
+                    (SpokeGraphPromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof CareerPathwaySceneModel) {
             CareerPathwaySceneLoader.loadScene(this, (CareerPathwaySceneModel) model,
-                toolbarBox, sceneGraph, filters);
+                toolbarBox, sceneGraph);
         } else if (model instanceof PathwaySceneModel) {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
@@ -590,7 +589,6 @@ public class Controller implements Initializable {
     private LoadedSurveyModel createSurvey() {
         LoadedSurveyModel survey = sceneGraph.exportSurvey();
         survey.careers = careers;
-        survey.filters = filters;
         return survey;
     }
 

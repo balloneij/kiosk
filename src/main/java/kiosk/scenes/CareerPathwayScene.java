@@ -41,8 +41,8 @@ public class CareerPathwayScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         // Grab careers from the Kiosk and userScore from the SceneGraph
-        careers = model.filter.filter(sketch.getAllCareers());
-        UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        this.careers = userScore.getCareers();
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
         ButtonModel[] careerButtons = new ButtonModel[careers.length];
