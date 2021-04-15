@@ -166,7 +166,7 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
-        if(!fontsLoaded) {
+        if (!fontsLoaded) {
             Graphics.loadFonts();
             fontsLoaded = true;
         }
