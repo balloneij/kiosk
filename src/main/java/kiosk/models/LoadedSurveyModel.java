@@ -67,6 +67,7 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = sceneModels.get(0).getId();
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
+        this.careers = new CareerModel[0];
     }
 
     /**
@@ -95,6 +96,7 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = rootSceneId;
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
+        this.careers = new CareerModel[0];
     }
 
     /**
