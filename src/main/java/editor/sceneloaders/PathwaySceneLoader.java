@@ -255,7 +255,8 @@ public class PathwaySceneLoader {
 
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, removeButton);
-        answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, separator);
+        answerVbox.getChildren().addAll(answerField, editingControls,
+                SceneLoader.getFilterBox(graph, model, answer), targetsBox, separator);
         return answerVbox;
     }
 }

@@ -4,6 +4,7 @@ import editor.ChildIdentifiers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,10 @@ public class SceneGraph {
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
     private LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
+    private final Set<String> careerCategories = new HashSet<>();
+    // K: category V: fields inside that category
+    private final HashMap<String, Set<String>> careerFields = new HashMap<>();
+    private final CareerModel[] allCareers;
 
     /**
      * Creates a scene graph which holds the root scene model, and
@@ -35,6 +40,21 @@ public class SceneGraph {
         this.sceneModels = new HashMap<>();
         this.sceneChangeCallbacks = new LinkedList<>();
         this.loadSurvey(survey);
+
+        // Store careers, categories, and fields
+        this.allCareers = survey.careers;
+        for (CareerModel career : survey.careers) {
+            careerCategories.add(career.category);
+
+            Set<String> fields;
+            if (!careerFields.containsKey(career.category)) {
+                fields = new HashSet<>();
+                careerFields.put(career.category, fields);
+            } else {
+                fields = careerFields.get(career.category);
+            }
+            fields.add(career.field);
+        }
     }
 
     /**
@@ -329,5 +349,51 @@ public class SceneGraph {
             .values().stream()
             .filter(sceneModel -> sceneModel.getName().equals(sceneName))
             .findFirst().orElse(null);
+    }
+
+    /**
+     * Get career categories.
+     * @return a set of unique categories
+     */
+    public Set<String> getCareerCategories() {
+        return this.careerCategories;
+    }
+
+    /**
+     * Get the career fields defined in the survey.
+     * @param category the fields belong to
+     * @return a set of unique fields
+     */
+    public Set<String> getCareerFields(String category) {
+        if (this.careerFields.containsKey(category)) {
+            return this.careerFields.get(category);
+        } else {
+            return new HashSet<>();
+        }
+    }
+
+    /**
+     * Get the careers that belong to category and field.
+     * @param category to filter by
+     * @param field to filter by
+     * @return a set of unique careers
+     */
+    public Set<String> findCareers(String category, String field) {
+        boolean allFields = field.equals("All");
+
+        if (!careerCategories.contains(category)) {
+            return new HashSet<>();
+        }
+        if (!allFields && !careerFields.get(category).contains(field)) {
+            return new HashSet<>();
+        }
+
+        HashSet<String> careers = new HashSet<>();
+        for (CareerModel career : allCareers) {
+            if (career.category.equals(category) && (allFields || career.field.equals(field))) {
+                careers.add(career.name);
+            }
+        }
+        return careers;
     }
 }
