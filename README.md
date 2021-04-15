@@ -55,7 +55,8 @@ Discovery World's Career Pathways Kiosk developed by an MSOE Senior Design team.
 
 ## Running
 
-Run the Jar using `java -jar target/kiosk.jar`.
+Run the application by double-clicking either the `Editor.bat` or `Kiosk.bat` files.
+
 
 # Troubleshooting
 
@@ -65,13 +66,12 @@ In the Project Explorer, right click the `src` directory.
 
 `Mark Directory As > Sources Root`
 
-## Missing dependencies
+## java.lang.NullPointerException
+This can sometimes happen if you are missing the `assets` folder. Make sure that folder you found
+the `Kiosk.bat` or `Editor.bat` has the `assets` folder and all of it's content.
 
-* `File > Project Structure > Libraries > '+' > New Project Library 'Java'`
-
-* Navigate to the project's directory and shift add all the jar files in `lib`.
-
-* Press OK and add apply changes before exiting.
+If you get this error, don't panic. Simply copy the `assets` folder and all it's content into 
+the proper location.
 
 ## Still not working?
 
