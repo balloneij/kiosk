@@ -44,7 +44,7 @@ public class SpokeGraphPromptSceneLoader {
      * @param graph The scene graph used to manage application state.
      */
     public static void loadScene(Controller controller, SpokeGraphPromptSceneModel model,
-                                 VBox toolbarBox, SceneGraph graph, FilterGroupModel[] filters) {
+                                 VBox toolbarBox, SceneGraph graph) {
         toolbarBox.getChildren().clear();
 
         // Get the editing Nodes for the SpokeGraphPromptsSceneModel properties
@@ -54,7 +54,6 @@ public class SpokeGraphPromptSceneLoader {
                 getHeaderBodyBox(model, graph),
                 getCareerBox(model, graph),
                 getPromptBox(model, graph),
-                getFilterBox(model, graph, filters),
                 getAnswersBox(controller, model, graph)
         );
 
@@ -125,33 +124,6 @@ public class SpokeGraphPromptSceneLoader {
         });
 
         VBox vbox = new VBox(new Label("Prompt Graph Center Text:"), promptTextField);
-        vbox.setPadding(PADDING);
-        return vbox;
-    }
-
-    /**
-     * Returns a ComboBox that can be used to change the filter the scene is using.
-     * @param model The model of the SpokeGraphPromptScene being edited.
-     * @param graph The SceneGraph to re-register the scene to.
-     * @return ComboBox that can be used to change the filter the scene is using.
-     */
-    private static Node getFilterBox(SpokeGraphPromptSceneModel model, SceneGraph graph,
-                                     FilterGroupModel[] filters) {
-        // Create a ComboBox with all the available filters
-        ComboBox<FilterGroupModel> filterBox =
-            new ComboBox<>(FXCollections.observableList(Arrays.asList(filters)));
-        filterBox.setValue(model.filter); // Set initial value to match the current filter
-
-        // On change, update the scenes filter (if it is different from the current filter)
-        filterBox.setOnAction(event -> {
-            FilterGroupModel target = filterBox.getValue();
-            if (!target.equals(model.filter)) {
-                model.filter = target;
-                graph.registerSceneModel(model); // Re-register the model to update the scene
-            }
-        });
-
-        VBox vbox = new VBox(new Label("Filter:"), filterBox);
         vbox.setPadding(PADDING);
         return vbox;
     }

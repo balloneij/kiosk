@@ -41,8 +41,8 @@ public class CareerPathwayScene implements Scene {
     @Override
     public void init(Kiosk sketch) {
         // Grab careers from the Kiosk and userScore from the SceneGraph
-        careers = model.filter.filter(sketch.getAllCareers());
-        UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        this.careers = userScore.getCareers();
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
         ButtonModel[] careerButtons = new ButtonModel[careers.length];
@@ -68,15 +68,12 @@ public class CareerPathwayScene implements Scene {
 
         // Create home and back button
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton();
-            this.homeButton.init(sketch);
+            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
-            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
-            this.supplementaryButton.init(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
 

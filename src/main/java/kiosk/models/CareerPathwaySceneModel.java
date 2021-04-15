@@ -13,7 +13,6 @@ public class CareerPathwaySceneModel implements SceneModel {
     public String centerText;
     public String headerTitle;
     public String headerBody;
-    public FilterGroupModel filter;
     public CareerModel[] careers;
 
     @Override
@@ -40,7 +39,6 @@ public class CareerPathwaySceneModel implements SceneModel {
         model.headerTitle = "Title";
         model.headerBody = "Heading";
         model.careers = new CareerModel[] {};
-        model.filter = FilterGroupModel.create();
         return model;
     }
 
@@ -72,7 +70,6 @@ public class CareerPathwaySceneModel implements SceneModel {
         model.centerText = centerText;
         model.headerTitle = headerTitle;
         model.headerBody = headerBody;
-        model.filter = filter;
         model.careers = Arrays.copyOf(careers, careers.length);
         return model;
     }

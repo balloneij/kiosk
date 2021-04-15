@@ -51,35 +51,6 @@
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel0"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel0">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel0"/>
-            <string>Business</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel0"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Business CEO</string>
-             </void>
-             <void method="add">
-              <string>Data Entry</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>careers</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel0"/>
@@ -224,13 +195,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel0"/>
-         <object idref="FilterGroupModel0"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="2">
@@ -369,13 +333,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
-         <object idref="FilterGroupModel0"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="3">
@@ -503,13 +460,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <object idref="FilterGroupModel0"/>
         </void>
        </void>
       </object>
@@ -641,13 +591,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <object idref="FilterGroupModel0"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="5">
@@ -775,13 +718,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <object idref="FilterGroupModel0"/>
         </void>
        </void>
       </object>
@@ -913,13 +849,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel5"/>
-         <object idref="FilterGroupModel0"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="7">
@@ -957,35 +886,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel1"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel1"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel1">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel1"/>
-            <string>Sports</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel1"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Sports Coach</string>
-             </void>
-             <void method="add">
-              <string>Athlete</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -1124,13 +1024,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel6"/>
-         <object idref="FilterGroupModel1"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="9">
@@ -1258,13 +1151,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel7"/>
-         <object idref="FilterGroupModel1"/>
         </void>
        </void>
       </object>
@@ -1396,13 +1282,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel8"/>
-         <object idref="FilterGroupModel1"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="11">
@@ -1530,13 +1409,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
-         <object idref="FilterGroupModel1"/>
         </void>
        </void>
       </object>
@@ -1668,13 +1540,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
-         <object idref="FilterGroupModel1"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="13">
@@ -1804,13 +1669,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
-         <object idref="FilterGroupModel1"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="14">
@@ -1848,38 +1706,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel2"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel2"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel2">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel2"/>
-            <string>Computer Engineering</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel2"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Programmer</string>
-             </void>
-             <void method="add">
-              <string>IT Technician</string>
-             </void>
-             <void method="add">
-              <string>Web application developer</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -2018,13 +1844,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
-         <object idref="FilterGroupModel2"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="16">
@@ -2152,13 +1971,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
-         <object idref="FilterGroupModel2"/>
         </void>
        </void>
       </object>
@@ -2290,13 +2102,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel14"/>
-         <object idref="FilterGroupModel2"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="18">
@@ -2424,13 +2229,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel15"/>
-         <object idref="FilterGroupModel2"/>
         </void>
        </void>
       </object>
@@ -2562,13 +2360,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel16"/>
-         <object idref="FilterGroupModel2"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="20">
@@ -2698,13 +2489,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel17"/>
-         <object idref="FilterGroupModel2"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="21">
@@ -2742,32 +2526,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel3"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel3"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel3">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel3"/>
-            <string>Plant Life</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel3"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Botanist</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -2906,13 +2664,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel18"/>
-         <object idref="FilterGroupModel3"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="23">
@@ -3040,13 +2791,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel19"/>
-         <object idref="FilterGroupModel3"/>
         </void>
        </void>
       </object>
@@ -3178,13 +2922,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel20"/>
-         <object idref="FilterGroupModel3"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="25">
@@ -3312,13 +3049,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel21"/>
-         <object idref="FilterGroupModel3"/>
         </void>
        </void>
       </object>
@@ -3450,13 +3180,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel22"/>
-         <object idref="FilterGroupModel3"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="27">
@@ -3586,13 +3309,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel23"/>
-         <object idref="FilterGroupModel3"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="28">
@@ -3630,38 +3346,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel4"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel4"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel4">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel4"/>
-            <string>Medical</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel4"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Dentist</string>
-             </void>
-             <void method="add">
-              <string>Therapist</string>
-             </void>
-             <void method="add">
-              <string>Surgeon</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -3800,13 +3484,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel24"/>
-         <object idref="FilterGroupModel4"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="30">
@@ -3934,13 +3611,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel25"/>
-         <object idref="FilterGroupModel4"/>
         </void>
        </void>
       </object>
@@ -4072,13 +3742,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel26"/>
-         <object idref="FilterGroupModel4"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="32">
@@ -4206,13 +3869,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel27"/>
-         <object idref="FilterGroupModel4"/>
         </void>
        </void>
       </object>
@@ -4344,13 +4000,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel28"/>
-         <object idref="FilterGroupModel4"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="34">
@@ -4480,13 +4129,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel29"/>
-         <object idref="FilterGroupModel4"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="35">
@@ -4524,32 +4166,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel5"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel5"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel5">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel5"/>
-            <string>Sciences</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel5"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Geologist</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -4688,13 +4304,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel30"/>
-         <object idref="FilterGroupModel5"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="37">
@@ -4822,13 +4431,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel31"/>
-         <object idref="FilterGroupModel5"/>
         </void>
        </void>
       </object>
@@ -4960,13 +4562,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel32"/>
-         <object idref="FilterGroupModel5"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="39">
@@ -5094,13 +4689,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel33"/>
-         <object idref="FilterGroupModel5"/>
         </void>
        </void>
       </object>
@@ -5232,13 +4820,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel34"/>
-         <object idref="FilterGroupModel5"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="41">
@@ -5368,13 +4949,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel35"/>
-         <object idref="FilterGroupModel5"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="42">
@@ -5412,38 +4986,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel6"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel6"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel6">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel6"/>
-            <string>Education</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel6"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Teacher</string>
-             </void>
-             <void method="add">
-              <string>Historian</string>
-             </void>
-             <void method="add">
-              <string>Child Care</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -5582,13 +5124,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel36"/>
-         <object idref="FilterGroupModel6"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="44">
@@ -5716,13 +5251,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel37"/>
-         <object idref="FilterGroupModel6"/>
         </void>
        </void>
       </object>
@@ -5854,13 +5382,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel38"/>
-         <object idref="FilterGroupModel6"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="46">
@@ -5988,13 +5509,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel39"/>
-         <object idref="FilterGroupModel6"/>
         </void>
        </void>
       </object>
@@ -6126,13 +5640,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel40"/>
-         <object idref="FilterGroupModel6"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="48">
@@ -6262,13 +5769,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel41"/>
-         <object idref="FilterGroupModel6"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="49">
@@ -6306,32 +5806,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel7"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel7"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel7">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel7"/>
-            <string>Animals</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel7"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Marine Biologist</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -6470,13 +5944,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel42"/>
-         <object idref="FilterGroupModel7"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="51">
@@ -6604,13 +6071,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel43"/>
-         <object idref="FilterGroupModel7"/>
         </void>
        </void>
       </object>
@@ -6742,13 +6202,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel44"/>
-         <object idref="FilterGroupModel7"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="53">
@@ -6876,13 +6329,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel45"/>
-         <object idref="FilterGroupModel7"/>
         </void>
        </void>
       </object>
@@ -7014,13 +6460,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel46"/>
-         <object idref="FilterGroupModel7"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="55">
@@ -7150,13 +6589,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel47"/>
-         <object idref="FilterGroupModel7"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="56">
@@ -7194,44 +6626,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel8"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel8"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel8">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel8"/>
-            <string>Lunar</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel8"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Astronaut</string>
-             </void>
-             <void method="add">
-              <string>Astronomer</string>
-             </void>
-             <void method="add">
-              <string>Avionic Technician</string>
-             </void>
-             <void method="add">
-              <string>Robotics Engineer</string>
-             </void>
-             <void method="add">
-              <string>Aerospace Engineer</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -7370,13 +6764,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel48"/>
-         <object idref="FilterGroupModel8"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="58">
@@ -7504,13 +6891,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel49"/>
-         <object idref="FilterGroupModel8"/>
         </void>
        </void>
       </object>
@@ -7642,13 +7022,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel50"/>
-         <object idref="FilterGroupModel8"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="60">
@@ -7776,13 +7149,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel51"/>
-         <object idref="FilterGroupModel8"/>
         </void>
        </void>
       </object>
@@ -7914,13 +7280,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel52"/>
-         <object idref="FilterGroupModel8"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="62">
@@ -8050,13 +7409,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel53"/>
-         <object idref="FilterGroupModel8"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="63">
@@ -8094,35 +7446,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel9"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel9"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel9">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel9"/>
-            <string>Food Services</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel9"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Chef</string>
-             </void>
-             <void method="add">
-              <string>Farmer</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -8261,13 +7584,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel54"/>
-         <object idref="FilterGroupModel9"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="65">
@@ -8395,13 +7711,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel55"/>
-         <object idref="FilterGroupModel9"/>
         </void>
        </void>
       </object>
@@ -8533,13 +7842,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel56"/>
-         <object idref="FilterGroupModel9"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="67">
@@ -8667,13 +7969,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel57"/>
-         <object idref="FilterGroupModel9"/>
         </void>
        </void>
       </object>
@@ -8805,13 +8100,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel58"/>
-         <object idref="FilterGroupModel9"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="69">
@@ -8941,13 +8229,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel59"/>
-         <object idref="FilterGroupModel9"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="70">
@@ -8985,32 +8266,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel10"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel10"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel10">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel10"/>
-            <string>Weather</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel10"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Meteorologist</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -9149,13 +8404,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel60"/>
-         <object idref="FilterGroupModel10"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="72">
@@ -9283,13 +8531,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel61"/>
-         <object idref="FilterGroupModel10"/>
         </void>
        </void>
       </object>
@@ -9421,13 +8662,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel62"/>
-         <object idref="FilterGroupModel10"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="74">
@@ -9555,13 +8789,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel63"/>
-         <object idref="FilterGroupModel10"/>
         </void>
        </void>
       </object>
@@ -9693,13 +8920,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel64"/>
-         <object idref="FilterGroupModel10"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="76">
@@ -9829,13 +9049,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel65"/>
-         <object idref="FilterGroupModel10"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="77">
@@ -9873,56 +9086,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel11"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel11"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel11">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel11"/>
-            <string>Public Services</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel11"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Postal Service</string>
-             </void>
-             <void method="add">
-              <string>Automotive Engineer</string>
-             </void>
-             <void method="add">
-              <string>Auto Mechanic</string>
-             </void>
-             <void method="add">
-              <string>Emergency Dispatcher</string>
-             </void>
-             <void method="add">
-              <string>Military Forces</string>
-             </void>
-             <void method="add">
-              <string>Firefighter</string>
-             </void>
-             <void method="add">
-              <string>Telemarketer</string>
-             </void>
-             <void method="add">
-              <string>Police</string>
-             </void>
-             <void method="add">
-              <string>Clergy</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -10061,13 +9224,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel66"/>
-         <object idref="FilterGroupModel11"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="79">
@@ -10195,13 +9351,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel67"/>
-         <object idref="FilterGroupModel11"/>
         </void>
        </void>
       </object>
@@ -10333,13 +9482,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel68"/>
-         <object idref="FilterGroupModel11"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="81">
@@ -10467,13 +9609,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel69"/>
-         <object idref="FilterGroupModel11"/>
         </void>
        </void>
       </object>
@@ -10605,13 +9740,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel70"/>
-         <object idref="FilterGroupModel11"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="83">
@@ -10741,13 +9869,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel71"/>
-         <object idref="FilterGroupModel11"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="84">
@@ -10785,32 +9906,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel12"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel12"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel12">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel12"/>
-            <string>Political Science</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel12"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Politician</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -10949,13 +10044,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel72"/>
-         <object idref="FilterGroupModel12"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="86">
@@ -11083,13 +10171,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel73"/>
-         <object idref="FilterGroupModel12"/>
         </void>
        </void>
       </object>
@@ -11221,13 +10302,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel74"/>
-         <object idref="FilterGroupModel12"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="88">
@@ -11355,13 +10429,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel75"/>
-         <object idref="FilterGroupModel12"/>
         </void>
        </void>
       </object>
@@ -11493,13 +10560,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel76"/>
-         <object idref="FilterGroupModel12"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="90">
@@ -11629,13 +10689,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel77"/>
-         <object idref="FilterGroupModel12"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="91">
@@ -11673,35 +10726,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel13"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel13"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel13">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel13"/>
-            <string>Fine Arts</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel13"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Animator</string>
-             </void>
-             <void method="add">
-              <string>Author</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -11840,13 +10864,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel78"/>
-         <object idref="FilterGroupModel13"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="93">
@@ -11974,13 +10991,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel79"/>
-         <object idref="FilterGroupModel13"/>
         </void>
        </void>
       </object>
@@ -12112,13 +11122,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel80"/>
-         <object idref="FilterGroupModel13"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="95">
@@ -12246,13 +11249,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel81"/>
-         <object idref="FilterGroupModel13"/>
         </void>
        </void>
       </object>
@@ -12384,13 +11380,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel82"/>
-         <object idref="FilterGroupModel13"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="97">
@@ -12520,13 +11509,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel83"/>
-         <object idref="FilterGroupModel13"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="98">
@@ -12564,32 +11546,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel14"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel14"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel14">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel14"/>
-            <string>Biology</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel14"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Research assistant</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -12728,13 +11684,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel84"/>
-         <object idref="FilterGroupModel14"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="100">
@@ -12862,13 +11811,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel85"/>
-         <object idref="FilterGroupModel14"/>
         </void>
        </void>
       </object>
@@ -13000,13 +11942,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel86"/>
-         <object idref="FilterGroupModel14"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="102">
@@ -13134,13 +12069,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel87"/>
-         <object idref="FilterGroupModel14"/>
         </void>
        </void>
       </object>
@@ -13272,13 +12200,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel88"/>
-         <object idref="FilterGroupModel14"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="104">
@@ -13408,13 +12329,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel89"/>
-         <object idref="FilterGroupModel14"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="105">
@@ -13452,35 +12366,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel15"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel15"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel15">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel15"/>
-            <string>Flight</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel15"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Pilot</string>
-             </void>
-             <void method="add">
-              <string>Flight Attendant</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -13619,13 +12504,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel90"/>
-         <object idref="FilterGroupModel15"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="107">
@@ -13753,13 +12631,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel91"/>
-         <object idref="FilterGroupModel15"/>
         </void>
        </void>
       </object>
@@ -13891,13 +12762,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel92"/>
-         <object idref="FilterGroupModel15"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="109">
@@ -14025,13 +12889,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel93"/>
-         <object idref="FilterGroupModel15"/>
         </void>
        </void>
       </object>
@@ -14163,13 +13020,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel94"/>
-         <object idref="FilterGroupModel15"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="111">
@@ -14299,13 +13149,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel95"/>
-         <object idref="FilterGroupModel15"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="112">
@@ -14343,44 +13186,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel16"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel16"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel16">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel16"/>
-            <string>Movies/TV</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel16"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>News Broadcaster</string>
-             </void>
-             <void method="add">
-              <string>Reporter</string>
-             </void>
-             <void method="add">
-              <string>Film Director</string>
-             </void>
-             <void method="add">
-              <string>Television Producer</string>
-             </void>
-             <void method="add">
-              <string>Radio Broadcaster</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -14519,13 +13324,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel96"/>
-         <object idref="FilterGroupModel16"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="114">
@@ -14653,13 +13451,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel97"/>
-         <object idref="FilterGroupModel16"/>
         </void>
        </void>
       </object>
@@ -14791,13 +13582,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel98"/>
-         <object idref="FilterGroupModel16"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="116">
@@ -14925,13 +13709,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel99"/>
-         <object idref="FilterGroupModel16"/>
         </void>
        </void>
       </object>
@@ -15063,13 +13840,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel100"/>
-         <object idref="FilterGroupModel16"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="118">
@@ -15199,13 +13969,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel101"/>
-         <object idref="FilterGroupModel16"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="119">
@@ -15243,32 +14006,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel17"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel17"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel17">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel17"/>
-            <string>Accounting</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel17"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Accountant</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -15407,13 +14144,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel102"/>
-         <object idref="FilterGroupModel17"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="121">
@@ -15541,13 +14271,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel103"/>
-         <object idref="FilterGroupModel17"/>
         </void>
        </void>
       </object>
@@ -15679,13 +14402,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel104"/>
-         <object idref="FilterGroupModel17"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="123">
@@ -15813,13 +14529,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel105"/>
-         <object idref="FilterGroupModel17"/>
         </void>
        </void>
       </object>
@@ -15951,13 +14660,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel106"/>
-         <object idref="FilterGroupModel17"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="125">
@@ -16087,13 +14789,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel107"/>
-         <object idref="FilterGroupModel17"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="126">
@@ -16131,35 +14826,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel18"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel18"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel18">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel18"/>
-            <string>Law</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel18"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Lawyer</string>
-             </void>
-             <void method="add">
-              <string>Judge</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -16298,13 +14964,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel108"/>
-         <object idref="FilterGroupModel18"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="128">
@@ -16432,13 +15091,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel109"/>
-         <object idref="FilterGroupModel18"/>
         </void>
        </void>
       </object>
@@ -16570,13 +15222,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel110"/>
-         <object idref="FilterGroupModel18"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="130">
@@ -16704,13 +15349,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel111"/>
-         <object idref="FilterGroupModel18"/>
         </void>
        </void>
       </object>
@@ -16842,13 +15480,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel112"/>
-         <object idref="FilterGroupModel18"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="132">
@@ -16978,13 +15609,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel113"/>
-         <object idref="FilterGroupModel18"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="133">
@@ -17022,41 +15646,6 @@
         <void method="set">
          <object idref="CareerPathwaySceneModel19"/>
          <string>Click each one to find more information</string>
-        </void>
-       </void>
-       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="CareerPathwaySceneModel19"/>
-         <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel19">
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>name</string>
-           <void method="set">
-            <object idref="FilterGroupModel19"/>
-            <string>Construction</string>
-           </void>
-          </void>
-          <void class="kiosk.models.FilterGroupModel" method="getField">
-           <string>careerNames</string>
-           <void method="set">
-            <object idref="FilterGroupModel19"/>
-            <object class="java.util.HashSet">
-             <void method="add">
-              <string>Architect</string>
-             </void>
-             <void method="add">
-              <string>Construction Worker</string>
-             </void>
-             <void method="add">
-              <string>Civil Engineer</string>
-             </void>
-             <void method="add">
-              <string>Carpenter</string>
-             </void>
-            </object>
-           </void>
-          </void>
-         </object>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -17195,13 +15784,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel114"/>
-         <object idref="FilterGroupModel19"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="135">
@@ -17329,13 +15911,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel115"/>
-         <object idref="FilterGroupModel19"/>
         </void>
        </void>
       </object>
@@ -17467,13 +16042,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel116"/>
-         <object idref="FilterGroupModel19"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="137">
@@ -17601,13 +16169,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel117"/>
-         <object idref="FilterGroupModel19"/>
         </void>
        </void>
       </object>
@@ -17739,13 +16300,6 @@
          </array>
         </void>
        </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel118"/>
-         <object idref="FilterGroupModel19"/>
-        </void>
-       </void>
       </object>
      </void>
      <void index="139">
@@ -17873,13 +16427,6 @@
            </object>
           </void>
          </array>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>filter</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel119"/>
-         <object idref="FilterGroupModel19"/>
         </void>
        </void>
       </object>
@@ -21185,74 +19732,6 @@ attention. Maybe a fun animation or something?</string>
     </array>
    </void>
   </void>
-  <void class="kiosk.models.LoadedSurveyModel" method="getField">
-   <string>filters</string>
-   <void method="set">
-    <object idref="LoadedSurveyModel0"/>
-    <array class="kiosk.models.FilterGroupModel" length="20">
-     <void index="0">
-      <object idref="FilterGroupModel19"/>
-     </void>
-     <void index="1">
-      <object idref="FilterGroupModel18"/>
-     </void>
-     <void index="2">
-      <object idref="FilterGroupModel17"/>
-     </void>
-     <void index="3">
-      <object idref="FilterGroupModel16"/>
-     </void>
-     <void index="4">
-      <object idref="FilterGroupModel15"/>
-     </void>
-     <void index="5">
-      <object idref="FilterGroupModel14"/>
-     </void>
-     <void index="6">
-      <object idref="FilterGroupModel13"/>
-     </void>
-     <void index="7">
-      <object idref="FilterGroupModel12"/>
-     </void>
-     <void index="8">
-      <object idref="FilterGroupModel11"/>
-     </void>
-     <void index="9">
-      <object idref="FilterGroupModel10"/>
-     </void>
-     <void index="10">
-      <object idref="FilterGroupModel9"/>
-     </void>
-     <void index="11">
-      <object idref="FilterGroupModel8"/>
-     </void>
-     <void index="12">
-      <object idref="FilterGroupModel7"/>
-     </void>
-     <void index="13">
-      <object idref="FilterGroupModel6"/>
-     </void>
-     <void index="14">
-      <object idref="FilterGroupModel5"/>
-     </void>
-     <void index="15">
-      <object idref="FilterGroupModel4"/>
-     </void>
-     <void index="16">
-      <object idref="FilterGroupModel3"/>
-     </void>
-     <void index="17">
-      <object idref="FilterGroupModel2"/>
-     </void>
-     <void index="18">
-      <object idref="FilterGroupModel1"/>
-     </void>
-     <void index="19">
-      <object idref="FilterGroupModel0"/>
-     </void>
-    </array>
-   </void>
-  </void>
  </object>
 <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
  <string>rgb</string>
@@ -21273,22 +19752,6 @@ attention. Maybe a fun animation or something?</string>
 <void class="kiosk.models.ButtonModel" id="Field1" method="getField">
  <string>rgb</string>
  <void id="intArray1" method="get">
-  <object idref="ButtonModel391"/>
-  <void index="1">
-   <int>108</int>
-  </void>
-  <void index="2">
-   <int>103</int>
-  </void>
-  <void index="0">
-   <int>51</int>
-  </void>
- </void>
-</void>
-<void idref="intArray1"/>
-<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
- <string>rgb</string>
- <void id="intArray2" method="get">
   <object idref="ButtonModel392"/>
   <void index="1">
    <int>98</int>
@@ -21298,6 +19761,22 @@ attention. Maybe a fun animation or something?</string>
   </void>
   <void index="0">
    <int>219</int>
+  </void>
+ </void>
+</void>
+<void idref="intArray1"/>
+<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
+ <string>rgb</string>
+ <void id="intArray2" method="get">
+  <object idref="ButtonModel391"/>
+  <void index="1">
+   <int>108</int>
+  </void>
+  <void index="2">
+   <int>103</int>
+  </void>
+  <void index="0">
+   <int>51</int>
   </void>
  </void>
 </void>

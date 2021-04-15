@@ -54,17 +54,19 @@ public class GraphicsUtil {
         // Rob fix your checkstyle
         backButtonModel.text = "← Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
-        return new ButtonControl(backButtonModel,
-                commonButtonPadding, sketch.height
-                - (commonButtonHeight * 3 / 4) - commonButtonPadding,
-                commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
+        ButtonControl backButton = new ButtonControl(backButtonModel,
+            commonButtonPadding, sketch.height
+            - (commonButtonHeight * 3 / 4) - commonButtonPadding,
+            commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
+        backButton.init(sketch);
+        return backButton;
     }
 
     /**
      * Initialize the home button's ButtonControl model.
      * @return home button control
      */
-    public static ButtonControl initializeHomeButton() {
+    public static ButtonControl initializeHomeButton(Kiosk sketch) {
 
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
@@ -76,9 +78,11 @@ public class GraphicsUtil {
         ButtonModel homeButtonModel = new ButtonModel();
         homeButtonModel.text = "◄◄ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
-        return new ButtonControl(homeButtonModel,
-                commonButtonPadding, commonButtonPadding,
-                commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
+        ButtonControl homeButton = new ButtonControl(homeButtonModel,
+            commonButtonPadding, commonButtonPadding,
+            commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
+        homeButton.init(sketch);
+        return homeButton;
     }
 
     /**
@@ -98,10 +102,12 @@ public class GraphicsUtil {
         ButtonModel nextButtonModel = new ButtonModel();
         nextButtonModel.text = "Go! →";
         nextButtonModel.rgb = Color.DW_GREEN_RGB;
-        return new ButtonControl(nextButtonModel,
-                sketch.width - commonButtonPadding - commonButtonWidth * 3 / 4,
-                sketch.height - (commonButtonHeight * 3 / 4) - commonButtonPadding,
-                commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4);
+        ButtonControl nextButton = new ButtonControl(nextButtonModel,
+            sketch.width - commonButtonPadding - commonButtonWidth * 3 / 4,
+            sketch.height - (commonButtonHeight * 3 / 4) - commonButtonPadding,
+            commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4);
+        nextButton.init(sketch);
+        return nextButton;
     }
 
     /**

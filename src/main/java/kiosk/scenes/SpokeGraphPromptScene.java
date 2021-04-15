@@ -4,10 +4,12 @@ import graphics.Graphics;
 import graphics.GraphicsUtil;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
+import kiosk.models.FilterGroupModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
 
@@ -158,8 +160,8 @@ public class SpokeGraphPromptScene implements Scene {
         final double size = Math.min(screenW, availableHeight);
 
         // Reference to current list of careers
-        CareerModel[] careers = model.filter.filter(sketch.getAllCareers());
-        UserScore userScore = SceneGraph.getUserScore(); // Reference to user's RIASEC scores
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        CareerModel[] careers = userScore.getCareers();
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
         ButtonModel[] careerButtons = new ButtonModel[careers.length];
@@ -184,15 +186,12 @@ public class SpokeGraphPromptScene implements Scene {
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton = GraphicsUtil.initializeHomeButton();
-            this.homeButton.init(sketch);
+            this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
-            this.backButton.init(sketch);
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
-            this.supplementaryButton.init(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
 
@@ -204,7 +203,11 @@ public class SpokeGraphPromptScene implements Scene {
         // Check for button clicks on the scene graph
         for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
-                sceneGraph.pushScene(button.getTarget(), button.getModel().category);
+                String scene = button.getTarget();
+                Riasec riasec = button.getModel().category;
+                FilterGroupModel filter = button.getModel().filter;
+                sceneGraph.pushScene(scene, riasec, filter);
+                break;
             }
         }
 
