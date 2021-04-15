@@ -8,6 +8,7 @@ import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -49,6 +50,7 @@ import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
+import kiosk.scenes.EmptyScene;
 
 public class Controller implements Initializable {
 
@@ -135,6 +137,7 @@ public class Controller implements Initializable {
                         sceneGraph.registerSceneModel(newModel);
 
                         rebuildToolbar(newModel);
+                        rebuildSceneGraphTreeView();
                     }
                 });
 
@@ -168,7 +171,9 @@ public class Controller implements Initializable {
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
         newSceneMenuItem.setOnAction(t -> {
-            createNewScene();
+            createNewScene(true);
+            rebuildSceneGraphTreeView();
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
         });
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
@@ -183,9 +188,6 @@ public class Controller implements Initializable {
     /**
      * Rebuild the toolbar. Public because the toolbar can need to
      * be remade under various circumstances (not just when switching scenes.)
-     * todo might be able to be replaced with just an "updateSceneName" method,
-     * todo as that is (currently) the only other way of rebuilding besides
-     * todo switching scenes
      */
     public void rebuildToolbar(SceneModel model) {
         // Clear the scene type selector if we changed scenes
@@ -230,6 +232,7 @@ public class Controller implements Initializable {
      * @return The new tree root.
      */
     public TreeItem<SceneModel> buildSceneGraphTreeView() {
+
         TreeItem<SceneModel> hiddenRoot = new TreeItem<>();
         hiddenRoot.setExpanded(true);
 
@@ -336,16 +339,62 @@ public class Controller implements Initializable {
      * specified by TREE_VIEW_DEPTH.
      */
     public void rebuildSceneGraphTreeView() {
+        // doesn't need to be a hashMap; every item in here is expanded
+        // and we simply don't record the ones that are not expanded
+        ArrayList<String> expandedItems = new ArrayList<>();
+
+        // because the tree view is the way we want it here, it's fine to
+        // loop through just the tree items - this is simpler, and/but
+        // causes "hidden expanded items" to no be remembered on refresh
+        if (sceneGraphTreeView.getRoot() != null) {
+            for (int i = 0; i < sceneGraphTreeView.getExpandedItemCount(); i++) {
+                TreeItem<SceneModel> treeItem = sceneGraphTreeView.getTreeItem(i);
+                if (treeItem.isExpanded()) {
+                    expandedItems.add(treeItem.getValue().getId());
+                }
+            }
+        }
+
         TreeItem<SceneModel> hiddenRoot = buildSceneGraphTreeView();
+
         for (TreeItem<SceneModel> potentialOrphan : hiddenRoot.getChildren()) {
             if (!potentialOrphan.getValue().equals(sceneGraph.getRootSceneModel())) {
                 SceneModel orphan = potentialOrphan.getValue();
+                // check if orphan needs to find a new home (be removed)
+                // this happens if it's an empty scene, and there was no intent of creation
+                if (orphan.getClass().equals(EmptySceneModel.class)) {
+                    EmptySceneModel emptyOrphan = (EmptySceneModel) orphan;
+                    if (!emptyOrphan.intent) {
+                        deleteScene(orphan);
+                        potentialOrphan.getParent().getChildren().remove(potentialOrphan);
+                        break;
+                    }
+                }
+                // else keep and mark it
                 if (!orphan.getName().contains(ChildIdentifiers.ORPHAN)) {
                     orphan.setName(ChildIdentifiers.ORPHAN + orphan.getName());
                 }
             }
         }
         this.sceneGraphTreeView.setRoot(hiddenRoot);
+
+        // null check for safety; should be initialized already (from above)
+        if (sceneGraphTreeView.getRoot() != null) {
+            int numToExpand = expandedItems.size();
+            for (int i = 0; i < numToExpand; i++) {
+                int j = 0;
+                TreeItem<SceneModel> treeItem = sceneGraphTreeView.getTreeItem(j);
+                while (treeItem != null) {
+                    if (expandedItems.contains(treeItem.getValue().getId())) {
+                        treeItem.setExpanded(true);
+                        expandedItems.remove(treeItem.getValue().getId());
+                        break;
+                    }
+                    treeItem = sceneGraphTreeView.getTreeItem(++j);
+                }
+            }
+        }
+        
         Controller.setHasPendingChanges(true);
     }
 
@@ -380,6 +429,7 @@ public class Controller implements Initializable {
         try {
             sceneGraph.unregisterSceneModel(toDelete);
             rebuildSceneGraphTreeView();
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
         } catch (SceneModelException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Unable to Delete Scene");
@@ -393,13 +443,31 @@ public class Controller implements Initializable {
         deleteScene(sceneGraph.getCurrentSceneModel());
     }
 
+    /**
+     * Creates a new scene.
+     * @param intent Whether the user has intentionally created the scene, or
+     *     whether the scene was created automatically via a new
+     *     button
+     * @return the newly-created scene
+     * @apiNote  It's a good idea to call rebuildSceneGraphTreeView() and
+     *     rebuildToolBar() soon after using this method.
+     * @implNote   rebuildSceneGraphTreeView() cannot be called __in__ this
+     *     method because the returned SceneModel needs to actually be returned
+     *     before the tree view can be rebuilt; otherwise, if intent is false,
+     *     the SceneModel will be deleted before it can even be returned.
+     *     Similarly, rebuildToolbar() can't be called here because, on
+     *     non-intentional empty scene creation, it rebuilds the toolbar
+     *     for an empty scene instead of the current scene.
+     */
     @FXML
-    private void createNewScene() {
+    public SceneModel createNewScene(boolean intent) {
         EmptySceneModel model = new EmptySceneModel();
         model.message = "This scene is empty! Change the scene type on the left side";
+        model.intent = intent;
 
         // Add to the scene graph
         addNewScene(sceneGraphTreeView.getRoot(), model);
+        return model;
     }
 
     /**
