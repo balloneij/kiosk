@@ -1,6 +1,5 @@
 package editor;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import editor.sceneloaders.CareerPathwaySceneLoader;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
@@ -8,7 +7,6 @@ import editor.sceneloaders.PromptSceneLoader;
 import editor.sceneloaders.SpokeGraphPromptSceneLoader;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
