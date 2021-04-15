@@ -67,6 +67,7 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = sceneModels.get(0).getId();
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
+        this.careers = new CareerModel[0];
     }
 
     /**
@@ -95,6 +96,7 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = rootSceneId;
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
+        this.careers = new CareerModel[0];
     }
 
     /**
@@ -208,6 +210,8 @@ public class LoadedSurveyModel implements Serializable {
             FilterGroupModel fieldFilter;
             if (fieldFilters.containsKey(career.field)) {
                 fieldFilter = fieldFilters.get(career.field);
+                fieldFilter.category = career.category;
+                fieldFilter.field = career.field;
             } else {
                 fieldFilter = FilterGroupModel.create();
                 fieldFilters.put(career.field, fieldFilter);
@@ -217,6 +221,8 @@ public class LoadedSurveyModel implements Serializable {
             FilterGroupModel categoryFilter;
             if (categoryFilters.containsKey(career.category)) {
                 categoryFilter = categoryFilters.get(career.category);
+                categoryFilter.category = career.category;
+                categoryFilter.field = "All";
             } else {
                 categoryFilter = FilterGroupModel.create();
                 categoryFilters.put(career.category, categoryFilter);

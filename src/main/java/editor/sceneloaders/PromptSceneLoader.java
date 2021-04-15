@@ -288,7 +288,8 @@ public class PromptSceneLoader {
         // Put all the answer controls together
         HBox editingControls = new HBox(colorPicker, imageChooseButton, shapeButton, removeButton);
         answerVbox.getChildren().addAll(
-                answerField, editingControls, targetsBox, riasecBox, separator);
+                answerField, editingControls, targetsBox, riasecBox,
+                SceneLoader.getFilterBox(graph, model, answer), separator);
         return answerVbox;
     }
 }

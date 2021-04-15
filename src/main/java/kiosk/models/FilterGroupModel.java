@@ -9,6 +9,8 @@ import java.util.Set;
  * careers LoadedSurveyModel.
  */
 public class FilterGroupModel {
+    public String category;
+    public String field;
     public Set<String> careerNames;
 
     public FilterGroupModel() {
