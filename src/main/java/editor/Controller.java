@@ -176,6 +176,7 @@ public class Controller implements Initializable {
         newSceneMenuItem.setOnAction(t -> {
             createNewScene(true);
             rebuildSceneGraphTreeView();
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
         });
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
@@ -431,6 +432,7 @@ public class Controller implements Initializable {
         try {
             sceneGraph.unregisterSceneModel(toDelete);
             rebuildSceneGraphTreeView();
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
         } catch (SceneModelException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Unable to Delete Scene");
@@ -448,12 +450,15 @@ public class Controller implements Initializable {
      * Creates a new scene.
      *
      * @return the newly-created scene
-     * @apiNote  It's a good idea to call rebuildSceneGraphTreeView()
-     *      soon after using this method
+     * @apiNote  It's a good idea to call rebuildSceneGraphTreeView() and
+     *      rebuildToolBar() soon after using this method.
      * @implNote   rebuildSceneGraphTreeView() cannot be called __in__ this
      *     method because the returned SceneModel needs to actually be returned
      *     before the tree view can be rebuilt; otherwise, if intent is false,
      *     the SceneModel will be deleted before it can even be returned.
+     *     Similarly, rebuildToolbar() can't be called here because, on
+     *     non-intentional empty scene creation, it rebuilds the toolbar
+     *     for an empty scene instead of the current scene.
      */
     @FXML
     public SceneModel createNewScene(boolean intent) {
