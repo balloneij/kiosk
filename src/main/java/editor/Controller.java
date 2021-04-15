@@ -446,10 +446,12 @@ public class Controller implements Initializable {
 
     /**
      * Creates a new scene.
-     *
+     * @param intent Whether the user has intentionally created the scene, or
+     *     whether the scene was created automatically via a new
+     *     button
      * @return the newly-created scene
      * @apiNote  It's a good idea to call rebuildSceneGraphTreeView() and
-     *      rebuildToolBar() soon after using this method.
+     *     rebuildToolBar() soon after using this method.
      * @implNote   rebuildSceneGraphTreeView() cannot be called __in__ this
      *     method because the returned SceneModel needs to actually be returned
      *     before the tree view can be rebuilt; otherwise, if intent is false,
