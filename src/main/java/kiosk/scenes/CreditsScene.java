@@ -9,24 +9,27 @@ import processing.core.PConstants;
 
 public class CreditsScene implements Scene {
 
+    private static int screenW =  Kiosk.getSettings().screenW;
+    private static int screenH = Kiosk.getSettings().screenH;
+
     // White foreground
-    private static final int FOREGROUND_WIDTH = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int FOREGROUND_HEIGHT = Kiosk.getSettings().screenH * 3 / 4;
-    private static final int FOREGROUND_X_PADDING
-            = Kiosk.getSettings().screenW / 6 + FOREGROUND_WIDTH / 2;
-    private static final int FOREGROUND_Y_PADDING
-            = Kiosk.getSettings().screenH / 8 + FOREGROUND_HEIGHT / 2;
-    private static final int FOREGROUND_CURVE_RADIUS = 100;
+    private static int foregroundWidth = Kiosk.getSettings().screenW * 2 / 3;
+    private static int foregroundHeight = Kiosk.getSettings().screenH * 3 / 4;
+    private static int foregroundXPadding
+            = Kiosk.getSettings().screenW / 6 + foregroundWidth / 2;
+    private static int foregroundYPadding
+            = Kiosk.getSettings().screenH / 8 + foregroundHeight / 2;
+    private static int foregroundCurveRadius = 100;
 
     // Text
-    private static final int TITLE_Y = Kiosk.getSettings().screenH / 4;
-    private static final int TITLE_FONT_SIZE = 30;
-    private static final int CREATOR_X = Kiosk.getSettings().screenW / 3;
-    private static final int CREATOR_Y = Kiosk.getSettings().screenH * 4 / 9;
-    private static final int PROMPT_FONT_SIZE = 16;
-    private static final int SUPPORTER_X = Kiosk.getSettings().screenW * 2 / 3;
-    private static final int SUPPORTER_Y = Kiosk.getSettings().screenH * 4 / 9;
-    private static final int ACTION_FONT_SIZE = 20;
+    private static int titleY = Kiosk.getSettings().screenH / 4;
+    private static int titleFontSize = screenW / 55;
+    private static int creatorX = Kiosk.getSettings().screenW / 3;
+    private static int creatorY = Kiosk.getSettings().screenH * 4 / 9;
+    private static int promptFontSize = screenW / 60;
+    private static int supporterX = Kiosk.getSettings().screenW * 2 / 3;
+    private static int supporterY = Kiosk.getSettings().screenH * 4 / 9;
+    private static int actionFontSize = screenW / 58;
 
     //Animations
     private int startFrame = 0;
@@ -34,8 +37,31 @@ public class CreditsScene implements Scene {
     private final CreditsSceneModel model;
     private ButtonControl backButton;
 
+    /**
+     * Default constructor.
+     * @param model the model to make
+     */
     public CreditsScene(CreditsSceneModel model) {
         this.model = model;
+
+        // White foreground
+        foregroundWidth = Kiosk.getSettings().screenW * 2 / 3;
+        foregroundHeight = Kiosk.getSettings().screenH * 3 / 4;
+        foregroundXPadding
+                = Kiosk.getSettings().screenW / 6 + foregroundWidth / 2;
+        foregroundYPadding
+                = Kiosk.getSettings().screenH / 8 + foregroundHeight / 2;
+        foregroundCurveRadius = 100;
+
+        // Text
+        titleY = Kiosk.getSettings().screenH / 4;
+        titleFontSize = Kiosk.getSettings().screenW / 55;
+        creatorX = Kiosk.getSettings().screenW / 3;
+        creatorY = Kiosk.getSettings().screenH * 4 / 9;
+        promptFontSize = Kiosk.getSettings().screenW / 60;
+        supporterX = Kiosk.getSettings().screenW * 2 / 3;
+        supporterY = Kiosk.getSettings().screenH * 4 / 9;
+        actionFontSize = Kiosk.getSettings().screenW / 58;
     }
 
     @Override
@@ -52,6 +78,7 @@ public class CreditsScene implements Scene {
         startFrame = sketch.frameCount;
 
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
+        this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
     }
 
@@ -76,12 +103,12 @@ public class CreditsScene implements Scene {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
-                    (float) (FOREGROUND_WIDTH * ((sketch.frameCount - startFrame) * 1.0
+                    foregroundXPadding, foregroundYPadding,
+                    (float) (foregroundWidth * ((sketch.frameCount - startFrame) * 1.0
                             / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (FOREGROUND_HEIGHT * ((sketch.frameCount - startFrame) * 1.0
+                    (float) (foregroundHeight * ((sketch.frameCount - startFrame) * 1.0
                             / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (FOREGROUND_CURVE_RADIUS * ((sketch.frameCount - startFrame) * 1.0
+                    (float) (foregroundCurveRadius * ((sketch.frameCount - startFrame) * 1.0
                             / Kiosk.getSettings().sceneAnimationFrames)));
             // Draw text
             sketch.rectMode(PConstants.CENTER);
@@ -89,31 +116,31 @@ public class CreditsScene implements Scene {
             sketch.fill(0);
             if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
                 // Title
-                Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE
+                Graphics.useGothic(sketch, (int) (titleFontSize
                         * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.title, centerX, TITLE_Y,
+                sketch.text(this.model.title, centerX, titleY,
                         sketch.width / 2f, sketch.height / 5f);
                 //Creators & Supporters
-                Graphics.useGothic(sketch, (int) (PROMPT_FONT_SIZE
+                Graphics.useGothic(sketch, (int) (promptFontSize
                         * ((sketch.frameCount - startFrame) * 1.0
                         / (Kiosk.getSettings().sceneAnimationFrames + 1))), false);
-                sketch.text(this.model.creatorTitle, CREATOR_X, CREATOR_Y,
+                sketch.text(this.model.creatorTitle, creatorX, creatorY,
                         sketch.width / 1.75f, sketch.height / 5f);
-                sketch.text(this.model.creators, CREATOR_X, (int) (CREATOR_Y * 1.35),
+                sketch.text(this.model.creators, creatorX, (int) (creatorY * 1.35),
                         sketch.width / 1.75f, sketch.height / 2f);
-                sketch.text(this.model.supporterTitle, SUPPORTER_X, SUPPORTER_Y,
+                sketch.text(this.model.supporterTitle, supporterX, supporterY,
                         sketch.width / 1.75f, sketch.height / 5f);
-                sketch.text(this.model.supporters, SUPPORTER_X, (int) (SUPPORTER_Y * 1.45),
+                sketch.text(this.model.supporters, supporterX, (int) (supporterY * 1.45),
                         sketch.width / 1.75f, sketch.height / 2f);
             }
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    FOREGROUND_X_PADDING, FOREGROUND_Y_PADDING,
-                    FOREGROUND_WIDTH, FOREGROUND_HEIGHT,
-                    FOREGROUND_CURVE_RADIUS);
+                    foregroundXPadding, foregroundYPadding,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
 
             // Draw text
             sketch.rectMode(PConstants.CENTER);
@@ -121,28 +148,28 @@ public class CreditsScene implements Scene {
             sketch.fill(0);
 
             // Title
-            Graphics.useGothic(sketch, (int) (TITLE_FONT_SIZE * 1.15f), true);
-            sketch.text(this.model.title, centerX, TITLE_Y,
+            Graphics.useGothic(sketch, (int) (titleFontSize * 1.15f), true);
+            sketch.text(this.model.title, centerX, titleY,
                     sketch.width / 2f, sketch.height / 5f);
 
             // Creator Title
-            Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
-            sketch.text(this.model.creatorTitle, CREATOR_X, CREATOR_Y,
+            Graphics.useGothic(sketch, actionFontSize, true);
+            sketch.text(this.model.creatorTitle, creatorX, creatorY,
                     sketch.width / 1.75f, sketch.height / 5f);
 
             // Creators
-            Graphics.useGothic(sketch, ACTION_FONT_SIZE, false);
-            sketch.text(this.model.creators, CREATOR_X, (int) (CREATOR_Y * 1.35),
+            Graphics.useGothic(sketch, actionFontSize, false);
+            sketch.text(this.model.creators, creatorX, (int) (creatorY * 1.35),
                     sketch.width / 1.75f, sketch.height);
 
             // Supporter Title
-            Graphics.useGothic(sketch, ACTION_FONT_SIZE, true);
-            sketch.text(this.model.supporterTitle, SUPPORTER_X, SUPPORTER_Y,
+            Graphics.useGothic(sketch, actionFontSize, true);
+            sketch.text(this.model.supporterTitle, supporterX, supporterY,
                     sketch.width / 1.75f, sketch.height / 5f);
 
             // Supporters
-            Graphics.useGothic(sketch, ACTION_FONT_SIZE, false);
-            sketch.text(this.model.supporters, SUPPORTER_X, (int) (SUPPORTER_Y * 1.45),
+            Graphics.useGothic(sketch, actionFontSize, false);
+            sketch.text(this.model.supporters, supporterX, (int) (supporterY * 1.45),
                     sketch.width / 1.75f, sketch.height);
         }
 

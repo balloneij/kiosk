@@ -32,6 +32,7 @@ import processing.event.MouseEvent;
 public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
+    private String surveyPath;
     private CareerModel[] careers;
     private Scene lastScene;
     private SceneModel lastSceneModel;
@@ -42,6 +43,8 @@ public class Kiosk extends PApplet {
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
     private boolean shouldTimeout = true;
+    private boolean isFullScreen = false;
+    private boolean fontsLoaded = false;
 
     private static JFileChooser fileChooser;
 
@@ -87,6 +90,7 @@ public class Kiosk extends PApplet {
         Kiosk.settings = settings;
 
         LoadedSurveyModel survey;
+        this.surveyPath = surveyPath;
         if (!surveyPath.isEmpty()) {
             survey = LoadedSurveyModel.readFromFile(new File(surveyPath));
         } else {
@@ -141,6 +145,12 @@ public class Kiosk extends PApplet {
 
     @Override
     public void settings() {
+        if (settings.fullScreenDesired) {
+            isFullScreen = true;
+            fullScreen();
+        } else {
+            isFullScreen = false;
+        }
         size(settings.screenW, settings.screenH);
     }
 
@@ -156,7 +166,10 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
-        Graphics.loadFonts();
+        if(!fontsLoaded) {
+            Graphics.loadFonts();
+            fontsLoaded = true;
+        }
     }
 
     @Override
@@ -282,6 +295,14 @@ public class Kiosk extends PApplet {
             } else if (event.getKeyCode() == 116) {
                 // F5 Key Press
                 this.sceneGraph.reset();
+            } else if (event.getKeyCode() == 122) {
+                // F11 Key Press
+                Settings s = new Settings(!isFullScreen);
+                Kiosk kioskNew = new Kiosk(this.surveyPath, s);
+                kioskNew.setFontsLoaded(true);
+                kioskNew.run();
+                this.noLoop();
+                this.getSurface().setVisible(false);
             }
         }
 
@@ -386,6 +407,10 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MouseWheel)) {
             listener.invoke(event);
         }
+    }
+
+    protected void setFontsLoaded(boolean fontsLoaded) {
+        this.fontsLoaded = fontsLoaded;
     }
 
     public static Settings getSettings() {
