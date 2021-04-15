@@ -284,7 +284,7 @@ public class SpokeGraphPromptSceneLoader {
         }
 
         ComboBox<SceneTarget> targetComboBox =
-                new ComboBox<>(FXCollections.observableList(sceneTargets));
+                new ComboBox<>(FXCollections.observableList(sceneTargets).sorted());
 
         SceneTarget currentAnswer = new SceneTarget(answer.target,
                 graph.getSceneById(answer.target).getName());
