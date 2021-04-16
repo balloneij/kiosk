@@ -19,7 +19,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
-import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
@@ -40,6 +39,7 @@ public class Kiosk extends PApplet {
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
     protected static Settings settings;
+    private Boop boop;
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
@@ -111,6 +111,8 @@ public class Kiosk extends PApplet {
         }
 
         Color.setSketch(this);
+
+        boop = new Boop();
     }
 
     /**
@@ -170,7 +172,7 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
-        Boop.loadVariables(this);
+        boop.loadVariables(this);
         if (!fontsLoaded) {
             Graphics.loadFonts();
             fontsLoaded = true;
@@ -241,7 +243,7 @@ public class Kiosk extends PApplet {
                         Kiosk.settings.gracePeriodMillis - currentSceneMillis;
             }
         }
-        Boop.movementLogic(this, currentScene.toString());
+        boop.movementLogic(this, currentScene);
     }
 
     /**
@@ -353,7 +355,7 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MouseClicked)) {
             listener.invoke(event);
         }
-        Boop.checkTap(this, event);
+        boop.checkTap(this, event);
     }
 
     @Override

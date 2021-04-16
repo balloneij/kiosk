@@ -5,8 +5,6 @@ import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
 import kiosk.Kiosk;
-import kiosk.models.ImageModel;
-import kiosk.scenes.Image;
 import processing.core.PConstants;
 import processing.core.PFont;
 
