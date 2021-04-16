@@ -179,13 +179,27 @@ public class ButtonControl implements Control<MouseEvent> {
         if (!this.model.noButton) {
             if (this.model.isCircle) {
                 this.drawCircle(sketch, 1);
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                                (float) rect.getCenterY() + this.rect.height / 10.f);
+                    }
+                }
             } else {
                 this.drawRectangle(sketch, 1);
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                                (float) rect.getCenterY() + this.rect.height / 10.f);
+                    }
+                }
             }
         } else {
             if (this.model.image != null) {
                 sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed && !this.disabled) {
+                if (this.isPressed) {
                     this.image.draw(sketch, (float) rect.getCenterX(),
                             (float) rect.getCenterY() + this.rect.height / 10.f);
                 } else {

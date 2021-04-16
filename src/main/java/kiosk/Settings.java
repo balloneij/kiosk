@@ -102,7 +102,11 @@ public class Settings {
         }
     }
 
-    public void setFullScreen(Boolean fullScreenDesired) {
+    /**
+     * Allows the settings file to be set to fullscreen after initialization.
+     * @param fullScreenDesired if this kiosk should be fullscreen
+     */
+    void setFullScreen(Boolean fullScreenDesired) {
         this.fullScreenDesired = fullScreenDesired;
         if (fullScreenDesired) {
             try {

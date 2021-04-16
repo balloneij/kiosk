@@ -20,6 +20,7 @@ public class Boop {
     private final int limbMovementRange = 1;
     private final float speedSlow = 0.5f;
     private final float speedFast = 0.75f;
+    private final float speedZoom = 2.5f;
     private final int minimumShellFrames = 100;
     private final int minimumHappyFrames = 150;
     private final int minimumBlinkFrames = 30;
@@ -27,6 +28,8 @@ public class Boop {
 
     private int width;
     private int boopDimens;
+    private float minX;
+    private float maxX;
 
     private Image lbFoot;
     private Image lfFoot;
@@ -81,6 +84,7 @@ public class Boop {
     private int lastClickedFrame;
     private int firstHappyFrame = -1;
     private int additionalHappyFrames;
+    private boolean shouldZoomAway;
 
     public Boop() {
         this.boopState = BoopState.STATIC_LEFT;
@@ -94,6 +98,8 @@ public class Boop {
      * @param currentScene the scene the user is currently viewing
      */
     public void movementLogic(Kiosk sketch, Scene currentScene) {
+        minX = 0;
+        maxX = width;
         if (currentScene.getClass().toString().contains("CareerDescriptionScene")
                 && firstHappyFrame == -1) {
             firstHappyFrame = sketch.frameCount;
@@ -104,9 +110,17 @@ public class Boop {
             } else {
                 boopState = BoopState.HAPPY_RIGHT;
             }
-        }
-        if (!currentScene.getClass().toString().contains("CareerDescriptionScene")) {
+        } else {
             firstHappyFrame = -1;
+        }
+        if (currentScene.getClass().toString().contains("SpokeGraphPromptScene")) {
+            minX = width / 15f * 6;
+            maxX = width / 15f * 7.5f;
+        }
+        if (currentScene.getClass().toString().contains("PathwayScene")
+                || currentScene.getClass().toString().contains("CareerPathwayScene")) {
+            minX = width / 15f * 9;
+            maxX = width * ((screenBoundaryFraction - 1) / screenBoundaryFraction);
         }
         boolean choseScootAnimation;
         if (currentX >= width * (screenBoundaryFraction - 1 / screenBoundaryFraction)) {
@@ -115,7 +129,6 @@ public class Boop {
             //oh god he can't hear us he has airpods in oh god
             //Oh the hu-manatee!
             choseLeft = true;
-            choseScootAnimation = true;
             boopState = BoopState.SCOOT_LEFT;
         } else if (currentX <= width / screenBoundaryFraction) {
             //Boop is too close to the left edge of the screen!
@@ -123,9 +136,22 @@ public class Boop {
             //oh god he can't hear us he has airpods in oh god
             //Oh the hu-manatee!
             choseLeft = false;
-            choseScootAnimation = true;
             boopState = BoopState.SCOOT_RIGHT;
+        } else if (currentX <= minX) {
+            choseLeft = false;
+            boopState = BoopState.SCOOT_RIGHT;
+            shouldZoomAway = true;
+        } else if (currentX >= maxX) {
+            choseLeft = true;
+            boopState = BoopState.SCOOT_LEFT;
+            shouldZoomAway = true;
+        } else {
+            shouldZoomAway = false;
         }
+        System.out.println("CURRENTX = " + currentX);
+        System.out.println("MIN X = " + minX);
+        System.out.println("MAX X = " + maxX);
+        System.out.println();
         if (sketch.frameCount % choiceFrequencyInFrames == 0
                 && !boopState.equals(BoopState.IN_SHELL_LEFT)
                 && !boopState.equals(BoopState.IN_SHELL_RIGHT)) {
@@ -201,7 +227,9 @@ public class Boop {
                 || boopState.equals(BoopState.TIPTOE_LEFT)
                 || boopState.equals(BoopState.TIPTOE_RIGHT)) {
             //Boop is moving, draw him somewhere else depending on his speed.
-            if (rand.nextInt(randomBounds) >= randomSwapSpeedChance) {
+            if (shouldZoomAway) {
+                drawBoop(sketch, speedZoom);
+            } else if (rand.nextInt(randomBounds) >= randomSwapSpeedChance) {
                 drawBoop(sketch, speedSlow);
             } else {
                 drawBoop(sketch, speedFast);
