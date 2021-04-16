@@ -311,7 +311,8 @@ public class Kiosk extends PApplet {
                 this.sceneGraph.reset();
             } else if (event.getKeyCode() == 122) {
                 // F11 Key Press
-                Settings s = new Settings(!isFullScreen);
+                Settings s = Settings.readSettings();
+                s.setFullScreen(!isFullScreen);
                 Kiosk kioskNew = new Kiosk(this.surveyPath, s);
                 kioskNew.setFontsLoaded(true);
                 kioskNew.run();

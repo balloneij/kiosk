@@ -101,4 +101,21 @@ public class Settings {
             return new Settings(fullScreenDesired);
         }
     }
+
+    public void setFullScreen(Boolean fullScreenDesired) {
+        this.fullScreenDesired = fullScreenDesired;
+        if (fullScreenDesired) {
+            try {
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                screenW = (int) screenSize.getWidth();
+                screenH = (int) screenSize.getHeight();
+            } catch (HeadlessException e) {
+                screenW = 1280;
+                screenH = 720;
+            }
+        } else {
+            screenW = 1280;
+            screenH = 720;
+        }
+    }
 }
