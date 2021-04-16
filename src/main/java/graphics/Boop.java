@@ -22,7 +22,7 @@ public class Boop {
     private final float speedFast = 0.75f;
     private final float speedZoom = 2.5f;
     private final int minimumShellFrames = 100;
-    private final int minimumHappyFrames = 150;
+    private final int minimumHappyFrames = 250;
     private final int minimumBlinkFrames = 30;
     private final int framesBetweenBlinks = 200;
 
@@ -64,6 +64,7 @@ public class Boop {
     private Image headLookBlinkR;
 
     private boolean choseLeft;
+    private boolean choseShake;
 
     private enum BoopState {
         HAPPY_LEFT, HAPPY_RIGHT,
@@ -85,6 +86,7 @@ public class Boop {
     private int firstHappyFrame = -1;
     private int additionalHappyFrames;
     private boolean shouldZoomAway;
+    private boolean startedHappyAnimation = false;
 
     public Boop() {
         this.boopState = BoopState.STATIC_LEFT;
@@ -101,7 +103,7 @@ public class Boop {
         minX = 0;
         maxX = width;
         if (currentScene.getClass().toString().contains("CareerDescriptionScene")
-                && firstHappyFrame == -1) {
+                && !startedHappyAnimation) {
             firstHappyFrame = sketch.frameCount;
             Random rand = new Random();
             additionalHappyFrames = rand.nextInt(30);
@@ -110,8 +112,9 @@ public class Boop {
             } else {
                 boopState = BoopState.HAPPY_RIGHT;
             }
-        } else {
-            firstHappyFrame = -1;
+        }
+        if (!currentScene.getClass().toString().contains("CareerDescriptionScene")) {
+            startedHappyAnimation = false;
         }
         if (currentScene.getClass().toString().contains("SpokeGraphPromptScene")) {
             minX = width / 15f * 6;
@@ -148,10 +151,6 @@ public class Boop {
         } else {
             shouldZoomAway = false;
         }
-        System.out.println("CURRENTX = " + currentX);
-        System.out.println("MIN X = " + minX);
-        System.out.println("MAX X = " + maxX);
-        System.out.println();
         if (sketch.frameCount % choiceFrequencyInFrames == 0
                 && !boopState.equals(BoopState.IN_SHELL_LEFT)
                 && !boopState.equals(BoopState.IN_SHELL_RIGHT)) {
@@ -307,6 +306,7 @@ public class Boop {
                 } else {
                     staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headHappy);
                 }
+                startedHappyAnimation = true;
                 if (sketch.frameCount >= firstHappyFrame
                         + minimumHappyFrames + additionalHappyFrames) {
                     //Boop is currently experiencing depression...
@@ -322,6 +322,7 @@ public class Boop {
                     staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
                             shellR, headHappyR);
                 }
+                startedHappyAnimation = true;
                 if (sketch.frameCount >= firstHappyFrame
                         + minimumHappyFrames + additionalHappyFrames) {
                     //Boop is currently experiencing depression...
@@ -330,7 +331,11 @@ public class Boop {
                 }
                 break;
             case IN_SHELL_LEFT:
-                inShellAnimation(sketch, shellEmpty, shellLook, shellLook1, shellLook2);
+                if (choseShake) {
+                    inShellAnimation2(sketch, shellEmpty, shellEmptyR);
+                } else {
+                    inShellAnimation(sketch, shellEmpty, shellLook, shellLook1, shellLook2);
+                }
                 if (sketch.frameCount >= lastClickedFrame
                         + minimumShellFrames + additionalShellFrames) {
                     //Boop is exiting his shell...
@@ -338,7 +343,11 @@ public class Boop {
                 }
                 break;
             case IN_SHELL_RIGHT:
-                inShellAnimation(sketch, shellEmptyR, shellLookR, shellLook1R, shellLook2R);
+                if (choseShake) {
+                    inShellAnimation2(sketch, shellEmptyR, shellEmpty);
+                } else {
+                    inShellAnimation(sketch, shellEmptyR, shellLookR, shellLook1R, shellLook2R);
+                }
                 if (sketch.frameCount >= lastClickedFrame
                         + minimumShellFrames + additionalShellFrames) {
                     //Boop is exiting his shell...
@@ -569,7 +578,7 @@ public class Boop {
     }
 
     /**
-     * Draws Boop amidst his hiding-in-shell animation.
+     * Draws Boop amidst his hiding-in-shell animation where he looks around at the end.
      * @param sketch to draw to
      * @param shellEmpty the empty shell to be used
      * @param shellLook the empty shell with Boop's head popping out to use
@@ -596,6 +605,29 @@ public class Boop {
     }
 
     /**
+     * Draws Boop amidst his hiding-in-shell animation where he shakes at the end.
+     * @param sketch to draw to
+     * @param shellEmpty the empty shell to be used
+     * @param shellEmpty2 the empty shell facing the opposite way to be used
+     */
+    private void inShellAnimation2(Kiosk sketch, Image shellEmpty,
+                                  Image shellEmpty2) {
+        int frameNumber = (sketch.frameCount - lastClickedFrame)
+                % (minimumShellFrames + additionalShellFrames);
+        if (frameNumber == 0) {
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+        } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 2f)) {
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+        } else if (frameNumber > ((minimumShellFrames + additionalShellFrames) / 2f)
+                && (frameNumber % 10 == 0 || frameNumber % 10 == 1 || frameNumber % 10 == 2
+                || frameNumber % 10 == 3 || frameNumber % 10 == 4)) {
+            shellEmpty2.draw(sketch, currentX, currentY + boopDimens / 10f);
+        } else {
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+        }
+    }
+
+    /**
      * Compares Boop's location to the tap's location.
      * @param event the mouse tap just registered
      */
@@ -607,6 +639,11 @@ public class Boop {
                 lastClickedFrame = sketch.frameCount;
                 Random rand = new Random();
                 additionalShellFrames = rand.nextInt(10);
+                if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
+                    choseShake = true;
+                } else {
+                    choseShake = false;
+                }
                 if (choseLeft) {
                     boopState = BoopState.IN_SHELL_LEFT;
                 } else {
