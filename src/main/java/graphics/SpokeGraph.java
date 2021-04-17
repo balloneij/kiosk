@@ -26,8 +26,8 @@ public class SpokeGraph {
     private final ButtonControl[] buttonControls;
     private double[] weights;
 
-    private final int[] rgbColor1 = new int[] { 0, 0, 255 };
-    private final int[] rgbColor2 = new int[] { 255, 0, 0 };
+    private final int[] rgbColor1 = new int[] { 20, 20, 200 };
+    private final int[] rgbColor2 = new int[] { 200, 20, 20 };
 
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
