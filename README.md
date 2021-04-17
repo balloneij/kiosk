@@ -28,6 +28,15 @@ Discovery World's Career Pathways Kiosk developed by an MSOE Senior Design team.
 
 # Build
 
+## Maven
+* Download and install Maven from `https://maven.apache.org/download.cgi`
+* Download file named apache-maven-x.x.x-bin.zip
+* Extract the contents of the folde to "C:\Maven" so that there is a path "C:\Maven\apachem-maven-x.x.x\bin"
+* Hit the Windows Key, and search for Edit Environment Variables.
+* Under System Variables, select Path. Then hit edit. Add a new line with this value "C:\Maven\apache-maven-3.8.1\bin"
+* Restart
+
+## Run The Build
 * From the project directory run `mvn package`
 * These files will appear in the `target` directory
   * kiosk.java
