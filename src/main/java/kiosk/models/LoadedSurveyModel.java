@@ -172,13 +172,13 @@ public class LoadedSurveyModel implements Serializable {
             try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    String[] values = line.split(",");
+                    String[] values = line.split("\t");
 
                     // Get values from columns
                     CareerModel career = new CareerModel();
-                    career.riasecCategory = Riasec.valueOf(values[0]);
+                    career.riasecCategory = Riasec.valueOf(values[2]);
                     career.field = values[1];
-                    career.category = values[2];
+                    career.category = values[0];
                     career.name = values[3];
                     career.description = values[4];
 
@@ -203,7 +203,7 @@ public class LoadedSurveyModel implements Serializable {
         HashMap<String, FilterGroupModel> categoryFilters = new HashMap<>();
 
         // Load careers from CSV
-        List<CareerModel> careers = loadCareers(new File("sample_careers.csv"));
+        List<CareerModel> careers = loadCareers(new File("sample_careers.tsv"));
 
         // Create filters based off of the sample careers
         for (CareerModel career : careers) {
