@@ -1,5 +1,6 @@
 package kiosk;
 
+import graphics.Boop;
 import graphics.Color;
 import graphics.Graphics;
 import java.awt.Component;
@@ -18,7 +19,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
-import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
@@ -39,6 +39,7 @@ public class Kiosk extends PApplet {
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private int lastMillis = 0;
     protected static Settings settings;
+    private Boop boop;
     private int newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
@@ -110,6 +111,8 @@ public class Kiosk extends PApplet {
         }
 
         Color.setSketch(this);
+
+        boop = new Boop();
     }
 
     /**
@@ -169,6 +172,7 @@ public class Kiosk extends PApplet {
     public void setup() {
         super.setup();
         this.lastMillis = millis();
+        boop.loadVariables(this);
         if (!fontsLoaded) {
             Graphics.loadFonts();
             fontsLoaded = true;
@@ -177,6 +181,8 @@ public class Kiosk extends PApplet {
 
     @Override
     public void draw() {
+        // Clear out the previous frame
+        this.background(0);
         // Compute the time delta in seconds
         int currMillis = millis();
         float dt = (float) (currMillis - this.lastMillis) / 1000;
@@ -237,6 +243,7 @@ public class Kiosk extends PApplet {
                         Kiosk.settings.gracePeriodMillis - currentSceneMillis;
             }
         }
+        boop.movementLogic(this, currentScene);
     }
 
     /**
@@ -304,7 +311,8 @@ public class Kiosk extends PApplet {
                 this.sceneGraph.reset();
             } else if (event.getKeyCode() == 122) {
                 // F11 Key Press
-                Settings s = new Settings(!isFullScreen);
+                Settings s = Settings.readSettings();
+                s.setFullScreen(!isFullScreen);
                 Kiosk kioskNew = new Kiosk(this.surveyPath, s);
                 kioskNew.setFontsLoaded(true);
                 kioskNew.run();
@@ -348,6 +356,7 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MouseClicked)) {
             listener.invoke(event);
         }
+        boop.checkTap(this, event);
     }
 
     @Override

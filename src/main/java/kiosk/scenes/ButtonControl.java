@@ -9,6 +9,7 @@ import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
+import kiosk.models.ImageModel;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
@@ -169,13 +170,27 @@ public class ButtonControl implements Control<MouseEvent> {
         if (!this.model.noButton) {
             if (this.model.isCircle) {
                 this.drawCircle(sketch, 1);
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                                (float) rect.getCenterY() + this.rect.height / 10.f);
+                    }
+                }
             } else {
                 this.drawRectangle(sketch, 1);
+                if (this.model.image != null) {
+                    sketch.imageMode(PConstants.CENTER);
+                    if (this.isPressed) {
+                        this.image.draw(sketch, (float) rect.getCenterX(),
+                                (float) rect.getCenterY() + this.rect.height / 10.f);
+                    }
+                }
             }
         } else {
             if (this.model.image != null) {
                 sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed && !this.disabled) {
+                if (this.isPressed) {
                     this.image.draw(sketch, (float) rect.getCenterX(),
                             (float) rect.getCenterY() + this.rect.height / 10.f);
                 } else {
@@ -246,7 +261,8 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
                     clampColor(this.model.rgb[1] + colorDeltaOnClick),
                     clampColor(this.model.rgb[2] + colorDeltaOnClick));
-            sketch.stroke(59, 58, 57, 63f);
+            sketch.stroke(Color.DW_BLACK_RGB[0], Color.DW_BLACK_RGB[1],
+                    Color.DW_BLACK_RGB[2], 63f);
             Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
                     this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                     this.rect.width, this.rect.height, defaultCornerRadius);
@@ -362,6 +378,7 @@ public class ButtonControl implements Control<MouseEvent> {
 
         // If it's clickable, draw the darker button behind the main one to add 3D effect
         if (!disabled) {
+            //Draw the darker button behind the button to add 3D effects
             sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
                     clampColor(this.model.rgb[1] + colorDeltaOnClick),
                     clampColor(this.model.rgb[2] + colorDeltaOnClick));

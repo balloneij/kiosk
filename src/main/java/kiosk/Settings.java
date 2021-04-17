@@ -101,4 +101,25 @@ public class Settings {
             return new Settings(fullScreenDesired);
         }
     }
+
+    /**
+     * Allows the settings file to be set to fullscreen after initialization.
+     * @param fullScreenDesired if this kiosk should be fullscreen
+     */
+    void setFullScreen(Boolean fullScreenDesired) {
+        this.fullScreenDesired = fullScreenDesired;
+        if (fullScreenDesired) {
+            try {
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                screenW = (int) screenSize.getWidth();
+                screenH = (int) screenSize.getHeight();
+            } catch (HeadlessException e) {
+                screenW = 1280;
+                screenH = 720;
+            }
+        } else {
+            screenW = 1280;
+            screenH = 720;
+        }
+    }
 }
