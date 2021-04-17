@@ -12,7 +12,7 @@
    <string>scenes</string>
    <void method="set">
     <object idref="LoadedSurveyModel0"/>
-    <array class="kiosk.models.SceneModel" length="22">
+    <array class="kiosk.models.SceneModel" length="26">
      <void index="0">
       <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel0">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
@@ -152,6 +152,273 @@
       </object>
      </void>
      <void index="1">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel1">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <string>Generatedebcb1d8f-6db5-4815-9527-9a28725e81ed</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>name</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <string>⦸Survey Path 3a (Lucas)</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <string>Now for some questions about you!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <string>Feel free to go back and change your answers.</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <string>Careers</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <string>How do you like to spend your free time?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel3">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel3"/>
+              <string>Making things</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel3"/>
+              <string>Generated7cbf686f-1701-4a87-a9ec-8c695f889bb5</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel3"/>
+              <object idref="Riasec0"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel4">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel4"/>
+              <string>Playing games</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel4"/>
+              <string>Generated7cbf686f-1701-4a87-a9ec-8c695f889bb5</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel4"/>
+              <object idref="Riasec1"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel5">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel5"/>
+              <string>Drawing</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel5"/>
+              <string>Generated7cbf686f-1701-4a87-a9ec-8c695f889bb5</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel5"/>
+              <object idref="Riasec2"/>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="2">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel2">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <string>Generated07deef46-17e8-4292-86dc-a2d60b7e1764</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>name</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <string>Survey Path 3d</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <string>Now for some questions about you!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <string>Feel free to go back and change your answers.</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <string>Careers</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <string>Of these animals, which do you like best?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel6">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel6"/>
+              <string>Monkey</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel6"/>
+              <string>fieldPrompt6</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel6"/>
+              <object class="java.lang.Enum" id="Riasec3" method="valueOf">
+               <class>kiosk.Riasec</class>
+               <string>Social</string>
+              </object>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel7">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel7"/>
+              <string>Penguin</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel7"/>
+              <string>fieldPrompt6</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel7"/>
+              <object class="java.lang.Enum" id="Riasec4" method="valueOf">
+               <class>kiosk.Riasec</class>
+               <string>Enterprising</string>
+              </object>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel8">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel8"/>
+              <string>Elephant</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel8"/>
+              <string>fieldPrompt6</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel8"/>
+              <object class="java.lang.Enum" id="Riasec5" method="valueOf">
+               <class>kiosk.Riasec</class>
+               <string>Conventional</string>
+              </object>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="3">
       <object class="kiosk.models.PathwaySceneModel" id="PathwaySceneModel0">
        <void class="kiosk.models.PathwaySceneModel" method="getField">
         <string>id</string>
@@ -194,32 +461,32 @@
          <object idref="PathwaySceneModel0"/>
          <array class="kiosk.models.ButtonModel" length="5">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel3">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel9">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel3"/>
+              <object idref="ButtonModel9"/>
               <string>Lakes/Ocean</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel3"/>
+              <object idref="ButtonModel9"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel3"/>
+              <object idref="ButtonModel9"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel3"/>
+              <object idref="ButtonModel9"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel0">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -267,32 +534,32 @@
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel4">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel10">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel4"/>
+              <object idref="ButtonModel10"/>
               <string>Preservation</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel4"/>
+              <object idref="ButtonModel10"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel4"/>
+              <object idref="ButtonModel10"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel4"/>
+              <object idref="ButtonModel10"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel1">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -340,32 +607,32 @@
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel5">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel11">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel5"/>
+              <object idref="ButtonModel11"/>
               <string>Discovery</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel5"/>
+              <object idref="ButtonModel11"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel5"/>
+              <object idref="ButtonModel11"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel5"/>
+              <object idref="ButtonModel11"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel2">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -413,32 +680,32 @@
            </object>
           </void>
           <void index="3">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel6">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel12">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel6"/>
+              <object idref="ButtonModel12"/>
               <string>Agriculture</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel6"/>
+              <object idref="ButtonModel12"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel6"/>
+              <object idref="ButtonModel12"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel6"/>
+              <object idref="ButtonModel12"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel3">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -486,32 +753,32 @@
            </object>
           </void>
           <void index="4">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel7">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel13">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel7"/>
+              <object idref="ButtonModel13"/>
               <string>Parks</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel7"/>
+              <object idref="ButtonModel13"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel7"/>
+              <object idref="ButtonModel13"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel7"/>
+              <object idref="ButtonModel13"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel4">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -563,7 +830,7 @@
        </void>
       </object>
      </void>
-     <void index="2">
+     <void index="4">
       <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel0">
        <void class="kiosk.models.PromptSceneModel" method="getField">
         <string>id</string>
@@ -608,18 +875,18 @@ What big problem do you want to help solve?</string>
          <object idref="PromptSceneModel0"/>
          <array class="kiosk.models.ButtonModel" length="1">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel8">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel14">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel8"/>
+              <object idref="ButtonModel14"/>
               <string>Yes!</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel8"/>
+              <object idref="ButtonModel14"/>
               <string>categoryScene</string>
              </void>
             </void>
@@ -630,263 +897,125 @@ What big problem do you want to help solve?</string>
        </void>
       </object>
      </void>
-     <void index="3">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel1">
+     <void index="5">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel3">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>id</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
+         <object idref="SpokeGraphPromptSceneModel3"/>
          <string>Generated997d1af1-f83f-4c9f-b2bd-81e3d13ee125</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
+         <object idref="SpokeGraphPromptSceneModel3"/>
          <string>Survey Path 1c</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
+         <object idref="SpokeGraphPromptSceneModel3"/>
          <string>Now for some questions about you!</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerBody</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
+         <object idref="SpokeGraphPromptSceneModel3"/>
          <string>Feel free to go back and change your answers.</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>careerCenterText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
+         <object idref="SpokeGraphPromptSceneModel3"/>
          <string>Careers</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>promptText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
+         <object idref="SpokeGraphPromptSceneModel3"/>
          <string>How do you fix problems?</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>answers</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel1"/>
+         <object idref="SpokeGraphPromptSceneModel3"/>
          <array class="kiosk.models.ButtonModel" length="3">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel9">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel15">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel9"/>
+              <object idref="ButtonModel15"/>
               <string>Ask for help</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel9"/>
+              <object idref="ButtonModel15"/>
               <string>Generatedd3922cb9-3e53-441c-985b-737528c85198</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel9"/>
-              <object class="java.lang.Enum" id="Riasec3" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Social</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel10">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel10"/>
-              <string>Make a sibling do it</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel10"/>
-              <string>Generatedd3922cb9-3e53-441c-985b-737528c85198</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel10"/>
-              <object class="java.lang.Enum" id="Riasec4" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Enterprising</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel11">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel11"/>
-              <string>Learn to do it myself</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel11"/>
-              <string>Generatedd3922cb9-3e53-441c-985b-737528c85198</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel11"/>
-              <object class="java.lang.Enum" id="Riasec5" method="valueOf">
-               <class>kiosk.Riasec</class>
-               <string>Conventional</string>
-              </object>
-             </void>
-            </void>
-           </object>
-          </void>
-         </array>
-        </void>
-       </void>
-      </object>
-     </void>
-     <void index="4">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel2">
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>id</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <string>Generated2caa3280-9585-41a1-a74e-87b9e03b7810</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <string>Survey Path 2d</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>headerTitle</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <string>Now for some questions about you!</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>headerBody</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <string>Feel free to go back and change your answers.</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>careerCenterText</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <string>Careers</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>promptText</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <string>You win a lottery! What do you do with the money?</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>answers</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel2"/>
-         <array class="kiosk.models.ButtonModel" length="3">
-          <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel12">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel12"/>
-              <string>Give it away!</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel12"/>
-              <string>fieldPrompt6</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel12"/>
+              <object idref="ButtonModel15"/>
               <object idref="Riasec3"/>
              </void>
             </void>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel13">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel16">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel13"/>
-              <string>Spend it now!</string>
+              <object idref="ButtonModel16"/>
+              <string>Make a sibling do it</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel13"/>
-              <string>fieldPrompt6</string>
+              <object idref="ButtonModel16"/>
+              <string>Generatedd3922cb9-3e53-441c-985b-737528c85198</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel13"/>
+              <object idref="ButtonModel16"/>
               <object idref="Riasec4"/>
              </void>
             </void>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel14">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel17">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel14"/>
-              <string>Save it!</string>
+              <object idref="ButtonModel17"/>
+              <string>Learn to do it myself</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel14"/>
-              <string>fieldPrompt6</string>
+              <object idref="ButtonModel17"/>
+              <string>Generatedd3922cb9-3e53-441c-985b-737528c85198</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel14"/>
+              <object idref="ButtonModel17"/>
               <object idref="Riasec5"/>
              </void>
             </void>
@@ -897,7 +1026,136 @@ What big problem do you want to help solve?</string>
        </void>
       </object>
      </void>
-     <void index="5">
+     <void index="6">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel4">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <string>Generated2caa3280-9585-41a1-a74e-87b9e03b7810</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>name</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <string>Survey Path 2d</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <string>Now for some questions about you!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <string>Feel free to go back and change your answers.</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <string>Careers</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <string>You win a lottery! What do you do with the money?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel18">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel18"/>
+              <string>Give it away!</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel18"/>
+              <string>fieldPrompt6</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel18"/>
+              <object idref="Riasec3"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel19">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel19"/>
+              <string>Spend it now!</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel19"/>
+              <string>fieldPrompt6</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel19"/>
+              <object idref="Riasec4"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel20">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel20"/>
+              <string>Save it!</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel20"/>
+              <string>fieldPrompt6</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel20"/>
+              <object idref="Riasec5"/>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="7">
       <object class="kiosk.models.CareerPathwaySceneModel" id="CareerPathwaySceneModel0">
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
         <string>id</string>
@@ -910,7 +1168,7 @@ What big problem do you want to help solve?</string>
         <string>name</string>
         <void method="set">
          <object idref="CareerPathwaySceneModel0"/>
-         <string>Result</string>
+         <string>Suggested Careers</string>
         </void>
        </void>
        <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
@@ -943,306 +1201,48 @@ What big problem do you want to help solve?</string>
        </void>
       </object>
      </void>
-     <void index="6">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel3">
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>id</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <string>fieldPrompt3</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <string>Prompt 3</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>headerTitle</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <string>Let&apos;s talk about your field!</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>headerBody</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <string>Select the answer that best applies to you</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>careerCenterText</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <string>Fields</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>promptText</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <string>Select one</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>answers</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel3"/>
-         <array class="kiosk.models.ButtonModel" length="3">
-          <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel15">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel15"/>
-              <string>Enterprising</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel15"/>
-              <string>fieldPrompt4</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel15"/>
-              <object idref="Riasec4"/>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel16">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel16"/>
-              <string>Social</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel16"/>
-              <string>fieldPrompt4</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel16"/>
-              <object idref="Riasec3"/>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel17">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel17"/>
-              <string>Investigative</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel17"/>
-              <string>fieldPrompt4</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel17"/>
-              <object idref="Riasec1"/>
-             </void>
-            </void>
-           </object>
-          </void>
-         </array>
-        </void>
-       </void>
-      </object>
-     </void>
-     <void index="7">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel4">
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>id</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <string>fieldPrompt2</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>name</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <string>Prompt 2</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>headerTitle</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <string>Let&apos;s talk about your field!</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>headerBody</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <string>Select the answer that best applies to you</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>careerCenterText</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <string>Fields</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>promptText</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <string>Select one</string>
-        </void>
-       </void>
-       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
-        <string>answers</string>
-        <void method="set">
-         <object idref="SpokeGraphPromptSceneModel4"/>
-         <array class="kiosk.models.ButtonModel" length="3">
-          <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel18">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel18"/>
-              <string>Artistic</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel18"/>
-              <string>fieldPrompt3</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel18"/>
-              <object idref="Riasec2"/>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel19">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel19"/>
-              <string>Realistic</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel19"/>
-              <string>fieldPrompt3</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel19"/>
-              <object idref="Riasec0"/>
-             </void>
-            </void>
-           </object>
-          </void>
-          <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel20">
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>text</string>
-             <void method="set">
-              <object idref="ButtonModel20"/>
-              <string>Conventional</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>target</string>
-             <void method="set">
-              <object idref="ButtonModel20"/>
-              <string>fieldPrompt3</string>
-             </void>
-            </void>
-            <void class="kiosk.models.ButtonModel" method="getField">
-             <string>category</string>
-             <void method="set">
-              <object idref="ButtonModel20"/>
-              <object idref="Riasec5"/>
-             </void>
-            </void>
-           </object>
-          </void>
-         </array>
-        </void>
-       </void>
-      </object>
-     </void>
      <void index="8">
       <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel5">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>id</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel5"/>
-         <string>fieldPrompt5</string>
+         <string>Generateddd274f3d-edfa-4b8c-86f8-0ea29e6630d7</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel5"/>
-         <string>Prompt 5</string>
+         <string>Survey Path 3c</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel5"/>
-         <string>Let&apos;s talk about your field!</string>
+         <string>Now for some questions about you!</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerBody</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel5"/>
-         <string>Select the answer that best applies to you</string>
+         <string>Feel free to go back and change your answers.</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>careerCenterText</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel5"/>
-         <string>Fields</string>
+         <string>Careers</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>promptText</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel5"/>
-         <string>Select one</string>
+         <string>How do you feel about rules?</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
@@ -1256,21 +1256,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel21"/>
-              <string>Enterprising</string>
+              <string>I think they are important to keep people safe</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel21"/>
-              <string>fieldPrompt6</string>
+              <string>Generated07deef46-17e8-4292-86dc-a2d60b7e1764</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel21"/>
-              <object idref="Riasec4"/>
+              <object idref="Riasec0"/>
              </void>
             </void>
            </object>
@@ -1281,21 +1281,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel22"/>
-              <string>Social</string>
+              <string>Sometimes they don&apos;t make sense to me</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel22"/>
-              <string>fieldPrompt6</string>
+              <string>Generated07deef46-17e8-4292-86dc-a2d60b7e1764</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel22"/>
-              <object idref="Riasec3"/>
+              <object idref="Riasec1"/>
              </void>
             </void>
            </object>
@@ -1306,21 +1306,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel23"/>
-              <string>Investigative</string>
+              <string>I think we should have fewer rules</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel23"/>
-              <string>fieldPrompt6</string>
+              <string>Generated07deef46-17e8-4292-86dc-a2d60b7e1764</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel23"/>
-              <object idref="Riasec1"/>
+              <object idref="Riasec2"/>
              </void>
             </void>
            </object>
@@ -1336,14 +1336,14 @@ What big problem do you want to help solve?</string>
         <string>id</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel6"/>
-         <string>fieldPrompt4</string>
+         <string>fieldPrompt3</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel6"/>
-         <string>Prompt 4</string>
+         <string>Prompt 3</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
@@ -1385,21 +1385,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel24"/>
-              <string>Artistic</string>
+              <string>Enterprising</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel24"/>
-              <string>fieldPrompt5</string>
+              <string>fieldPrompt4</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel24"/>
-              <object idref="Riasec2"/>
+              <object idref="Riasec4"/>
              </void>
             </void>
            </object>
@@ -1410,21 +1410,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel25"/>
-              <string>Realistic</string>
+              <string>Social</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel25"/>
-              <string>fieldPrompt5</string>
+              <string>fieldPrompt4</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel25"/>
-              <object idref="Riasec0"/>
+              <object idref="Riasec3"/>
              </void>
             </void>
            </object>
@@ -1435,21 +1435,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel26"/>
-              <string>Conventional</string>
+              <string>Investigative</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel26"/>
-              <string>fieldPrompt5</string>
+              <string>fieldPrompt4</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel26"/>
-              <object idref="Riasec5"/>
+              <object idref="Riasec1"/>
              </void>
             </void>
            </object>
@@ -1465,14 +1465,14 @@ What big problem do you want to help solve?</string>
         <string>id</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel7"/>
-         <string>fieldPrompt1</string>
+         <string>fieldPrompt2</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel7"/>
-         <string>Prompt 1</string>
+         <string>Prompt 2</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
@@ -1514,21 +1514,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel27"/>
-              <string>Enterprising</string>
+              <string>Artistic</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel27"/>
-              <string>fieldPrompt2</string>
+              <string>fieldPrompt3</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel27"/>
-              <object idref="Riasec4"/>
+              <object idref="Riasec2"/>
              </void>
             </void>
            </object>
@@ -1539,21 +1539,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel28"/>
-              <string>Social</string>
+              <string>Realistic</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel28"/>
-              <string>fieldPrompt2</string>
+              <string>fieldPrompt3</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel28"/>
-              <object idref="Riasec3"/>
+              <object idref="Riasec0"/>
              </void>
             </void>
            </object>
@@ -1564,21 +1564,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel29"/>
-              <string>Investigative</string>
+              <string>Conventional</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel29"/>
-              <string>fieldPrompt2</string>
+              <string>fieldPrompt3</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel29"/>
-              <object idref="Riasec1"/>
+              <object idref="Riasec5"/>
              </void>
             </void>
            </object>
@@ -1594,14 +1594,14 @@ What big problem do you want to help solve?</string>
         <string>id</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel8"/>
-         <string>fieldPrompt0</string>
+         <string>fieldPrompt5</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
          <object idref="SpokeGraphPromptSceneModel8"/>
-         <string>Prompt 0</string>
+         <string>Prompt 5</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
@@ -1643,21 +1643,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel30"/>
-              <string>Artistic</string>
+              <string>Enterprising</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel30"/>
-              <string>fieldPrompt1</string>
+              <string>fieldPrompt6</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel30"/>
-              <object idref="Riasec2"/>
+              <object idref="Riasec4"/>
              </void>
             </void>
            </object>
@@ -1668,21 +1668,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel31"/>
-              <string>Realistic</string>
+              <string>Social</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel31"/>
-              <string>fieldPrompt1</string>
+              <string>fieldPrompt6</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel31"/>
-              <object idref="Riasec0"/>
+              <object idref="Riasec3"/>
              </void>
             </void>
            </object>
@@ -1693,21 +1693,21 @@ What big problem do you want to help solve?</string>
              <string>text</string>
              <void method="set">
               <object idref="ButtonModel32"/>
-              <string>Conventional</string>
+              <string>Investigative</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
               <object idref="ButtonModel32"/>
-              <string>fieldPrompt1</string>
+              <string>fieldPrompt6</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
               <object idref="ButtonModel32"/>
-              <object idref="Riasec5"/>
+              <object idref="Riasec1"/>
              </void>
             </void>
            </object>
@@ -1718,6 +1718,393 @@ What big problem do you want to help solve?</string>
       </object>
      </void>
      <void index="12">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel9">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel9"/>
+         <string>fieldPrompt4</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>name</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel9"/>
+         <string>Prompt 4</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel9"/>
+         <string>Let&apos;s talk about your field!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel9"/>
+         <string>Select the answer that best applies to you</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel9"/>
+         <string>Fields</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel9"/>
+         <string>Select one</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel9"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel33">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel33"/>
+              <string>Artistic</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel33"/>
+              <string>fieldPrompt5</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel33"/>
+              <object idref="Riasec2"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel34">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel34"/>
+              <string>Realistic</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel34"/>
+              <string>fieldPrompt5</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel34"/>
+              <object idref="Riasec0"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel35">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel35"/>
+              <string>Conventional</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel35"/>
+              <string>fieldPrompt5</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel35"/>
+              <object idref="Riasec5"/>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="13">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel10">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel10"/>
+         <string>fieldPrompt1</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>name</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel10"/>
+         <string>Prompt 1</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel10"/>
+         <string>Let&apos;s talk about your field!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel10"/>
+         <string>Select the answer that best applies to you</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel10"/>
+         <string>Fields</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel10"/>
+         <string>Select one</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel10"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel36">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel36"/>
+              <string>Enterprising</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel36"/>
+              <string>fieldPrompt2</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel36"/>
+              <object idref="Riasec4"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel37">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel37"/>
+              <string>Social</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel37"/>
+              <string>fieldPrompt2</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel37"/>
+              <object idref="Riasec3"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel38">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel38"/>
+              <string>Investigative</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel38"/>
+              <string>fieldPrompt2</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel38"/>
+              <object idref="Riasec1"/>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="14">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel11">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel11"/>
+         <string>fieldPrompt0</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>name</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel11"/>
+         <string>Prompt 0</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel11"/>
+         <string>Let&apos;s talk about your field!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel11"/>
+         <string>Select the answer that best applies to you</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel11"/>
+         <string>Fields</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel11"/>
+         <string>Select one</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel11"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel39">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel39"/>
+              <string>Artistic</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel39"/>
+              <string>fieldPrompt1</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel39"/>
+              <object idref="Riasec2"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel40">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel40"/>
+              <string>Realistic</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel40"/>
+              <string>fieldPrompt1</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel40"/>
+              <object idref="Riasec0"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel41">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel41"/>
+              <string>Conventional</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel41"/>
+              <string>fieldPrompt1</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel41"/>
+              <object idref="Riasec5"/>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="15">
       <object class="kiosk.models.PathwaySceneModel" id="PathwaySceneModel1">
        <void class="kiosk.models.PathwaySceneModel" method="getField">
         <string>id</string>
@@ -1760,32 +2147,32 @@ What big problem do you want to help solve?</string>
          <object idref="PathwaySceneModel1"/>
          <array class="kiosk.models.ButtonModel" length="5">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel33">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel42">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel33"/>
+              <object idref="ButtonModel42"/>
               <string>Literature</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel33"/>
+              <object idref="ButtonModel42"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel33"/>
+              <object idref="ButtonModel42"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel33"/>
+              <object idref="ButtonModel42"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel5">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -1833,32 +2220,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel34">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel43">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel34"/>
+              <object idref="ButtonModel43"/>
               <string>Energy</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel34"/>
+              <object idref="ButtonModel43"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel34"/>
+              <object idref="ButtonModel43"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel34"/>
+              <object idref="ButtonModel43"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel6">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -1906,32 +2293,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel35">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel44">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel35"/>
+              <object idref="ButtonModel44"/>
               <string>Film</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel35"/>
+              <object idref="ButtonModel44"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel35"/>
+              <object idref="ButtonModel44"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel35"/>
+              <object idref="ButtonModel44"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel7">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -1979,32 +2366,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="3">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel36">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel45">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel36"/>
+              <object idref="ButtonModel45"/>
               <string>Health</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel36"/>
+              <object idref="ButtonModel45"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel36"/>
+              <object idref="ButtonModel45"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel36"/>
+              <object idref="ButtonModel45"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel8">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2052,32 +2439,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="4">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel37">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel46">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel37"/>
+              <object idref="ButtonModel46"/>
               <string>Public Service</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel37"/>
+              <object idref="ButtonModel46"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel37"/>
+              <object idref="ButtonModel46"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel37"/>
+              <object idref="ButtonModel46"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel9">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2129,7 +2516,7 @@ What big problem do you want to help solve?</string>
        </void>
       </object>
      </void>
-     <void index="13">
+     <void index="16">
       <object class="kiosk.models.PathwaySceneModel" id="PathwaySceneModel2">
        <void class="kiosk.models.PathwaySceneModel" method="getField">
         <string>id</string>
@@ -2172,32 +2559,32 @@ What big problem do you want to help solve?</string>
          <object idref="PathwaySceneModel2"/>
          <array class="kiosk.models.ButtonModel" length="5">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel38">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel47">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel38"/>
+              <object idref="ButtonModel47"/>
               <string>Weather</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel38"/>
+              <object idref="ButtonModel47"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel38"/>
+              <object idref="ButtonModel47"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel38"/>
+              <object idref="ButtonModel47"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel10">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2245,32 +2632,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel39">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel48">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel39"/>
+              <object idref="ButtonModel48"/>
               <string>Lunar</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel39"/>
+              <object idref="ButtonModel48"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel39"/>
+              <object idref="ButtonModel48"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel39"/>
+              <object idref="ButtonModel48"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel11">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2318,32 +2705,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel40">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel49">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel40"/>
+              <object idref="ButtonModel49"/>
               <string>Aerospace</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel40"/>
+              <object idref="ButtonModel49"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel40"/>
+              <object idref="ButtonModel49"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel40"/>
+              <object idref="ButtonModel49"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel12">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2391,32 +2778,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="3">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel41">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel50">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel41"/>
+              <object idref="ButtonModel50"/>
               <string>Thinking</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel41"/>
+              <object idref="ButtonModel50"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel41"/>
+              <object idref="ButtonModel50"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel41"/>
+              <object idref="ButtonModel50"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel13">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2464,32 +2851,32 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
           <void index="4">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel42">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel51">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel42"/>
+              <object idref="ButtonModel51"/>
               <string>Communications</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel42"/>
+              <object idref="ButtonModel51"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel42"/>
+              <object idref="ButtonModel51"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel42"/>
+              <object idref="ButtonModel51"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel14">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2541,7 +2928,7 @@ What big problem do you want to help solve?</string>
        </void>
       </object>
      </void>
-     <void index="14">
+     <void index="17">
       <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel1">
        <void class="kiosk.models.PromptSceneModel" method="getField">
         <string>id</string>
@@ -2578,18 +2965,18 @@ attention. Maybe a fun animation or something?</string>
          <object idref="PromptSceneModel1"/>
          <array class="kiosk.models.ButtonModel" length="1">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel43">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel52">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel43"/>
+              <object idref="ButtonModel52"/>
               <string>Let&apos;s go</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel43"/>
+              <object idref="ButtonModel52"/>
               <string>titleScene</string>
              </void>
             </void>
@@ -2600,7 +2987,7 @@ attention. Maybe a fun animation or something?</string>
        </void>
       </object>
      </void>
-     <void index="15">
+     <void index="18">
       <object class="kiosk.models.PromptSceneModel" id="PromptSceneModel2">
        <void class="kiosk.models.PromptSceneModel" method="getField">
         <string>id</string>
@@ -2645,32 +3032,32 @@ You can always go back and begin again</string>
          <object idref="PromptSceneModel2"/>
          <array class="kiosk.models.ButtonModel" length="4">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel44">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel53">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel44"/>
+              <object idref="ButtonModel53"/>
               <string></string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel44"/>
+              <object idref="ButtonModel53"/>
               <string>fieldPickerHuman</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel44"/>
+              <object idref="ButtonModel53"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>image</string>
              <void method="set">
-              <object idref="ButtonModel44"/>
+              <object idref="ButtonModel53"/>
               <object class="kiosk.models.ImageModel" id="ImageModel0">
                <void class="kiosk.models.ImageModel" method="getField">
                 <string>path</string>
@@ -2699,7 +3086,7 @@ You can always go back and begin again</string>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel44"/>
+              <object idref="ButtonModel53"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel15">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2819,32 +3206,32 @@ You can always go back and begin again</string>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel45">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel54">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel45"/>
+              <object idref="ButtonModel54"/>
               <string></string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel45"/>
+              <object idref="ButtonModel54"/>
               <string>fieldPickerNature</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel45"/>
+              <object idref="ButtonModel54"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>image</string>
              <void method="set">
-              <object idref="ButtonModel45"/>
+              <object idref="ButtonModel54"/>
               <object class="kiosk.models.ImageModel" id="ImageModel1">
                <void class="kiosk.models.ImageModel" method="getField">
                 <string>path</string>
@@ -2873,7 +3260,7 @@ You can always go back and begin again</string>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel45"/>
+              <object idref="ButtonModel54"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel16">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -2993,32 +3380,32 @@ You can always go back and begin again</string>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel46">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel55">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel46"/>
+              <object idref="ButtonModel55"/>
               <string></string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel46"/>
+              <object idref="ButtonModel55"/>
               <string>fieldPickerSmartMachine</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel46"/>
+              <object idref="ButtonModel55"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>image</string>
              <void method="set">
-              <object idref="ButtonModel46"/>
+              <object idref="ButtonModel55"/>
               <object class="kiosk.models.ImageModel" id="ImageModel2">
                <void class="kiosk.models.ImageModel" method="getField">
                 <string>path</string>
@@ -3047,7 +3434,7 @@ You can always go back and begin again</string>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel46"/>
+              <object idref="ButtonModel55"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel17">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -3167,32 +3554,32 @@ You can always go back and begin again</string>
            </object>
           </void>
           <void index="3">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel47">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel56">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel47"/>
+              <object idref="ButtonModel56"/>
               <string></string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel47"/>
+              <object idref="ButtonModel56"/>
               <string>fieldPickerSpace</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel47"/>
+              <object idref="ButtonModel56"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>image</string>
              <void method="set">
-              <object idref="ButtonModel47"/>
+              <object idref="ButtonModel56"/>
               <object class="kiosk.models.ImageModel" id="ImageModel3">
                <void class="kiosk.models.ImageModel" method="getField">
                 <string>path</string>
@@ -3221,7 +3608,7 @@ You can always go back and begin again</string>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel47"/>
+              <object idref="ButtonModel56"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel18">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -3342,125 +3729,125 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
-     <void index="16">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel9">
+     <void index="19">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel12">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>id</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
+         <object idref="SpokeGraphPromptSceneModel12"/>
          <string>Generatedd3922cb9-3e53-441c-985b-737528c85198</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
+         <object idref="SpokeGraphPromptSceneModel12"/>
          <string>Survey Path 1d</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
+         <object idref="SpokeGraphPromptSceneModel12"/>
          <string>Now for some questions about you!</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerBody</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
+         <object idref="SpokeGraphPromptSceneModel12"/>
          <string>Feel free to go back and change your answers.</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>careerCenterText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
+         <object idref="SpokeGraphPromptSceneModel12"/>
          <string>Careers</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>promptText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
+         <object idref="SpokeGraphPromptSceneModel12"/>
          <string>A test is coming up. How do you study for it?</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>answers</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel9"/>
+         <object idref="SpokeGraphPromptSceneModel12"/>
          <array class="kiosk.models.ButtonModel" length="3">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel48">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel57">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel48"/>
+              <object idref="ButtonModel57"/>
               <string>Ignore it and play</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel48"/>
+              <object idref="ButtonModel57"/>
               <string>fieldPrompt6</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel48"/>
+              <object idref="ButtonModel57"/>
               <object idref="Riasec3"/>
              </void>
             </void>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel49">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel58">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel49"/>
+              <object idref="ButtonModel58"/>
               <string>At the last second</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel49"/>
+              <object idref="ButtonModel58"/>
               <string>fieldPrompt6</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel49"/>
+              <object idref="ButtonModel58"/>
               <object idref="Riasec4"/>
              </void>
             </void>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel50">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel59">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel50"/>
+              <object idref="ButtonModel59"/>
               <string>Study hard</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel50"/>
+              <object idref="ButtonModel59"/>
               <string>fieldPrompt6</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel50"/>
+              <object idref="ButtonModel59"/>
               <object idref="Riasec5"/>
              </void>
             </void>
@@ -3471,125 +3858,125 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
-     <void index="17">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel10">
+     <void index="20">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel13">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>id</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
-         <string>Generatedc874c883-aaab-42e8-a6f3-e032cd6b5942</string>
+         <object idref="SpokeGraphPromptSceneModel13"/>
+         <string>Generated7cbf686f-1701-4a87-a9ec-8c695f889bb5</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
-         <string>⦸Survey Path 2a</string>
+         <object idref="SpokeGraphPromptSceneModel13"/>
+         <string>Survey Path 3b</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
+         <object idref="SpokeGraphPromptSceneModel13"/>
          <string>Now for some questions about you!</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerBody</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
+         <object idref="SpokeGraphPromptSceneModel13"/>
          <string>Feel free to go back and change your answers.</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>careerCenterText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
+         <object idref="SpokeGraphPromptSceneModel13"/>
          <string>Careers</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>promptText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
-         <string>Which class do you like best?</string>
+         <object idref="SpokeGraphPromptSceneModel13"/>
+         <string>Would you like to be in a movie?</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>answers</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel10"/>
+         <object idref="SpokeGraphPromptSceneModel13"/>
          <array class="kiosk.models.ButtonModel" length="3">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel51">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel60">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel51"/>
-              <string>Music</string>
+              <object idref="ButtonModel60"/>
+              <string>Yes, I&apos;d love to be the star!</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel51"/>
-              <string>Generated60d4f366-9f85-43b9-bf5d-18be0c77a2b0</string>
+              <object idref="ButtonModel60"/>
+              <string>Generateddd274f3d-edfa-4b8c-86f8-0ea29e6630d7</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel51"/>
+              <object idref="ButtonModel60"/>
               <object idref="Riasec3"/>
              </void>
             </void>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel52">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel61">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel52"/>
-              <string>Gym</string>
+              <object idref="ButtonModel61"/>
+              <string>I&apos;d be okay with being a side character</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel52"/>
-              <string>Generated60d4f366-9f85-43b9-bf5d-18be0c77a2b0</string>
+              <object idref="ButtonModel61"/>
+              <string>Generateddd274f3d-edfa-4b8c-86f8-0ea29e6630d7</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel52"/>
+              <object idref="ButtonModel61"/>
               <object idref="Riasec4"/>
              </void>
             </void>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel53">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel62">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel53"/>
-              <string>Language Arts</string>
+              <object idref="ButtonModel62"/>
+              <string>I think I&apos;d rather be the director instead</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel53"/>
-              <string>Generated60d4f366-9f85-43b9-bf5d-18be0c77a2b0</string>
+              <object idref="ButtonModel62"/>
+              <string>Generateddd274f3d-edfa-4b8c-86f8-0ea29e6630d7</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel53"/>
+              <object idref="ButtonModel62"/>
               <object idref="Riasec5"/>
              </void>
             </void>
@@ -3600,7 +3987,136 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
-     <void index="18">
+     <void index="21">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel14">
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>id</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel14"/>
+         <string>Generatedc874c883-aaab-42e8-a6f3-e032cd6b5942</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>name</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel14"/>
+         <string>⦸Survey Path 2a</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerTitle</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel14"/>
+         <string>Now for some questions about you!</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>headerBody</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel14"/>
+         <string>Feel free to go back and change your answers.</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careerCenterText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel14"/>
+         <string>Careers</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>promptText</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel14"/>
+         <string>Which class do you like best?</string>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answers</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel14"/>
+         <array class="kiosk.models.ButtonModel" length="3">
+          <void index="0">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel63">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel63"/>
+              <string>Music</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel63"/>
+              <string>Generated60d4f366-9f85-43b9-bf5d-18be0c77a2b0</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel63"/>
+              <object idref="Riasec3"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="1">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel64">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel64"/>
+              <string>Gym</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel64"/>
+              <string>Generated60d4f366-9f85-43b9-bf5d-18be0c77a2b0</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel64"/>
+              <object idref="Riasec4"/>
+             </void>
+            </void>
+           </object>
+          </void>
+          <void index="2">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel65">
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>text</string>
+             <void method="set">
+              <object idref="ButtonModel65"/>
+              <string>Language Arts</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>target</string>
+             <void method="set">
+              <object idref="ButtonModel65"/>
+              <string>Generated60d4f366-9f85-43b9-bf5d-18be0c77a2b0</string>
+             </void>
+            </void>
+            <void class="kiosk.models.ButtonModel" method="getField">
+             <string>category</string>
+             <void method="set">
+              <object idref="ButtonModel65"/>
+              <object idref="Riasec5"/>
+             </void>
+            </void>
+           </object>
+          </void>
+         </array>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void index="22">
       <object class="kiosk.models.PathwaySceneModel" id="PathwaySceneModel3">
        <void class="kiosk.models.PathwaySceneModel" method="getField">
         <string>id</string>
@@ -3643,32 +4159,32 @@ You can always go back and begin again</string>
          <object idref="PathwaySceneModel3"/>
          <array class="kiosk.models.ButtonModel" length="5">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel54">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel66">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel54"/>
+              <object idref="ButtonModel66"/>
               <string>Mechanical</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel54"/>
+              <object idref="ButtonModel66"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel54"/>
+              <object idref="ButtonModel66"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel54"/>
+              <object idref="ButtonModel66"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel19">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -3716,32 +4232,32 @@ You can always go back and begin again</string>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel55">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel67">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel55"/>
+              <object idref="ButtonModel67"/>
               <string>AI</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel55"/>
+              <object idref="ButtonModel67"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel55"/>
+              <object idref="ButtonModel67"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel55"/>
+              <object idref="ButtonModel67"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel20">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -3789,32 +4305,32 @@ You can always go back and begin again</string>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel56">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel68">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel56"/>
+              <object idref="ButtonModel68"/>
               <string>Software</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel56"/>
+              <object idref="ButtonModel68"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel56"/>
+              <object idref="ButtonModel68"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel56"/>
+              <object idref="ButtonModel68"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel21">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -3862,32 +4378,32 @@ You can always go back and begin again</string>
            </object>
           </void>
           <void index="3">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel57">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel69">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel57"/>
+              <object idref="ButtonModel69"/>
               <string>Hardware</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel57"/>
+              <object idref="ButtonModel69"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel57"/>
+              <object idref="ButtonModel69"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel57"/>
+              <object idref="ButtonModel69"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel22">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -3935,32 +4451,32 @@ You can always go back and begin again</string>
            </object>
           </void>
           <void index="4">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel58">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel70">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel58"/>
+              <object idref="ButtonModel70"/>
               <string>Manufacturing</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel58"/>
+              <object idref="ButtonModel70"/>
               <string>fieldPrompt0</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>isCircle</string>
              <void method="set">
-              <object idref="ButtonModel58"/>
+              <object idref="ButtonModel70"/>
               <boolean>true</boolean>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>filter</string>
              <void method="set">
-              <object idref="ButtonModel58"/>
+              <object idref="ButtonModel70"/>
               <object class="kiosk.models.FilterGroupModel" id="FilterGroupModel23">
                <void class="kiosk.models.FilterGroupModel" method="getField">
                 <string>category</string>
@@ -4012,125 +4528,125 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
-     <void index="19">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel11">
+     <void index="23">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel15">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>id</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
+         <object idref="SpokeGraphPromptSceneModel15"/>
          <string>Generated8af32bca-7389-4dcc-9c68-b82229698a73</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
+         <object idref="SpokeGraphPromptSceneModel15"/>
          <string>Survey Path 1b</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
+         <object idref="SpokeGraphPromptSceneModel15"/>
          <string>Now for some questions about you!</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerBody</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
+         <object idref="SpokeGraphPromptSceneModel15"/>
          <string>Feel free to go back and change your answers.</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>careerCenterText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
+         <object idref="SpokeGraphPromptSceneModel15"/>
          <string>Careers</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>promptText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
+         <object idref="SpokeGraphPromptSceneModel15"/>
          <string>How much do you like to make things?</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>answers</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel11"/>
+         <object idref="SpokeGraphPromptSceneModel15"/>
          <array class="kiosk.models.ButtonModel" length="3">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel59">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel71">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel59"/>
+              <object idref="ButtonModel71"/>
               <string>I love making things</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel59"/>
+              <object idref="ButtonModel71"/>
               <string>Generated997d1af1-f83f-4c9f-b2bd-81e3d13ee125</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel59"/>
+              <object idref="ButtonModel71"/>
               <object idref="Riasec0"/>
              </void>
             </void>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel60">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel72">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel60"/>
+              <object idref="ButtonModel72"/>
               <string>I love taking things apart</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel60"/>
+              <object idref="ButtonModel72"/>
               <string>Generated997d1af1-f83f-4c9f-b2bd-81e3d13ee125</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel60"/>
+              <object idref="ButtonModel72"/>
               <object idref="Riasec1"/>
              </void>
             </void>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel61">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel73">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel61"/>
+              <object idref="ButtonModel73"/>
               <string>I like making art</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel61"/>
+              <object idref="ButtonModel73"/>
               <string>Generated997d1af1-f83f-4c9f-b2bd-81e3d13ee125</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel61"/>
+              <object idref="ButtonModel73"/>
               <object idref="Riasec2"/>
              </void>
             </void>
@@ -4141,125 +4657,125 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
-     <void index="20">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel12">
+     <void index="24">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel16">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>id</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
+         <object idref="SpokeGraphPromptSceneModel16"/>
          <string>Generatedf8edf8af-c82b-4f9f-909e-15e0917dbf45</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
+         <object idref="SpokeGraphPromptSceneModel16"/>
          <string>Survey Path 2c</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
+         <object idref="SpokeGraphPromptSceneModel16"/>
          <string>Now for some questions about you!</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerBody</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
+         <object idref="SpokeGraphPromptSceneModel16"/>
          <string>Feel free to go back and change your answers.</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>careerCenterText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
+         <object idref="SpokeGraphPromptSceneModel16"/>
          <string>Careers</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>promptText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
+         <object idref="SpokeGraphPromptSceneModel16"/>
          <string>There is an alien invasion! What will you do?</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>answers</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel12"/>
+         <object idref="SpokeGraphPromptSceneModel16"/>
          <array class="kiosk.models.ButtonModel" length="3">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel62">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel74">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel62"/>
+              <object idref="ButtonModel74"/>
               <string>Fight!</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel62"/>
+              <object idref="ButtonModel74"/>
               <string>Generated2caa3280-9585-41a1-a74e-87b9e03b7810</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel62"/>
+              <object idref="ButtonModel74"/>
               <object idref="Riasec0"/>
              </void>
             </void>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel63">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel75">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel63"/>
+              <object idref="ButtonModel75"/>
               <string>Stare at them from afar.</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel63"/>
+              <object idref="ButtonModel75"/>
               <string>Generated2caa3280-9585-41a1-a74e-87b9e03b7810</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel63"/>
+              <object idref="ButtonModel75"/>
               <object idref="Riasec1"/>
              </void>
             </void>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel64">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel76">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel64"/>
+              <object idref="ButtonModel76"/>
               <string>Invite them to lunch</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel64"/>
+              <object idref="ButtonModel76"/>
               <string>Generated2caa3280-9585-41a1-a74e-87b9e03b7810</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel64"/>
+              <object idref="ButtonModel76"/>
               <object idref="Riasec2"/>
              </void>
             </void>
@@ -4270,125 +4786,125 @@ You can always go back and begin again</string>
        </void>
       </object>
      </void>
-     <void index="21">
-      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel13">
+     <void index="25">
+      <object class="kiosk.models.SpokeGraphPromptSceneModel" id="SpokeGraphPromptSceneModel17">
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>id</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
+         <object idref="SpokeGraphPromptSceneModel17"/>
          <string>Generatedf44e6c91-3ffe-4d32-abb0-23f66926b1e6</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>name</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
+         <object idref="SpokeGraphPromptSceneModel17"/>
          <string>⦸Survey Path 1a</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerTitle</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
+         <object idref="SpokeGraphPromptSceneModel17"/>
          <string>Now for some questions about you!</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>headerBody</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
+         <object idref="SpokeGraphPromptSceneModel17"/>
          <string>Feel free to go back and change your answers.</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>careerCenterText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
+         <object idref="SpokeGraphPromptSceneModel17"/>
          <string>Careers</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>promptText</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
+         <object idref="SpokeGraphPromptSceneModel17"/>
          <string>Which class do you like best?</string>
         </void>
        </void>
        <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
         <string>answers</string>
         <void method="set">
-         <object idref="SpokeGraphPromptSceneModel13"/>
+         <object idref="SpokeGraphPromptSceneModel17"/>
          <array class="kiosk.models.ButtonModel" length="3">
           <void index="0">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel65">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel77">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel65"/>
+              <object idref="ButtonModel77"/>
               <string>Math</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel65"/>
+              <object idref="ButtonModel77"/>
               <string>Generated8af32bca-7389-4dcc-9c68-b82229698a73</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel65"/>
+              <object idref="ButtonModel77"/>
               <object idref="Riasec0"/>
              </void>
             </void>
            </object>
           </void>
           <void index="1">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel66">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel78">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel66"/>
+              <object idref="ButtonModel78"/>
               <string>Science</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel66"/>
+              <object idref="ButtonModel78"/>
               <string>Generated8af32bca-7389-4dcc-9c68-b82229698a73</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel66"/>
+              <object idref="ButtonModel78"/>
               <object idref="Riasec1"/>
              </void>
             </void>
            </object>
           </void>
           <void index="2">
-           <object class="kiosk.models.ButtonModel" id="ButtonModel67">
+           <object class="kiosk.models.ButtonModel" id="ButtonModel79">
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>text</string>
              <void method="set">
-              <object idref="ButtonModel67"/>
+              <object idref="ButtonModel79"/>
               <string>Art</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>target</string>
              <void method="set">
-              <object idref="ButtonModel67"/>
+              <object idref="ButtonModel79"/>
               <string>Generated8af32bca-7389-4dcc-9c68-b82229698a73</string>
              </void>
             </void>
             <void class="kiosk.models.ButtonModel" method="getField">
              <string>category</string>
              <void method="set">
-              <object idref="ButtonModel67"/>
+              <object idref="ButtonModel79"/>
               <object idref="Riasec2"/>
              </void>
             </void>
@@ -8954,7 +9470,7 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
  <string>rgb</string>
  <void id="intArray0" method="get">
-  <object idref="ButtonModel47"/>
+  <object idref="ButtonModel56"/>
   <void index="1">
    <int>97</int>
   </void>
@@ -8970,23 +9486,7 @@ You can always go back and begin again</string>
 <void class="kiosk.models.ButtonModel" id="Field1" method="getField">
  <string>rgb</string>
  <void id="intArray1" method="get">
-  <object idref="ButtonModel45"/>
-  <void index="1">
-   <int>108</int>
-  </void>
-  <void index="2">
-   <int>103</int>
-  </void>
-  <void index="0">
-   <int>51</int>
-  </void>
- </void>
-</void>
-<void idref="intArray1"/>
-<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
- <string>rgb</string>
- <void id="intArray2" method="get">
-  <object idref="ButtonModel46"/>
+  <object idref="ButtonModel55"/>
   <void index="1">
    <int>98</int>
   </void>
@@ -8998,11 +9498,27 @@ You can always go back and begin again</string>
   </void>
  </void>
 </void>
+<void idref="intArray1"/>
+<void class="kiosk.models.ButtonModel" id="Field2" method="getField">
+ <string>rgb</string>
+ <void id="intArray2" method="get">
+  <object idref="ButtonModel54"/>
+  <void index="1">
+   <int>108</int>
+  </void>
+  <void index="2">
+   <int>103</int>
+  </void>
+  <void index="0">
+   <int>51</int>
+  </void>
+ </void>
+</void>
 <void idref="intArray2"/>
 <void class="kiosk.models.ButtonModel" id="Field3" method="getField">
  <string>rgb</string>
  <void id="intArray3" method="get">
-  <object idref="ButtonModel44"/>
+  <object idref="ButtonModel53"/>
   <void index="1">
    <int>33</int>
   </void>
