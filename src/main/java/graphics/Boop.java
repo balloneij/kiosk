@@ -87,6 +87,7 @@ public class Boop {
     private int additionalHappyFrames;
     private boolean shouldZoomAway;
     private boolean startedHappyAnimation = false;
+    private final Random rand = new Random();
 
     public Boop() {
         this.boopState = BoopState.STATIC_LEFT;
@@ -105,7 +106,6 @@ public class Boop {
         if (currentScene.getClass().toString().contains("CareerDescriptionScene")
                 && !startedHappyAnimation) {
             firstHappyFrame = sketch.frameCount;
-            Random rand = new Random();
             additionalHappyFrames = rand.nextInt(30);
             if (choseLeft) {
                 boopState = BoopState.HAPPY_LEFT;
@@ -160,7 +160,6 @@ public class Boop {
                         || boopState.equals(BoopState.SCOOT_RIGHT)
                         || boopState.equals(BoopState.TIPTOE_LEFT)
                         || boopState.equals(BoopState.TIPTOE_RIGHT)) {
-                    Random rand = new Random();
                     int randInt = rand.nextInt(randomBounds);
                     if (randInt >= movementPercentage) {
                         //If Boop randomly decides to stop...
@@ -177,7 +176,6 @@ public class Boop {
                     if (lastMovementFrame < sketch.frameCount + stoppingBreakInFrames) {
                         //Boop must stay put for at least
                         // STOPPING_BREAK_IN_FRAMES frames after stopping.
-                        Random rand = new Random();
                         int randInt = rand.nextInt(randomBounds) + timesNotMoved;
                         if (randInt >= movementPercentage) {
                             //If Boop randomly decides to start moving...
@@ -220,7 +218,6 @@ public class Boop {
      * @param sketch to draw to
      */
     private void drawThisFrame(Kiosk sketch) {
-        Random rand = new Random();
         if (boopState.equals(BoopState.SCOOT_LEFT)
                 || boopState.equals(BoopState.SCOOT_RIGHT)
                 || boopState.equals(BoopState.TIPTOE_LEFT)
@@ -637,7 +634,6 @@ public class Boop {
             if (currentY >= event.getY() - boopDimens / 2f
                     && currentY <= event.getY() + boopDimens / 2f) {
                 lastClickedFrame = sketch.frameCount;
-                Random rand = new Random();
                 additionalShellFrames = rand.nextInt(10);
                 if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
                     choseShake = true;
