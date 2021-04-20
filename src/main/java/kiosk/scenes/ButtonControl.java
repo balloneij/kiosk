@@ -194,76 +194,20 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param sketch to draw to
      */
     private void drawRectangle(Kiosk sketch, double sizeMultiplier) {
-        // Draw modifiers
-        sketch.rectMode(PConstants.CENTER);
-        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-
-        // If it's clickable, draw the darker button behind the main one to add 3D effect
-        if (!this.disabled) {
-            //Draw the darker button behind the button to add 3D effects
-            sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
-                    clampColor(this.model.rgb[1] + colorDeltaOnClick),
-                    clampColor(this.model.rgb[2] + colorDeltaOnClick));
-            sketch.stroke(Color.DW_BLACK_RGB[0], Color.DW_BLACK_RGB[1],
-                    Color.DW_BLACK_RGB[2], 63f);
-            Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
-                    this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
-                    this.rect.width, this.rect.height, defaultCornerRadius);
-        }
+        setDrawModifiers(sketch);
+        drawOutline(sketch, sizeMultiplier);
 
         // If pressed, draw the text lower and don't draw the main button
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
-            textWithOutline(this.model.text,
-                    (float) this.rect.getCenterX(),
-                    (float) this.rect.getCenterY()
-                            + this.rect.height / 10.f,
-                    (float) this.rect.width,
-                    (float) this.rect.height,
-                    sketch, isLightButton());
-            if (this.model.image != null) {
-                sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed && !this.disabled) {
-                    this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY() + this.rect.height / 10.f);
-                } else {
-                    this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
-                }
-            }
+            drawText(sketch);
+            drawImage(sketch);
         } else {
             if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                     < Kiosk.getSettings().buttonAnimationLengthFrames
                     && !this.disabled && this.shouldAnimate) {
                 double offset = calculateAnimationOffset(sketch);
-                if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                        < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
-                        && !this.disabled && this.shouldAnimate) {
-                    sketch.fill((clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))),
-                            (clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))),
-                            (clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))));
-                } else {
-                    sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            (clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))),
-                            (clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))));
-                }
+                setFill(sketch);
                 sketch.stroke(59, 58, 57, 63f);
                 Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
                         this.rect.y + (float) (this.rect.height / 2.f
@@ -276,19 +220,9 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY() + this.rect.height / 10.f);
-                    } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) (this.rect.getCenterY() + (this.rect.height / 10.f * offset)));
-                    }
-                }
+                drawImage(sketch, offset);
             } else {
-                sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-                sketch.stroke(59, 58, 57, 63f);
+                setNormalFillAndStroke(sketch);
                 Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f,
                         this.rect.width, this.rect.height, defaultCornerRadius);
@@ -298,96 +232,26 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY() + this.rect.height / 10.f);
-                    } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY());
-                    }
-                }
+                drawImage(sketch);
             }
         }
     }
 
     private void drawCircle(Kiosk sketch, double sizeMultiplier) {
-        // Draw modifiers
-        sketch.rectMode(PConstants.CORNER);
-        sketch.ellipseMode(PConstants.CENTER);
-        sketch.rectMode(PConstants.CENTER);
-        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-
-        // If it's clickable, draw the darker button behind the main one to add 3D effect
-        if (!disabled) {
-            //Draw the darker button behind the button to add 3D effects
-            sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
-                    clampColor(this.model.rgb[1] + colorDeltaOnClick),
-                    clampColor(this.model.rgb[2] + colorDeltaOnClick));
-            sketch.stroke(59, 58, 57, 63f);
-            sketch.ellipse(this.rect.x + this.rect.width / 2.f,
-                    this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
-                    (int) (this.rect.width * sizeMultiplier),
-                    (int) (this.rect.height * sizeMultiplier));
-        }
+        setDrawModifiers(sketch);
+        drawOutline(sketch, sizeMultiplier);
 
         // If pressed, draw the text lower and don't draw the main button
         // This makes it look like the button is pushed into the screen
         if (this.isPressed) {
-            if (!this.model.text.equals("")) {
-                textWithOutline(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY() + this.rect.height / 10.f,
-                        this.rect.width, this.rect.height,
-                        sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) rect.getCenterY() + this.rect.height / 10.f);
-                    } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) (rect.getCenterY()));
-                    }
-                }
-            }
+            drawText(sketch);
+            drawImage(sketch);
         } else {
-            sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-            sketch.stroke(59, 58, 57, 63f);
             if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
                     < Kiosk.getSettings().buttonAnimationLengthFrames
                     && !this.disabled && this.shouldAnimate) {
                 double offset = calculateAnimationOffset(sketch);
-                if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                        < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
-                        && !this.disabled && this.shouldAnimate) {
-                    sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
-                } else {
-                    sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
-                }
+                setFill(sketch);
                 sketch.ellipse(this.rect.x + this.rect.width / 2.f,
                         this.rect.y + (float) (this.rect.height / 2.f
                                 + (this.rect.height / 10.f * offset)),
@@ -399,17 +263,9 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) (rect.getCenterY() + this.rect.height / 10.f));
-                    } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) (rect.getCenterY() + (this.rect.height / 10.f * offset)));
-                    }
-                }
+                drawImage(sketch, offset);
             } else {
+                setNormalFillAndStroke(sketch);
                 sketch.ellipse(this.rect.x + this.rect.width / 2.f,
                         this.rect.y + this.rect.height / 2.f,
                         (float) (this.rect.width * sizeMultiplier),
@@ -419,18 +275,110 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) this.rect.getCenterY(),
                         this.rect.width, this.rect.height,
                         sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) rect.getCenterY() + this.rect.height / 10.f);
-                    } else {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) (rect.getCenterY()));
-                    }
-                }
+                drawImage(sketch);
             }
         }
+    }
+
+    private void setDrawModifiers(Kiosk sketch) {
+        sketch.rectMode(PConstants.CORNER);
+        sketch.ellipseMode(PConstants.CENTER);
+        sketch.rectMode(PConstants.CENTER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+    }
+
+    private void drawOutline(Kiosk sketch, double sizeMultiplier) {
+        if (!this.disabled) {
+            //Draw the darker button behind the button to add 3D effects
+            sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
+                    clampColor(this.model.rgb[1] + colorDeltaOnClick),
+                    clampColor(this.model.rgb[2] + colorDeltaOnClick));
+            sketch.stroke(Color.DW_BLACK_RGB[0], Color.DW_BLACK_RGB[1],
+                    Color.DW_BLACK_RGB[2], 63f);
+            if (model.isCircle) {
+                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                        (int) (this.rect.width * sizeMultiplier),
+                        (int) (this.rect.height * sizeMultiplier));
+            } else {
+                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
+                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                        this.rect.width, this.rect.height, defaultCornerRadius);
+            }
+        }
+    }
+
+    private void drawText(Kiosk sketch) {
+        if (!this.model.text.equals("")) {
+            textWithOutline(this.model.text,
+                    (float) this.rect.getCenterX(),
+                    (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                    this.rect.width, this.rect.height,
+                    sketch, isLightButton());
+        }
+    }
+
+    private void drawImage(Kiosk sketch) {
+        if (this.model.image != null) {
+            sketch.imageMode(PConstants.CENTER);
+            if (this.isPressed && !this.disabled) {
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) rect.getCenterY() + this.rect.height / 10.f);
+            } else {
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) (rect.getCenterY()));
+            }
+        }
+    }
+
+    private void drawImage(Kiosk sketch, double offset) {
+        if (this.model.image != null) {
+            sketch.imageMode(PConstants.CENTER);
+            if (this.isPressed && !this.disabled) {
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) (rect.getCenterY() + this.rect.height / 10.f));
+            } else {
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) (rect.getCenterY() + (this.rect.height / 10.f * offset)));
+            }
+        }
+    }
+
+    private void setFill(Kiosk sketch) {
+        if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
+                && !this.disabled && this.shouldAnimate) {
+            sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
+                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
+                    clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
+                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
+                    clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
+                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
+        } else {
+            sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
+                            * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                            - (sketch.frameCount
+                            % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
+                    clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
+                            * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                            - (sketch.frameCount
+                            % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
+                    clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
+                            * ((Kiosk.getSettings().buttonAnimationLengthFrames
+                            - (sketch.frameCount
+                            % Kiosk.getSettings().buttonAnimationFrames))
+                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
+        }
+    }
+
+    private void setNormalFillAndStroke(Kiosk sketch) {
+        sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+        sketch.stroke(59, 58, 57, 63f);
     }
 
     /**
