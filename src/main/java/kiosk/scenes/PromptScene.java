@@ -207,12 +207,6 @@ public class PromptScene implements Scene {
                 sketch.text(this.model.actionPhrase, centerX, actionY,
                         sketch.width / 1.5f, sketch.height / 6f);
             }
-            if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
-                for (ButtonControl button : this.buttons) {
-                    button.draw(sketch, ((sketch.frameCount - startFrame) * 1.0
-                            / (Kiosk.getSettings().sceneAnimationFrames + 1)));
-                }
-            }
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box
             sketch.fill(255);

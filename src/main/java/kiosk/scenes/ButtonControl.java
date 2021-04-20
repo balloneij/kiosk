@@ -9,7 +9,6 @@ import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
-import kiosk.models.ImageModel;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
 
@@ -161,86 +160,30 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param sketch to draw to
      */
     public void draw(Kiosk sketch) {
+        // Set the Font
         if (!fontSizeOverwritten) {
             Graphics.useGothic(sketch, fontSize, true);
             checkInit(); // Prints a warning if the button wasn't initialized
             textSizeMultiplier = 1;
         }
         fontSizeOverwritten = false;
+
+        // Draw the shape
         if (!this.model.noButton) {
             if (this.model.isCircle) {
                 this.drawCircle(sketch, 1);
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed) {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) rect.getCenterY() + this.rect.height / 10.f);
-                    }
-                }
             } else {
                 this.drawRectangle(sketch, 1);
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed) {
-                        this.image.draw(sketch, (float) rect.getCenterX(),
-                                (float) rect.getCenterY() + this.rect.height / 10.f);
-                    }
-                }
             }
-        } else {
-            if (this.model.image != null) {
-                sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed) {
-                    this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY() + this.rect.height / 10.f);
-                } else {
-                    this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
-                }
-            }
-        }
-    }
-
-    /**
-     * Draw the button.
-     * @param sketch to draw to
-     * @param multiplier to change the font's size for this drawing only
-     */
-    public void draw(Kiosk sketch, float multiplier) {
-        Graphics.useGothic(sketch, (int) (fontSize * multiplier), true);
-        fontSizeOverwritten = true;
-        textSizeMultiplier = multiplier;
-        draw(sketch);
-    }
-
-    public void draw(Kiosk sketch, boolean isClickable) {
-        this.setDisabled(!isClickable);
-        draw(sketch);
-    }
-
-    /**
-     * Draw the button.
-     * @param sketch to draw to
-     * @param sizeMultiplier to change the button's overall size, for animation purposes
-     */
-    public void draw(Kiosk sketch, double sizeMultiplier) {
-        Graphics.useGothic(sketch, (int) (fontSize * sizeMultiplier), true);
-        checkInit(); // Prints a warning if the button wasn't initialized
-        textSizeMultiplier = (float) sizeMultiplier;
-        if (!this.model.noButton) {
-            if (this.model.isCircle) {
-                this.drawCircle(sketch, sizeMultiplier);
+        } else if (this.model.image != null) { // Draw the image, if it exists
+            sketch.imageMode(PConstants.CENTER);
+            if (this.isPressed) {
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) rect.getCenterY() + this.rect.height / 10.f);
             } else {
-                this.drawRectangle(sketch, sizeMultiplier);
-            }
-        } else {
-            if (this.model.image != null) {
-                sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed && !this.disabled) {
-                    this.image.draw(sketch, (float) rect.getCenterX(),
-                            (float) rect.getCenterY() + this.rect.height / 10.f);
-                } else {
-                    this.image.draw(sketch, (float) rect.getCenterX(), (float) rect.getCenterY());
-                }
+                this.image.draw(sketch, (float) rect.getCenterX(), !this.model.noButton
+                        ? (float) rect.getCenterY() + this.rect.height / 10.f
+                        : (float) rect.getCenterY());
             }
         }
     }
@@ -606,27 +549,6 @@ public class ButtonControl implements Control<MouseEvent> {
             this.wasClicked = true;
         }
         this.isPressed = false;
-    }
-
-    /**
-     * Moves the button to the specified Coordinates.
-     * @param x The X Location from the left of the screen.
-     * @param y The Y Location from the top of the screen.
-     */
-    public void setLocation(int x, int y) {
-        this.rect.x = x;
-        this.rect.y = y;
-    }
-
-    /**
-     * Sets the width and the height of the button for rendering purposes.
-     * This is a stop sign.
-     * @param width The width of the button. (This is a stop sign)
-     * @param height The height of the button. (This is a stop sign)
-     */
-    public void setWidthAndHeight(int width, int height) {
-        this.rect.width = width;
-        this.rect.height = height;
     }
 
     public float getCenterX() {
