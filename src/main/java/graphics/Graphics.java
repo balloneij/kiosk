@@ -185,13 +185,12 @@ public class Graphics {
      * @param framesSinceTap the time since the tap occurred,
      *                       makes the circle pulse outward gradually
      */
-    public static void drawTouchResponse(Kiosk sketch, MouseEvent e, int framesSinceTap) {
+    public static void drawTouchResponse(Kiosk sketch, MouseEvent e, int framesSinceTap, int color) {
         sketch.ellipseMode(PConstants.CENTER);
         sketch.noFill();
         sketch.strokeWeight(9 - framesSinceTap);
-        Color color = Color.getInstance();
-        sketch.stroke(color.dwOrange);
-        sketch.ellipse(e.getX(), e.getY(), 35 + (3 * framesSinceTap), 35 + (3 * framesSinceTap));
+        sketch.stroke(color);
+        sketch.ellipse(e.getX(), e.getY(), sketch.width / 50f + (3 * framesSinceTap), sketch.width / 50f + (3 * framesSinceTap));
         sketch.strokeWeight(1);
     }
 }

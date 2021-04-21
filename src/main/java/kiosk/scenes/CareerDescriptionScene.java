@@ -42,6 +42,9 @@ public class CareerDescriptionScene implements Scene {
     private static int instructionsFontSize = screenW / 60;
     private static int descriptionFontSize = screenW / 58;
 
+    //Animations
+    private int startFrame = 0;
+
     /**
      * Career Description Scene shows a title, body of text, and a button at the bottom.
      * @param model The model object where we get our information.
@@ -99,6 +102,8 @@ public class CareerDescriptionScene implements Scene {
         this.centerButton.init(sketch);
         sketch.hookControl(this.centerButton);
 
+        startFrame = sketch.frameCount;
+
         this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
         this.supplementaryButton.init(sketch);
         sketch.hookControl(this.supplementaryButton);
@@ -122,45 +127,83 @@ public class CareerDescriptionScene implements Scene {
         final int centerX = Kiosk.getSettings().screenW / 2;
         Graphics.drawBubbleBackground(sketch);
 
-        // Draw the white foreground box
-        sketch.fill(255);
-        Graphics.drawRoundedRectangle(sketch,
-                foregroundXPadding, foregroundYPadding,
-                foregroundWidth, foregroundHeight,
-                foregroundCurveRadius);
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
+            // Draw the white foreground box
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    (float) (foregroundXPadding + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), foregroundYPadding,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
 
-        // Text Properties
-        sketch.rectMode(PConstants.CENTER);
-        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-        sketch.fill(0);
-
-
-        // Career Name
-        Graphics.useGothic(sketch, titleFontSize, true);
-        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.careerModel.name, centerX, (int) (titleY * 1.15),
-                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+            // Text Properties
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
 
 
-        // What to do next
-        Graphics.useGothic(sketch, instructionsFontSize, false);
-        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.body, centerX, (int) (instructionsY * 1.15),
-                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
-
-        // Career Description
-        Graphics.useGothic(sketch, descriptionFontSize, false);
-        sketch.textAlign(PConstants.CENTER, PConstants.TOP);
-        sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.careerModel.description, centerX, (int) (descriptionY * 1.15),
-                (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+            // Career Name
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.name, (float) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (titleY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
 
+            // What to do next
+            Graphics.useGothic(sketch, instructionsFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, (float) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (instructionsY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Career Description
+            Graphics.useGothic(sketch, descriptionFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.description, (float) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (descriptionY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch, screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+        } else {
+            // Draw the white foreground box
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    foregroundXPadding, foregroundYPadding,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
+
+            // Text Properties
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
 
 
-        this.centerButton.draw(sketch);
+            // Career Name
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.name, centerX, (int) (titleY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+
+            // What to do next
+            Graphics.useGothic(sketch, instructionsFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, centerX, (int) (instructionsY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Career Description
+            Graphics.useGothic(sketch, descriptionFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.description, centerX, (int) (descriptionY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch);
+        }
+
+
         this.homeButton.draw(sketch);
         this.backButton.draw(sketch);
         this.supplementaryButton.draw(sketch);

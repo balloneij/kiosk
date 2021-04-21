@@ -100,8 +100,8 @@ public class Boop {
      * @param currentScene the scene the user is currently viewing
      */
     public void movementLogic(Kiosk sketch, Scene currentScene) {
-        minX = 0;
-        maxX = width;
+        minX = width / screenBoundaryFraction;
+        maxX = width * (screenBoundaryFraction - 1 / screenBoundaryFraction);
         if (currentScene.getClass().toString().contains("CareerDescriptionScene")
                 && !startedHappyAnimation) {
             firstHappyFrame = sketch.frameCount;

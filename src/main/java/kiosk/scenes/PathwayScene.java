@@ -24,6 +24,9 @@ public class PathwayScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
 
+    //Animations
+    private int startFrame = 0;
+
     /**
      * Create a pathway scene.
      * @param model to base the scene off of
@@ -61,6 +64,8 @@ public class PathwayScene implements Scene {
             sketch.hookControl(careerOption);
         }
 
+        startFrame = sketch.frameCount;
+
         spokeGraph.init(sketch);
     }
 
@@ -92,8 +97,14 @@ public class PathwayScene implements Scene {
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
-        this.spokeGraph.draw(sketch);
+
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            this.spokeGraph.draw(sketch, screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+        } else {
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0);
+            this.spokeGraph.draw(sketch, 0);
+        }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.backButton.draw(sketch);

@@ -141,14 +141,14 @@ public class GraphicsUtil {
      * @param title text
      * @param body text
      */
-    public static void drawHeader(Kiosk sketch, String title, String body) {
+    public static void drawHeader(Kiosk sketch, String title, String body, double offsetX) {
 
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
 
         headerW = screenW * 3f / 4;
         headerH = screenH / 6f;
-        headerX = (screenW - headerW) / 2;
+        headerX = (float) (((screenW - headerW) / 2) + offsetX);
         headerY = screenH / 32f;
         headerCenterX = headerX + (headerW / 2);
         headerCenterY = headerY + (headerH / 2);

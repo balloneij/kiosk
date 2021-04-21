@@ -233,13 +233,13 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
 
-        //If this scene is new, animate the items to gradually show up on screen
+        //If this scene is new, animate the spokes to gradually change
         if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0);
 
             // Calculate answer location constants
             float headerBottomY = headerY + headerH + 2 * answersPadding;
-            int answersCenterX = (int) ((screenW * 3 / 4) + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            int answersCenterX = (screenW * 3 / 4);
             float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
 
             // Draw answer buttons
@@ -247,17 +247,17 @@ public class SpokeGraphPromptScene implements Scene {
                 sketch.strokeWeight(answersSpokeThickness);
                 sketch.stroke(255);
                 sketch.line(answersCenterX, answersCenterY,
-                        (float) (answer.getCenterX() + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), answer.getCenterY());
-                answer.draw(sketch,  screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+                        answer.getCenterX(), answer.getCenterY());
+                answer.draw(sketch,  0);
             }
 
             // Draw the center prompt button
-            this.promptButton.draw(sketch,  screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            this.promptButton.draw(sketch,  0);
 
             // Draw the career spoke graph
-            this.spokeGraph.draw(sketch);
+            this.spokeGraph.draw(sketch, 0);
         } else { //If it's already a second-or-two old, draw the scene normally
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0);
 
             // Calculate answer location constants
             float headerBottomY = headerY + headerH + 2 * answersPadding;
@@ -277,7 +277,7 @@ public class SpokeGraphPromptScene implements Scene {
             this.promptButton.draw(sketch);
 
             // Draw the career spoke graph
-            this.spokeGraph.draw(sketch);
+            this.spokeGraph.draw(sketch, 0);
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {

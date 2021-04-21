@@ -154,17 +154,17 @@ public class SpokeGraph {
      * Draw the spoke graph.
      * @param sketch to draw to
      */
-    public void draw(Kiosk sketch) {
+    public void draw(Kiosk sketch, double offsetX) {
         checkInit(); // Prints a warning if the SpokeGraph wasn't initialized
 
         // Draw the buttons and spokes
         for (ButtonControl buttonControl : this.buttonControls) {
             sketch.stroke(255);
             sketch.strokeWeight(SPOKE_THICKNESS);
-            sketch.line(centerX, centerY,
-                    buttonControl.getCenterX(), buttonControl.getCenterY());
+            sketch.line((float) (centerX + offsetX), centerY,
+                    (float) (buttonControl.getCenterX() + offsetX), buttonControl.getCenterY());
 
-            buttonControl.draw(sketch);
+            buttonControl.draw(sketch, offsetX);
         }
 
         // Set draw modes
@@ -174,13 +174,13 @@ public class SpokeGraph {
 
         // Draw the center circle
         sketch.fill(0);
-        sketch.ellipse(centerX, centerY,
+        sketch.ellipse((float) (centerX + offsetX), centerY,
                 (float) (maxButtonRadius + minButtonRadius),
                 (float) (maxButtonRadius + minButtonRadius));
         sketch.fill(255);
 
         GraphicsUtil.textWithOutline(this.centerText,
-                centerX, centerY,
+                (float) (centerX + offsetX), centerY,
                 centerSquareSize, centerSquareSize, sketch);
     }
 
