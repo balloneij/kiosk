@@ -43,6 +43,9 @@ public class ButtonControl implements Control<MouseEvent> {
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
 
+    private int centerX;
+    private int centerY;
+
     /**
      * Button UI control. Visual representation of a ButtonModel.
      *
@@ -67,6 +70,8 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int w, int h, boolean doesAnimate) {
         this.model = model;
+        this.centerX = x;
+        this.centerY = y;
         this.rect = new Rectangle(x, y, w, h);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
@@ -91,6 +96,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
+        this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
     }
 
     /**
@@ -115,6 +121,8 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int radius, boolean doesAnimate) {
         this.model = model;
+        this.centerX = x;
+        this.centerY = y;
         this.rect = new Rectangle(x, y, radius * 2, radius * 2);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
@@ -485,18 +493,53 @@ public class ButtonControl implements Control<MouseEvent> {
         this.centerSquareSize = (float) Math.sqrt(Math.pow(this.radius * 2, 2) / 2);
     }
 
+    private static ButtonModel draggedButtonModel;
+    private boolean isDragged = false;
+    private int pressX;
+    private int pressY;
+    private int offsetX;
+    private int offsetY;
+
+    private double dragDistance(int x, int y) {
+        int xDist = pressX - x;
+        int yDist = pressY - y;
+        return Math.sqrt(xDist * xDist + yDist * yDist);
+    }
+
     private void onMousePressed(MouseEvent event) {
         if (this.rect.contains(event.getX(), event.getY())) {
             this.isPressed = true;
+            pressX = event.getX();
+            pressY = event.getY();
+            offsetX = this.rect.x - pressX;
+            offsetY = this.rect.y - pressY;
         }
     }
 
     private void onMouseReleased(MouseEvent event) {
         // Mouse was pressed and released inside the button
-        if (this.isPressed && this.rect.contains(event.getX(), event.getY())) {
+        if (this.isPressed && this.rect.contains(event.getX(), event.getY())
+            && !isDragged) {
             this.wasClicked = true;
         }
         this.isPressed = false;
+        this.isDragged = false;
+        draggedButtonModel = null;
+    }
+
+    private void onMouseDragged(MouseEvent event) {
+        if (dragDistance(event.getX(), event.getY()) > 5
+                && this.rect.contains(event.getX(), event.getY())
+        ) {
+            if (draggedButtonModel == null) {
+                this.isDragged = true;
+                draggedButtonModel = this.model;
+            }
+            if (this.model.equals(draggedButtonModel) ) {
+                this.rect.x = event.getX() + offsetX;
+                this.rect.y = event.getY() + offsetY;
+            }
+        }
     }
 
     public float getCenterX() {
