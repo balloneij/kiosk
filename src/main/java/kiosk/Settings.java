@@ -45,7 +45,7 @@ public class Settings {
     public Settings(boolean fullScreenDesired) {
         gracePeriodMillis = 15000;
         timeoutMillis = 60000;
-        sceneAnimationFrames = 0;
+        sceneAnimationFrames = 20;
         buttonAnimationFrames = 80;
         buttonAnimationLengthFrames = 20;
         buttonAnimationIntensity = buttonAnimationFrames * buttonAnimationLengthFrames / 2.0;

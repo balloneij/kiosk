@@ -51,6 +51,9 @@ public class SpokeGraphPromptScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
 
+    //Animations
+    private int startFrame = 0;
+
     /**
      * Creates a Spoke Graph Prompt Scene
      * It has a spoke graph of all the careers in the upper left corner
@@ -195,6 +198,8 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.hookControl(this.supplementaryButton);
         }
 
+        startFrame = sketch.frameCount;
+
         this.promptButton.init(sketch);
     }
 
@@ -227,27 +232,53 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
 
-        // Calculate answer location constants
-        float headerBottomY = headerY + headerH + 2 * answersPadding;
-        int answersCenterX = screenW * 3 / 4;
-        float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
+        //If this scene is new, animate the items to gradually show up on screen
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
 
-        // Draw answer buttons
-        for (ButtonControl answer : answerButtons) {
-            sketch.strokeWeight(answersSpokeThickness);
-            sketch.stroke(255);
-            sketch.line(answersCenterX, answersCenterY,
-                    answer.getCenterX(), answer.getCenterY());
-            answer.draw(sketch);
+            // Calculate answer location constants
+            float headerBottomY = headerY + headerH + 2 * answersPadding;
+            int answersCenterX = (int) ((screenW * 3 / 4) + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
+
+            // Draw answer buttons
+            for (ButtonControl answer : answerButtons) {
+                sketch.strokeWeight(answersSpokeThickness);
+                sketch.stroke(255);
+                sketch.line(answersCenterX, answersCenterY,
+                        (float) (answer.getCenterX() + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), answer.getCenterY());
+                answer.draw(sketch,  screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            }
+
+            // Draw the center prompt button
+            this.promptButton.draw(sketch,  screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+
+            // Draw the career spoke graph
+            this.spokeGraph.draw(sketch);
+        } else { //If it's already a second-or-two old, draw the scene normally
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
+
+            // Calculate answer location constants
+            float headerBottomY = headerY + headerH + 2 * answersPadding;
+            int answersCenterX = screenW * 3 / 4;
+            float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
+
+            // Draw answer buttons
+            for (ButtonControl answer : answerButtons) {
+                sketch.strokeWeight(answersSpokeThickness);
+                sketch.stroke(255);
+                sketch.line(answersCenterX, answersCenterY,
+                        answer.getCenterX(), answer.getCenterY());
+                answer.draw(sketch);
+            }
+
+            // Draw the center prompt button
+            this.promptButton.draw(sketch);
+
+            // Draw the career spoke graph
+            this.spokeGraph.draw(sketch);
         }
-
-        // Draw the center prompt button
-        this.promptButton.draw(sketch);
-
-        // Draw the career spoke graph
-        this.spokeGraph.draw(sketch);
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             // Draw the back and home buttons

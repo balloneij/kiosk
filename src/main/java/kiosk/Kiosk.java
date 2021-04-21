@@ -47,6 +47,10 @@ public class Kiosk extends PApplet {
     private File loadedFile;
     private boolean isFullScreen = false;
     private boolean fontsLoaded = false;
+    private int recentTapFrame = -10;
+    private ArrayList<Integer> recentTapFrames;
+    private MouseEvent recentTapEvent;
+    private ArrayList<MouseEvent> recentTapEvents;
 
     private static JFileChooser fileChooser;
 
@@ -113,6 +117,8 @@ public class Kiosk extends PApplet {
         Color.setSketch(this);
 
         boop = new Boop();
+        recentTapEvents = new ArrayList<MouseEvent>();
+        recentTapFrames = new ArrayList<Integer>();
     }
 
     /**
@@ -244,6 +250,15 @@ public class Kiosk extends PApplet {
             }
         }
         boop.movementLogic(this, currentScene);
+        for (int i = 0; i < recentTapEvents.size(); i++) {
+            if (recentTapFrames.get(i) + 8 >= this.frameCount) {
+                Graphics.drawTouchResponse(this, recentTapEvents.get(i), this.frameCount - recentTapFrames.get(i));
+            }
+            if (recentTapFrames.get(i) + 8 < this.frameCount) {
+                recentTapFrames.remove(i);
+                recentTapEvents.remove(i);
+            }
+        }
     }
 
     /**
@@ -357,6 +372,8 @@ public class Kiosk extends PApplet {
             listener.invoke(event);
         }
         boop.checkTap(this, event);
+        recentTapEvents.add(event);
+        recentTapFrames.add(this.frameCount);
     }
 
     @Override

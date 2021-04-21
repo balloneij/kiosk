@@ -169,49 +169,34 @@ public class PromptScene implements Scene {
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
-        //TODO MAKE ANIMATION LESS CHOPPY WHEN LESS FRAMES DESIRED
-        //     Implement Seth's idea of white box gradually revealing text
         //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.frameCount - startFrame < Kiosk.getSettings().sceneAnimationFrames) {
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    foregroundXPadding, foregroundYPadding,
-                    (float) (foregroundWidth * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (foregroundHeight * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (foregroundCurveRadius * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)));
+                    (float) (foregroundXPadding + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    foregroundYPadding,
+                    foregroundWidth,
+                    foregroundHeight,
+                    foregroundCurveRadius);
             // Draw text
             sketch.rectMode(PConstants.CENTER);
             sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
             sketch.fill(0);
-            if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
-                // Title
-                Graphics.useGothic(sketch, (int) (titleFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.title, centerX, titleY,
-                        sketch.width / 1.5f, sketch.height / 5f);
-                // Prompt
-                Graphics.useGothic(sketch, (int) (promptFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), false);
-                sketch.text(this.model.prompt, centerX, promptY,
-                        sketch.width / 1.5f, sketch.height / 5f);
-                // Action
-                Graphics.useGothic(sketch, (int) (actionFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.actionPhrase, centerX, actionY,
-                        sketch.width / 1.5f, sketch.height / 6f);
-            }
-            if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
-                for (ButtonControl button : this.buttons) {
-                    button.draw(sketch, ((sketch.frameCount - startFrame) * 1.0
-                            / (Kiosk.getSettings().sceneAnimationFrames + 1)));
-                }
+            // Title
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.text(this.model.title, (int) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
+                    sketch.width / 1.5f, sketch.height / 5f);
+            // Prompt
+            Graphics.useGothic(sketch, promptFontSize, false);
+            sketch.text(this.model.prompt, (int) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), promptY,
+                    sketch.width / 1.5f, sketch.height / 5f);
+            // Action
+            Graphics.useGothic(sketch, actionFontSize, true);
+            sketch.text(this.model.actionPhrase, (int) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), actionY,
+                    sketch.width / 1.5f, sketch.height / 6f);
+            for (ButtonControl button : this.buttons) {
+                button.draw(sketch, screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
             }
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box

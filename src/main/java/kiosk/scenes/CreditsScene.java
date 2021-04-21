@@ -96,44 +96,34 @@ public class CreditsScene implements Scene {
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
-        //TODO MAKE ANIMATION LESS CHOPPY WHEN LESS FRAMES DESIRED
-        //     Implement Seth's idea of white box gradually revealing text
         //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.frameCount - startFrame < Kiosk.getSettings().sceneAnimationFrames) {
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    foregroundXPadding, foregroundYPadding,
-                    (float) (foregroundWidth * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (foregroundHeight * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (foregroundCurveRadius * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)));
+                    (float) (foregroundXPadding + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    foregroundYPadding,
+                    foregroundWidth,
+                    foregroundHeight,
+                    foregroundCurveRadius);
             // Draw text
             sketch.rectMode(PConstants.CENTER);
             sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
             sketch.fill(0);
-            if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
-                // Title
-                Graphics.useGothic(sketch, (int) (titleFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.title, centerX, titleY,
-                        sketch.width / 2f, sketch.height / 5f);
-                //Creators & Supporters
-                Graphics.useGothic(sketch, (int) (promptFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), false);
-                sketch.text(this.model.creatorTitle, creatorX, creatorY,
-                        sketch.width / 1.75f, sketch.height / 5f);
-                sketch.text(this.model.creators, creatorX, (int) (creatorY * 1.35),
-                        sketch.width / 1.75f, sketch.height / 2f);
-                sketch.text(this.model.supporterTitle, supporterX, supporterY,
-                        sketch.width / 1.75f, sketch.height / 5f);
-                sketch.text(this.model.supporters, supporterX, (int) (supporterY * 1.45),
-                        sketch.width / 1.75f, sketch.height / 2f);
-            }
+            // Title
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.text(this.model.title, (int) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
+                    sketch.width / 2f, sketch.height / 5f);
+            //Creators & Supporters
+            Graphics.useGothic(sketch, promptFontSize, false);
+            sketch.text(this.model.creatorTitle, (int) (creatorX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), creatorY,
+                    sketch.width / 1.75f, sketch.height / 5f);
+            sketch.text(this.model.creators, (int) (creatorX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (creatorY * 1.35),
+                    sketch.width / 1.75f, sketch.height / 2f);
+            sketch.text(this.model.supporterTitle, (int) (supporterX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), supporterY,
+                    sketch.width / 1.75f, sketch.height / 5f);
+            sketch.text(this.model.supporters, (int) (supporterX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (supporterY * 1.45),
+                    sketch.width / 1.75f, sketch.height / 2f);
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box
             sketch.fill(255);
