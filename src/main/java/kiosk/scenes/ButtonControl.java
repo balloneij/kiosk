@@ -43,8 +43,6 @@ public class ButtonControl implements Control<MouseEvent> {
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
 
-    private int centerX;
-    private int centerY;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -70,8 +68,6 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int w, int h, boolean doesAnimate) {
         this.model = model;
-        this.centerX = x;
-        this.centerY = y;
         this.rect = new Rectangle(x, y, w, h);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
@@ -121,8 +117,6 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int radius, boolean doesAnimate) {
         this.model = model;
-        this.centerX = x;
-        this.centerY = y;
         this.rect = new Rectangle(x, y, radius * 2, radius * 2);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
@@ -147,6 +141,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
+        this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
     }
 
     /**
@@ -501,9 +496,9 @@ public class ButtonControl implements Control<MouseEvent> {
     private int offsetY;
 
     private double dragDistance(int x, int y) {
-        int xDist = pressX - x;
-        int yDist = pressY - y;
-        return Math.sqrt(xDist * xDist + yDist * yDist);
+        int distX = pressX - x;
+        int distY = pressY - y;
+        return Math.sqrt(distX * distX + distY * distY);
     }
 
     private void onMousePressed(MouseEvent event) {
@@ -535,7 +530,7 @@ public class ButtonControl implements Control<MouseEvent> {
                 this.isDragged = true;
                 draggedButtonModel = this.model;
             }
-            if (this.model.equals(draggedButtonModel) ) {
+            if (this.model.equals(draggedButtonModel)) {
                 this.rect.x = event.getX() + offsetX;
                 this.rect.y = event.getY() + offsetY;
             }
