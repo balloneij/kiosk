@@ -43,6 +43,8 @@ public class ButtonControl implements Control<MouseEvent> {
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
 
+    private int centerX;
+    private int centerY;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -68,6 +70,8 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int w, int h, boolean doesAnimate) {
         this.model = model;
+        centerX = x;
+        centerY = y;
         this.rect = new Rectangle(x, y, w, h);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
@@ -117,6 +121,8 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int radius, boolean doesAnimate) {
         this.model = model;
+        centerX = x;
+        centerY = y;
         this.rect = new Rectangle(x, y, radius * 2, radius * 2);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
@@ -156,6 +162,8 @@ public class ButtonControl implements Control<MouseEvent> {
         wasInit = true;
     }
 
+    long lastTime = 0;
+
     /**
      * Draw's the appropriate button to the sketch using
      * coordinates and information provided upon initialization.
@@ -187,6 +195,30 @@ public class ButtonControl implements Control<MouseEvent> {
                 this.image.draw(sketch, (float) rect.getCenterX(), !this.model.noButton
                         ? (float) rect.getCenterY() + this.rect.height / 10.f
                         : (float) rect.getCenterY());
+            }
+        }
+
+        if (isSnapping) {
+            long deltaTime = 0;
+            if (lastTime != 0) {
+                deltaTime = System.currentTimeMillis() - lastTime;
+                lastTime = System.currentTimeMillis();
+            } else {
+                lastTime = System.currentTimeMillis();
+            }
+
+            float xDist = centerX - this.rect.x;
+            float yDist = centerY - this.rect.y;
+            if (Math.sqrt(xDist* xDist + yDist * yDist) < 10) {
+                this.isSnapping = false;
+                this.isDragged = false;
+                this.rect.x = centerX;
+                this.rect.y = centerY;
+                draggedButtonModel = null;
+                this.lastTime = 0;
+            } else {
+                this.rect.y += (int) (yDist * deltaTime / 100f);
+                this.rect.x += (int) (xDist * deltaTime / 100f);
             }
         }
     }
@@ -494,6 +526,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private int pressY;
     private int offsetX;
     private int offsetY;
+    private boolean isSnapping;
 
     private double dragDistance(int x, int y) {
         int distX = pressX - x;
@@ -516,14 +549,19 @@ public class ButtonControl implements Control<MouseEvent> {
         if (this.isPressed && this.rect.contains(event.getX(), event.getY())
             && !isDragged) {
             this.wasClicked = true;
+            this.isSnapping = false;
+            draggedButtonModel = null;
         }
         this.isPressed = false;
-        this.isDragged = false;
-        draggedButtonModel = null;
+        // TODO: Move this into some drag complete logic
+        if (this.model.equals(draggedButtonModel)) {
+            this.isDragged = false;
+            this.isSnapping = true;
+        }
     }
 
     private void onMouseDragged(MouseEvent event) {
-        if (dragDistance(event.getX(), event.getY()) > 5
+        if (dragDistance(event.getX(), event.getY()) > 10
                 && this.rect.contains(event.getX(), event.getY())
         ) {
             if (draggedButtonModel == null) {
