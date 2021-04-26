@@ -194,7 +194,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
                             (float) rect.getCenterY() + this.rect.height / 10.f);
                 } else {
-                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX), (float) rect.getCenterY());
+                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
+                            (float) rect.getCenterY());
                 }
             }
         }
@@ -230,7 +231,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[2] + colorDeltaOnClick));
             sketch.stroke(Color.DW_BLACK_RGB[0], Color.DW_BLACK_RGB[1],
                     Color.DW_BLACK_RGB[2], 63f);
-            Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x + offsetX + this.rect.width / 2.f),
+            Graphics.drawRoundedRectangle(sketch, (float)
+                            (this.rect.x + offsetX + this.rect.width / 2.f),
                     this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
                     this.rect.width, this.rect.height, defaultCornerRadius);
         }
@@ -251,7 +253,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
                             (float) rect.getCenterY() + this.rect.height / 10.f);
                 } else {
-                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX), (float) rect.getCenterY());
+                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
+                            (float) rect.getCenterY());
                 }
             }
         } else {
@@ -289,7 +292,8 @@ public class ButtonControl implements Control<MouseEvent> {
                             / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))));
                 }
                 sketch.stroke(59, 58, 57, 63f);
-                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x + offsetX + this.rect.width / 2.f),
+                Graphics.drawRoundedRectangle(sketch, (float)
+                                (this.rect.x + offsetX + this.rect.width / 2.f),
                         this.rect.y + (float) (this.rect.height / 2.f
                                 + (this.rect.height / 10.f * offset)),
                         (int) (this.rect.width), (int)
@@ -313,7 +317,8 @@ public class ButtonControl implements Control<MouseEvent> {
             } else {
                 sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
                 sketch.stroke(59, 58, 57, 63f);
-                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x + offsetX + this.rect.width / 2.f),
+                Graphics.drawRoundedRectangle(sketch, (float)
+                                (this.rect.x + offsetX + this.rect.width / 2.f),
                         this.rect.y + this.rect.height / 2.f,
                         this.rect.width, this.rect.height, defaultCornerRadius);
                 textWithOutline(this.model.text,

@@ -101,7 +101,9 @@ public class CreditsScene implements Scene {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    (float) (foregroundXPadding + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (float) (foregroundXPadding + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
                     foregroundYPadding,
                     foregroundWidth,
                     foregroundHeight,
@@ -112,17 +114,29 @@ public class CreditsScene implements Scene {
             sketch.fill(0);
             // Title
             Graphics.useGothic(sketch, titleFontSize, true);
-            sketch.text(this.model.title, (int) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
+            sketch.text(this.model.title, (int) (centerX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
                     sketch.width / 2f, sketch.height / 5f);
             //Creators & Supporters
             Graphics.useGothic(sketch, promptFontSize, false);
-            sketch.text(this.model.creatorTitle, (int) (creatorX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), creatorY,
+            sketch.text(this.model.creatorTitle, (int) (creatorX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), creatorY,
                     sketch.width / 1.75f, sketch.height / 5f);
-            sketch.text(this.model.creators, (int) (creatorX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (creatorY * 1.35),
+            sketch.text(this.model.creators, (int) (creatorX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (creatorY * 1.35),
                     sketch.width / 1.75f, sketch.height / 2f);
-            sketch.text(this.model.supporterTitle, (int) (supporterX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), supporterY,
+            sketch.text(this.model.supporterTitle, (int) (supporterX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), supporterY,
                     sketch.width / 1.75f, sketch.height / 5f);
-            sketch.text(this.model.supporters, (int) (supporterX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (supporterY * 1.45),
+            sketch.text(this.model.supporters, (int) (supporterX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (supporterY * 1.45),
                     sketch.width / 1.75f, sketch.height / 2f);
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box

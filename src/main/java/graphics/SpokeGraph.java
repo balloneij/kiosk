@@ -26,8 +26,8 @@ public class SpokeGraph {
     private final ButtonControl[] buttonControls;
     private double[] weights;
 
-    private final int[] rgbColor1 = new int[] { 20, 20, 200 };
-    private final int[] rgbColor2 = new int[] { 200, 20, 20 };
+    private final int[] rgbColor1 = new int[] { 252, 177, 22 };
+    private final int[] rgbColor2 = new int[] { 0, 174, 106 };
 
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
@@ -132,8 +132,8 @@ public class SpokeGraph {
                 newWeights[i] = (weights[i] - minWeight) / (maxWeight - minWeight);
             }
         } else {
-            // If the min and max are the same, just use 0.5 for all
-            Arrays.fill(newWeights, 0.5);
+            // If the min and max are the same, just use 0 for all
+            Arrays.fill(newWeights, 0);
         }
 
         return newWeights;

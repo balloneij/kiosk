@@ -131,7 +131,9 @@ public class CareerDescriptionScene implements Scene {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
-                    (float) (foregroundXPadding + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), foregroundYPadding,
+                    (float) (foregroundXPadding + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), foregroundYPadding,
                     foregroundWidth, foregroundHeight,
                     foregroundCurveRadius);
 
@@ -145,7 +147,10 @@ public class CareerDescriptionScene implements Scene {
             Graphics.useGothic(sketch, titleFontSize, true);
             sketch.textAlign(PConstants.CENTER, PConstants.TOP);
             sketch.rectMode(PConstants.CENTER);
-            sketch.text(this.model.careerModel.name, (float) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (titleY * 1.15),
+            sketch.text(this.model.careerModel.name, (float) (centerX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (titleY * 1.15),
                     (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
 
@@ -153,17 +158,25 @@ public class CareerDescriptionScene implements Scene {
             Graphics.useGothic(sketch, instructionsFontSize, false);
             sketch.textAlign(PConstants.CENTER, PConstants.TOP);
             sketch.rectMode(PConstants.CENTER);
-            sketch.text(this.model.body, (float) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (instructionsY * 1.15),
+            sketch.text(this.model.body, (float) (centerX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (instructionsY * 1.15),
                     (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
             // Career Description
             Graphics.useGothic(sketch, descriptionFontSize, false);
             sketch.textAlign(PConstants.CENTER, PConstants.TOP);
             sketch.rectMode(PConstants.CENTER);
-            sketch.text(this.model.careerModel.description, (float) (centerX + screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (descriptionY * 1.15),
+            sketch.text(this.model.careerModel.description, (float) (centerX + screenW + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (descriptionY * 1.15),
                     (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
-            this.centerButton.draw(sketch, screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            this.centerButton.draw(sketch, screenW + screenW
+                    * (1 - ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames + 1)));
         } else {
             // Draw the white foreground box
             sketch.fill(255);

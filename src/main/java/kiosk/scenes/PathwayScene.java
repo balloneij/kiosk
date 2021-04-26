@@ -99,8 +99,12 @@ public class PathwayScene implements Scene {
         Graphics.drawBubbleBackground(sketch);
 
         if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
-            this.spokeGraph.draw(sketch, screenW + screenW * (1 - ((sketch.frameCount - startFrame) * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
+                    screenW + screenW * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            this.spokeGraph.draw(sketch, screenW + screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
         } else {
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0);
             this.spokeGraph.draw(sketch, 0);

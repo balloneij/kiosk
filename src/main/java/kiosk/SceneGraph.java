@@ -20,6 +20,7 @@ import kiosk.scenes.Scene;
 public class SceneGraph {
 
     private final UserScore userScore;
+    private UserScore previousUserScore;
     private SceneModel root;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
@@ -37,6 +38,7 @@ public class SceneGraph {
      */
     public SceneGraph(LoadedSurveyModel survey) {
         this.userScore = new UserScore(survey.careers);
+        this.previousUserScore = new UserScore(survey.careers);
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
         this.sceneChangeCallbacks = new LinkedList<>();
@@ -69,6 +71,7 @@ public class SceneGraph {
         // Reset to a new, initial state
         this.history.clear();
         userScore.reset();
+        previousUserScore.reset();
         this.sceneModels.clear();
         this.sceneChangeCallbacks.clear();
 
@@ -109,6 +112,12 @@ public class SceneGraph {
                                        FilterGroupModel nullOrFilter) {
         // Update the user score from the category selected on the
         // previous scene
+        previousUserScore.setRealistic(userScore.getCategoryScore(Riasec.Realistic));
+        previousUserScore.setInvestigative(userScore.getCategoryScore(Riasec.Investigative));
+        previousUserScore.setArtistic(userScore.getCategoryScore(Riasec.Artistic));
+        previousUserScore.setSocial(userScore.getCategoryScore(Riasec.Social));
+        previousUserScore.setEnterprising(userScore.getCategoryScore(Riasec.Enterprising));
+        previousUserScore.setConventional(userScore.getCategoryScore(Riasec.Conventional));
         userScore.apply(category, nullOrFilter);
 
         // Add the new scene
@@ -165,6 +174,12 @@ public class SceneGraph {
         this.history.pop();
 
         // Undo the last operation on the user score
+        previousUserScore.setRealistic(userScore.getCategoryScore(Riasec.Realistic));
+        previousUserScore.setInvestigative(userScore.getCategoryScore(Riasec.Investigative));
+        previousUserScore.setArtistic(userScore.getCategoryScore(Riasec.Artistic));
+        previousUserScore.setSocial(userScore.getCategoryScore(Riasec.Social));
+        previousUserScore.setEnterprising(userScore.getCategoryScore(Riasec.Enterprising));
+        previousUserScore.setConventional(userScore.getCategoryScore(Riasec.Conventional));
         userScore.undo();
 
         // Set the next scene from the stack
@@ -186,6 +201,7 @@ public class SceneGraph {
      */
     public synchronized void reset() {
         // Reset the user score
+        previousUserScore.reset();
         userScore.reset();
 
         // Reset the root scene
@@ -335,6 +351,10 @@ public class SceneGraph {
 
     public synchronized Collection<SceneModel> getAllSceneModels() {
         return sceneModels.values();
+    }
+
+    public UserScore getPreviousUserScore() {
+        return previousUserScore;
     }
 
     public UserScore getUserScore() {

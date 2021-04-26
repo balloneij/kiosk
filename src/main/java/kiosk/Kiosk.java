@@ -252,7 +252,8 @@ public class Kiosk extends PApplet {
         boop.movementLogic(this, currentScene);
         for (int i = 0; i < recentTapEvents.size(); i++) {
             if (recentTapFrames.get(i) + 8 >= this.frameCount) {
-                Graphics.drawTouchResponse(this, recentTapEvents.get(i), this.frameCount - recentTapFrames.get(i), recentTapColors.get(i));
+                Graphics.drawTouchResponse(this, recentTapEvents.get(i),
+                        this.frameCount - recentTapFrames.get(i), recentTapColors.get(i));
             }
             if (recentTapFrames.get(i) + 8 < this.frameCount) {
                 recentTapFrames.remove(i);
@@ -270,6 +271,10 @@ public class Kiosk extends PApplet {
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.get(e).clear();
         }
+    }
+
+    public UserScore getPreviousUserScore() {
+        return this.sceneGraph.getPreviousUserScore();
     }
 
     public UserScore getUserScore() {

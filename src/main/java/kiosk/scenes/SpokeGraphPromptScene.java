@@ -255,7 +255,34 @@ public class SpokeGraphPromptScene implements Scene {
             this.promptButton.draw(sketch,  0);
 
             // Draw the career spoke graph
-            this.spokeGraph.draw(sketch, 0);
+            // Define the size of the square that the spoke graph will fit in
+            final double availableHeight = (screenH - headerY - headerH);
+            final double size = Math.min(screenW, availableHeight);
+            // Reference to current list of careers
+            UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+            UserScore previousUserScore = sketch.getPreviousUserScore();
+            CareerModel[] careers = userScore.getCareers();
+
+            // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+            ButtonModel[] careerButtons = new ButtonModel[careers.length];
+            double[] careerWeights = new double[careers.length];
+
+            for (int i = 0; i < careers.length; i++) {
+                CareerModel career = careers[i];
+                careerButtons[i] = new ButtonModel();
+                careerButtons[i].text = career.name;
+                careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
+                        + ((userScore.getCategoryScore(career.riasecCategory)
+                        - previousUserScore.getCategoryScore(career.riasecCategory))
+                        / (sketch.frameCount - startFrame * 1.0f));
+            }
+
+            // Create spoke graph
+            SpokeGraph sg = new SpokeGraph(size, 0, headerY + headerH,
+                    this.model.careerCenterText, careerButtons, careerWeights);
+            sg.setDisabled(true);
+            sg.init(sketch);
+            sg.draw(sketch, 0);
         } else { //If it's already a second-or-two old, draw the scene normally
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0);
 
@@ -277,7 +304,7 @@ public class SpokeGraphPromptScene implements Scene {
             this.promptButton.draw(sketch);
 
             // Draw the career spoke graph
-            this.spokeGraph.draw(sketch, 0);
+            spokeGraph.draw(sketch, 0);
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {

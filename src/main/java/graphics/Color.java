@@ -1,9 +1,8 @@
 package graphics;
 
+import java.util.Random;
 import processing.core.PApplet;
 import processing.core.PConstants;
-
-import java.util.Random;
 
 public class Color {
 
@@ -87,7 +86,7 @@ public class Color {
     }
 
     /**
-     * Randomly chooses a DW color
+     * Randomly chooses a DW color.
      * @return the int of a color
      */
     public static int randomColor() {
@@ -101,7 +100,8 @@ public class Color {
             case 2:
                 return sketch.color(DW_BLUE_RGB[0], DW_BLUE_RGB[1], DW_BLUE_RGB[2]);
             case 3:
-                return sketch.color(DW_LIGHT_BLUE_RGB[0], DW_LIGHT_BLUE_RGB[1], DW_LIGHT_BLUE_RGB[2]);
+                return sketch.color(DW_LIGHT_BLUE_RGB[0],
+                        DW_LIGHT_BLUE_RGB[1], DW_LIGHT_BLUE_RGB[2]);
             case 4:
                 return sketch.color(DW_DARK_BLUE_RGB[0], DW_DARK_BLUE_RGB[1], DW_DARK_BLUE_RGB[2]);
             case 5:
@@ -111,12 +111,14 @@ public class Color {
             case 7:
                 return sketch.color(DW_ORANGE_RGB[0], DW_ORANGE_RGB[1], DW_ORANGE_RGB[2]);
             case 8:
-                return sketch.color(DW_LIGHT_ORANGE_RGB[0], DW_LIGHT_ORANGE_RGB[1], DW_LIGHT_ORANGE_RGB[2]);
+                return sketch.color(DW_LIGHT_ORANGE_RGB[0],
+                        DW_LIGHT_ORANGE_RGB[1], DW_LIGHT_ORANGE_RGB[2]);
             case 9:
                 return sketch.color(DW_RED_RGB[0], DW_RED_RGB[1], DW_RED_RGB[2]);
             case 10:
                 return sketch.color(DW_GREEN_RGB[0], DW_GREEN_RGB[1], DW_GREEN_RGB[2]);
+            default:
+                return sketch.color(DW_BLACK_RGB[0], DW_BLACK_RGB[1], DW_BLACK_RGB[2]);
         }
-        return sketch.color(DW_ORANGE_RGB[0], DW_ORANGE_RGB[1], DW_ORANGE_RGB[2]);
     }
 }
