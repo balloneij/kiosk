@@ -320,6 +320,12 @@ public class SceneGraph {
         if (root != null) {
             this.root.setName(this.root.getName()
                     .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+
+            // If the new root is the current scene, re-register so the buttons update
+            if (getCurrentSceneModel() != null
+                && root.getId().equals(getCurrentSceneModel().getId())) {
+                registerSceneModel(root);
+            }
         }
         // Set new root and give em the special star
         this.root.setName(ChildIdentifiers.ROOT + this.root.getName());
