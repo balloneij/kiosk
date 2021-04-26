@@ -208,11 +208,13 @@ public class Kiosk extends PApplet {
             this.lastScene = currentScene;
             this.lastSceneModel = currentSceneModel;
 
-            currentSceneIsRoot = lastSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId());
+            currentSceneIsRoot =
+                    lastSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId());
         }
 
         // Update and draw the scene
         currentScene.update(dt, this.sceneGraph);
+        Graphics.drawBubbleBackground(this, dt);
         currentScene.draw(this);
 
         // Check for timeout

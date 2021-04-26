@@ -127,7 +127,6 @@ public class DetailsScene implements Scene {
     @Override
     public void draw(Kiosk sketch) {
         final int centerX = Kiosk.getSettings().screenW / 2;
-        Graphics.drawBubbleBackground(sketch);
 
         // Draw the white foreground box
         sketch.fill(255);

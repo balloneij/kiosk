@@ -229,7 +229,6 @@ public class SpokeGraphPromptScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        Graphics.drawBubbleBackground(sketch);
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
 
         // Calculate answer location constants

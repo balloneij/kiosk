@@ -120,9 +120,6 @@ public class TimeoutScene implements Scene {
     public void draw(Kiosk sketch) {
         final int centerX = Kiosk.getSettings().screenW / 2;
 
-        // Draw bubble background
-        Graphics.drawBubbleBackground(sketch);
-
         // Draw the white foreground box
         sketch.fill(255);
         Graphics.drawRoundedRectangle(sketch,

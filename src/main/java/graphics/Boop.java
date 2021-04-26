@@ -5,6 +5,7 @@ import kiosk.Kiosk;
 import kiosk.models.ImageModel;
 import kiosk.scenes.Image;
 import kiosk.scenes.Scene;
+import processing.core.PConstants;
 import processing.event.MouseEvent;
 
 public class Boop {
@@ -243,6 +244,7 @@ public class Boop {
      * @param amountToMove the amount that Boop should move across the screen each frame
      */
     private void drawBoop(Kiosk sketch, float amountToMove) {
+        sketch.imageMode(PConstants.CENTER);
         int frameCheck = sketch.frameCount % framesBetweenBlinks;
         switch (boopState) {
             case SCOOT_LEFT:
