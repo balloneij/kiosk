@@ -157,6 +157,7 @@ public class TimeoutScene implements Scene {
         }
 
         // Image
+        sketch.imageMode(PConstants.CENTER);
         image.draw(sketch, imageX, imageY);
 
         homeButton.draw(sketch);
