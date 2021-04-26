@@ -153,8 +153,10 @@ public class PromptScene implements Scene {
 
         if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
+                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
+                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
                 sceneGraph.popScene();
             }
         } else if (this.supplementaryButton.wasClicked()) {
@@ -170,7 +172,7 @@ public class PromptScene implements Scene {
         Graphics.drawBubbleBackground(sketch);
 
         //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.getSceneGraph().recentActivity.equals("RESET")) {
+        if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
             if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
                 // Draw the white foreground box
                 sketch.fill(255);
@@ -242,7 +244,7 @@ public class PromptScene implements Scene {
                     button.draw(sketch);
                 }
             }
-        } else if (sketch.getSceneGraph().recentActivity.equals("POP")) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("POP")) {
             if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
                 // Draw the white foreground box
                 sketch.fill(255);

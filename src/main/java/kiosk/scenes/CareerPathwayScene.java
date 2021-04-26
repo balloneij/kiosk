@@ -122,13 +122,13 @@ public class CareerPathwayScene implements Scene {
         if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
                     screenW + screenW * (1 - ((sketch.frameCount - startFrame)
-                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
             this.spokeGraph.draw(sketch, screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
         } else {
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0);
-            this.spokeGraph.draw(sketch, 0);
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
+            this.spokeGraph.draw(sketch, 0, 0);
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {

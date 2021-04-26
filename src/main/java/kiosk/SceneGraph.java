@@ -111,6 +111,8 @@ public class SceneGraph {
     public synchronized void pushScene(SceneModel sceneModel,
                                        Riasec category,
                                        FilterGroupModel nullOrFilter) {
+        this.recentActivity = "PUSHED AWAY FROM " + this.history.peek();
+
         // Update the user score from the category selected on the
         // previous scene
         previousUserScore.setRealistic(userScore.getCategoryScore(Riasec.Realistic));
@@ -125,8 +127,6 @@ public class SceneGraph {
         this.currentScene = sceneModel.deepCopy().createScene();
         this.history.push(sceneModel);
         this.onSceneChange(sceneModel);
-
-        this.recentActivity = "PUSH";
     }
 
     public synchronized void pushScene(String sceneModelId) {
@@ -153,7 +153,6 @@ public class SceneGraph {
                     "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
                     Riasec.None, null);
         }
-        this.recentActivity = "PUSH";
     }
 
     /**
@@ -163,7 +162,6 @@ public class SceneGraph {
         CareerDescriptionModel description = new CareerDescriptionModel();
         description.careerModel = career;
         pushScene(description);
-        this.recentActivity = "PUSH";
     }
 
     public synchronized boolean containsScene(String sceneId) {
@@ -175,6 +173,9 @@ public class SceneGraph {
      * on the last SceneModel.
      */
     public synchronized void popScene() {
+
+        this.recentActivity = "POPPED OFF " + this.history.peek();
+
         // Remove the current scene from history
         this.history.pop();
 
@@ -198,8 +199,6 @@ public class SceneGraph {
             this.currentScene = next.deepCopy().createScene();
             this.onSceneChange(next);
         }
-
-        this.recentActivity = "POP";
     }
 
     /**
