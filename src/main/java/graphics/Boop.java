@@ -14,6 +14,7 @@ public class Boop {
     private final int randomGoLeftChance = 50;
     private final int randomSwapSpeedChance = 50;
     private final int randomSwapAnimationChance = 50;
+    private final int randomRoscoeAnimationChance = 25;
     private final int choiceFrequencyInFrames = 30;
     private final int stoppingBreakInFrames = 25;
     private final int movementPercentage = 75;
@@ -46,6 +47,7 @@ public class Boop {
     private Image headBlink;
     private Image headLook;
     private Image headLookBlink;
+    private Image headRoscoe;
 
     private Image lbFootR;
     private Image lfFootR;
@@ -62,9 +64,11 @@ public class Boop {
     private Image headBlinkR;
     private Image headLookR;
     private Image headLookBlinkR;
+    private Image headRoscoeR;
 
     private boolean choseLeft;
     private boolean choseShake;
+    private boolean choseRoscoeAnimation;
 
     private enum BoopState {
         HAPPY_LEFT, HAPPY_RIGHT,
@@ -331,7 +335,9 @@ public class Boop {
                 }
                 break;
             case IN_SHELL_LEFT:
-                if (choseShake) {
+                if(choseRoscoeAnimation) {
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headRoscoe);
+                } else if (choseShake) {
                     inShellAnimation2(sketch, shellEmpty, shellEmptyR);
                 } else {
                     inShellAnimation(sketch, shellEmpty, shellLook, shellLook1, shellLook2);
@@ -343,7 +349,9 @@ public class Boop {
                 }
                 break;
             case IN_SHELL_RIGHT:
-                if (choseShake) {
+                if(choseRoscoeAnimation) {
+                    staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR, shellR, headRoscoeR);
+                } else if (choseShake) {
                     inShellAnimation2(sketch, shellEmptyR, shellEmpty);
                 } else {
                     inShellAnimation(sketch, shellEmptyR, shellLookR, shellLook1R, shellLook2R);
@@ -627,6 +635,7 @@ public class Boop {
         }
     }
 
+
     /**
      * Compares Boop's location to the tap's location.
      * @param event the mouse tap just registered
@@ -639,10 +648,18 @@ public class Boop {
                 lastClickedFrame = sketch.frameCount;
                 Random rand = new Random();
                 additionalShellFrames = rand.nextInt(10);
-                if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
-                    choseShake = true;
-                } else {
-                    choseShake = false;
+                choseRoscoeAnimation = false;
+                if (sketch.getSceneGraph().getCurrentSceneModel().getName().contains("Credits")) {
+                    if (rand.nextInt(randomBounds) > randomRoscoeAnimationChance) {
+                        choseRoscoeAnimation = true;
+                    }
+                }
+                if (!choseRoscoeAnimation) {
+                    if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
+                        choseShake = true;
+                    } else {
+                        choseShake = false;
+                    }
                 }
                 if (choseLeft) {
                     boopState = BoopState.IN_SHELL_LEFT;
@@ -692,6 +709,8 @@ public class Boop {
                 new ImageModel("assets/boop/Head_Look.png", boopDimens, boopDimens));
         headLookBlink = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Look_Blink.png", boopDimens, boopDimens));
+        headRoscoe = Image.createImage(sketch,
+                new ImageModel("assets/boop/Head_Roscoe.png", boopDimens, boopDimens));
 
         lbFootR = Image.createImage(sketch,
                 new ImageModel("assets/boop/LeftBackFoot_r.png", boopDimens, boopDimens));
@@ -723,6 +742,8 @@ public class Boop {
                 new ImageModel("assets/boop/Head_Look_r.png", boopDimens, boopDimens));
         headLookBlinkR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Look_Blink_r.png", boopDimens, boopDimens));
+        headRoscoeR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Head_Roscoe_r.png", boopDimens, boopDimens));
 
         currentX = width / 2f;
         currentY = height - boopDimens / 2f;
