@@ -236,6 +236,17 @@ public class SpokeGraphPromptScene implements Scene {
         int answersCenterX = screenW * 3 / 4;
         float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
 
+        // Draw the career spoke graph
+        this.spokeGraph.draw(sketch);
+
+        if (!isRoot) {
+            // Draw the back and home buttons
+            this.backButton.draw(sketch);
+            this.homeButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
+        }
+
         // Draw answer buttons
         for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(answersSpokeThickness);
