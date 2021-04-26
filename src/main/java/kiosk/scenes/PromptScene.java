@@ -170,7 +170,151 @@ public class PromptScene implements Scene {
         Graphics.drawBubbleBackground(sketch);
 
         //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
+        if (sketch.getSceneGraph().recentActivity.equals("RESET")) {
+            if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+                // Draw the white foreground box
+                sketch.fill(255);
+                Graphics.drawRoundedRectangle(sketch,
+                        foregroundXPadding,
+                        (float) (foregroundYPadding + screenH + screenH
+                                * (1 - ((sketch.frameCount - startFrame)
+                                * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                        foregroundWidth,
+                        foregroundHeight,
+                        foregroundCurveRadius);
+                // Draw text
+                sketch.rectMode(PConstants.CENTER);
+                sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+                sketch.fill(0);
+                // Title
+                Graphics.useGothic(sketch, titleFontSize, true);
+                sketch.text(this.model.title, centerX, (int) (titleY + screenH + screenH
+                        * (1 - ((sketch.frameCount - startFrame) * 1.0
+                        / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                        sketch.width / 1.5f, sketch.height / 5f);
+                // Prompt
+                Graphics.useGothic(sketch, promptFontSize, false);
+                sketch.text(this.model.prompt, centerX, (int) (promptY + screenH + screenH
+                        * (1 - ((sketch.frameCount - startFrame) * 1.0
+                        / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                        sketch.width / 1.5f, sketch.height / 5f);
+                // Action
+                Graphics.useGothic(sketch, actionFontSize, true);
+                sketch.text(this.model.actionPhrase, centerX, (int) (actionY + screenH + screenH
+                        * (1 - ((sketch.frameCount - startFrame) * 1.0
+                        / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                        sketch.width / 1.5f, sketch.height / 6f);
+                for (ButtonControl button : this.buttons) {
+                    button.draw(sketch, 0, screenH + screenH
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1)));
+                }
+            } else {
+                // Draw the white foreground box
+                sketch.fill(255);
+                Graphics.drawRoundedRectangle(sketch,
+                        foregroundXPadding, foregroundYPadding,
+                        foregroundWidth, foregroundHeight,
+                        foregroundCurveRadius);
+
+                // Draw text
+                sketch.rectMode(PConstants.CENTER);
+                sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+                sketch.fill(0);
+
+                // Title
+                Graphics.useGothic(sketch, titleFontSize, true);
+                sketch.text(this.model.title, centerX, titleY,
+                        sketch.width / 1.5f, sketch.height / 5f);
+
+                // Prompt
+                Graphics.useGothic(sketch, promptFontSize, false);
+                sketch.text(this.model.prompt, centerX, promptY,
+                        sketch.width / 1.5f, sketch.height / 5f);
+
+                // Action
+                Graphics.useGothic(sketch, actionFontSize, true);
+                sketch.text(this.model.actionPhrase, centerX, actionY,
+                        sketch.width / 1.5f, sketch.height / 6f);
+
+                // Draw buttons
+                for (ButtonControl button : this.buttons) {
+                    button.draw(sketch);
+                }
+            }
+        } else if (sketch.getSceneGraph().recentActivity.equals("POP")) {
+            if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+                // Draw the white foreground box
+                sketch.fill(255);
+                Graphics.drawRoundedRectangle(sketch,
+                        (float) (foregroundXPadding - screenW - screenW
+                                * (1 - ((sketch.frameCount - startFrame)
+                                * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                        foregroundYPadding,
+                        foregroundWidth,
+                        foregroundHeight,
+                        foregroundCurveRadius);
+                // Draw text
+                sketch.rectMode(PConstants.CENTER);
+                sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+                sketch.fill(0);
+                // Title
+                Graphics.useGothic(sketch, titleFontSize, true);
+                sketch.text(this.model.title, (int) (centerX - screenW - screenW
+                                * (1 - ((sketch.frameCount - startFrame) * 1.0
+                                / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
+                        sketch.width / 1.5f, sketch.height / 5f);
+                // Prompt
+                Graphics.useGothic(sketch, promptFontSize, false);
+                sketch.text(this.model.prompt, (int) (centerX - screenW - screenW
+                                * (1 - ((sketch.frameCount - startFrame) * 1.0
+                                / Kiosk.getSettings().sceneAnimationFrames + 1))), promptY,
+                        sketch.width / 1.5f, sketch.height / 5f);
+                // Action
+                Graphics.useGothic(sketch, actionFontSize, true);
+                sketch.text(this.model.actionPhrase, (int) (centerX - screenW - screenW
+                                * (1 - ((sketch.frameCount - startFrame) * 1.0
+                                / Kiosk.getSettings().sceneAnimationFrames + 1))), actionY,
+                        sketch.width / 1.5f, sketch.height / 6f);
+                for (ButtonControl button : this.buttons) {
+                    button.draw(sketch, 0 - screenW - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+                }
+            } else { //If it's already a second-or-two old, draw the scene normally
+                // Draw the white foreground box
+                sketch.fill(255);
+                Graphics.drawRoundedRectangle(sketch,
+                        foregroundXPadding, foregroundYPadding,
+                        foregroundWidth, foregroundHeight,
+                        foregroundCurveRadius);
+
+                // Draw text
+                sketch.rectMode(PConstants.CENTER);
+                sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+                sketch.fill(0);
+
+                // Title
+                Graphics.useGothic(sketch, titleFontSize, true);
+                sketch.text(this.model.title, centerX, titleY,
+                        sketch.width / 1.5f, sketch.height / 5f);
+
+                // Prompt
+                Graphics.useGothic(sketch, promptFontSize, false);
+                sketch.text(this.model.prompt, centerX, promptY,
+                        sketch.width / 1.5f, sketch.height / 5f);
+
+                // Action
+                Graphics.useGothic(sketch, actionFontSize, true);
+                sketch.text(this.model.actionPhrase, centerX, actionY,
+                        sketch.width / 1.5f, sketch.height / 6f);
+
+                // Draw buttons
+                for (ButtonControl button : this.buttons) {
+                    button.draw(sketch);
+                }
+            }
+        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
@@ -206,7 +350,7 @@ public class PromptScene implements Scene {
             for (ButtonControl button : this.buttons) {
                 button.draw(sketch, screenW + screenW
                         * (1 - ((sketch.frameCount - startFrame) * 1.0
-                        / Kiosk.getSettings().sceneAnimationFrames + 1)));
+                        / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
             }
         } else { //If it's already a second-or-two old, draw the scene normally
             // Draw the white foreground box

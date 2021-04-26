@@ -164,7 +164,7 @@ public class SpokeGraph {
             sketch.line((float) (centerX + offsetX), centerY,
                     (float) (buttonControl.getCenterX() + offsetX), buttonControl.getCenterY());
 
-            buttonControl.draw(sketch, offsetX);
+            buttonControl.draw(sketch, offsetX, 0);
         }
 
         // Set draw modes

@@ -234,7 +234,7 @@ public class SpokeGraphPromptScene implements Scene {
         Graphics.drawBubbleBackground(sketch);
 
         //If this scene is new, animate the spokes to gradually change
-        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0);
 
             // Calculate answer location constants
@@ -248,11 +248,11 @@ public class SpokeGraphPromptScene implements Scene {
                 sketch.stroke(255);
                 sketch.line(answersCenterX, answersCenterY,
                         answer.getCenterX(), answer.getCenterY());
-                answer.draw(sketch,  0);
+                answer.draw(sketch,  0, 0);
             }
 
             // Draw the center prompt button
-            this.promptButton.draw(sketch,  0);
+            this.promptButton.draw(sketch,  0, 0);
 
             // Draw the career spoke graph
             // Define the size of the square that the spoke graph will fit in

@@ -47,7 +47,7 @@ public class Editor extends Kiosk {
      * Instantiates the editor and starts the sketch.
      */
     public Editor(String surveyPath, Settings settings) {
-        super(surveyPath, settings);
+        super(surveyPath, settings, true);
         this.setHotkeysEnabled(false);
         SurveySettingsController.editor = this;
     }

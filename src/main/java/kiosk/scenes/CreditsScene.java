@@ -97,7 +97,7 @@ public class CreditsScene implements Scene {
         Graphics.drawBubbleBackground(sketch);
 
         //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,

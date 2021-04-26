@@ -22,7 +22,7 @@ public class SceneGraph {
     private final UserScore userScore;
     private UserScore previousUserScore;
     private SceneModel root;
-    private final LinkedList<SceneModel> history;
+    public final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
     private LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
@@ -30,6 +30,7 @@ public class SceneGraph {
     // K: category V: fields inside that category
     private final HashMap<String, Set<String>> careerFields = new HashMap<>();
     private final CareerModel[] allCareers;
+    public String recentActivity = "NONE";
 
     /**
      * Creates a scene graph which holds the root scene model, and
@@ -124,6 +125,8 @@ public class SceneGraph {
         this.currentScene = sceneModel.deepCopy().createScene();
         this.history.push(sceneModel);
         this.onSceneChange(sceneModel);
+
+        this.recentActivity = "PUSH";
     }
 
     public synchronized void pushScene(String sceneModelId) {
@@ -150,6 +153,7 @@ public class SceneGraph {
                     "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
                     Riasec.None, null);
         }
+        this.recentActivity = "PUSH";
     }
 
     /**
@@ -159,6 +163,7 @@ public class SceneGraph {
         CareerDescriptionModel description = new CareerDescriptionModel();
         description.careerModel = career;
         pushScene(description);
+        this.recentActivity = "PUSH";
     }
 
     public synchronized boolean containsScene(String sceneId) {
@@ -193,6 +198,8 @@ public class SceneGraph {
             this.currentScene = next.deepCopy().createScene();
             this.onSceneChange(next);
         }
+
+        this.recentActivity = "POP";
     }
 
     /**
@@ -209,6 +216,8 @@ public class SceneGraph {
         this.history.clear();
         this.history.push(this.root);
         this.onSceneChange(this.root);
+
+        this.recentActivity = "RESET";
     }
 
     /**

@@ -127,7 +127,7 @@ public class CareerDescriptionScene implements Scene {
         final int centerX = Kiosk.getSettings().screenW / 2;
         Graphics.drawBubbleBackground(sketch);
 
-        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames) {
+        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,
@@ -176,7 +176,7 @@ public class CareerDescriptionScene implements Scene {
 
             this.centerButton.draw(sketch, screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1)));
+                    / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
         } else {
             // Draw the white foreground box
             sketch.fill(255);

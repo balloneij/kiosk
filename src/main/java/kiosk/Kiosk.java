@@ -31,6 +31,7 @@ import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
+    public boolean isEditor;
     protected SceneGraph sceneGraph;
     private String surveyPath;
     private CareerModel[] careers;
@@ -58,7 +59,7 @@ public class Kiosk extends PApplet {
      * @param surveyPath to load from
      */
     public Kiosk(String surveyPath) {
-        this(surveyPath, Settings.readSettings());
+        this(surveyPath, Settings.readSettings(), false);
     }
 
     /**
@@ -67,7 +68,7 @@ public class Kiosk extends PApplet {
      * @param surveyPath the path of the survey XML
      * @param settings the settings to use
      */
-    public Kiosk(String surveyPath, Settings settings) {
+    public Kiosk(String surveyPath, Settings settings, boolean isEditor) {
         // Configure fileChooser style
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -119,6 +120,8 @@ public class Kiosk extends PApplet {
         recentTapEvents = new ArrayList<MouseEvent>();
         recentTapFrames = new ArrayList<Integer>();
         recentTapColors = new ArrayList<Integer>();
+
+        this.isEditor = isEditor;
     }
 
     /**
@@ -334,7 +337,7 @@ public class Kiosk extends PApplet {
                 // F11 Key Press
                 Settings s = Settings.readSettings();
                 s.setFullScreen(!isFullScreen);
-                Kiosk kioskNew = new Kiosk(this.surveyPath, s);
+                Kiosk kioskNew = new Kiosk(this.surveyPath, s, false);
                 kioskNew.setFontsLoaded(true);
                 kioskNew.run();
                 this.noLoop();
@@ -467,5 +470,9 @@ public class Kiosk extends PApplet {
 
     protected void setHotkeysEnabled(boolean hotkeysEnabled) {
         this.hotkeysEnabled = hotkeysEnabled;
+    }
+
+    public SceneGraph getSceneGraph() {
+        return this.sceneGraph;
     }
 }
