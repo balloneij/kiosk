@@ -146,8 +146,8 @@ public class Graphics {
      * @param sketch to draw to
      */
     public static void drawBubbleBackground(Kiosk sketch) {
-        final int width = sketch.getSettings().screenW;
-        final int height = sketch.getSettings().screenH;
+        final int width = Kiosk.getSettings().screenW;
+        final int height = Kiosk.getSettings().screenH;
 
         float spacing = width / 50f;
         float radius = spacing / 2.05f;

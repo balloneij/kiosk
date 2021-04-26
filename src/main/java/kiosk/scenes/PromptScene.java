@@ -51,6 +51,7 @@ public class PromptScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot = false;
 
     /**
      * Default constructor.
@@ -137,6 +138,8 @@ public class PromptScene implements Scene {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
+
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
@@ -151,7 +154,7 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
@@ -247,7 +250,7 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             homeButton.draw(sketch);
             backButton.draw(sketch);
         } else {

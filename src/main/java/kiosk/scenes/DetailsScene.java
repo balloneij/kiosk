@@ -161,7 +161,7 @@ public class DetailsScene implements Scene {
 
         this.centerButton.draw(sketch);
         this.nextButton.draw(sketch);
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
         } else {
