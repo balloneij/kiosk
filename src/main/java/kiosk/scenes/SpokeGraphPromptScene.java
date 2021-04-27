@@ -218,8 +218,10 @@ public class SpokeGraphPromptScene implements Scene {
 
         if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
+                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
+                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
                 sceneGraph.popScene();
             }
         }

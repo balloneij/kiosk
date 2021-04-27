@@ -85,6 +85,7 @@ public class CreditsScene implements Scene {
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
         if (this.backButton.wasClicked()) {
+            //TODO STAY ON THIS SCENE FOR A FEW FRAMES
             sceneGraph.popScene();
         }
     }
