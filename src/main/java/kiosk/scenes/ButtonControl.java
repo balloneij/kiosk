@@ -82,8 +82,13 @@ public class ButtonControl implements Control<MouseEvent> {
         this.disabled = false;
         this.shouldAnimate = doesAnimate;
 
-        screenW = Kiosk.getSettings().screenW;
-        screenH = Kiosk.getSettings().screenH;
+        // Read draw constants from settings
+        Settings settings = Kiosk.getSettings();
+        screenW = settings.screenW;
+        screenH = settings.screenH;
+        buttonAnimationFrames = settings.buttonAnimationFrames;
+        buttonAnimationIntensity = settings.buttonAnimationIntensity;
+        buttonAnimationLengthFrames = settings.buttonAnimationLengthFrames;
 
         fontSize = screenW / 75;
         fontSizeOverwritten = false;
