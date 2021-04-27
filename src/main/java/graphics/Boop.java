@@ -14,7 +14,7 @@ public class Boop {
     private final int randomGoLeftChance = 50;
     private final int randomSwapSpeedChance = 50;
     private final int randomSwapAnimationChance = 50;
-    private final int randomRoscoeAnimationChance = 25;
+    private final int randomRoscoeAnimationChance = 33;
     private final int choiceFrequencyInFrames = 30;
     private final int stoppingBreakInFrames = 25;
     private final int movementPercentage = 75;
@@ -650,7 +650,7 @@ public class Boop {
                 additionalShellFrames = rand.nextInt(10);
                 choseRoscoeAnimation = false;
                 if (sketch.getSceneGraph().getCurrentSceneModel().getName().contains("Credits")) {
-                    if (rand.nextInt(randomBounds) > randomRoscoeAnimationChance) {
+                    if (rand.nextInt(randomBounds) < randomRoscoeAnimationChance) {
                         choseRoscoeAnimation = true;
                     }
                 }
