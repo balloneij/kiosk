@@ -48,6 +48,7 @@ public class PromptScene implements Scene {
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedNext = false;
+    private boolean clickedMsoe = false;
     private String sceneToGoTo;
     private Riasec riasecToGoTo;
     private FilterGroupModel filterToGoTo;
@@ -164,7 +165,7 @@ public class PromptScene implements Scene {
                 clickedBack = true;
             }
         } else if (this.supplementaryButton.wasClicked()) {
-            sceneGraph.pushScene(new CreditsSceneModel());
+            clickedMsoe = true;
         }
     }
 
@@ -175,7 +176,7 @@ public class PromptScene implements Scene {
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
-        if (clickedNext) {
+        if (clickedNext || clickedMsoe) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -217,7 +218,11 @@ public class PromptScene implements Scene {
                         / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
             }
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
-                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+                if (clickedNext) {
+                    sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+                } else if (clickedMsoe) {
+                    sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+                }
             }
         } else if (clickedBack) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {

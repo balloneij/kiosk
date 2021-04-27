@@ -26,6 +26,12 @@ public class PathwayScene implements Scene {
 
     //Animations
     private int startFrame = 0;
+    private boolean clickedBack = false;
+    private boolean clickedHome = false;
+    private boolean clickedNext = false;
+    private String sceneToGoTo;
+    private Riasec riasecToGoTo;
+    private FilterGroupModel filterToGoTo;
 
     /**
      * Create a pathway scene.
@@ -73,21 +79,19 @@ public class PathwayScene implements Scene {
     public void update(float dt, SceneGraph sceneGraph) {
         for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
-                String scene = button.getTarget();
-                Riasec riasec = button.getModel().category;
-                FilterGroupModel filter = button.getModel().filter;
-                sceneGraph.pushScene(scene, riasec, filter);
+                clickedNext = true;
+                sceneToGoTo = button.getTarget();
+                riasecToGoTo = button.getModel().category;
+                filterToGoTo = button.getModel().filter;
                 break;
             }
         }
 
         if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
-                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-                sceneGraph.reset();
+                clickedHome = true;
             } else if (this.backButton.wasClicked()) {
-                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-                sceneGraph.popScene();
+                clickedBack = true;
             }
         }
     }
@@ -100,7 +104,48 @@ public class PathwayScene implements Scene {
         sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
 
-        if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
+        if (clickedNext) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
+                    screenW * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            this.spokeGraph.draw(sketch, screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+            }
+        } else if (clickedBack) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
+                    0 - screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            this.spokeGraph.draw(sketch, 0 - screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().popScene();
+            }
+        } else if (clickedHome) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
+                    0,  screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            this.spokeGraph.draw(sketch, 0, screenH
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().reset();
+            }
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
             if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
                 GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
                         0,  screenH + screenH
