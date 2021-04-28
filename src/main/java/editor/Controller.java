@@ -297,7 +297,7 @@ public class Controller implements Initializable {
                     continue;
                 } else if (sceneGraph.getSceneById(childId)
                         .getClass().equals(ErrorSceneModel.class)) {
-                    root.getChildren().add(new TreeItem<>(new ErrorSceneModel()));
+                    root.getChildren().add(new TreeItem<>(sceneGraph.getSceneById(childId)));
                     continue;
                 }
 

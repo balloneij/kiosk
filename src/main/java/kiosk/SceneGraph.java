@@ -131,16 +131,15 @@ public class SceneGraph {
     public synchronized void pushScene(String sceneModelId,
                                        Riasec category,
                                        FilterGroupModel nullOrFilter) {
-        boolean containsModel = sceneModels.containsKey(sceneModelId);
+        // this is handled whether the scene exists or not
+        SceneModel nextSceneModel = getSceneById(sceneModelId);
 
-        if (containsModel) {
-            SceneModel nextSceneModel = sceneModels.get(sceneModelId);
-            pushScene(nextSceneModel, category, nullOrFilter);
-        } else {
-            pushScene(new ErrorSceneModel(
-                    "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
-                    Riasec.None, null);
+        if (!containsScene(sceneModelId)) {
+            category = Riasec.None;
+            nullOrFilter = null;
         }
+
+        pushScene(nextSceneModel, category, nullOrFilter);
     }
 
     /**
@@ -291,6 +290,7 @@ public class SceneGraph {
      */
     public synchronized SceneModel getSceneById(String id) {
         SceneModel sceneModel = this.sceneModels.get(id);
+        System.out.println("getScenebyID was used"); //todo
 
         if (sceneModel == null) {
             return new ErrorSceneModel("Scene '" + id + "' does not exist");
