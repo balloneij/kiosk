@@ -4,6 +4,7 @@ import javafx.scene.control.TreeItem;
 import kiosk.SceneGraph;
 import kiosk.Settings;
 import kiosk.models.ButtonModel;
+import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.PromptSceneModel;
@@ -371,6 +372,6 @@ public class ControllerTest {
         assertEquals(1, aTI.getChildren().size());
 
         TreeItem<SceneModel> errorTI = aTI.getChildren().get(0);
-        assertEquals(ErrorSceneModel.class, errorTI.getValue().getClass());
+        assertEquals(EmptySceneModel.class, errorTI.getValue().getClass());
     }
 }
