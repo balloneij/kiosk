@@ -36,12 +36,14 @@ public class Boop {
     private Image lfFoot;
     private Image rbFoot;
     private Image rfFoot;
+    private Image leftHideLeg;
+    private Image rightHideLeg;
     private Image shell;
-    private Image shellEmpty;
-    private Image shellLook;
-    private Image shellLook1;
-    private Image shellLook2;
+    private Image shellHide;
     private Image head;
+    private Image headPeek;
+    private Image headPeek1;
+    private Image headPeek2;
     private Image headHappy;
     private Image headHappyBlink;
     private Image headBlink;
@@ -53,12 +55,14 @@ public class Boop {
     private Image lfFootR;
     private Image rbFootR;
     private Image rfFootR;
+    private Image leftHideLegR;
+    private Image rightHideLegR;
     private Image shellR;
-    private Image shellEmptyR;
-    private Image shellLookR;
-    private Image shellLook1R;
-    private Image shellLook2R;
+    private Image shellHideR;
     private Image headR;
+    private Image headPeekR;
+    private Image headPeek1R;
+    private Image headPeek2R;
     private Image headHappyR;
     private Image headHappyBlinkR;
     private Image headBlinkR;
@@ -338,9 +342,9 @@ public class Boop {
                 if(choseRoscoeAnimation) {
                     staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headRoscoe);
                 } else if (choseShake) {
-                    inShellAnimation2(sketch, shellEmpty, shellEmptyR);
+                    inShellAnimation2(sketch, shellHide, shellHideR);
                 } else {
-                    inShellAnimation(sketch, shellEmpty, shellLook, shellLook1, shellLook2);
+                    inShellAnimation(sketch, shellHide, headPeek, headPeek1, headPeek2, leftHideLeg, rightHideLeg);
                 }
                 if (sketch.frameCount >= lastClickedFrame
                         + minimumShellFrames + additionalShellFrames) {
@@ -352,9 +356,9 @@ public class Boop {
                 if(choseRoscoeAnimation) {
                     staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR, shellR, headRoscoeR);
                 } else if (choseShake) {
-                    inShellAnimation2(sketch, shellEmptyR, shellEmpty);
+                    inShellAnimation2(sketch, shellHideR, shellHide);
                 } else {
-                    inShellAnimation(sketch, shellEmptyR, shellLookR, shellLook1R, shellLook2R);
+                    inShellAnimation(sketch, shellHideR, headPeekR, headPeek1R, headPeek2R, leftHideLegR, rightHideLegR);
                 }
                 if (sketch.frameCount >= lastClickedFrame
                         + minimumShellFrames + additionalShellFrames) {
@@ -589,26 +593,38 @@ public class Boop {
      * Draws Boop amidst his hiding-in-shell animation where he looks around at the end.
      * @param sketch to draw to
      * @param shellEmpty the empty shell to be used
-     * @param shellLook the empty shell with Boop's head popping out to use
-     * @param shellLook1 the empty shell with Boop's head popping out,
+     * @param shellPeek  Boop's head popping out to use
+     * @param shellPeek1 Boop's head popping out,
      *                   looking to one side to use
-     * @param shellLook2 the empty shell with boop's head popping out,
+     * @param shellPeek2 Boop's head popping out,
      *                   looking to the other side to use
+     * @param leftLeg    Boop's left leg to draw
+     * @param rightLeg   Boop's right leg to draw
      */
     private void inShellAnimation(Kiosk sketch, Image shellEmpty,
-                                  Image shellLook, Image shellLook1, Image shellLook2) {
+                                  Image shellPeek, Image shellPeek1, Image shellPeek2, Image leftLeg, Image rightLeg) {
         int frameNumber = (sketch.frameCount - lastClickedFrame)
                 % (minimumShellFrames + additionalShellFrames);
         if (frameNumber == 0) {
-            shellLook2.draw(sketch, currentX, currentY + boopDimens / 10f);
+            leftLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            rightLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellPeek2.draw(sketch, currentX, currentY + boopDimens / 10f);
         } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 3f)) {
             shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
         } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 2f)) {
-            shellLook.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellPeek.draw(sketch, currentX, currentY + boopDimens / 10f);
         } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 3f * 2)) {
-            shellLook1.draw(sketch, currentX, currentY + boopDimens / 10f);
+            leftLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            rightLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellPeek1.draw(sketch, currentX, currentY + boopDimens / 10f);
         } else {
-            shellLook2.draw(sketch, currentX, currentY + boopDimens / 10f);
+            leftLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            rightLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellPeek2.draw(sketch, currentX, currentY + boopDimens / 10f);
         }
     }
 
@@ -680,25 +696,29 @@ public class Boop {
         boopDimens = height / 8;
 
         lbFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftBackFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Back_Foot.png", boopDimens, boopDimens));
         lfFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftFrontFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Front_Foot.png", boopDimens, boopDimens));
         rbFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightBackFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Back_Foot.png", boopDimens, boopDimens));
         rfFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightFrontFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Front_Foot.png", boopDimens, boopDimens));
+        leftHideLeg = Image.createImage(sketch,
+                new ImageModel("assets/boop/Left_Leg.png", boopDimens, boopDimens));
+        rightHideLeg = Image.createImage(sketch,
+                new ImageModel("assets/boop/Right_Leg.png", boopDimens, boopDimens));
         shell = Image.createImage(sketch,
                 new ImageModel("assets/boop/Shell.png", boopDimens, boopDimens));
-        shellEmpty = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Empty.png", boopDimens, boopDimens));
-        shellLook = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look.png", boopDimens, boopDimens));
-        shellLook1 = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_1.png", boopDimens, boopDimens));
-        shellLook2 = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_2.png", boopDimens, boopDimens));
+        shellHide = Image.createImage(sketch,
+                new ImageModel("assets/boop/Shell_Hide.png", boopDimens, boopDimens));
         head = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head.png", boopDimens, boopDimens));
+        headPeek = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek.png", boopDimens, boopDimens));
+        headPeek1 = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Left.png", boopDimens, boopDimens));
+        headPeek2 = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Right.png", boopDimens, boopDimens));
         headHappy = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Happy.png", boopDimens, boopDimens));
         headHappyBlink = Image.createImage(sketch,
@@ -713,25 +733,29 @@ public class Boop {
                 new ImageModel("assets/boop/Head_Roscoe.png", boopDimens, boopDimens));
 
         lbFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftBackFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Back_Foot_r.png", boopDimens, boopDimens));
         lfFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftFrontFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Front_Foot_r.png", boopDimens, boopDimens));
         rbFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightBackFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Back_Foot_r.png", boopDimens, boopDimens));
         rfFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightFrontFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Front_Foot_r.png", boopDimens, boopDimens));
+        leftHideLegR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Left_Leg_r.png", boopDimens, boopDimens));
+        rightHideLegR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Right_Leg_r.png", boopDimens, boopDimens));
         shellR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Shell_r.png", boopDimens, boopDimens));
-        shellEmptyR = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Empty_r.png", boopDimens, boopDimens));
-        shellLookR = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_r.png", boopDimens, boopDimens));
-        shellLook1R = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_1_r.png", boopDimens, boopDimens));
-        shellLook2R = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_2_r.png", boopDimens, boopDimens));
+        shellHideR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Shell_Hide_r.png", boopDimens, boopDimens));
         headR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_r.png", boopDimens, boopDimens));
+        headPeekR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_r.png", boopDimens, boopDimens));
+        headPeek1R = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Left_r.png", boopDimens, boopDimens));
+        headPeek2R = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Right_r.png", boopDimens, boopDimens));
         headHappyR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Happy_r.png", boopDimens, boopDimens));
         headHappyBlinkR = Image.createImage(sketch,
