@@ -290,7 +290,6 @@ public class SceneGraph {
      */
     public synchronized SceneModel getSceneById(String id) {
         SceneModel sceneModel = this.sceneModels.get(id);
-        System.out.println("getScenebyID was used"); //todo
 
         if (sceneModel == null) {
             return new ErrorSceneModel("Scene '" + id + "' does not exist");
