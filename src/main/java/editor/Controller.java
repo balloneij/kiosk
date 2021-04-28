@@ -31,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -175,6 +176,21 @@ public class Controller implements Initializable {
             createNewScene(true);
             rebuildSceneGraphTreeView();
             rebuildToolbar(sceneGraph.getCurrentSceneModel());
+        });
+
+        sceneGraphTreeView.setOnKeyReleased(t -> {
+            if (t.getCode() == KeyCode.DELETE) {
+                SceneModel selectedModel =
+                        sceneGraphTreeView.getSelectionModel().getSelectedItem().getValue();
+                if (selectedModel != null) {
+                    // Operators could be distributed internally, but it reduces clarity
+                    if (!(selectedModel == sceneGraphTreeView.getRoot().getValue()
+                        || (selectedModel.getClass().equals(EmptySceneModel.class)
+                            && !((EmptySceneModel) selectedModel).intent))) {
+                        deleteScene(selectedModel);
+                    }
+                }
+            }
         });
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
