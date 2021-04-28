@@ -137,12 +137,9 @@ public class CareerPathwayScene implements Scene {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
-                    screenW * (1 - ((sketch.frameCount - startFrame)
-                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
-            this.spokeGraph.draw(sketch, screenW
+            drawThisFrame(sketch, (int) (screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().pushEndScene(desiredCareer);
             }
@@ -150,13 +147,9 @@ public class CareerPathwayScene implements Scene {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
-                    0 - screenW
-                            * (1 - ((sketch.frameCount - startFrame)
-                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
-            this.spokeGraph.draw(sketch, 0 - screenW
+            drawThisFrame(sketch, (int) (0 - screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
@@ -164,59 +157,40 @@ public class CareerPathwayScene implements Scene {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
-                    0,  screenH
-                            * (1 - ((sketch.frameCount - startFrame)
-                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
-            this.spokeGraph.draw(sketch, 0, screenH
+            drawThisFrame(sketch, 0, (int) (screenH
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))));
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
-            if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
-                GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
-                        0,  screenH + screenH
-                                * (1 - ((sketch.frameCount - startFrame)
-                                * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
-                this.spokeGraph.draw(sketch, 0, screenH + screenH
-                        * (1 - ((sketch.frameCount - startFrame)
-                        * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
-            } else {
-                GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
-                this.spokeGraph.draw(sketch, 0, 0);
-            }
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP")) {
-            if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
-                GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
-                        0 - screenW - screenW
-                                * (1 - ((sketch.frameCount - startFrame)
-                                * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
-                this.spokeGraph.draw(sketch, 0 - screenW - screenW
-                        * (1 - ((sketch.frameCount - startFrame)
-                        * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
-            } else {
-                GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
-                this.spokeGraph.draw(sketch, 0, 0);
-            }
-        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,
-                    screenW + screenW * (1 - ((sketch.frameCount - startFrame)
-                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
-            this.spokeGraph.draw(sketch, screenW + screenW
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET") && sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+            drawThisFrame(sketch, 0, (int) (screenH + screenH
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))));
+        } else if (sketch.getSceneGraph().recentActivity.contains("POP") && sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+            drawThisFrame(sketch, (int) (0 - screenW - screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
+        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+            drawThisFrame(sketch, (int) (screenW + screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
         } else {
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
-            this.spokeGraph.draw(sketch, 0, 0);
+            drawThisFrame(sketch, 0, 0);
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
-        } else {
-            supplementaryButton.draw(sketch);
+        }
+    }
+
+    private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
+        this.spokeGraph.draw(sketch, offsetX, offsetY);
+
+        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
         }
     }
 }

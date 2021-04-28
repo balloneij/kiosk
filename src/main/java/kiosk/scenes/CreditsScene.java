@@ -92,7 +92,6 @@ public class CreditsScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        final int centerX = Kiosk.getSettings().screenW / 2;
 
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
@@ -107,129 +106,60 @@ public class CreditsScene implements Scene {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
-            // Draw the white foreground box
-            sketch.fill(255);
-            Graphics.drawRoundedRectangle(sketch,
-                    (float) (foregroundXPadding - screenW
-                            * (1 - ((sketch.frameCount - startFrame)
-                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
-                    foregroundYPadding,
-                    foregroundWidth,
-                    foregroundHeight,
-                    foregroundCurveRadius);
-            // Draw text
-            sketch.rectMode(PConstants.CENTER);
-            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-            sketch.fill(0);
-            // Title
-            Graphics.useGothic(sketch, titleFontSize, true);
-            sketch.text(this.model.title, (int) (centerX - screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
-                    sketch.width / 2f, sketch.height / 5f);
-            //Creators & Supporters
-            Graphics.useGothic(sketch, promptFontSize, false);
-            sketch.text(this.model.creatorTitle, (int) (creatorX - screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))), creatorY,
-                    sketch.width / 1.75f, sketch.height / 5f);
-            sketch.text(this.model.creators, (int) (creatorX - screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
-                    (int) (creatorY * 1.35),
-                    sketch.width / 1.75f, sketch.height / 2f);
-            sketch.text(this.model.supporterTitle, (int) (supporterX - screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))), supporterY,
-                    sketch.width / 1.75f, sketch.height / 5f);
-            sketch.text(this.model.supporters, (int) (supporterX - screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
-                    (int) (supporterY * 1.45),
-                    sketch.width / 1.75f, sketch.height / 2f);
+            drawThisFrame(sketch, (int) (0 - screenW
+                    * (1 - ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
         } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
-            // Draw the white foreground box
-            sketch.fill(255);
-            Graphics.drawRoundedRectangle(sketch,
-                    (float) (foregroundXPadding + screenW + screenW
-                            * (1 - ((sketch.frameCount - startFrame)
-                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
-                    foregroundYPadding,
-                    foregroundWidth,
-                    foregroundHeight,
-                    foregroundCurveRadius);
-            // Draw text
-            sketch.rectMode(PConstants.CENTER);
-            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-            sketch.fill(0);
-            // Title
-            Graphics.useGothic(sketch, titleFontSize, true);
-            sketch.text(this.model.title, (int) (centerX + screenW + screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
-                    sketch.width / 2f, sketch.height / 5f);
-            //Creators & Supporters
-            Graphics.useGothic(sketch, promptFontSize, false);
-            sketch.text(this.model.creatorTitle, (int) (creatorX + screenW + screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))), creatorY,
-                    sketch.width / 1.75f, sketch.height / 5f);
-            sketch.text(this.model.creators, (int) (creatorX + screenW + screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
-                    (int) (creatorY * 1.35),
-                    sketch.width / 1.75f, sketch.height / 2f);
-            sketch.text(this.model.supporterTitle, (int) (supporterX + screenW + screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))), supporterY,
-                    sketch.width / 1.75f, sketch.height / 5f);
-            sketch.text(this.model.supporters, (int) (supporterX + screenW + screenW
-                            * (1 - ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
-                    (int) (supporterY * 1.45),
-                    sketch.width / 1.75f, sketch.height / 2f);
+            drawThisFrame(sketch, (int) (screenW + screenW
+                    * (1 - ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
         } else { //If it's already a second-or-two old, draw the scene normally
-            // Draw the white foreground box
-            sketch.fill(255);
-            Graphics.drawRoundedRectangle(sketch,
-                    foregroundXPadding, foregroundYPadding,
-                    foregroundWidth, foregroundHeight,
-                    foregroundCurveRadius);
-
-            // Draw text
-            sketch.rectMode(PConstants.CENTER);
-            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-            sketch.fill(0);
-
-            // Title
-            Graphics.useGothic(sketch, (int) (titleFontSize * 1.15f), true);
-            sketch.text(this.model.title, centerX, titleY,
-                    sketch.width / 2f, sketch.height / 5f);
-
-            // Creator Title
-            Graphics.useGothic(sketch, actionFontSize, true);
-            sketch.text(this.model.creatorTitle, creatorX, creatorY,
-                    sketch.width / 1.75f, sketch.height / 5f);
-
-            // Creators
-            Graphics.useGothic(sketch, actionFontSize, false);
-            sketch.text(this.model.creators, creatorX, (int) (creatorY * 1.35),
-                    sketch.width / 1.75f, sketch.height);
-
-            // Supporter Title
-            Graphics.useGothic(sketch, actionFontSize, true);
-            sketch.text(this.model.supporterTitle, supporterX, supporterY,
-                    sketch.width / 1.75f, sketch.height / 5f);
-
-            // Supporters
-            Graphics.useGothic(sketch, actionFontSize, false);
-            sketch.text(this.model.supporters, supporterX, (int) (supporterY * 1.45),
-                    sketch.width / 1.75f, sketch.height);
+            drawThisFrame(sketch, 0, 0);
         }
+    }
 
-        backButton.draw(sketch);
+    private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
+        final int centerX = Kiosk.getSettings().screenW / 2;
+        // Draw the white foreground box
+        sketch.fill(255);
+        Graphics.drawRoundedRectangle(sketch,
+                foregroundXPadding + offsetX, foregroundYPadding + offsetY,
+                foregroundWidth, foregroundHeight,
+                foregroundCurveRadius);
+
+        // Draw text
+        sketch.rectMode(PConstants.CENTER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+        sketch.fill(0);
+
+        // Title
+        Graphics.useGothic(sketch, (int) (titleFontSize * 1.15f), true);
+        sketch.text(this.model.title, centerX + offsetX, titleY + offsetY,
+                sketch.width / 2f, sketch.height / 5f);
+
+        // Creator Title
+        Graphics.useGothic(sketch, actionFontSize, true);
+        sketch.text(this.model.creatorTitle, creatorX + offsetX, creatorY + offsetY,
+                sketch.width / 1.75f, sketch.height / 5f);
+
+        // Creators
+        Graphics.useGothic(sketch, actionFontSize, false);
+        sketch.text(this.model.creators, creatorX + offsetX, (int) (creatorY * 1.35) + offsetY,
+                sketch.width / 1.75f, sketch.height);
+
+        // Supporter Title
+        Graphics.useGothic(sketch, actionFontSize, true);
+        sketch.text(this.model.supporterTitle, supporterX + offsetX, supporterY + offsetY,
+                sketch.width / 1.75f, sketch.height / 5f);
+
+        // Supporters
+        Graphics.useGothic(sketch, actionFontSize, false);
+        sketch.text(this.model.supporters, supporterX + offsetX, (int) (supporterY * 1.45) + offsetY,
+                sketch.width / 1.75f, sketch.height);
+
+        backButton.draw(sketch, offsetX, offsetY);
     }
 }
