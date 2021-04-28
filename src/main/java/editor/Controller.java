@@ -297,7 +297,13 @@ public class Controller implements Initializable {
                     continue;
                 } else if (sceneGraph.getSceneById(childId)
                         .getClass().equals(ErrorSceneModel.class)) {
-                    root.getChildren().add(new TreeItem<>(sceneGraph.getSceneById(childId)));
+                    // prevents adding an error scene to the treeView
+                    EmptySceneModel replaceError = new EmptySceneModel(childId,
+                            ((ErrorSceneModel) sceneGraph.getSceneById(childId)).errorMsg);
+                    //todo What should the message be in this error scene?
+                    replaceError.intent = false;
+                    sceneGraph.registerSceneModel(replaceError);
+                    root.getChildren().add(new TreeItem<>(replaceError));
                     continue;
                 }
 

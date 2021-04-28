@@ -15,6 +15,7 @@ import kiosk.models.ErrorSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
+import kiosk.scenes.ErrorScene;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
@@ -292,8 +293,10 @@ public class SceneGraph {
         SceneModel sceneModel = this.sceneModels.get(id);
 
         if (sceneModel == null) {
-            return new ErrorSceneModel("Scene '" + id + "' does not exist");
+            sceneModel = new ErrorSceneModel("Scene '" + id + "' does not exist");
+            sceneModel.setId(id);
         }
+
         return sceneModel;
     }
 
