@@ -160,7 +160,8 @@ public class CreditsScene implements Scene {
 
         // Supporters
         Graphics.useGothic(sketch, actionFontSize, false);
-        sketch.text(this.model.supporters, supporterX + offsetX, (int) (supporterY * 1.45) + offsetY,
+        sketch.text(this.model.supporters, supporterX + offsetX,
+                (int) (supporterY * 1.45) + offsetY,
                 sketch.width / 1.75f, sketch.height);
 
         backButton.draw(sketch, offsetX, offsetY);

@@ -7,7 +7,10 @@ import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.UserScore;
-import kiosk.models.*;
+import kiosk.models.ButtonModel;
+import kiosk.models.CareerModel;
+import kiosk.models.FilterGroupModel;
+import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
 
 
@@ -249,7 +252,8 @@ public class SpokeGraphPromptScene implements Scene {
             }
         }
 
-        if ((clickedNext) && !sketch.isEditor) { //TODO ONLY IF THE NEXT SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
+        if ((clickedNext) && !sketch.isEditor) {
+            //TODO ONLY IF THE NEXT SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -257,7 +261,10 @@ public class SpokeGraphPromptScene implements Scene {
             drawThisFrame(sketch, 0, 0);
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-        } else if (clickedBack && !sketch.isEditor && !sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
+        } else if (clickedBack && !sketch.isEditor
+                && !sketch.getSceneGraph().getPreviousScene()
+                .toString().contains("SpokeGraphPrompt")) {
+            //TODO ONLY IF THE PREVIOUS SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -269,7 +276,10 @@ public class SpokeGraphPromptScene implements Scene {
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE WAS A SPOKEGRAPHPROMPTSCENE, DON'T MOVE
+        } else if (clickedBack && !sketch.isEditor
+                && sketch.getSceneGraph().getPreviousScene()
+                .toString().contains("SpokeGraphPrompt")) {
+            //TODO ONLY IF THE PREVIOUS SCENE WAS A SPOKEGRAPHPROMPTSCENE, DON'T MOVE
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -297,11 +307,15 @@ public class SpokeGraphPromptScene implements Scene {
             } else {
                 drawThisFrame(sketch, 0, 0);
             }
-        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt") && sketch.getSceneGraph().recentActivity.contains("POP")) { //TODO PREVIOUS SCENE GARBAGE
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor
+                && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")
+                && sketch.getSceneGraph().recentActivity.contains("POP")) {
+            //TODO PREVIOUS SCENE GARBAGE
             drawThisFrameInterpolate(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))), 0);
-        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")) {
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor
+                && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")) {
             drawThisFrameInterpolate(sketch, (int) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))), 0);
@@ -409,7 +423,8 @@ public class SpokeGraphPromptScene implements Scene {
             careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
                     + (((userScore.getCategoryScore(career.riasecCategory)
                     - previousUserScore.getCategoryScore(career.riasecCategory))
-                    * ((sketch.frameCount - startFrame) / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
+                    * ((sketch.frameCount - startFrame)
+                    / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
         }
 
         // Create spoke graph

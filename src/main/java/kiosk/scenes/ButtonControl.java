@@ -235,7 +235,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     Color.DW_BLACK_RGB[2], 63f);
             Graphics.drawRoundedRectangle(sketch, (float)
                             (this.rect.x + offsetX + this.rect.width / 2.f),
-                    (float) (this.rect.y + offsetY + this.rect.height / 2.f + this.rect.height / 10.f),
+                    (float) (this.rect.y + offsetY + this.rect.height
+                            / 2.f + this.rect.height / 10.f),
                     this.rect.width, this.rect.height, defaultCornerRadius);
         }
 
@@ -302,7 +303,8 @@ public class ButtonControl implements Control<MouseEvent> {
                                 (this.rect.height), defaultCornerRadius);
                 textWithOutline(this.model.text,
                         (float) (this.rect.getCenterX() + offsetX),
-                        (float) (this.rect.getCenterY() + offsetY + (this.rect.height / 10.f * offset)),
+                        (float) (this.rect.getCenterY() + offsetY
+                                + (this.rect.height / 10.f * offset)),
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
@@ -313,7 +315,8 @@ public class ButtonControl implements Control<MouseEvent> {
                             (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
                     } else {
                         this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (this.rect.getCenterY() + offsetY + (this.rect.height / 10.f * offset)));
+                            (float) (this.rect.getCenterY() + offsetY
+                                    + (this.rect.height / 10.f * offset)));
                     }
                 }
             } else {
@@ -358,7 +361,8 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[2] + colorDeltaOnClick));
             sketch.stroke(59, 58, 57, 63f);
             sketch.ellipse((float) (this.rect.x + offsetX + this.rect.width / 2.f),
-                    (float) (this.rect.y + offsetY + this.rect.height / 2.f + this.rect.height / 10.f),
+                    (float) (this.rect.y + offsetY + this.rect.height
+                            / 2.f + this.rect.height / 10.f),
                     (int) (this.rect.width),
                     (int) (this.rect.height));
         }
@@ -426,7 +430,8 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) (this.rect.height));
                 textWithOutline(this.model.text,
                         (float) (this.rect.getCenterX() + offsetX),
-                        (float) (this.rect.getCenterY() + offsetY + (this.rect.height / 10.f * offset)),
+                        (float) (this.rect.getCenterY() + offsetY
+                                + (this.rect.height / 10.f * offset)),
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
@@ -437,7 +442,8 @@ public class ButtonControl implements Control<MouseEvent> {
                                 (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
                     } else {
                         this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY + (this.rect.height / 10.f * offset)));
+                                (float) (rect.getCenterY() + offsetY
+                                        + (this.rect.height / 10.f * offset)));
                     }
                 }
             } else {

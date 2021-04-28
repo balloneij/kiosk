@@ -162,7 +162,8 @@ public class SpokeGraph {
             sketch.stroke(255);
             sketch.strokeWeight(SPOKE_THICKNESS);
             sketch.line((float) (centerX + offsetX), (float) (centerY + offsetY),
-                    (float) (buttonControl.getCenterX() + offsetX), (float) (buttonControl.getCenterY() + offsetY));
+                    (float) (buttonControl.getCenterX() + offsetX),
+                    (float) (buttonControl.getCenterY() + offsetY));
 
             buttonControl.draw(sketch, offsetX, offsetY);
         }

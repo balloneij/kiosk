@@ -138,8 +138,10 @@ public class GraphicsUtil {
         ButtonModel msoeButtonModel = new ButtonModel();
         msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
         ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
-                (int) (sketch.width - (commonButtonWidth * 3 / 4) - commonButtonPadding + offsetX),
-                (int) (sketch.height - (commonButtonHeight * 5 / 4) - commonButtonPadding + offsetY),
+                (int) (sketch.width - (commonButtonWidth * 3 / 4)
+                        - commonButtonPadding + offsetX),
+                (int) (sketch.height - (commonButtonHeight * 5 / 4)
+                        - commonButtonPadding + offsetY),
                 commonButtonWidth * 3 / 4, commonButtonWidth * 3 / 4, false);
         msoeButton.setNoButton(true);
         msoeButton.init(sketch);
@@ -152,7 +154,8 @@ public class GraphicsUtil {
      * @param title text
      * @param body text
      */
-    public static void drawHeader(Kiosk sketch, String title, String body, double offsetX, double offsetY) {
+    public static void drawHeader(Kiosk sketch, String title,
+                                  String body, double offsetX, double offsetY) {
 
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
@@ -178,7 +181,8 @@ public class GraphicsUtil {
         sketch.stroke(255);
 
         Graphics.drawRoundedRectangle(sketch,
-                (float) (headerX + offsetX + headerW / 2), (float) (headerY + offsetY + headerH / 2),
+                (float) (headerX + offsetX + headerW / 2),
+                (float) (headerY + offsetY + headerH / 2),
                 headerW, headerH, headerCurveRadius);
 
         // Draw the title and body

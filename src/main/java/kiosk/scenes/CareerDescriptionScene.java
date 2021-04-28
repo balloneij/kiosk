@@ -173,11 +173,13 @@ public class CareerDescriptionScene implements Scene {
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
                     / sceneAnimationFrames + 1))), 0);
@@ -227,7 +229,8 @@ public class CareerDescriptionScene implements Scene {
         Graphics.useGothic(sketch, descriptionFontSize, false);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.careerModel.description, centerX + offsetX, (int) (descriptionY * 1.15) + offsetY,
+        sketch.text(this.model.careerModel.description, centerX + offsetX,
+                (int) (descriptionY * 1.15) + offsetY,
                 (int) (foregroundWidth * 0.95), foregroundHeight / 5);
 
         this.centerButton.draw(sketch, offsetX, offsetY);

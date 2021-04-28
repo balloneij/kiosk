@@ -4,10 +4,11 @@ import graphics.Graphics;
 import graphics.GraphicsUtil;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
-import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.UserScore;
-import kiosk.models.*;
+import kiosk.models.ButtonModel;
+import kiosk.models.CareerModel;
+import kiosk.models.CareerPathwaySceneModel;
 import processing.core.PConstants;
 
 /**
@@ -165,11 +166,13 @@ public class CareerPathwayScene implements Scene {
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))), 0);

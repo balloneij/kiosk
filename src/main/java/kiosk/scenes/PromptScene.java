@@ -225,11 +225,13 @@ public class PromptScene implements Scene {
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
                     / sceneAnimationFrames + 1))));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
                     / sceneAnimationFrames + 1))), 0);

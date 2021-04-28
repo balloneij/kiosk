@@ -339,12 +339,13 @@ public class Boop {
                 }
                 break;
             case IN_SHELL_LEFT:
-                if(choseRoscoeAnimation) {
+                if (choseRoscoeAnimation) {
                     staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headRoscoe);
                 } else if (choseShake) {
                     inShellAnimation2(sketch, shellHide, shellHideR);
                 } else {
-                    inShellAnimation(sketch, shellHide, headPeek, headPeek1, headPeek2, leftHideLeg, rightHideLeg);
+                    inShellAnimation(sketch, shellHide, headPeek,
+                            headPeek1, headPeek2, leftHideLeg, rightHideLeg);
                 }
                 if (sketch.frameCount >= lastClickedFrame
                         + minimumShellFrames + additionalShellFrames) {
@@ -353,12 +354,14 @@ public class Boop {
                 }
                 break;
             case IN_SHELL_RIGHT:
-                if(choseRoscoeAnimation) {
-                    staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR, shellR, headRoscoeR);
+                if (choseRoscoeAnimation) {
+                    staticAnimation(sketch, lbFootR, lfFootR, rbFootR,
+                            rfFootR, shellR, headRoscoeR);
                 } else if (choseShake) {
                     inShellAnimation2(sketch, shellHideR, shellHide);
                 } else {
-                    inShellAnimation(sketch, shellHideR, headPeekR, headPeek1R, headPeek2R, leftHideLegR, rightHideLegR);
+                    inShellAnimation(sketch, shellHideR, headPeekR,
+                            headPeek1R, headPeek2R, leftHideLegR, rightHideLegR);
                 }
                 if (sketch.frameCount >= lastClickedFrame
                         + minimumShellFrames + additionalShellFrames) {
@@ -602,7 +605,8 @@ public class Boop {
      * @param rightLeg   Boop's right leg to draw
      */
     private void inShellAnimation(Kiosk sketch, Image shellEmpty,
-                                  Image shellPeek, Image shellPeek1, Image shellPeek2, Image leftLeg, Image rightLeg) {
+                                  Image shellPeek, Image shellPeek1, Image shellPeek2,
+                                  Image leftLeg, Image rightLeg) {
         int frameNumber = (sketch.frameCount - lastClickedFrame)
                 % (minimumShellFrames + additionalShellFrames);
         if (frameNumber == 0) {

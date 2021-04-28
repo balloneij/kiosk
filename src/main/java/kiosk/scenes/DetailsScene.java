@@ -96,7 +96,8 @@ public class DetailsScene implements Scene {
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
         } else {
-            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch, 0, 0 - (3 * screenH / 4f));
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(
+                    sketch, 0, 0 - (3 * screenH / 4f));
             sketch.hookControl(this.supplementaryButton);
         }
 
@@ -193,11 +194,13 @@ public class DetailsScene implements Scene {
                 sketch.getSceneGraph().reset();
             }
         }
-        if (sketch.getSceneGraph().recentActivity.contains("RESET") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        if (sketch.getSceneGraph().recentActivity.contains("RESET")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch,  (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))), 0);
