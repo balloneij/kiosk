@@ -3,9 +3,11 @@ package kiosk.scenes;
 import graphics.Graphics;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CreditsSceneModel;
+import kiosk.models.FilterGroupModel;
 import processing.core.PConstants;
 
 
@@ -44,6 +46,9 @@ public class CareerDescriptionScene implements Scene {
 
     //Animations
     private int startFrame = 0;
+    private boolean clickedBack = false;
+    private boolean clickedHome = false;
+    private boolean clickedMsoe = false;
 
     /**
      * Career Description Scene shows a title, body of text, and a button at the bottom.
@@ -112,17 +117,13 @@ public class CareerDescriptionScene implements Scene {
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
         if (this.homeButton.wasClicked()) {
-            //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-            sceneGraph.reset();
+            clickedHome = true;
         } else if (this.backButton.wasClicked()) {
-            //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-            sceneGraph.popScene();
+            clickedBack = true;
         } else if (this.centerButton.wasClicked()) {
-            //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-            sceneGraph.reset();
+            clickedHome = true;
         } else if (this.supplementaryButton.wasClicked()) {
-            //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-            sceneGraph.pushScene(new CreditsSceneModel());
+            clickedMsoe = true;
         }
     }
 
@@ -131,7 +132,185 @@ public class CareerDescriptionScene implements Scene {
         final int centerX = Kiosk.getSettings().screenW / 2;
         Graphics.drawBubbleBackground(sketch);
 
-        if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
+        if (sketch.isEditor) {
+            if (clickedBack) {
+                sketch.getSceneGraph().popScene();
+            } else if (clickedHome) {
+                sketch.getSceneGraph().reset();
+            } else if (clickedMsoe) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+            }
+        }
+
+        if (clickedMsoe && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            // Draw the white foreground box
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    (float) (foregroundXPadding+ screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), foregroundYPadding,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
+
+            // Text Properties
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+
+
+            // Career Name
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.name, (float) (centerX + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (titleY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+
+            // What to do next
+            Graphics.useGothic(sketch, instructionsFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, (float) (centerX + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (instructionsY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Career Description
+            Graphics.useGothic(sketch, descriptionFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.description, (float) (centerX + screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (descriptionY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch, screenW
+                    * (1 - ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+            }
+        } else if (clickedBack && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            // Draw the white foreground box
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    (float) (foregroundXPadding - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), foregroundYPadding,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
+
+            // Text Properties
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+
+
+            // Career Name
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.name, (float) (centerX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (titleY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+
+            // What to do next
+            Graphics.useGothic(sketch, instructionsFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, (float) (centerX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (instructionsY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Career Description
+            Graphics.useGothic(sketch, descriptionFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.description, (float) (centerX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (descriptionY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch, 0 - screenW
+                    * (1 - ((sketch.frameCount - startFrame) * 1.0
+                    / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().popScene();
+            }
+        } else if (clickedHome && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            // Draw the white foreground box
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    foregroundXPadding, (float) (foregroundYPadding + screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
+
+            // Text Properties
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+
+
+            // Career Name
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.name, centerX,
+                    (int) ((titleY * 1.15) + screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+
+            // What to do next
+            Graphics.useGothic(sketch, instructionsFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, centerX,
+                    (int) ((instructionsY * 1.15) + screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Career Description
+            Graphics.useGothic(sketch, descriptionFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.careerModel.description, centerX,
+                    (int) ((descriptionY * 1.15) + screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch, 0, screenH
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().reset();
+            }
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
             if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
                 // Draw the white foreground box
                 sketch.fill(255);

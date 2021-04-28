@@ -25,6 +25,7 @@ public class SceneGraph {
     public final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
+    private Scene previousScene;
     private LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
     private final Set<String> careerCategories = new HashSet<>();
     // K: category V: fields inside that category
@@ -82,6 +83,7 @@ public class SceneGraph {
         }
 
         setRootSceneModel(this.sceneModels.get(survey.rootSceneId));
+        this.previousScene = this.currentScene;
         this.currentScene = this.root.deepCopy().createScene();
         this.history.push(this.root);
     }
@@ -124,6 +126,7 @@ public class SceneGraph {
         userScore.apply(category, nullOrFilter);
 
         // Add the new scene
+        this.previousScene = this.currentScene;
         this.currentScene = sceneModel.deepCopy().createScene();
         this.history.push(sceneModel);
         this.onSceneChange(sceneModel);
@@ -193,9 +196,11 @@ public class SceneGraph {
 
         if (next == null) {
             ErrorSceneModel errorScene = new ErrorSceneModel("Popped too far from history");
+            this.previousScene = this.currentScene;
             this.currentScene = errorScene.createScene();
             this.onSceneChange(errorScene);
         } else {
+            this.previousScene = this.currentScene;
             this.currentScene = next.deepCopy().createScene();
             this.onSceneChange(next);
         }
@@ -211,6 +216,7 @@ public class SceneGraph {
         userScore.reset();
 
         // Reset the root scene
+        this.previousScene = this.currentScene;
         this.currentScene = this.root.deepCopy().createScene();
         this.history.clear();
         this.history.push(this.root);
@@ -228,6 +234,7 @@ public class SceneGraph {
 
         // If we are changing the current scene model, recreate the scene
         if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
+            this.previousScene = this.currentScene;
             this.currentScene = sceneModel.deepCopy().createScene();
             this.onSceneChange(sceneModel);
         }
@@ -277,6 +284,7 @@ public class SceneGraph {
         sceneModels.put(newId, sceneModel);
 
         if (this.getCurrentSceneModel().getId().equals(sceneModel.getId())) {
+            this.previousScene = this.currentScene;
             this.currentScene = sceneModel.deepCopy().createScene();
             this.onSceneChange(sceneModel);
         }
@@ -302,6 +310,14 @@ public class SceneGraph {
      */
     public synchronized Scene getCurrentScene() {
         return currentScene;
+    }
+
+    /**
+     * Get the previous scene that was somewhat-recently pushed to the state.
+     * @return The previous scene.
+     */
+    public synchronized Scene getPreviousScene() {
+        return previousScene;
     }
 
     public synchronized SceneModel getCurrentSceneModel() {

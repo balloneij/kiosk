@@ -112,11 +112,22 @@ public class GraphicsUtil {
 
     /**
      * Initialize the MSOE button's ButtonControl model.
+     * Uses the other initializeMsoeButton, by passing 0's for the offsets.
      * @param sketch to create on.
      * @return MSOE button control
      */
     public static ButtonControl initializeMsoeButton(Kiosk sketch) {
+        return initializeMsoeButton(sketch, 0, 0);
+    }
 
+    /**
+     * Initialize the MSOE button's ButtonControl model.
+     * @param sketch to create on.
+     * @param offsetX the number of pixels to displace this by, rightwards
+     * @param offsetY the number of pixels to displace this by, downwards
+     * @return MSOE button control
+     */
+    public static ButtonControl initializeMsoeButton(Kiosk sketch, float offsetX, float offsetY) {
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
 
@@ -127,8 +138,8 @@ public class GraphicsUtil {
         ButtonModel msoeButtonModel = new ButtonModel();
         msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
         ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
-                sketch.width - (commonButtonWidth * 3 / 4) - commonButtonPadding,
-                sketch.height - (commonButtonHeight * 5 / 4) - commonButtonPadding,
+                (int) (sketch.width - (commonButtonWidth * 3 / 4) - commonButtonPadding + offsetX),
+                (int) (sketch.height - (commonButtonHeight * 5 / 4) - commonButtonPadding + offsetY),
                 commonButtonWidth * 3 / 4, commonButtonWidth * 3 / 4, false);
         msoeButton.setNoButton(true);
         msoeButton.init(sketch);

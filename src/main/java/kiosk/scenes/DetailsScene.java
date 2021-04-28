@@ -96,7 +96,7 @@ public class DetailsScene implements Scene {
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
         } else {
-            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch, 0, 0 - (3 * screenH / 4f));
             sketch.hookControl(this.supplementaryButton);
         }
 
@@ -522,7 +522,7 @@ public class DetailsScene implements Scene {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
         } else {
-            supplementaryButton.draw(sketch); //TODO CHECK IF NEXT & MSOE BUTTONS OVERLAP
+            supplementaryButton.draw(sketch);
         }
     }
 }
