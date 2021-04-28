@@ -176,7 +176,19 @@ public class PromptScene implements Scene {
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
-        if (clickedNext || clickedMsoe) {
+        if (sketch.isEditor) {
+            if (clickedNext) {
+                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+            } else if (clickedBack) {
+                sketch.getSceneGraph().popScene();
+            } else if (clickedHome) {
+                sketch.getSceneGraph().reset();
+            } else if (clickedMsoe) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+            }
+        }
+
+        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -224,7 +236,7 @@ public class PromptScene implements Scene {
                     sketch.getSceneGraph().pushScene(new CreditsSceneModel());
                 }
             }
-        } else if (clickedBack) {
+        } else if (clickedBack && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -268,7 +280,7 @@ public class PromptScene implements Scene {
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedHome) {
+        } else if (clickedHome && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }

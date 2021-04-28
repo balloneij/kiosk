@@ -4,6 +4,7 @@ import graphics.Graphics;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
+import kiosk.models.CreditsSceneModel;
 import kiosk.models.DetailsSceneModel;
 import processing.core.PConstants;
 
@@ -45,6 +46,10 @@ public class DetailsScene implements Scene {
 
     //Animations
     private int startFrame = 0;
+    private boolean clickedBack = false;
+    private boolean clickedHome = false;
+    private boolean clickedNext = false;
+    private boolean clickedMsoe = false;
 
     /**
      * Detials Scene show a title, body of text, and a button at the bottom.
@@ -119,17 +124,18 @@ public class DetailsScene implements Scene {
     public void update(float dt, SceneGraph sceneGraph) {
         if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
             if (this.homeButton.wasClicked()) {
-                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-                sceneGraph.reset();
+                clickedHome = true;
             } else if (this.backButton.wasClicked()) {
-                //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-                sceneGraph.popScene();
+                clickedBack = true;
             }
+        } else if (this.supplementaryButton.wasClicked()) {
+            clickedMsoe = true;
         }
+
         if (this.centerButton.wasClicked()) {
-            sceneGraph.pushScene(this.centerButton.getTarget());
+            clickedNext = true;
         } else if (this.nextButton.wasClicked()) {
-            sceneGraph.pushScene(this.centerButton.getTarget());
+            clickedNext = true;
         }
     }
 
@@ -138,6 +144,157 @@ public class DetailsScene implements Scene {
         final int centerX = Kiosk.getSettings().screenW / 2;
         Graphics.drawBubbleBackground(sketch);
 
+        if (sketch.isEditor) {
+            if (clickedNext) {
+                sketch.getSceneGraph().pushScene(this.centerButton.getTarget());
+            } else if (clickedBack) {
+                sketch.getSceneGraph().popScene();
+            } else if (clickedHome) {
+                sketch.getSceneGraph().reset();
+            } else if (clickedMsoe) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+            }
+        }
+
+        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    (float) (foregroundXPadding + screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)) + foregroundWidth / 2.f),
+                    foregroundYPadding + foregroundHeight / 2.f,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
+
+            // Text Properties
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+
+            // Title
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.textLeading(33);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.title, (float) (centerX + screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (titleY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Body
+            Graphics.useGothic(sketch, bodyFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.textLeading(25);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, (float) (centerX + screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (bodyY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch,  screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            this.nextButton.draw(sketch, screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                if (clickedNext) {
+                    sketch.getSceneGraph().pushScene(this.centerButton.getTarget());
+                } else if (clickedMsoe) {
+                    sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+                }
+            }
+        } else if (clickedBack && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    (float) (foregroundXPadding - screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)) + foregroundWidth / 2.f),
+                    foregroundYPadding + foregroundHeight / 2.f,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
+
+            // Text Properties
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+
+            // Title
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.textLeading(33);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.title, (float) (centerX - screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (titleY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Body
+            Graphics.useGothic(sketch, bodyFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.textLeading(25);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, (float) (centerX - screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), (int) (bodyY * 1.15),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch);
+            this.nextButton.draw(sketch);
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().popScene();
+            }
+        } else if (clickedHome && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    foregroundXPadding + foregroundWidth / 2.f,
+                    (float) (foregroundYPadding + screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))) + foregroundHeight / 2.f,
+                    foregroundWidth, foregroundHeight,
+                    foregroundCurveRadius);
+
+            // Text Properties
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+
+            // Title
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.textLeading(33);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.title, centerX, (int) ((titleY * 1.15) + screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            // Body
+            Graphics.useGothic(sketch, bodyFontSize, false);
+            sketch.textAlign(PConstants.CENTER, PConstants.TOP);
+            sketch.textLeading(25);
+            sketch.rectMode(PConstants.CENTER);
+            sketch.text(this.model.body, centerX, (int) ((bodyY * 1.15) + screenH
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (foregroundWidth * 0.95), foregroundHeight / 5);
+
+            this.centerButton.draw(sketch, 0, screenH
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            this.nextButton.draw(sketch, 0,  screenH
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().reset();
+            }
+        }
         if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
             if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
                 sketch.fill(255);

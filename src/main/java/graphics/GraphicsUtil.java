@@ -148,8 +148,8 @@ public class GraphicsUtil {
 
         headerW = screenW * 3f / 4;
         headerH = screenH / 6f;
-        headerX = (float) (((screenW - headerW) / 2) + offsetX);
-        headerY = (float) ((screenH / 32f) + offsetY);
+        headerX = (float) (((screenW - headerW) / 2));
+        headerY = (float) ((screenH / 32f));
         headerCenterX = headerX + (headerW / 2);
         headerCenterY = headerY + (headerH / 2);
         headerCurveRadius = (int) (headerH);
@@ -167,7 +167,7 @@ public class GraphicsUtil {
         sketch.stroke(255);
 
         Graphics.drawRoundedRectangle(sketch,
-                headerX + headerW / 2, headerY + headerH / 2,
+                (float) (headerX + offsetX + headerW / 2), (float) (headerY + offsetY + headerH / 2),
                 headerW, headerH, headerCurveRadius);
 
         // Draw the title and body
@@ -176,13 +176,13 @@ public class GraphicsUtil {
 
         Graphics.useGothic(sketch, headerTitleFontSize, true);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(title, headerCenterX, headerTitleY,
+        sketch.text(title, (int) (headerCenterX + offsetX), (int) (headerTitleY + offsetY),
                 (int) (headerW * 0.95), headerH / 2);
 
         Graphics.useGothic(sketch, headerBodyFontSize, false);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(body, headerCenterX,
-                (int) (headerBodyY * 1.15), (int) (headerW * 0.95), headerH / 2);
+        sketch.text(body, (int) (headerCenterX + offsetX),
+                (int) ((headerBodyY * 1.15) + offsetY), (int) (headerW * 0.95), headerH / 2);
     }
 
     /**

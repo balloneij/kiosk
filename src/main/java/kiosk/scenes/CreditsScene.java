@@ -33,6 +33,7 @@ public class CreditsScene implements Scene {
 
     //Animations
     private int startFrame = 0;
+    private boolean clickedBack = false;
 
     private final CreditsSceneModel model;
     private ButtonControl backButton;
@@ -85,8 +86,7 @@ public class CreditsScene implements Scene {
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
         if (this.backButton.wasClicked()) {
-            //TODO STAY ON THIS SCENE FOR A FEW FRAMES
-            sceneGraph.popScene();
+            clickedBack = true;
         }
     }
 
@@ -97,8 +97,60 @@ public class CreditsScene implements Scene {
         // Draw bubble background
         Graphics.drawBubbleBackground(sketch);
 
-        //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+        if (sketch.isEditor) {
+            if (clickedBack) {
+                sketch.getSceneGraph().popScene();
+            }
+        }
+
+        if (clickedBack && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            // Draw the white foreground box
+            sketch.fill(255);
+            Graphics.drawRoundedRectangle(sketch,
+                    (float) (foregroundXPadding - screenW
+                            * (1 - ((sketch.frameCount - startFrame)
+                            * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    foregroundYPadding,
+                    foregroundWidth,
+                    foregroundHeight,
+                    foregroundCurveRadius);
+            // Draw text
+            sketch.rectMode(PConstants.CENTER);
+            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+            sketch.fill(0);
+            // Title
+            Graphics.useGothic(sketch, titleFontSize, true);
+            sketch.text(this.model.title, (int) (centerX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), titleY,
+                    sketch.width / 2f, sketch.height / 5f);
+            //Creators & Supporters
+            Graphics.useGothic(sketch, promptFontSize, false);
+            sketch.text(this.model.creatorTitle, (int) (creatorX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), creatorY,
+                    sketch.width / 1.75f, sketch.height / 5f);
+            sketch.text(this.model.creators, (int) (creatorX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (creatorY * 1.35),
+                    sketch.width / 1.75f, sketch.height / 2f);
+            sketch.text(this.model.supporterTitle, (int) (supporterX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))), supporterY,
+                    sketch.width / 1.75f, sketch.height / 5f);
+            sketch.text(this.model.supporters, (int) (supporterX - screenW
+                            * (1 - ((sketch.frameCount - startFrame) * 1.0
+                            / Kiosk.getSettings().sceneAnimationFrames + 1))),
+                    (int) (supporterY * 1.45),
+                    sketch.width / 1.75f, sketch.height / 2f);
+            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().popScene();
+            }
+        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
             // Draw the white foreground box
             sketch.fill(255);
             Graphics.drawRoundedRectangle(sketch,

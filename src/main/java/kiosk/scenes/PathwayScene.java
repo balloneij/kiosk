@@ -6,10 +6,7 @@ import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
-import kiosk.models.ButtonModel;
-import kiosk.models.FilterGroupModel;
-import kiosk.models.PathwaySceneModel;
-import kiosk.models.SceneModel;
+import kiosk.models.*;
 import processing.core.PConstants;
 
 public class PathwayScene implements Scene {
@@ -29,6 +26,7 @@ public class PathwayScene implements Scene {
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedNext = false;
+    private boolean clickedMsoe = false;
     private String sceneToGoTo;
     private Riasec riasecToGoTo;
     private FilterGroupModel filterToGoTo;
@@ -93,6 +91,8 @@ public class PathwayScene implements Scene {
             } else if (this.backButton.wasClicked()) {
                 clickedBack = true;
             }
+        } else if (this.supplementaryButton.wasClicked()) {
+            clickedMsoe = true;
         }
     }
 
@@ -104,7 +104,19 @@ public class PathwayScene implements Scene {
         sketch.fill(0);
         Graphics.drawBubbleBackground(sketch);
 
-        if (clickedNext) {
+        if (sketch.isEditor) {
+            if (clickedNext) {
+                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+            } else if (clickedBack) {
+                sketch.getSceneGraph().popScene();
+            } else if (clickedHome) {
+                sketch.getSceneGraph().reset();
+            } else if (clickedMsoe) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+            }
+        }
+
+        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -115,9 +127,13 @@ public class PathwayScene implements Scene {
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
-                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+                if (clickedNext) {
+                    sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+                } else if (clickedMsoe) {
+                    sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+                }
             }
-        } else if (clickedBack) {
+        } else if (clickedBack && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -131,7 +147,7 @@ public class PathwayScene implements Scene {
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedHome) {
+        } else if (clickedHome && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
