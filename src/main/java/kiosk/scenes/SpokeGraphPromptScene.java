@@ -167,6 +167,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Reference to current list of careers
         UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        UserScore previousUserScore = sketch.getPreviousUserScore();
         CareerModel[] careers = userScore.getCareers();
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
@@ -177,7 +178,7 @@ public class SpokeGraphPromptScene implements Scene {
             CareerModel career = careers[i];
             careerButtons[i] = new ButtonModel();
             careerButtons[i].text = career.name;
-            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+            careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory);
         }
 
         // Create spoke graph
@@ -247,14 +248,54 @@ public class SpokeGraphPromptScene implements Scene {
         }
 
         if ((clickedNext) && !sketch.isEditor) { //TODO ONLY IF THE NEXT SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
+
+            // Calculate answer location constants
+            float headerBottomY = headerY + headerH + 2 * answersPadding;
+            int answersCenterX = (screenW * 3 / 4);
+            float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
+
+            // Draw answer buttons
+            for (ButtonControl answer : answerButtons) {
+                sketch.strokeWeight(answersSpokeThickness);
+                sketch.stroke(255);
+                sketch.line(answersCenterX, answersCenterY,
+                        answer.getCenterX(), answer.getCenterY());
+                answer.draw(sketch, 0, 0);
             }
 
-            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
-                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+            // Draw the center prompt button
+            this.promptButton.draw(sketch, 0, 0);
+
+            // Draw the career spoke graph
+            // Define the size of the square that the spoke graph will fit in
+            final double availableHeight = (screenH - headerY - headerH);
+            final double size = Math.min(screenW, availableHeight);
+            // Reference to current list of careers
+            UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+            UserScore previousUserScore = sketch.getPreviousUserScore();
+            CareerModel[] careers = userScore.getCareers();
+
+            // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+            ButtonModel[] careerButtons = new ButtonModel[careers.length];
+            double[] careerWeights = new double[careers.length];
+
+            for (int i = 0; i < careers.length; i++) {
+                CareerModel career = careers[i];
+                careerButtons[i] = new ButtonModel();
+                careerButtons[i].text = career.name;
+                careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
             }
-        } else if (clickedBack && !sketch.isEditor && !sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) {
+
+            // Create spoke graph
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                    this.model.careerCenterText, careerButtons, careerWeights);
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
+            spokeGraph.draw(sketch, 0, 0);
+
+            sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+        } else if (clickedBack && !sketch.isEditor && !sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -288,13 +329,38 @@ public class SpokeGraphPromptScene implements Scene {
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
 
             // Draw the career spoke graph
+            // Define the size of the square that the spoke graph will fit in
+            final double availableHeight = (screenH - headerY - headerH);
+            final double size = Math.min(screenW, availableHeight);
+            // Reference to current list of careers
+            UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+            UserScore previousUserScore = sketch.getPreviousUserScore();
+            CareerModel[] careers = userScore.getCareers();
+
+            // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+            ButtonModel[] careerButtons = new ButtonModel[careers.length];
+            double[] careerWeights = new double[careers.length];
+
+            for (int i = 0; i < careers.length; i++) {
+                CareerModel career = careers[i];
+                careerButtons[i] = new ButtonModel();
+                careerButtons[i].text = career.name;
+                careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+            }
+
+            // Create spoke graph
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                    this.model.careerCenterText, careerButtons, careerWeights);
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
             spokeGraph.draw(sketch, 0 - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+
             if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) {
+        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE WAS A SPOKEGRAPHPROMPTSCENE, DON'T MOVE
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
 
             // Calculate answer location constants
@@ -315,7 +381,32 @@ public class SpokeGraphPromptScene implements Scene {
             this.promptButton.draw(sketch);
 
             // Draw the career spoke graph
+            // Define the size of the square that the spoke graph will fit in
+            final double availableHeight = (screenH - headerY - headerH);
+            final double size = Math.min(screenW, availableHeight);
+            // Reference to current list of careers
+            UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+            UserScore previousUserScore = sketch.getPreviousUserScore();
+            CareerModel[] careers = userScore.getCareers();
+
+            // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+            ButtonModel[] careerButtons = new ButtonModel[careers.length];
+            double[] careerWeights = new double[careers.length];
+
+            for (int i = 0; i < careers.length; i++) {
+                CareerModel career = careers[i];
+                careerButtons[i] = new ButtonModel();
+                careerButtons[i].text = career.name;
+                careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+            }
+
+            // Create spoke graph
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                    this.model.careerCenterText, careerButtons, careerWeights);
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
             spokeGraph.draw(sketch, 0, 0);
+
             sketch.getSceneGraph().popScene();
         } else if (clickedHome && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
@@ -351,6 +442,30 @@ public class SpokeGraphPromptScene implements Scene {
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
 
             // Draw the career spoke graph
+            // Define the size of the square that the spoke graph will fit in
+            final double availableHeight = (screenH - headerY - headerH);
+            final double size = Math.min(screenW, availableHeight);
+            // Reference to current list of careers
+            UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+            UserScore previousUserScore = sketch.getPreviousUserScore();
+            CareerModel[] careers = userScore.getCareers();
+
+            // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+            ButtonModel[] careerButtons = new ButtonModel[careers.length];
+            double[] careerWeights = new double[careers.length];
+
+            for (int i = 0; i < careers.length; i++) {
+                CareerModel career = careers[i];
+                careerButtons[i] = new ButtonModel();
+                careerButtons[i].text = career.name;
+                careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+            }
+
+            // Create spoke graph
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                    this.model.careerCenterText, careerButtons, careerWeights);
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
             spokeGraph.draw(sketch, 0, screenH
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
@@ -390,6 +505,30 @@ public class SpokeGraphPromptScene implements Scene {
                         * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)));
 
                 // Draw the career spoke graph
+                // Define the size of the square that the spoke graph will fit in
+                final double availableHeight = (screenH - headerY - headerH);
+                final double size = Math.min(screenW, availableHeight);
+                // Reference to current list of careers
+                UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+                UserScore previousUserScore = sketch.getPreviousUserScore();
+                CareerModel[] careers = userScore.getCareers();
+
+                // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+                ButtonModel[] careerButtons = new ButtonModel[careers.length];
+                double[] careerWeights = new double[careers.length];
+
+                for (int i = 0; i < careers.length; i++) {
+                    CareerModel career = careers[i];
+                    careerButtons[i] = new ButtonModel();
+                    careerButtons[i].text = career.name;
+                    careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+                }
+
+                // Create spoke graph
+                spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                        this.model.careerCenterText, careerButtons, careerWeights);
+                spokeGraph.setDisabled(true);
+                spokeGraph.init(sketch);
                 spokeGraph.draw(sketch, 0, 0);
             } else {
                 GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
@@ -412,10 +551,34 @@ public class SpokeGraphPromptScene implements Scene {
                 this.promptButton.draw(sketch);
 
                 // Draw the career spoke graph
+                // Define the size of the square that the spoke graph will fit in
+                final double availableHeight = (screenH - headerY - headerH);
+                final double size = Math.min(screenW, availableHeight);
+                // Reference to current list of careers
+                UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+                UserScore previousUserScore = sketch.getPreviousUserScore();
+                CareerModel[] careers = userScore.getCareers();
+
+                // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+                ButtonModel[] careerButtons = new ButtonModel[careers.length];
+                double[] careerWeights = new double[careers.length];
+
+                for (int i = 0; i < careers.length; i++) {
+                    CareerModel career = careers[i];
+                    careerButtons[i] = new ButtonModel();
+                    careerButtons[i].text = career.name;
+                    careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+                }
+
+                // Create spoke graph
+                spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                        this.model.careerCenterText, careerButtons, careerWeights);
+                spokeGraph.setDisabled(true);
+                spokeGraph.init(sketch);
                 spokeGraph.draw(sketch, 0, 0);
             }
-        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt") && sketch.getSceneGraph().recentActivity.contains("POP")) {
-            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,   0 - screenW - screenW
+        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt") && sketch.getSceneGraph().recentActivity.contains("POP")) { //TODO PREVIOUS SCENE GARBAGE
+            GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
 
@@ -462,19 +625,19 @@ public class SpokeGraphPromptScene implements Scene {
                 careerButtons[i] = new ButtonModel();
                 careerButtons[i].text = career.name;
                 careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
-                        + ((userScore.getCategoryScore(career.riasecCategory)
+                        + (((userScore.getCategoryScore(career.riasecCategory)
                         - previousUserScore.getCategoryScore(career.riasecCategory))
-                        / (sketch.frameCount - startFrame * 1.0f));
+                        * ((sketch.frameCount - startFrame) / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
             }
 
             // Create spoke graph
-            SpokeGraph sg = new SpokeGraph(size, 0, headerY + headerH,
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
                     this.model.careerCenterText, careerButtons, careerWeights);
-            sg.setDisabled(true);
-            sg.init(sketch);
-            sg.draw(sketch, 0 - screenW - screenW
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
+            spokeGraph.draw(sketch, (float) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
         } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")) {
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody,  screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
@@ -523,19 +686,19 @@ public class SpokeGraphPromptScene implements Scene {
                 careerButtons[i] = new ButtonModel();
                 careerButtons[i].text = career.name;
                 careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
-                        + ((userScore.getCategoryScore(career.riasecCategory)
+                        + (((userScore.getCategoryScore(career.riasecCategory)
                         - previousUserScore.getCategoryScore(career.riasecCategory))
-                        / (sketch.frameCount - startFrame * 1.0f));
+                        * ((sketch.frameCount - startFrame) / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
             }
 
             // Create spoke graph
-            SpokeGraph sg = new SpokeGraph(size, 0, headerY + headerH,
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
                     this.model.careerCenterText, careerButtons, careerWeights);
-            sg.setDisabled(true);
-            sg.init(sketch);
-            sg.draw(sketch, screenW + screenW
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
+            spokeGraph.draw(sketch, (float) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)), 0);
+                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
         } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
 
@@ -574,17 +737,17 @@ public class SpokeGraphPromptScene implements Scene {
                 careerButtons[i] = new ButtonModel();
                 careerButtons[i].text = career.name;
                 careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
-                        + ((userScore.getCategoryScore(career.riasecCategory)
+                        + (((userScore.getCategoryScore(career.riasecCategory)
                         - previousUserScore.getCategoryScore(career.riasecCategory))
-                        / (sketch.frameCount - startFrame * 1.0f));
+                        * ((sketch.frameCount - startFrame) / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
             }
 
             // Create spoke graph
-            SpokeGraph sg = new SpokeGraph(size, 0, headerY + headerH,
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
                     this.model.careerCenterText, careerButtons, careerWeights);
-            sg.setDisabled(true);
-            sg.init(sketch);
-            sg.draw(sketch, 0, 0);
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
+            spokeGraph.draw(sketch, 0, 0);
         } else { //If it's already a second-or-two old, draw the scene normally
             GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, 0);
 
@@ -606,6 +769,30 @@ public class SpokeGraphPromptScene implements Scene {
             this.promptButton.draw(sketch);
 
             // Draw the career spoke graph
+            // Define the size of the square that the spoke graph will fit in
+            final double availableHeight = (screenH - headerY - headerH);
+            final double size = Math.min(screenW, availableHeight);
+            // Reference to current list of careers
+            UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+            UserScore previousUserScore = sketch.getPreviousUserScore();
+            CareerModel[] careers = userScore.getCareers();
+
+            // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+            ButtonModel[] careerButtons = new ButtonModel[careers.length];
+            double[] careerWeights = new double[careers.length];
+
+            for (int i = 0; i < careers.length; i++) {
+                CareerModel career = careers[i];
+                careerButtons[i] = new ButtonModel();
+                careerButtons[i].text = career.name;
+                careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+            }
+
+            // Create spoke graph
+            spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                    this.model.careerCenterText, careerButtons, careerWeights);
+            spokeGraph.setDisabled(true);
+            spokeGraph.init(sketch);
             spokeGraph.draw(sketch, 0, 0);
         }
 
