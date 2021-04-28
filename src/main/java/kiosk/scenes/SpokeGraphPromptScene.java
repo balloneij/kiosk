@@ -50,6 +50,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     //Animations
     private int startFrame = 0;
+    private int sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedNext = false;
@@ -203,6 +204,7 @@ public class SpokeGraphPromptScene implements Scene {
         }
 
         startFrame = sketch.frameCount;
+        sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
 
         this.promptButton.init(sketch);
     }
@@ -248,7 +250,7 @@ public class SpokeGraphPromptScene implements Scene {
         }
 
         if ((clickedNext) && !sketch.isEditor) { //TODO ONLY IF THE NEXT SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
 
@@ -256,19 +258,19 @@ public class SpokeGraphPromptScene implements Scene {
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
         } else if (clickedBack && !sketch.isEditor && !sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
 
             drawThisFrame(sketch, (int) (0 - screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
+                    * 1.0 / sceneAnimationFrames + 1))), 0);
 
-            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE WAS A SPOKEGRAPHPROMPTSCENE, DON'T MOVE
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
 
@@ -276,34 +278,34 @@ public class SpokeGraphPromptScene implements Scene {
 
             sketch.getSceneGraph().popScene();
         } else if (clickedHome && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
-            
+
             drawThisFrame(sketch, 0, (int) (screenH
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))));
+                    * 1.0 / sceneAnimationFrames + 1))));
 
-            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().reset();
             }
         } else if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
-            if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+            if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
                 drawThisFrame(sketch, 0, (int) (screenH
                         * (1 - ((sketch.frameCount - startFrame)
-                        * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))));
+                        * 1.0 / sceneAnimationFrames + 1))));
             } else {
                 drawThisFrame(sketch, 0, 0);
             }
-        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt") && sketch.getSceneGraph().recentActivity.contains("POP")) { //TODO PREVIOUS SCENE GARBAGE
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt") && sketch.getSceneGraph().recentActivity.contains("POP")) { //TODO PREVIOUS SCENE GARBAGE
             drawThisFrameInterpolate(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
-        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")) {
+                    * 1.0 / sceneAnimationFrames + 1))), 0);
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")) {
             drawThisFrameInterpolate(sketch, (int) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
-        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+                    * 1.0 / sceneAnimationFrames + 1))), 0);
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrameInterpolate(sketch, 0, 0);
         } else { //If it's already a second-or-two old, draw the scene normally
             drawThisFrame(sketch, 0, 0);

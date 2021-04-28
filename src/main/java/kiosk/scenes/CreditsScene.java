@@ -33,6 +33,7 @@ public class CreditsScene implements Scene {
 
     //Animations
     private int startFrame = 0;
+    private int sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
     private boolean clickedBack = false;
 
     private final CreditsSceneModel model;
@@ -76,7 +77,9 @@ public class CreditsScene implements Scene {
         this.model.supporters = "The Lighthouse Kids\nJohn Emmerich\n"
                 + "Jodi Schomaker\nDavid Mancl\nRyan Kresse\n"
                 + "Dr. Taylor\nOur friends & families";
+
         startFrame = sketch.frameCount;
+        sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
 
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
         this.backButton.init(sketch);
@@ -103,19 +106,19 @@ public class CreditsScene implements Scene {
         }
 
         if (clickedBack && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
             drawThisFrame(sketch, (int) (0 - screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
-            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                    / sceneAnimationFrames + 1))), 0);
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
+                    / sceneAnimationFrames + 1))), 0);
         } else { //If it's already a second-or-two old, draw the scene normally
             drawThisFrame(sketch, 0, 0);
         }

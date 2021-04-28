@@ -45,6 +45,7 @@ public class PromptScene implements Scene {
 
     //Animations
     private int startFrame = 0;
+    private int sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedNext = false;
@@ -98,7 +99,6 @@ public class PromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        startFrame = sketch.frameCount;
         final int sketchHeight = Kiosk.getSettings().screenH;
 
         // Start the X on the far left so we simply need to add
@@ -144,6 +144,9 @@ public class PromptScene implements Scene {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
+
+        startFrame = sketch.frameCount;
+        sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
     }
 
     @Override
@@ -189,13 +192,13 @@ public class PromptScene implements Scene {
         }
 
         if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
             drawThisFrame(sketch, (int) (screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
-            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                    / sceneAnimationFrames + 1))), 0);
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 if (clickedNext) {
                     sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
                 } else if (clickedMsoe) {
@@ -203,37 +206,37 @@ public class PromptScene implements Scene {
                 }
             }
         } else if (clickedBack && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
             drawThisFrame(sketch, (int) (0 - screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
-            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                    / sceneAnimationFrames + 1))), 0);
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedHome && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
             drawThisFrame(sketch, 0, (int) (screenH
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1))));
-            if (startFrame + Kiosk.getSettings().sceneAnimationFrames <= sketch.frameCount) {
+                    / sceneAnimationFrames + 1))));
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET") && sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1))));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP") && sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+                    / sceneAnimationFrames + 1))));
+        } else if (sketch.getSceneGraph().recentActivity.contains("POP") && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
-        } else if (sketch.frameCount - startFrame <= Kiosk.getSettings().sceneAnimationFrames && !sketch.isEditor) {
+                    / sceneAnimationFrames + 1))), 0);
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) ((screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1)))), 0);
+                    * 1.0 / sceneAnimationFrames + 1)))), 0);
         } else { //If it's already a second-or-two old, draw the scene normally
             drawThisFrame(sketch, 0, 0);
         }
