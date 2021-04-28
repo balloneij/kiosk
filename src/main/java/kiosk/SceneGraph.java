@@ -315,6 +315,10 @@ public class SceneGraph {
      * @param newRoot The scene which will become the launching point for the Kiosk.
      */
     public synchronized void setRootSceneModel(SceneModel newRoot) {
+        if (this.root != null) {
+            this.root.setName(this.root.getName().replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+        }
+
         this.root = newRoot;
         // Remove root from original child
         if (root != null) {

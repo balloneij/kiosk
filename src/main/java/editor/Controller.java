@@ -309,8 +309,10 @@ public class Controller implements Initializable {
                         depths.put(childId, depth + 1);
                     }
                     SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                    childSceneModel.setName(childSceneModel.getName()
-                            .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+                    if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
+                        childSceneModel.setName(childSceneModel.getName()
+                                .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+                    }
                     // Add the parent to the tree element
                     root.getChildren().add(new TreeItem<>(childSceneModel));
                     continue;
@@ -326,8 +328,10 @@ public class Controller implements Initializable {
                 // if the child IS new, indicate that it no longer needs to be added
                 remainingChildren.remove(childId);
                 SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                childSceneModel.setName(childSceneModel.getName()
-                        .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+                if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
+                    childSceneModel.setName(childSceneModel.getName()
+                            .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+                }
                 TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
                 root.getChildren()
                         .add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
