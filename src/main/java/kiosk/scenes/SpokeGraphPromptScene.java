@@ -248,10 +248,18 @@ public class SpokeGraphPromptScene implements Scene {
         }
 
         if ((clickedNext) && !sketch.isEditor) { //TODO ONLY IF THE NEXT SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+
             drawThisFrame(sketch, 0, 0);
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
         } else if (clickedBack && !sketch.isEditor && !sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+
             drawThisFrame(sketch, (int) (0 - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))), 0);
@@ -260,10 +268,18 @@ public class SpokeGraphPromptScene implements Scene {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().getPreviousScene().toString().contains("SpokeGraphPrompt")) { //TODO ONLY IF THE PREVIOUS SCENE WAS A SPOKEGRAPHPROMPTSCENE, DON'T MOVE
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+
             drawThisFrame(sketch, 0, 0);
 
             sketch.getSceneGraph().popScene();
         } else if (clickedHome && !sketch.isEditor) {
+            if (sketch.frameCount > startFrame + Kiosk.getSettings().sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+            
             drawThisFrame(sketch, 0, (int) (screenH
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / Kiosk.getSettings().sceneAnimationFrames + 1))));
@@ -297,8 +313,6 @@ public class SpokeGraphPromptScene implements Scene {
             // Draw the back and home buttons
             this.backButton.draw(sketch);
             this.homeButton.draw(sketch);
-        } else {
-            supplementaryButton.draw(sketch);
         }
     }
 
@@ -316,7 +330,7 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.stroke(255);
             sketch.line(answersCenterX + offsetX, answersCenterY + offsetY,
                     answer.getCenterX() + offsetX, answer.getCenterY() + offsetY);
-            answer.draw(sketch);
+            answer.draw(sketch, offsetX, offsetY);
         }
 
         // Draw the center prompt button
@@ -402,5 +416,9 @@ public class SpokeGraphPromptScene implements Scene {
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, offsetY);
+
+        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
+        }
     }
 }
