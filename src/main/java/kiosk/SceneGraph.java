@@ -293,7 +293,8 @@ public class SceneGraph {
         SceneModel sceneModel = this.sceneModels.get(id);
 
         if (sceneModel == null) {
-            sceneModel = new ErrorSceneModel("Scene '" + id + "' does not exist");
+            sceneModel = new ErrorSceneModel("You might have deleted a scene that a button led to."
+                    + "Because we can't have a button lead nowhere, this scene can't be deleted.");
             sceneModel.setId(id);
         }
 

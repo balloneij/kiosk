@@ -180,14 +180,16 @@ public class Controller implements Initializable {
 
         sceneGraphTreeView.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.DELETE) {
-                SceneModel selectedModel =
-                        sceneGraphTreeView.getSelectionModel().getSelectedItem().getValue();
-                if (selectedModel != null) {
-                    // Operators could be distributed internally, but it reduces clarity
-                    if (!(selectedModel == sceneGraphTreeView.getRoot().getValue()
-                        || (selectedModel.getClass().equals(EmptySceneModel.class)
-                            && !((EmptySceneModel) selectedModel).intent))) {
-                        deleteScene(selectedModel);
+                if (sceneGraphTreeView.getSelectionModel().getSelectedItem() != null) {
+                    SceneModel selectedModel =
+                            sceneGraphTreeView.getSelectionModel().getSelectedItem().getValue();
+                    if (selectedModel != null) {
+                        // Operators could be distributed internally, but it reduces clarity
+                        if (!(selectedModel == sceneGraph.getRootSceneModel()
+                                || (selectedModel.getClass().equals(EmptySceneModel.class)
+                                && !((EmptySceneModel) selectedModel).intent))) {
+                            deleteScene(selectedModel);
+                        }
                     }
                 }
             }
