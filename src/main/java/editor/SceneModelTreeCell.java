@@ -86,7 +86,8 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
             // Also checks if the scene is empty AND it wasn't created on purpose;
             // scenes created automatically cannot be deleted by the user
             if (getItem().getId().equals(Controller.sceneGraph.getRootSceneModel().getId())
-                    || (getItem().getClass().equals(EmptySceneModel.class) && !(((EmptySceneModel) getItem()).intent))) {
+                    || (getItem().getClass().equals(EmptySceneModel.class)
+                    && !(((EmptySceneModel) getItem()).intent))) {
                 rootMenuItem.setDisable(true);
                 deleteMenuItem.setDisable(true);
             } else {

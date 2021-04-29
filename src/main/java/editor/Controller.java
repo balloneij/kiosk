@@ -189,6 +189,12 @@ public class Controller implements Initializable {
                                 || (selectedModel.getClass().equals(EmptySceneModel.class)
                                 && !((EmptySceneModel) selectedModel).intent))) {
                             deleteScene(selectedModel);
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setHeaderText("Unable to Delete Scene");
+                            alert.setContentText("The root scene and empty scenes pointed"
+                                    + " to by a button cannot be deleted");
+                            alert.showAndWait();
                         }
                     }
                 }

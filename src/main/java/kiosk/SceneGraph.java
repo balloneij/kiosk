@@ -294,7 +294,7 @@ public class SceneGraph {
 
         if (sceneModel == null) {
             sceneModel = new ErrorSceneModel("You might have deleted a scene that a button led to."
-                    + "Because we can't have a button lead nowhere, this scene can't be deleted.");
+                    + " Because we can't have a button lead nowhere, this scene can't be deleted.");
             sceneModel.setId(id);
         }
 
