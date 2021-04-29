@@ -27,6 +27,7 @@ public class CareerPathwayScene implements Scene {
     private CareerModel[] careers;
     private ButtonModel[] buttons;
     private ButtonControl supplementaryButton;
+    private boolean isRoot = false;
 
     /**
      * Create a pathway scene.
@@ -83,6 +84,8 @@ public class CareerPathwayScene implements Scene {
         }
         sketch.hookControl(this.backButton);
         sketch.hookControl(this.homeButton);
+
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
@@ -112,11 +115,10 @@ public class CareerPathwayScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        Graphics.drawBubbleBackground(sketch);
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
         this.spokeGraph.draw(sketch);
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
         } else {

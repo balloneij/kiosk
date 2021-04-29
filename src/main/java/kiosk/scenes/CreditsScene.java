@@ -93,9 +93,6 @@ public class CreditsScene implements Scene {
     public void draw(Kiosk sketch) {
         final int centerX = Kiosk.getSettings().screenW / 2;
 
-        // Draw bubble background
-        Graphics.drawBubbleBackground(sketch);
-
         //TODO MAKE ANIMATION LESS CHOPPY WHEN LESS FRAMES DESIRED
         //     Implement Seth's idea of white box gradually revealing text
         //If this scene is new, animate the items to gradually show up on screen
