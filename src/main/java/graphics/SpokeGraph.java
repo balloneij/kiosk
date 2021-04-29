@@ -60,7 +60,20 @@ public class SpokeGraph {
         this.centerY = (float) (y + size / 2);
         this.weights = weights;
 
-        double[] normalWeights = normalizeWeights(weights);
+        int amountOfZeros = 0;
+        boolean itemHigherThanOne = false;
+        for (int i = 0; i < weights.length; i++) {
+            if (weights[i] == 0) {
+                amountOfZeros++;
+            } else if ((weights[i]) > 1) {
+                itemHigherThanOne = true;
+            }
+        }
+
+        double[] normalWeights = weights;
+        if (amountOfZeros <= weights.length - 1 && itemHigherThanOne) {
+            normalWeights = normalizeWeights(weights);
+        }
 
         // Worst case Spokegraph
         //      O

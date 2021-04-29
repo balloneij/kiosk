@@ -202,7 +202,8 @@ public class SpokeGraphPromptScene implements Scene {
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
         } else {
-            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(
+                    sketch, 0, 0 - (3 * screenH / 4f));
             sketch.hookControl(this.supplementaryButton);
         }
 
@@ -252,8 +253,23 @@ public class SpokeGraphPromptScene implements Scene {
             }
         }
 
-        if ((clickedNext) && !sketch.isEditor) {
-            //TODO ONLY IF THE NEXT SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
+        if ((clickedNext) && !sketch.isEditor && sketch.getSceneGraph().getSceneById(sceneToGoTo).toString().contains("Career Pathway")) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+
+            final double availableHeight = (screenH - headerY - headerH);
+            final double size = Math.min(screenW, availableHeight);
+            drawThisFrameOppositeDirections(sketch, (int) (0 - ((screenW - size) / 2)
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / sceneAnimationFrames + 1))), 0, (int) (screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / sceneAnimationFrames + 1))), 0);
+
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+            }
+        } else if ((clickedNext) && !sketch.isEditor && !sketch.getSceneGraph().getSceneById(sceneToGoTo).toString().contains("Spoke Graph Prompt")) {
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -261,15 +277,18 @@ public class SpokeGraphPromptScene implements Scene {
             drawThisFrame(sketch, 0, 0);
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+        } else if ((clickedNext) && !sketch.isEditor && sketch.getSceneGraph().getSceneById(sceneToGoTo).toString().contains("Spoke Graph Prompt")) {
+            drawThisFrame(sketch, 0, 0);
+
+            sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
         } else if (clickedBack && !sketch.isEditor
-                && !sketch.getSceneGraph().getPreviousScene()
-                .toString().contains("SpokeGraphPrompt")) {
-            //TODO ONLY IF THE PREVIOUS SCENE ISN'T A SPOKEGRAPHPROMPTSCENE, MOVE TO THE SIDE
+                && !sketch.getSceneGraph().history.get(1)
+                .toString().contains("Spoke Graph Prompt")) {
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
 
-            drawThisFrame(sketch, (int) (0 - screenW
+            drawThisFrameInterpolate(sketch, (int) (0 - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))), 0);
 
@@ -277,14 +296,9 @@ public class SpokeGraphPromptScene implements Scene {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedBack && !sketch.isEditor
-                && sketch.getSceneGraph().getPreviousScene()
-                .toString().contains("SpokeGraphPrompt")) {
-            //TODO ONLY IF THE PREVIOUS SCENE WAS A SPOKEGRAPHPROMPTSCENE, DON'T MOVE
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
-
-            drawThisFrame(sketch, 0, 0);
+                && sketch.getSceneGraph().history.get(1)
+                .toString().contains("Spoke Graph Prompt")) {
+            drawThisFrameInterpolate(sketch, 0, 0);
 
             sketch.getSceneGraph().popScene();
         } else if (clickedHome && !sketch.isEditor) {
@@ -299,18 +313,20 @@ public class SpokeGraphPromptScene implements Scene {
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")) {
-            if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
-                drawThisFrame(sketch, 0, (int) (screenH
-                        * (1 - ((sketch.frameCount - startFrame)
-                        * 1.0 / sceneAnimationFrames + 1))));
-            } else {
-                drawThisFrame(sketch, 0, 0);
-            }
+        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
+                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+            drawThisFrameInterpolate(sketch, 0, (int) (screenH
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / sceneAnimationFrames + 1))));
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor
+                && sketch.getSceneGraph().recentActivity.contains("Career Pathway")
+                && sketch.getSceneGraph().recentActivity.contains("POP")) {
+            drawThisFrameOppositeDirections(sketch, 0, 0, (int) (screenW + screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / sceneAnimationFrames + 1))), 0);
         } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor
                 && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")
                 && sketch.getSceneGraph().recentActivity.contains("POP")) {
-            //TODO PREVIOUS SCENE GARBAGE
             drawThisFrameInterpolate(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))), 0);
@@ -436,6 +452,57 @@ public class SpokeGraphPromptScene implements Scene {
 
         if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
+        }
+    }
+
+    private void drawThisFrameOppositeDirections(Kiosk sketch, int offsetX, int offsetY, int otherOffsetX, int otherOffsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, otherOffsetX, otherOffsetY);
+
+        // Calculate answer location constants
+        float headerBottomY = headerY + headerH + 2 * answersPadding;
+        int answersCenterX = (screenW * 3 / 4);
+        float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
+
+        // Draw answer buttons
+        for (ButtonControl answer : answerButtons) {
+            sketch.strokeWeight(answersSpokeThickness);
+            sketch.stroke(255);
+            sketch.line(answersCenterX + otherOffsetX, answersCenterY + otherOffsetY,
+                    answer.getCenterX() + otherOffsetX, answer.getCenterY() + otherOffsetY);
+            answer.draw(sketch, otherOffsetX, otherOffsetY);
+        }
+
+        // Draw the center prompt button
+        this.promptButton.draw(sketch, otherOffsetX, otherOffsetY);
+
+        // Draw the career spoke graph
+        // Define the size of the square that the spoke graph will fit in
+        final double availableHeight = (screenH - headerY - headerH);
+        final double size = Math.min(screenW, availableHeight);
+        // Reference to current list of careers
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        CareerModel[] careers = userScore.getCareers();
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
+            careerButtons[i] = new ButtonModel();
+            careerButtons[i].text = career.name;
+            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+        }
+
+        // Create spoke graph
+        spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                this.model.careerCenterText, careerButtons, careerWeights);
+        spokeGraph.setDisabled(true);
+        spokeGraph.init(sketch);
+        spokeGraph.draw(sketch, offsetX, offsetY);
+
+        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            supplementaryButton.draw(sketch, otherOffsetX, otherOffsetY);
         }
     }
 }

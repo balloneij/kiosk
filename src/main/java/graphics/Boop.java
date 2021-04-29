@@ -134,27 +134,21 @@ public class Boop {
             maxX = width * ((screenBoundaryFraction - 1) / screenBoundaryFraction);
         }
         boolean choseScootAnimation;
-        if (currentX >= width * (screenBoundaryFraction - 1 / screenBoundaryFraction)) {
+        if (currentX >= width * (screenBoundaryFraction - 1 / screenBoundaryFraction) || currentX >= maxX) {
             //Boop is too close to the right edge of the screen!
             //Somebody tell him to stop!
             //oh god he can't hear us he has airpods in oh god
             //Oh the hu-manatee!
             choseLeft = true;
             boopState = BoopState.SCOOT_LEFT;
-        } else if (currentX <= width / screenBoundaryFraction) {
+            shouldZoomAway = true;
+        } else if (currentX <= width / screenBoundaryFraction || currentX <= minX) {
             //Boop is too close to the left edge of the screen!
             //Somebody tell him to stop!
             //oh god he can't hear us he has airpods in oh god
             //Oh the hu-manatee!
             choseLeft = false;
             boopState = BoopState.SCOOT_RIGHT;
-        } else if (currentX <= minX) {
-            choseLeft = false;
-            boopState = BoopState.SCOOT_RIGHT;
-            shouldZoomAway = true;
-        } else if (currentX >= maxX) {
-            choseLeft = true;
-            boopState = BoopState.SCOOT_LEFT;
             shouldZoomAway = true;
         } else {
             shouldZoomAway = false;

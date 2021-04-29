@@ -146,6 +146,23 @@ public class CareerPathwayScene implements Scene {
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().pushEndScene(desiredCareer);
             }
+        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
+                .toString().contains("Spoke Graph Prompt")) {
+            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
+                startFrame = sketch.frameCount;
+            }
+
+            final double availableHeight = (screenH - (screenH / 32f) - (screenH / 6f));
+            final double size = Math.min(screenW, availableHeight);
+
+            drawThisFrameReversedSpoke(sketch, (int) (((screenW - size) / 2)
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / sceneAnimationFrames + 1))), 0, (int) (0 - screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / sceneAnimationFrames + 1))), 0);
+            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                sketch.getSceneGraph().popScene();
+            }
         } else if (clickedBack && !sketch.isEditor) {
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
@@ -176,6 +193,12 @@ public class CareerPathwayScene implements Scene {
             drawThisFrame(sketch, (int) (0 - screenW - screenW
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))), 0);
+        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames
+                && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
+                .toString().contains("Spoke Graph Prompt")) {
+            drawThisFrameCenteredSpoke(sketch, (int) (screenW + screenW
+                    * (1 - ((sketch.frameCount - startFrame)
+                    * 1.0 / sceneAnimationFrames + 1))), 0);
         } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
@@ -196,6 +219,98 @@ public class CareerPathwayScene implements Scene {
 
         if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
+        }
+    }
+
+    private void drawThisFrameCenteredSpoke(Kiosk sketch, int offsetX, int offsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
+
+        float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
+        // Grab careers from the Kiosk and userScore from the SceneGraph
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        UserScore previousUserScore = sketch.getPreviousUserScore();
+        this.careers = userScore.getCareers();
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
+            ButtonModel button = new ButtonModel(career.name, "");
+            button.isCircle = true;
+            careerButtons[i] = button;
+            careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
+                    + (((userScore.getCategoryScore(career.riasecCategory)
+                    - previousUserScore.getCategoryScore(career.riasecCategory))
+                    * ((sketch.frameCount - startFrame)
+                    / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
+        }
+
+        // Create spoke graph
+        this.spokeGraph = new SpokeGraph(size,
+                screenW / 2f - size / 2,
+                GraphicsUtil.headerY + GraphicsUtil.headerH,
+                model.centerText,
+                careerButtons,
+                careerWeights);
+        this.spokeGraph.init(sketch);
+
+        // Attach user input hooks
+        for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
+            sketch.hookControl(careerOption);
+        }
+
+        this.spokeGraph.draw(sketch, 0, 0);
+
+        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
+        }
+    }
+
+    private void drawThisFrameReversedSpoke(Kiosk sketch, int offsetX, int offsetY, int headerOffsetX, int headerOffsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, headerOffsetX, headerOffsetY);
+
+        float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
+        // Grab careers from the Kiosk and userScore from the SceneGraph
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        UserScore previousUserScore = sketch.getPreviousUserScore();
+        this.careers = userScore.getCareers();
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
+            ButtonModel button = new ButtonModel(career.name, "");
+            button.isCircle = true;
+            careerButtons[i] = button;
+            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory)
+                    + (((previousUserScore.getCategoryScore(career.riasecCategory)
+                    - userScore.getCategoryScore(career.riasecCategory))
+                    * ((sketch.frameCount - startFrame)
+                    / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
+        }
+
+        // Create spoke graph
+        this.spokeGraph = new SpokeGraph(size,
+                screenW / 2f - size / 2,
+                GraphicsUtil.headerY + GraphicsUtil.headerH,
+                model.centerText,
+                careerButtons,
+                careerWeights);
+        this.spokeGraph.init(sketch);
+
+        // Attach user input hooks
+        for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
+            sketch.hookControl(careerOption);
+        }
+
+        this.spokeGraph.draw(sketch, offsetX, offsetY);
+
+        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+            supplementaryButton.draw(sketch, headerOffsetX, headerOffsetY);
         }
     }
 }
