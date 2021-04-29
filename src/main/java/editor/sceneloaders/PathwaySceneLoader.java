@@ -12,6 +12,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -75,7 +76,8 @@ public class PathwaySceneLoader {
 
     // Adds a Node containing a text field for editing the header body.
     protected static Node getHeaderBodyBox(PathwaySceneModel model, SceneGraph graph) {
-        TextField bodyField = new TextField(model.headerBody);
+        TextArea bodyField = new TextArea(model.headerBody);
+        bodyField.setPrefRowCount(2);
 
         // Listener to update the body
         bodyField.textProperty().addListener((observable, oldValue, newValue) -> {

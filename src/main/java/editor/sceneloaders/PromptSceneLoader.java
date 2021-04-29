@@ -13,6 +13,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -70,7 +71,8 @@ public class PromptSceneLoader {
 
     // Adds a Node containing a text field for editing the title.
     private static Node getTitleBox(PromptSceneModel model, SceneGraph graph) {
-        TextField titleField = new TextField(model.title);
+        TextArea titleField = new TextArea(model.title);
+        titleField.setPrefRowCount(2);
 
         // Listener to update the title
         titleField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -85,7 +87,8 @@ public class PromptSceneLoader {
 
     // Adds a Node containing a text field for editing the prompt.
     private static Node getPromptBox(PromptSceneModel model, SceneGraph graph) {
-        TextField promptField = new TextField(model.prompt);
+        TextArea promptField = new TextArea(model.prompt);
+        promptField.setPrefRowCount(2);
 
         // Listener to update the prompt
         promptField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -100,7 +103,8 @@ public class PromptSceneLoader {
 
     // Adds a Node containing a text field for editing the actionPhrase.
     private static Node getActionBox(PromptSceneModel model, SceneGraph graph) {
-        TextField actionField = new TextField(model.actionPhrase);
+        TextArea actionField = new TextArea(model.actionPhrase);
+        actionField.setPrefRowCount(2);
 
         // Listener to update the action phrase
         actionField.textProperty().addListener((observable, oldValue, newValue) -> {

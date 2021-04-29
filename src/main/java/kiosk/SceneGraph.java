@@ -316,7 +316,8 @@ public class SceneGraph {
      */
     public synchronized void setRootSceneModel(SceneModel newRoot) {
         if (this.root != null) {
-            this.root.setName(this.root.getName().replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+            this.root.setName(this.root.getName()
+                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
         }
 
         this.root = newRoot;
