@@ -5,8 +5,10 @@ import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
 import kiosk.Kiosk;
+import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
+import processing.core.PGraphics;
 
 public class Graphics {
 
@@ -24,7 +26,9 @@ public class Graphics {
     private static PFont sansSerifBold = null;
     private static PFont sansSerifItalicize = null;
     private static PFont sansSerifBoldItalicize = null;
+
     private static float bubbleOffset = 0;
+    private static PGraphics bubbleImage = null;
 
     private Graphics() {
 
@@ -145,35 +149,60 @@ public class Graphics {
      * bubbling up from the bottom.
      * @param sketch to draw to
      */
-    public static void drawBubbleBackground(Kiosk sketch) {
-        final int width = sketch.getSettings().screenW;
-        final int height = sketch.getSettings().screenH;
+    public static void drawBubbleBackground(Kiosk sketch, float dt) {
+        final int width = Kiosk.getSettings().screenW;
+        final int height = Kiosk.getSettings().screenH;
 
+        if (bubbleImage == null) {
+            bubbleImage = createBubbleBackgroundImage(sketch, width, height);
+        } else if (bubbleImage.width != width || bubbleImage.height != height) {
+            // The size of the kiosk changed, so we need a new buffer image
+            bubbleImage = createBubbleBackgroundImage(sketch, width, height);
+        }
+
+        // Update the location of the background
+        bubbleOffset = (bubbleOffset + 16 * dt) % width;
+
+        // Draw the scrolling background
+        // Floor the offset to prevent jitters from pixel approximation
+        float offset = (float) -Math.floor(bubbleOffset);
+        sketch.imageMode(PConstants.CORNER);
+        sketch.image(bubbleImage, offset, 0);
+        sketch.image(bubbleImage, width + offset, 0);
+    }
+
+    private static PGraphics createBubbleBackgroundImage(PApplet sketch, int width, int height) {
+        // Create offscreen graphics buffer
+        PGraphics pg = sketch.createGraphics(width, height);
+
+        Color color = Color.getInstance();
         float spacing = width / 50f;
         float radius = spacing / 2.05f;
         float radiusChipping = 0.30f * (width / 1280f);
 
-        sketch.ellipseMode(PConstants.CORNER);
-        sketch.noStroke();
-
-        Color color = Color.getInstance();
-        sketch.background(color.dwBlue);
-        sketch.fill(color.dwLightBlue);
+        // Draw to the buffer
+        pg.beginDraw();
+        pg.background(color.dwBlue);
+        pg.fill(color.dwLightBlue);
+        pg.ellipseMode(PConstants.CORNER);
+        pg.noStroke();
 
         boolean stagger = false;
         float y = height - radius;
         float iterationNumber = ((radius - 1) / radiusChipping);
         for (int i = 0; i < iterationNumber; i++) {
-            for (float x = stagger ? spacing / 2 - bubbleOffset : -bubbleOffset;
+            for (float x = stagger ? spacing / 2 : 0;
                  x < width; x += spacing) {
                 if (y > 0) {
-                    sketch.ellipse(x, y, radius, radius);
+                    pg.ellipse(x, y, radius, radius);
                 }
             }
             radius -= radiusChipping;
             y -= spacing;
             stagger = !stagger;
         }
-        bubbleOffset = bubbleOffset + 0.125f;
+        pg.endDraw();
+
+        return pg;
     }
 }

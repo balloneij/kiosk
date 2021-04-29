@@ -23,6 +23,7 @@ public class PathwayScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot = false;
 
     /**
      * Create a pathway scene.
@@ -47,7 +48,7 @@ public class PathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -62,6 +63,7 @@ public class PathwayScene implements Scene {
         }
 
         spokeGraph.init(sketch);
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
@@ -76,7 +78,7 @@ public class PathwayScene implements Scene {
             }
         }
 
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
@@ -91,11 +93,10 @@ public class PathwayScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        Graphics.drawBubbleBackground(sketch);
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
         this.spokeGraph.draw(sketch);
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.backButton.draw(sketch);
             this.homeButton.draw(sketch);
         } else {

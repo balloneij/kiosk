@@ -50,6 +50,7 @@ public class SpokeGraphPromptScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot = false;
 
     /**
      * Creates a Spoke Graph Prompt Scene
@@ -185,7 +186,9 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.hookControl(button);
         }
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+
+        if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -211,7 +214,7 @@ public class SpokeGraphPromptScene implements Scene {
             }
         }
 
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
@@ -226,7 +229,6 @@ public class SpokeGraphPromptScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        Graphics.drawBubbleBackground(sketch);
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
 
         // Calculate answer location constants
@@ -237,9 +239,7 @@ public class SpokeGraphPromptScene implements Scene {
         // Draw the career spoke graph
         this.spokeGraph.draw(sketch);
 
-
-
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             // Draw the back and home buttons
             this.backButton.draw(sketch);
             this.homeButton.draw(sketch);
@@ -258,5 +258,16 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Draw the center prompt button
         this.promptButton.draw(sketch);
+
+        // Draw the career spoke graph
+        this.spokeGraph.draw(sketch);
+
+        if (!isRoot) {
+            // Draw the back and home buttons
+            this.backButton.draw(sketch);
+            this.homeButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
+        }
     }
 }

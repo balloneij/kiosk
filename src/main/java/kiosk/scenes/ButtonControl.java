@@ -8,6 +8,7 @@ import java.util.Map;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
+import kiosk.Settings;
 import kiosk.models.ButtonModel;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
@@ -45,6 +46,9 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private int centerX;
     private int centerY;
+    private int buttonAnimationFrames;
+    private double buttonAnimationIntensity;
+    private float buttonAnimationLengthFrames;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -129,8 +133,13 @@ public class ButtonControl implements Control<MouseEvent> {
         this.disabled = false;
         shouldAnimate = doesAnimate;
 
-        screenW = Kiosk.getSettings().screenW;
-        screenH = Kiosk.getSettings().screenH;
+        // Read draw constants from settings
+        Settings settings = Kiosk.getSettings();
+        screenW = settings.screenW;
+        screenH = settings.screenH;
+        buttonAnimationFrames = settings.buttonAnimationFrames;
+        buttonAnimationIntensity = settings.buttonAnimationIntensity;
+        buttonAnimationLengthFrames = settings.buttonAnimationLengthFrames;
 
         fontSize = screenW / 75;
         fontSizeOverwritten = false;
@@ -138,8 +147,8 @@ public class ButtonControl implements Control<MouseEvent> {
         colorDeltaOnClick = -25;
 
         // Constants for home and back button
-        buttonWidth = Kiosk.getSettings().screenW / 8;
-        buttonHeight = Kiosk.getSettings().screenH / 6;
+        buttonWidth = screenW / 8;
+        buttonHeight = screenH / 6;
         // Radius of the rounded edge on rectangle buttons
         defaultCornerRadius = buttonHeight / 5;
         buttonPadding = 20;
@@ -207,9 +216,9 @@ public class ButtonControl implements Control<MouseEvent> {
                 lastTime = System.currentTimeMillis();
             }
 
-            float xDist = centerX - this.rect.x;
-            float yDist = centerY - this.rect.y;
-            if (Math.sqrt(xDist* xDist + yDist * yDist) < 10) {
+            float distX = centerX - this.rect.x;
+            float distY = centerY - this.rect.y;
+            if (Math.sqrt(distX * distX + distY * distY) < 10) {
                 this.isSnapping = false;
                 this.isDragged = false;
                 this.rect.x = centerX;
@@ -217,8 +226,8 @@ public class ButtonControl implements Control<MouseEvent> {
                 draggedButtonModel = null;
                 this.lastTime = 0;
             } else {
-                this.rect.y += (int) (yDist * deltaTime / 100f);
-                this.rect.x += (int) (xDist * deltaTime / 100f);
+                this.rect.y += (int) (distY * deltaTime / 100f);
+                this.rect.x += (int) (distX * deltaTime / 100f);
             }
         }
     }
@@ -238,8 +247,8 @@ public class ButtonControl implements Control<MouseEvent> {
             drawText(sketch);
             drawImage(sketch);
         } else {
-            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                    < Kiosk.getSettings().buttonAnimationLengthFrames
+            if (sketch.frameCount % buttonAnimationFrames
+                    < buttonAnimationLengthFrames
                     && !this.disabled && this.shouldAnimate) {
                 double offset = calculateAnimationOffset(sketch);
                 setFill(sketch);
@@ -282,8 +291,8 @@ public class ButtonControl implements Control<MouseEvent> {
             drawText(sketch);
             drawImage(sketch);
         } else {
-            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                    < Kiosk.getSettings().buttonAnimationLengthFrames
+            if (sketch.frameCount % buttonAnimationFrames
+                    < buttonAnimationLengthFrames
                     && !this.disabled && this.shouldAnimate) {
                 double offset = calculateAnimationOffset(sketch);
                 setFill(sketch);
@@ -380,35 +389,43 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     private void setFill(Kiosk sketch) {
-        if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
+        int frameCount = sketch.frameCount;
+
+        // Determine the fill color
+        int r;
+        int g;
+        int b;
+        if (frameCount % buttonAnimationFrames
+                < (buttonAnimationLengthFrames / 2)
                 && !this.disabled && this.shouldAnimate) {
-            sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                    clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                    clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
+            r = clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
+                    * (frameCount % buttonAnimationFrames
+                    / buttonAnimationLengthFrames)));
+            g = clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
+                    * (frameCount % buttonAnimationFrames
+                    / buttonAnimationLengthFrames)));
+            b = clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
+                    * (frameCount % buttonAnimationFrames
+                    / buttonAnimationLengthFrames)));
         } else {
-            sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                            * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                            - (sketch.frameCount
-                            % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                    clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                            * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                            - (sketch.frameCount
-                            % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                    clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                            * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                            - (sketch.frameCount
-                            % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
+            r = clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
+                    * ((buttonAnimationLengthFrames
+                    - (frameCount
+                    % buttonAnimationFrames))
+                    / buttonAnimationLengthFrames)));
+            g = clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
+                    * ((buttonAnimationLengthFrames
+                    - (frameCount
+                    % buttonAnimationFrames))
+                    / buttonAnimationLengthFrames)));
+            b = clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
+                    * ((buttonAnimationLengthFrames
+                    - (frameCount
+                    % buttonAnimationFrames))
+                    / buttonAnimationLengthFrames)));
         }
+
+        sketch.fill(r, g, b);
     }
 
     private void setNormalFillAndStroke(Kiosk sketch) {
@@ -424,12 +441,12 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     private double calculateAnimationOffset(Kiosk sketch) {
         return (8) * ((0 - (sketch.frameCount
-                % Kiosk.getSettings().buttonAnimationFrames)
-                * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames)
-                / Kiosk.getSettings().buttonAnimationIntensity) + ((sketch.frameCount
-                % Kiosk.getSettings().buttonAnimationFrames)
-                * ((Kiosk.getSettings().buttonAnimationLengthFrames - 1)
-                / Kiosk.getSettings().buttonAnimationIntensity)));
+                % buttonAnimationFrames)
+                * (sketch.frameCount % buttonAnimationFrames)
+                / buttonAnimationIntensity) + ((sketch.frameCount
+                % buttonAnimationFrames)
+                * ((buttonAnimationLengthFrames - 1)
+                / buttonAnimationIntensity)));
     }
 
     private boolean isLightButton() {

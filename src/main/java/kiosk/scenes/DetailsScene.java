@@ -16,6 +16,7 @@ public class DetailsScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot;
 
     // Buttons
     private static int buttonWidth = Kiosk.getSettings().screenW / 8;
@@ -103,11 +104,13 @@ public class DetailsScene implements Scene {
 
         this.nextButton = GraphicsUtil.initializeNextButton(sketch);
         sketch.hookControl(this.nextButton);
+
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!this.isRoot) {
             if (this.homeButton.wasClicked()) {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
@@ -124,7 +127,6 @@ public class DetailsScene implements Scene {
     @Override
     public void draw(Kiosk sketch) {
         final int centerX = Kiosk.getSettings().screenW / 2;
-        Graphics.drawBubbleBackground(sketch);
 
         // Draw the white foreground box
         sketch.fill(255);
@@ -158,7 +160,7 @@ public class DetailsScene implements Scene {
 
         this.centerButton.draw(sketch);
         this.nextButton.draw(sketch);
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.homeButton.draw(sketch);
             this.backButton.draw(sketch);
         } else {

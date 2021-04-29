@@ -36,6 +36,7 @@ public class Kiosk extends PApplet {
     private CareerModel[] careers;
     private Scene lastScene;
     private SceneModel lastSceneModel;
+    private boolean currentSceneIsRoot = false;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
     private long lastNanos = 0;
     protected static Settings settings;
@@ -213,23 +214,19 @@ public class Kiosk extends PApplet {
 
             this.lastScene = currentScene;
             this.lastSceneModel = currentSceneModel;
+
+            currentSceneIsRoot =
+                    lastSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId());
         }
 
         // Update and draw the scene
         currentScene.update(dt, this.sceneGraph);
+        Graphics.drawBubbleBackground(this, dt);
         currentScene.draw(this);
 
-        long currentSceneMillis = currentMillis - this.newSceneMillis;
-
-        // Check for timeout (since the current scene has been loaded)
-        // Make sure it's not the root scene though first
-        // Also make sure that we weren't previously on the root scene,
-        // otherwise we get the timeout popup immediately
-        currentSceneModel = this.sceneGraph.getCurrentSceneModel();
-        if (lastSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
-            currentSceneMillis = 0;
-        }
-        if (!currentSceneModel.getId().equals(sceneGraph.getRootSceneModel().getId())) {
+        // Check for timeout
+        int currentSceneMillis = currMillis - this.newSceneMillis;
+        if (!currentSceneIsRoot) {
             if (timeoutActive && currentSceneMillis > Kiosk.settings.gracePeriodMillis) {
                 // Clear the timeoutActive flag
                 // Needed here because a sceneGraph reset doesn't clear the flag automatically
