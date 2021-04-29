@@ -44,7 +44,7 @@ public class TimeoutScene implements Scene {
     private ButtonControl backButton;
     private Image image;
 
-    public int remainingTime = 0;
+    public long remainingTime = 0;
 
     /**
      * Default constructor.

@@ -37,10 +37,10 @@ public class Kiosk extends PApplet {
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
-    private int lastMillis = 0;
+    private long lastNanos = 0;
     protected static Settings settings;
     private Boop boop;
-    private int newSceneMillis;
+    private long newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
     private boolean shouldTimeout = true;
@@ -171,7 +171,7 @@ public class Kiosk extends PApplet {
     @Override
     public void setup() {
         super.setup();
-        this.lastMillis = millis();
+        this.lastNanos = System.nanoTime();
         boop.loadVariables(this);
         if (!fontsLoaded) {
             Graphics.loadFonts();
@@ -183,10 +183,17 @@ public class Kiosk extends PApplet {
     public void draw() {
         // Clear out the previous frame
         this.background(0);
+
+        // Check for frameCount rollover
+        if (this.frameCount <= 0) {
+            this.frameCount = this.frameCount - Integer.MIN_VALUE + 1;
+        }
+
         // Compute the time delta in seconds
-        int currMillis = millis();
-        float dt = (float) (currMillis - this.lastMillis) / 1000;
-        this.lastMillis = currMillis;
+        long currentNanos = System.nanoTime();
+        long currentMillis = currentNanos / 1000000;
+        float dt = (float) (currentNanos - this.lastNanos) / 1000000000;
+        this.lastNanos = currentNanos;
 
         // Get the current scene and sceneModel
         Scene currentScene = this.sceneGraph.getCurrentScene();
@@ -202,7 +209,7 @@ public class Kiosk extends PApplet {
             }
 
             // Record when a new scene is loaded
-            this.newSceneMillis = currMillis;
+            this.newSceneMillis = currentMillis;
 
             this.lastScene = currentScene;
             this.lastSceneModel = currentSceneModel;
@@ -212,7 +219,7 @@ public class Kiosk extends PApplet {
         currentScene.update(dt, this.sceneGraph);
         currentScene.draw(this);
 
-        int currentSceneMillis = currMillis - this.newSceneMillis;
+        long currentSceneMillis = currentMillis - this.newSceneMillis;
 
         // Check for timeout (since the current scene has been loaded)
         // Make sure it's not the root scene though first
@@ -240,7 +247,7 @@ public class Kiosk extends PApplet {
                 timeoutActive = true;
             } else if (timeoutActive && this.sceneGraph.getCurrentScene() instanceof TimeoutScene) {
                 ((TimeoutScene) this.sceneGraph.getCurrentScene()).remainingTime =
-                        Kiosk.settings.gracePeriodMillis - currentSceneMillis;
+                        (Kiosk.settings.gracePeriodMillis - currentSceneMillis);
             }
         }
         boop.movementLogic(this, currentScene);
