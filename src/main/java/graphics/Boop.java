@@ -134,7 +134,8 @@ public class Boop {
             maxX = width * ((screenBoundaryFraction - 1) / screenBoundaryFraction);
         }
         boolean choseScootAnimation;
-        if (currentX >= width * (screenBoundaryFraction - 1 / screenBoundaryFraction) || currentX >= maxX) {
+        if (currentX >= width * (screenBoundaryFraction - 1 / screenBoundaryFraction)
+                || currentX >= maxX) {
             //Boop is too close to the right edge of the screen!
             //Somebody tell him to stop!
             //oh god he can't hear us he has airpods in oh god

@@ -253,7 +253,9 @@ public class SpokeGraphPromptScene implements Scene {
             }
         }
 
-        if ((clickedNext) && !sketch.isEditor && sketch.getSceneGraph().getSceneById(sceneToGoTo).toString().contains("Career Pathway")) {
+        if ((clickedNext) && !sketch.isEditor
+                && sketch.getSceneGraph().getSceneById(sceneToGoTo)
+                .toString().contains("Career Pathway")) {
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
@@ -262,23 +264,27 @@ public class SpokeGraphPromptScene implements Scene {
             final double size = Math.min(screenW, availableHeight);
             drawThisFrameOppositeDirections(sketch, (int) (0 - ((screenW - size) / 2)
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0, (int) (screenW
+                    * 1.0 / sceneAnimationFrames + 1))), (int) (screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
+                    * 1.0 / sceneAnimationFrames + 1))));
 
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
             }
-        } else if ((clickedNext) && !sketch.isEditor && !sketch.getSceneGraph().getSceneById(sceneToGoTo).toString().contains("Spoke Graph Prompt")) {
+        } else if ((clickedNext) && !sketch.isEditor
+                && !sketch.getSceneGraph().getSceneById(sceneToGoTo)
+                .toString().contains("Spoke Graph Prompt")) {
             if (sketch.frameCount > startFrame + sceneAnimationFrames) {
                 startFrame = sketch.frameCount;
             }
 
-            drawThisFrame(sketch, 0, 0);
+            drawThisFrame(sketch, 0);
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-        } else if ((clickedNext) && !sketch.isEditor && sketch.getSceneGraph().getSceneById(sceneToGoTo).toString().contains("Spoke Graph Prompt")) {
-            drawThisFrame(sketch, 0, 0);
+        } else if ((clickedNext) && !sketch.isEditor
+                && sketch.getSceneGraph().getSceneById(sceneToGoTo)
+                .toString().contains("Spoke Graph Prompt")) {
+            drawThisFrame(sketch, 0);
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
         } else if (clickedBack && !sketch.isEditor
@@ -306,7 +312,7 @@ public class SpokeGraphPromptScene implements Scene {
                 startFrame = sketch.frameCount;
             }
 
-            drawThisFrame(sketch, 0, (int) (screenH
+            drawThisFrame(sketch, (int) (screenH
                     * (1 - ((sketch.frameCount - startFrame)
                     * 1.0 / sceneAnimationFrames + 1))));
 
@@ -321,9 +327,9 @@ public class SpokeGraphPromptScene implements Scene {
         } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor
                 && sketch.getSceneGraph().recentActivity.contains("Career Pathway")
                 && sketch.getSceneGraph().recentActivity.contains("POP")) {
-            drawThisFrameOppositeDirections(sketch, 0, 0, (int) (screenW + screenW
+            drawThisFrameOppositeDirections(sketch, 0, (int) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
+                    * 1.0 / sceneAnimationFrames + 1))));
         } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor
                 && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")
                 && sketch.getSceneGraph().recentActivity.contains("POP")) {
@@ -338,7 +344,7 @@ public class SpokeGraphPromptScene implements Scene {
         } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrameInterpolate(sketch, 0, 0);
         } else { //If it's already a second-or-two old, draw the scene normally
-            drawThisFrame(sketch, 0, 0);
+            drawThisFrame(sketch, 0);
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
@@ -348,8 +354,8 @@ public class SpokeGraphPromptScene implements Scene {
         }
     }
 
-    private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
+    private void drawThisFrame(Kiosk sketch, int offsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, offsetY);
 
         // Calculate answer location constants
         float headerBottomY = headerY + headerH + 2 * answersPadding;
@@ -360,13 +366,13 @@ public class SpokeGraphPromptScene implements Scene {
         for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(answersSpokeThickness);
             sketch.stroke(255);
-            sketch.line(answersCenterX + offsetX, answersCenterY + offsetY,
-                    answer.getCenterX() + offsetX, answer.getCenterY() + offsetY);
-            answer.draw(sketch, offsetX, offsetY);
+            sketch.line(answersCenterX, answersCenterY + offsetY,
+                    answer.getCenterX(), answer.getCenterY() + offsetY);
+            answer.draw(sketch, 0, offsetY);
         }
 
         // Draw the center prompt button
-        this.promptButton.draw(sketch, offsetX, offsetY);
+        this.promptButton.draw(sketch, 0, offsetY);
 
         // Draw the career spoke graph
         // Define the size of the square that the spoke graph will fit in
@@ -392,10 +398,10 @@ public class SpokeGraphPromptScene implements Scene {
                 this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
-        spokeGraph.draw(sketch, offsetX, offsetY);
+        spokeGraph.draw(sketch, 0, offsetY);
 
         if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            supplementaryButton.draw(sketch, offsetX, offsetY);
+            supplementaryButton.draw(sketch, 0, offsetY);
         }
     }
 
@@ -455,8 +461,9 @@ public class SpokeGraphPromptScene implements Scene {
         }
     }
 
-    private void drawThisFrameOppositeDirections(Kiosk sketch, int offsetX, int offsetY, int otherOffsetX, int otherOffsetY) {
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, otherOffsetX, otherOffsetY);
+    private void drawThisFrameOppositeDirections(Kiosk sketch, int offsetX, int otherOffsetX) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle,
+                model.headerBody, otherOffsetX, 0);
 
         // Calculate answer location constants
         float headerBottomY = headerY + headerH + 2 * answersPadding;
@@ -467,13 +474,13 @@ public class SpokeGraphPromptScene implements Scene {
         for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(answersSpokeThickness);
             sketch.stroke(255);
-            sketch.line(answersCenterX + otherOffsetX, answersCenterY + otherOffsetY,
-                    answer.getCenterX() + otherOffsetX, answer.getCenterY() + otherOffsetY);
-            answer.draw(sketch, otherOffsetX, otherOffsetY);
+            sketch.line(answersCenterX + otherOffsetX, answersCenterY,
+                    answer.getCenterX() + otherOffsetX, answer.getCenterY());
+            answer.draw(sketch, otherOffsetX, 0);
         }
 
         // Draw the center prompt button
-        this.promptButton.draw(sketch, otherOffsetX, otherOffsetY);
+        this.promptButton.draw(sketch, otherOffsetX, 0);
 
         // Draw the career spoke graph
         // Define the size of the square that the spoke graph will fit in
@@ -499,10 +506,10 @@ public class SpokeGraphPromptScene implements Scene {
                 this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
-        spokeGraph.draw(sketch, offsetX, offsetY);
+        spokeGraph.draw(sketch, offsetX, 0);
 
         if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            supplementaryButton.draw(sketch, otherOffsetX, otherOffsetY);
+            supplementaryButton.draw(sketch, otherOffsetX, 0);
         }
     }
 }

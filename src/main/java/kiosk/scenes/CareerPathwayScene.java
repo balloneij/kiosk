@@ -157,9 +157,9 @@ public class CareerPathwayScene implements Scene {
 
             drawThisFrameReversedSpoke(sketch, (int) (((screenW - size) / 2)
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0, (int) (0 - screenW
+                    * 1.0 / sceneAnimationFrames + 1))), (int) (0 - screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
+                    * 1.0 / sceneAnimationFrames + 1))));
             if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
                 sketch.getSceneGraph().popScene();
             }
@@ -198,7 +198,7 @@ public class CareerPathwayScene implements Scene {
                 .toString().contains("Spoke Graph Prompt")) {
             drawThisFrameCenteredSpoke(sketch, (int) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
+                    * 1.0 / sceneAnimationFrames + 1))));
         } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW + screenW
                     * (1 - ((sketch.frameCount - startFrame)
@@ -222,8 +222,8 @@ public class CareerPathwayScene implements Scene {
         }
     }
 
-    private void drawThisFrameCenteredSpoke(Kiosk sketch, int offsetX, int offsetY) {
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
+    private void drawThisFrameCenteredSpoke(Kiosk sketch, int offsetX) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, 0);
 
         float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         // Grab careers from the Kiosk and userScore from the SceneGraph
@@ -264,12 +264,13 @@ public class CareerPathwayScene implements Scene {
         this.spokeGraph.draw(sketch, 0, 0);
 
         if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            supplementaryButton.draw(sketch, offsetX, offsetY);
+            supplementaryButton.draw(sketch, offsetX, 0);
         }
     }
 
-    private void drawThisFrameReversedSpoke(Kiosk sketch, int offsetX, int offsetY, int headerOffsetX, int headerOffsetY) {
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, headerOffsetX, headerOffsetY);
+    private void drawThisFrameReversedSpoke(Kiosk sketch, int offsetX, int headerOffsetX) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle,
+                model.headerBody, headerOffsetX, 0);
 
         float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         // Grab careers from the Kiosk and userScore from the SceneGraph
@@ -307,10 +308,10 @@ public class CareerPathwayScene implements Scene {
             sketch.hookControl(careerOption);
         }
 
-        this.spokeGraph.draw(sketch, offsetX, offsetY);
+        this.spokeGraph.draw(sketch, offsetX, 0);
 
         if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            supplementaryButton.draw(sketch, headerOffsetX, headerOffsetY);
+            supplementaryButton.draw(sketch, headerOffsetX, 0);
         }
     }
 }
