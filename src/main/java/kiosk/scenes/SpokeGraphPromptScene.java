@@ -50,6 +50,7 @@ public class SpokeGraphPromptScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot = false;
 
     //Animations
     private int startFrame = 0;
@@ -196,7 +197,9 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.hookControl(button);
         }
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+
+        if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -226,7 +229,7 @@ public class SpokeGraphPromptScene implements Scene {
             }
         }
 
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             if (this.homeButton.wasClicked()) {
                 clickedHome = true;
             } else if (this.backButton.wasClicked()) {
@@ -241,7 +244,6 @@ public class SpokeGraphPromptScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        Graphics.drawBubbleBackground(sketch);
 
         if (sketch.isEditor) {
             if (clickedNext) {
@@ -362,6 +364,17 @@ public class SpokeGraphPromptScene implements Scene {
         int answersCenterX = screenW * 3 / 4;
         float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
 
+        // Draw the career spoke graph
+        this.spokeGraph.draw(sketch, 0, 0);
+
+        if (!isRoot) {
+            // Draw the back and home buttons
+            this.backButton.draw(sketch);
+            this.homeButton.draw(sketch);
+        } else {
+            supplementaryButton.draw(sketch);
+        }
+
         // Draw answer buttons
         for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(answersSpokeThickness);
@@ -456,7 +469,7 @@ public class SpokeGraphPromptScene implements Scene {
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, offsetY);
 
-        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
         }
     }
@@ -508,7 +521,7 @@ public class SpokeGraphPromptScene implements Scene {
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, 0);
 
-        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (isRoot) {
             supplementaryButton.draw(sketch, otherOffsetX, 0);
         }
     }

@@ -23,6 +23,7 @@ public class PathwayScene implements Scene {
     private ButtonControl backButton;
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot = false;
 
     //Animations
     private int startFrame = 0;
@@ -58,7 +59,7 @@ public class PathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -76,6 +77,7 @@ public class PathwayScene implements Scene {
         sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
 
         spokeGraph.init(sketch);
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
@@ -90,7 +92,7 @@ public class PathwayScene implements Scene {
             }
         }
 
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             if (this.homeButton.wasClicked()) {
                 clickedHome = true;
             } else if (this.backButton.wasClicked()) {
@@ -107,7 +109,6 @@ public class PathwayScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        Graphics.drawBubbleBackground(sketch);
 
         if (sketch.isEditor) {
             if (clickedNext) {
@@ -174,7 +175,7 @@ public class PathwayScene implements Scene {
             drawThisFrame(sketch, 0, 0);
         }
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.backButton.draw(sketch);
             this.homeButton.draw(sketch);
         }
@@ -184,7 +185,7 @@ public class PathwayScene implements Scene {
         GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
         this.spokeGraph.draw(sketch, offsetX, offsetY);
 
-        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
         }
     }

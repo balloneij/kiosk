@@ -131,8 +131,6 @@ public class CareerDescriptionScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.drawBubbleBackground(sketch);
-
         if (sketch.isEditor) {
             if (clickedBack) {
                 sketch.getSceneGraph().popScene();

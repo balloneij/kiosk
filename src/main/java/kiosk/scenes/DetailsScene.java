@@ -17,6 +17,7 @@ public class DetailsScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot;
 
     private static int screenW =  Kiosk.getSettings().screenW;
     private static int screenH = Kiosk.getSettings().screenH;
@@ -122,11 +123,13 @@ public class DetailsScene implements Scene {
 
         startFrame = sketch.frameCount;
         sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!this.isRoot) {
             if (this.homeButton.wasClicked()) {
                 clickedHome = true;
             } else if (this.backButton.wasClicked()) {
@@ -145,8 +148,6 @@ public class DetailsScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        Graphics.drawBubbleBackground(sketch);
-
         if (sketch.isEditor) {
             if (clickedNext) {
                 sketch.getSceneGraph().pushScene(this.centerButton.getTarget());
@@ -251,7 +252,7 @@ public class DetailsScene implements Scene {
         this.centerButton.draw(sketch, offsetX, offsetY);
         this.nextButton.draw(sketch, offsetX, offsetY);
 
-        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
         }
     }

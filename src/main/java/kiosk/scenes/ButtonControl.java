@@ -8,6 +8,7 @@ import java.util.Map;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
+import kiosk.Settings;
 import kiosk.models.ButtonModel;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
@@ -42,8 +43,14 @@ public class ButtonControl implements Control<MouseEvent> {
     private boolean shouldAnimate;
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
-    private double offsetX = 0;
-    private double offsetY = 0;
+
+    private int centerX;
+    private int centerY;
+    private int buttonAnimationFrames;
+    private double buttonAnimationIntensity;
+    private float buttonAnimationLengthFrames;
+    private double animationOffsetX;
+    private double animationOffsetY;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -69,14 +76,21 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int w, int h, boolean doesAnimate) {
         this.model = model;
+        centerX = x;
+        centerY = y;
         this.rect = new Rectangle(x, y, w, h);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
         this.disabled = false;
         this.shouldAnimate = doesAnimate;
 
-        screenW = Kiosk.getSettings().screenW;
-        screenH = Kiosk.getSettings().screenH;
+        // Read draw constants from settings
+        Settings settings = Kiosk.getSettings();
+        screenW = settings.screenW;
+        screenH = settings.screenH;
+        buttonAnimationFrames = settings.buttonAnimationFrames;
+        buttonAnimationIntensity = settings.buttonAnimationIntensity;
+        buttonAnimationLengthFrames = settings.buttonAnimationLengthFrames;
 
         fontSize = screenW / 75;
         fontSizeOverwritten = false;
@@ -93,6 +107,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
+        this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
     }
 
     /**
@@ -117,14 +132,21 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     public ButtonControl(ButtonModel model, int x, int y, int radius, boolean doesAnimate) {
         this.model = model;
+        centerX = x;
+        centerY = y;
         this.rect = new Rectangle(x, y, radius * 2, radius * 2);
         updateRadius(); // Radius only used when button is circle
         this.image = null;
         this.disabled = false;
         shouldAnimate = doesAnimate;
 
-        screenW = Kiosk.getSettings().screenW;
-        screenH = Kiosk.getSettings().screenH;
+        // Read draw constants from settings
+        Settings settings = Kiosk.getSettings();
+        screenW = settings.screenW;
+        screenH = settings.screenH;
+        buttonAnimationFrames = settings.buttonAnimationFrames;
+        buttonAnimationIntensity = settings.buttonAnimationIntensity;
+        buttonAnimationLengthFrames = settings.buttonAnimationLengthFrames;
 
         fontSize = screenW / 75;
         fontSizeOverwritten = false;
@@ -132,8 +154,8 @@ public class ButtonControl implements Control<MouseEvent> {
         colorDeltaOnClick = -25;
 
         // Constants for home and back button
-        buttonWidth = Kiosk.getSettings().screenW / 8;
-        buttonHeight = Kiosk.getSettings().screenH / 6;
+        buttonWidth = screenW / 8;
+        buttonHeight = screenH / 6;
         // Radius of the rounded edge on rectangle buttons
         defaultCornerRadius = buttonHeight / 5;
         buttonPadding = 20;
@@ -141,6 +163,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
+        this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
     }
 
     /**
@@ -155,52 +178,7 @@ public class ButtonControl implements Control<MouseEvent> {
         wasInit = true;
     }
 
-    /**
-     * Draw's the appropriate button to the sketch using
-     * coordinates and information provided upon initialization.
-     *
-     * @param sketch to draw to
-     */
-    public void draw(Kiosk sketch) {
-        if (!fontSizeOverwritten) {
-            Graphics.useGothic(sketch, fontSize, true);
-            checkInit(); // Prints a warning if the button wasn't initialized
-            textSizeMultiplier = 1;
-        }
-        fontSizeOverwritten = false;
-        if (!this.model.noButton) {
-            if (this.model.isCircle) {
-                this.drawCircle(sketch, offsetX, offsetY);
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed) {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                    }
-                }
-            } else {
-                this.drawRectangle(sketch, offsetX, offsetY);
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed) {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                    }
-                }
-            }
-        } else {
-            if (this.model.image != null) {
-                sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed) {
-                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                } else {
-                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (rect.getCenterY() + offsetY));
-                }
-            }
-        }
-    }
+    long lastTime = 0;
 
     /**
      * Draw's the appropriate button to the sketch using
@@ -209,23 +187,173 @@ public class ButtonControl implements Control<MouseEvent> {
      * @param sketch to draw to
      */
     public void draw(Kiosk sketch, double offsetX, double offsetY) {
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+        animationOffsetX = offsetX;
+        animationOffsetY = offsetY;
         draw(sketch);
+    }
+
+    /**
+     * Draw's the appropriate button to the sketch using
+     * coordinates and information provided upon initialization.
+     *
+     * @param sketch to draw to
+     */
+    public void draw(Kiosk sketch) {
+        // Set the Font
+        if (!fontSizeOverwritten) {
+            Graphics.useGothic(sketch, fontSize, true);
+            checkInit(); // Prints a warning if the button wasn't initialized
+            textSizeMultiplier = 1;
+        }
+        fontSizeOverwritten = false;
+
+        // Draw the shape
+        if (!this.model.noButton) {
+            if (this.model.isCircle) {
+                this.drawCircle(sketch);
+            } else {
+                this.drawRectangle(sketch);
+            }
+        } else if (this.model.image != null) { // Draw the image, if it exists
+            sketch.imageMode(PConstants.CENTER);
+            if (this.isPressed) {
+                this.image.draw(sketch, (float) rect.getCenterX(),
+                        (float) rect.getCenterY() + this.rect.height / 10.f);
+            } else {
+                this.image.draw(sketch, (float) rect.getCenterX(), !this.model.noButton
+                        ? (float) rect.getCenterY() + this.rect.height / 10.f
+                        : (float) rect.getCenterY());
+            }
+        }
+
+        if (isSnapping) {
+            long deltaTime = 0;
+            if (lastTime != 0) {
+                deltaTime = System.currentTimeMillis() - lastTime;
+                lastTime = System.currentTimeMillis();
+            } else {
+                lastTime = System.currentTimeMillis();
+            }
+
+            float distX = centerX - this.rect.x;
+            float distY = centerY - this.rect.y;
+            if (Math.sqrt(distX * distX + distY * distY) < 10) {
+                this.isSnapping = false;
+                this.isDragged = false;
+                this.rect.x = centerX;
+                this.rect.y = centerY;
+                draggedButtonModel = null;
+                this.lastTime = 0;
+            } else {
+                this.rect.y += (int) (distY * deltaTime / 100f);
+                this.rect.x += (int) (distX * deltaTime / 100f);
+            }
+        }
     }
 
     /**
      * Draw the button as a rectangle.
      *
      * @param sketch to draw to
-     * @param offsetX the amount the button should be drawn to the right, for animation purposes
      */
-    private void drawRectangle(Kiosk sketch, double offsetX, double offsetY) {
-        // Draw modifiers
+    private void drawRectangle(Kiosk sketch) {
+        setDrawModifiers(sketch);
+        drawOutline(sketch, 1);
+
+        // If pressed, draw the text lower and don't draw the main button
+        // This makes it look like the button is pushed into the screen
+        if (this.isPressed) {
+            drawText(sketch);
+            drawImage(sketch);
+        } else {
+            if (sketch.frameCount % buttonAnimationFrames
+                    < buttonAnimationLengthFrames
+                    && !this.disabled && this.shouldAnimate) {
+                double offset = calculateAnimationOffset(sketch);
+                setFill(sketch);
+                sketch.stroke(59, 58, 57, 63f);
+                Graphics.drawRoundedRectangle(sketch, (float)
+                                (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + (float) (this.rect.height / 2.f
+                                + (this.rect.height / 10.f * offset))),
+                        (int) (this.rect.width), (int)
+                                (this.rect.height), defaultCornerRadius);
+                textWithOutline(this.model.text,
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY
+                                + (this.rect.height / 10.f * offset)),
+                        (float) this.rect.width,
+                        (float) this.rect.height,
+                        sketch, isLightButton());
+                drawImage(sketch, offset);
+            } else {
+                setNormalFillAndStroke(sketch);
+                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f),
+                        this.rect.width, this.rect.height, defaultCornerRadius);
+                textWithOutline(this.model.text,
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY),
+                        (float) this.rect.width,
+                        (float) this.rect.height,
+                        sketch, isLightButton());
+                drawImage(sketch);
+            }
+        }
+    }
+
+    private void drawCircle(Kiosk sketch) {
+        setDrawModifiers(sketch);
+        drawOutline(sketch, 1);
+
+        // If pressed, draw the text lower and don't draw the main button
+        // This makes it look like the button is pushed into the screen
+        if (this.isPressed) {
+            drawText(sketch);
+            drawImage(sketch);
+        } else {
+            if (sketch.frameCount % buttonAnimationFrames
+                    < buttonAnimationLengthFrames
+                    && !this.disabled && this.shouldAnimate) {
+                double offset = calculateAnimationOffset(sketch);
+                setFill(sketch);
+                sketch.ellipse((float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + (float) (this.rect.height / 2.f
+                                + (this.rect.height / 10.f * offset))),
+                        (float) (this.rect.width),
+                        (float) (this.rect.height));
+                textWithOutline(this.model.text,
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY
+                                + (this.rect.height / 10.f * offset)),
+                        (float) this.rect.width,
+                        (float) this.rect.height,
+                        sketch, isLightButton());
+                drawImage(sketch, offset);
+            } else {
+                setNormalFillAndStroke(sketch);
+                sketch.ellipse((float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f),
+                        (float) (this.rect.width),
+                        (float) (this.rect.height));
+                textWithOutline(this.model.text,
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY),
+                        this.rect.width, this.rect.height,
+                        sketch, isLightButton());
+                drawImage(sketch);
+            }
+        }
+    }
+
+    private void setDrawModifiers(Kiosk sketch) {
+        sketch.rectMode(PConstants.CORNER);
+        sketch.ellipseMode(PConstants.CENTER);
         sketch.rectMode(PConstants.CENTER);
         sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+    }
 
-        // If it's clickable, draw the darker button behind the main one to add 3D effect
+    private void drawOutline(Kiosk sketch, double sizeMultiplier) {
         if (!this.disabled) {
             //Draw the darker button behind the button to add 3D effects
             sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
@@ -233,241 +361,98 @@ public class ButtonControl implements Control<MouseEvent> {
                     clampColor(this.model.rgb[2] + colorDeltaOnClick));
             sketch.stroke(Color.DW_BLACK_RGB[0], Color.DW_BLACK_RGB[1],
                     Color.DW_BLACK_RGB[2], 63f);
-            Graphics.drawRoundedRectangle(sketch, (float)
-                            (this.rect.x + offsetX + this.rect.width / 2.f),
-                    (float) (this.rect.y + offsetY + this.rect.height
-                            / 2.f + this.rect.height / 10.f),
-                    this.rect.width, this.rect.height, defaultCornerRadius);
-        }
-
-        // If pressed, draw the text lower and don't draw the main button
-        // This makes it look like the button is pushed into the screen
-        if (this.isPressed) {
-            textWithOutline(this.model.text,
-                    (float) (this.rect.getCenterX() + offsetX),
-                    (float) (this.rect.getCenterY() + offsetY
-                            + this.rect.height / 10.f),
-                    (float) this.rect.width,
-                    (float) this.rect.height,
-                    sketch, isLightButton());
-            if (this.model.image != null) {
-                sketch.imageMode(PConstants.CENTER);
-                if (this.isPressed && !this.disabled) {
-                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                } else {
-                    this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (rect.getCenterY() + offsetY));
-                }
-            }
-        } else {
-            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                    < Kiosk.getSettings().buttonAnimationLengthFrames
-                    && !this.disabled && this.shouldAnimate) {
-                double offset = calculateAnimationOffset(sketch);
-                if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                        < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
-                        && !this.disabled && this.shouldAnimate) {
-                    sketch.fill((clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))),
-                            (clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))),
-                            (clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))));
-                } else {
-                    sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            (clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))),
-                            (clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames)))));
-                }
-                sketch.stroke(59, 58, 57, 63f);
-                Graphics.drawRoundedRectangle(sketch, (float)
-                                (this.rect.x + offsetX + this.rect.width / 2.f),
-                        (float) (this.rect.y + offsetY + (float) (this.rect.height / 2.f
-                                + (this.rect.height / 10.f * offset))),
-                        (int) (this.rect.width), (int)
-                                (this.rect.height), defaultCornerRadius);
-                textWithOutline(this.model.text,
-                        (float) (this.rect.getCenterX() + offsetX),
-                        (float) (this.rect.getCenterY() + offsetY
-                                + (this.rect.height / 10.f * offset)),
-                        (float) this.rect.width,
-                        (float) this.rect.height,
-                        sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                    } else {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (this.rect.getCenterY() + offsetY
-                                    + (this.rect.height / 10.f * offset)));
-                    }
-                }
+            if (model.isCircle) {
+                sketch.ellipse((float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f + this.rect.height / 10.f),
+                        (int) (this.rect.width * sizeMultiplier),
+                        (int) (this.rect.height * sizeMultiplier));
             } else {
-                sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-                sketch.stroke(59, 58, 57, 63f);
-                Graphics.drawRoundedRectangle(sketch, (float)
-                                (this.rect.x + offsetX + this.rect.width / 2.f),
-                        (float) (this.rect.y + offsetY + this.rect.height / 2.f),
+                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f + this.rect.height / 10.f),
                         this.rect.width, this.rect.height, defaultCornerRadius);
-                textWithOutline(this.model.text,
-                        (float) (this.rect.getCenterX() + offsetX),
-                        (float) (this.rect.getCenterY() + offsetY),
-                        (float) this.rect.width,
-                        (float) this.rect.height,
-                        sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                    } else {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                            (float) (rect.getCenterY() + offsetY));
-                    }
-                }
             }
         }
     }
 
-    private void drawCircle(Kiosk sketch, double offsetX, double offsetY) {
-        // Draw modifiers
-        sketch.rectMode(PConstants.CORNER);
-        sketch.ellipseMode(PConstants.CENTER);
-        sketch.rectMode(PConstants.CENTER);
-        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-
-        // If it's clickable, draw the darker button behind the main one to add 3D effect
-        if (!disabled) {
-            //Draw the darker button behind the button to add 3D effects
-            sketch.fill(clampColor(this.model.rgb[0] + colorDeltaOnClick),
-                    clampColor(this.model.rgb[1] + colorDeltaOnClick),
-                    clampColor(this.model.rgb[2] + colorDeltaOnClick));
-            sketch.stroke(59, 58, 57, 63f);
-            sketch.ellipse((float) (this.rect.x + offsetX + this.rect.width / 2.f),
-                    (float) (this.rect.y + offsetY + this.rect.height
-                            / 2.f + this.rect.height / 10.f),
-                    (int) (this.rect.width),
-                    (int) (this.rect.height));
+    private void drawText(Kiosk sketch) {
+        if (!this.model.text.equals("")) {
+            textWithOutline(this.model.text,
+                    (float) (this.rect.getCenterX() + animationOffsetX),
+                    (float) (this.rect.getCenterY() + animationOffsetY + this.rect.height / 10.f),
+                    this.rect.width, this.rect.height,
+                    sketch, isLightButton());
         }
+    }
 
-        // If pressed, draw the text lower and don't draw the main button
-        // This makes it look like the button is pushed into the screen
-        if (this.isPressed) {
-            if (!this.model.text.equals("")) {
-                textWithOutline(this.model.text,
-                        (float) (this.rect.getCenterX() + offsetX),
-                        (float) (this.rect.getCenterY() + offsetY + this.rect.height / 10.f),
-                        this.rect.width, this.rect.height,
-                        sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                    } else {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY));
-                    }
-                }
-            }
-        } else {
-            sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
-            sketch.stroke(59, 58, 57, 63f);
-            if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                    < Kiosk.getSettings().buttonAnimationLengthFrames
-                    && !this.disabled && this.shouldAnimate) {
-                double offset = calculateAnimationOffset(sketch);
-                if (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                        < (Kiosk.getSettings().buttonAnimationLengthFrames / 2)
-                        && !this.disabled && this.shouldAnimate) {
-                    sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                            * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
-                } else {
-                    sketch.fill(clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))),
-                            clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
-                                    * ((Kiosk.getSettings().buttonAnimationLengthFrames
-                                    - (sketch.frameCount
-                                    % Kiosk.getSettings().buttonAnimationFrames))
-                            / (float) Kiosk.getSettings().buttonAnimationLengthFrames))));
-                }
-                sketch.ellipse((float) (this.rect.x + offsetX + this.rect.width / 2.f),
-                        (float) (this.rect.y + offsetY + (float) (this.rect.height / 2.f
-                                + (this.rect.height / 10.f * offset))),
-                        (float) (this.rect.width),
-                        (float) (this.rect.height));
-                textWithOutline(this.model.text,
-                        (float) (this.rect.getCenterX() + offsetX),
-                        (float) (this.rect.getCenterY() + offsetY
-                                + (this.rect.height / 10.f * offset)),
-                        (float) this.rect.width,
-                        (float) this.rect.height,
-                        sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                    } else {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY
-                                        + (this.rect.height / 10.f * offset)));
-                    }
-                }
+    private void drawImage(Kiosk sketch) {
+        if (this.model.image != null) {
+            sketch.imageMode(PConstants.CENTER);
+            if (this.isPressed && !this.disabled) {
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f));
             } else {
-                sketch.ellipse((float) (this.rect.x + offsetX + this.rect.width / 2.f),
-                        (float) (this.rect.y + offsetY + this.rect.height / 2.f),
-                        (float) (this.rect.width),
-                        (float) (this.rect.height));
-                textWithOutline(this.model.text,
-                        (float) (this.rect.getCenterX() + offsetX),
-                        (float) (this.rect.getCenterY() + offsetY),
-                        this.rect.width, this.rect.height,
-                        sketch, isLightButton());
-                if (this.model.image != null) {
-                    sketch.imageMode(PConstants.CENTER);
-                    if (this.isPressed && !this.disabled) {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY + this.rect.height / 10.f));
-                    } else {
-                        this.image.draw(sketch, (float) (rect.getCenterX() + offsetX),
-                                (float) (rect.getCenterY() + offsetY));
-                    }
-                }
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY));
             }
         }
+    }
+
+    private void drawImage(Kiosk sketch, double offset) {
+        if (this.model.image != null) {
+            sketch.imageMode(PConstants.CENTER);
+            if (this.isPressed && !this.disabled) {
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f));
+            } else {
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY + (this.rect.height / 10.f * offset)));
+            }
+        }
+    }
+
+    private void setFill(Kiosk sketch) {
+        int frameCount = sketch.frameCount;
+
+        // Determine the fill color
+        int r;
+        int g;
+        int b;
+        if (frameCount % buttonAnimationFrames
+                < (buttonAnimationLengthFrames / 2)
+                && !this.disabled && this.shouldAnimate) {
+            r = clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
+                    * (frameCount % buttonAnimationFrames
+                    / buttonAnimationLengthFrames)));
+            g = clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
+                    * (frameCount % buttonAnimationFrames
+                    / buttonAnimationLengthFrames)));
+            b = clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
+                    * (frameCount % buttonAnimationFrames
+                    / buttonAnimationLengthFrames)));
+        } else {
+            r = clampColor((int) (this.model.rgb[0] + colorDeltaOnClick
+                    * ((buttonAnimationLengthFrames
+                    - (frameCount
+                    % buttonAnimationFrames))
+                    / buttonAnimationLengthFrames)));
+            g = clampColor((int) (this.model.rgb[1] + colorDeltaOnClick
+                    * ((buttonAnimationLengthFrames
+                    - (frameCount
+                    % buttonAnimationFrames))
+                    / buttonAnimationLengthFrames)));
+            b = clampColor((int) (this.model.rgb[2] + colorDeltaOnClick
+                    * ((buttonAnimationLengthFrames
+                    - (frameCount
+                    % buttonAnimationFrames))
+                    / buttonAnimationLengthFrames)));
+        }
+
+        sketch.fill(r, g, b);
+    }
+
+    private void setNormalFillAndStroke(Kiosk sketch) {
+        sketch.fill(this.model.rgb[0], this.model.rgb[1], this.model.rgb[2]);
+        sketch.stroke(59, 58, 57, 63f);
     }
 
     /**
@@ -478,12 +463,12 @@ public class ButtonControl implements Control<MouseEvent> {
      */
     private double calculateAnimationOffset(Kiosk sketch) {
         return (8) * ((0 - (sketch.frameCount
-                % Kiosk.getSettings().buttonAnimationFrames)
-                * (sketch.frameCount % Kiosk.getSettings().buttonAnimationFrames)
-                / Kiosk.getSettings().buttonAnimationIntensity) + ((sketch.frameCount
-                % Kiosk.getSettings().buttonAnimationFrames)
-                * ((Kiosk.getSettings().buttonAnimationLengthFrames - 1)
-                / Kiosk.getSettings().buttonAnimationIntensity)));
+                % buttonAnimationFrames)
+                * (sketch.frameCount % buttonAnimationFrames)
+                / buttonAnimationIntensity) + ((sketch.frameCount
+                % buttonAnimationFrames)
+                * ((buttonAnimationLengthFrames - 1)
+                / buttonAnimationIntensity)));
     }
 
     private boolean isLightButton() {
@@ -574,39 +559,59 @@ public class ButtonControl implements Control<MouseEvent> {
         this.centerSquareSize = (float) Math.sqrt(Math.pow(this.radius * 2, 2) / 2);
     }
 
+    private static ButtonModel draggedButtonModel;
+    private boolean isDragged = false;
+    private int pressX;
+    private int pressY;
+    private int offsetX;
+    private int offsetY;
+    private boolean isSnapping;
+
+    private double dragDistance(int x, int y) {
+        int distX = pressX - x;
+        int distY = pressY - y;
+        return Math.sqrt(distX * distX + distY * distY);
+    }
+
     private void onMousePressed(MouseEvent event) {
         if (this.rect.contains(event.getX(), event.getY())) {
             this.isPressed = true;
+            pressX = event.getX();
+            pressY = event.getY();
+            offsetX = this.rect.x - pressX;
+            offsetY = this.rect.y - pressY;
         }
     }
 
     private void onMouseReleased(MouseEvent event) {
         // Mouse was pressed and released inside the button
-        if (this.isPressed && this.rect.contains(event.getX(), event.getY())) {
+        if (this.isPressed && this.rect.contains(event.getX(), event.getY())
+            && !isDragged) {
             this.wasClicked = true;
+            this.isSnapping = false;
+            draggedButtonModel = null;
         }
         this.isPressed = false;
+        // TODO: Move this into some drag complete logic
+        if (this.model.equals(draggedButtonModel)) {
+            this.isDragged = false;
+            this.isSnapping = true;
+        }
     }
 
-    /**
-     * Moves the button to the specified Coordinates.
-     * @param x The X Location from the left of the screen.
-     * @param y The Y Location from the top of the screen.
-     */
-    public void setLocation(int x, int y) {
-        this.rect.x = x;
-        this.rect.y = y;
-    }
-
-    /**
-     * Sets the width and the height of the button for rendering purposes.
-     * This is a stop sign.
-     * @param width The width of the button. (This is a stop sign)
-     * @param height The height of the button. (This is a stop sign)
-     */
-    public void setWidthAndHeight(int width, int height) {
-        this.rect.width = width;
-        this.rect.height = height;
+    private void onMouseDragged(MouseEvent event) {
+        if (dragDistance(event.getX(), event.getY()) > 10
+                && this.rect.contains(event.getX(), event.getY())
+        ) {
+            if (draggedButtonModel == null) {
+                this.isDragged = true;
+                draggedButtonModel = this.model;
+            }
+            if (this.model.equals(draggedButtonModel)) {
+                this.rect.x = event.getX() + offsetX;
+                this.rect.y = event.getY() + offsetY;
+            }
+        }
     }
 
     public float getCenterX() {

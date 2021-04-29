@@ -95,10 +95,6 @@ public class CreditsScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-
-        // Draw bubble background
-        Graphics.drawBubbleBackground(sketch);
-
         if (sketch.isEditor) {
             if (clickedBack) {
                 sketch.getSceneGraph().popScene();

@@ -59,6 +59,7 @@ public class PromptScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl backButton;
     private ButtonControl supplementaryButton;
+    private boolean isRoot = false;
 
     /**
      * Default constructor.
@@ -147,6 +148,8 @@ public class PromptScene implements Scene {
 
         startFrame = sketch.frameCount;
         sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
@@ -161,7 +164,7 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (!sceneGraph.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             if (this.homeButton.wasClicked()) {
                 clickedHome = true;
             } else if (this.backButton.wasClicked()) {
@@ -174,11 +177,6 @@ public class PromptScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        final int centerX = Kiosk.getSettings().screenW / 2;
-
-        // Draw bubble background
-        Graphics.drawBubbleBackground(sketch);
-
         if (sketch.isEditor) {
             if (clickedNext) {
                 sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
@@ -243,7 +241,7 @@ public class PromptScene implements Scene {
             drawThisFrame(sketch, 0, 0);
         }
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             homeButton.draw(sketch);
             backButton.draw(sketch);
         }
@@ -283,7 +281,7 @@ public class PromptScene implements Scene {
             button.draw(sketch, offsetX, offsetY);
         }
 
-        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
         }
     }

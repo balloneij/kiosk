@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -285,6 +286,10 @@ public class Controller implements Initializable {
         // Set the key to it's highest computed value
         depths.put(rootModel.getId(), depth);
 
+        // create a set of the children that need to be added yet (no duplicates)
+        Set<String> remainingChildren = new HashSet<>();
+        Collections.addAll(remainingChildren, rootModel.getTargets());
+
         for (String childId : rootModel.getTargets()) {
             if (!unvisitedScenes.contains(childId)) { // This scene has already been touched
                 // Spoke graph prompt scenes return children with the null targetId
@@ -304,8 +309,10 @@ public class Controller implements Initializable {
                         depths.put(childId, depth + 1);
                     }
                     SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                    childSceneModel.setName(childSceneModel.getName()
-                            .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+                    if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
+                        childSceneModel.setName(childSceneModel.getName()
+                                .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+                    }
                     // Add the parent to the tree element
                     root.getChildren().add(new TreeItem<>(childSceneModel));
                     continue;
@@ -315,12 +322,20 @@ public class Controller implements Initializable {
             } else {
                 depths.put(childId, depth + 1);
             }
-            SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-            childSceneModel.setName(childSceneModel.getName()
-                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-            TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
-            root.getChildren()
-                    .add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
+
+            // check that the child being added is new
+            if (remainingChildren.contains(childId)) {
+                // if the child IS new, indicate that it no longer needs to be added
+                remainingChildren.remove(childId);
+                SceneModel childSceneModel = sceneGraph.getSceneById(childId);
+                if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
+                    childSceneModel.setName(childSceneModel.getName()
+                            .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+                }
+                TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
+                root.getChildren()
+                        .add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
+            }
         }
         return root;
     }
