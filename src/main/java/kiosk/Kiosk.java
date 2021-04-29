@@ -225,7 +225,7 @@ public class Kiosk extends PApplet {
         currentScene.draw(this);
 
         // Check for timeout
-        int currentSceneMillis = currMillis - this.newSceneMillis;
+        long currentSceneMillis = currentMillis - this.newSceneMillis;
         if (!currentSceneIsRoot) {
             if (timeoutActive && currentSceneMillis > Kiosk.settings.gracePeriodMillis) {
                 // Clear the timeoutActive flag
