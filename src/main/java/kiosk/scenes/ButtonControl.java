@@ -288,7 +288,8 @@ public class ButtonControl implements Control<MouseEvent> {
                 drawImage(sketch, offset);
             } else {
                 setNormalFillAndStroke(sketch);
-                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                Graphics.drawRoundedRectangle(sketch, (float)
+                                (this.rect.x + animationOffsetX + this.rect.width / 2.f),
                         (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f),
                         this.rect.width, this.rect.height, defaultCornerRadius);
                 textWithOutline(this.model.text,
@@ -363,12 +364,15 @@ public class ButtonControl implements Control<MouseEvent> {
                     Color.DW_BLACK_RGB[2], 63f);
             if (model.isCircle) {
                 sketch.ellipse((float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
-                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f + this.rect.height / 10.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height
+                                / 2.f + this.rect.height / 10.f),
                         (int) (this.rect.width * sizeMultiplier),
                         (int) (this.rect.height * sizeMultiplier));
             } else {
-                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
-                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f + this.rect.height / 10.f),
+                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x
+                                + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height
+                                / 2.f + this.rect.height / 10.f),
                         this.rect.width, this.rect.height, defaultCornerRadius);
             }
         }
@@ -405,7 +409,8 @@ public class ButtonControl implements Control<MouseEvent> {
                         (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f));
             } else {
                 this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
-                        (float) (rect.getCenterY() + animationOffsetY + (this.rect.height / 10.f * offset)));
+                        (float) (rect.getCenterY() + animationOffsetY
+                                + (this.rect.height / 10.f * offset)));
             }
         }
     }

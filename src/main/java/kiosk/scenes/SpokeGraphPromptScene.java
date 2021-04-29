@@ -365,7 +365,7 @@ public class SpokeGraphPromptScene implements Scene {
         float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
 
         // Draw the career spoke graph
-        this.spokeGraph.draw(sketch, 0, 0);
+        this.spokeGraph.draw(sketch, 0, offsetY);
 
         if (!isRoot) {
             // Draw the back and home buttons

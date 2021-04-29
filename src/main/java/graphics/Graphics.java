@@ -8,8 +8,8 @@ import kiosk.Kiosk;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
-import processing.event.MouseEvent;
 import processing.core.PGraphics;
+import processing.event.MouseEvent;
 
 public class Graphics {
 
