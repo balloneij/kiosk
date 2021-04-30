@@ -249,7 +249,7 @@ public class Kiosk extends PApplet {
                         Kiosk.settings.gracePeriodMillis - currentSceneMillis;
             }
         }
-        boop.movementLogic(this, currentScene);
+        boop.movementLogic(this, currentScene, dt);
         for (int i = 0; i < recentTapEvents.size(); i++) {
             if (recentTapFrames.get(i) + 8 >= this.frameCount) {
                 Graphics.drawTouchResponse(this, recentTapEvents.get(i),
