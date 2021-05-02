@@ -3,11 +3,9 @@ package kiosk.scenes;
 import graphics.Graphics;
 import graphics.GraphicsUtil;
 import kiosk.Kiosk;
-import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CreditsSceneModel;
-import kiosk.models.FilterGroupModel;
 import processing.core.PConstants;
 
 
@@ -45,11 +43,13 @@ public class CareerDescriptionScene implements Scene {
     private static int descriptionFontSize = screenW / 58;
 
     //Animations
-    private int startFrame = 0;
-    private int sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedMsoe = false;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
 
     /**
      * Career Description Scene shows a title, body of text, and a button at the bottom.
@@ -108,8 +108,9 @@ public class CareerDescriptionScene implements Scene {
         this.centerButton.init(sketch);
         sketch.hookControl(this.centerButton);
 
-        startFrame = sketch.frameCount;
-        sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
 
         this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
         this.supplementaryButton.init(sketch);
@@ -118,6 +119,8 @@ public class CareerDescriptionScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         if (this.homeButton.wasClicked()) {
             clickedHome = true;
         } else if (this.backButton.wasClicked()) {
@@ -126,6 +129,7 @@ public class CareerDescriptionScene implements Scene {
             clickedHome = true;
         } else if (this.supplementaryButton.wasClicked()) {
             clickedMsoe = true;
+            System.out.println("MSOE CLICKED");
         }
     }
 
@@ -141,50 +145,50 @@ public class CareerDescriptionScene implements Scene {
             }
         }
 
+        if (totalTimeOpening < sceneAnimationMilliseconds) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (clickedBack || clickedHome || clickedMsoe) {
+            totalTimeEnding += dt * 1000;
+        }
+
         if (clickedMsoe && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
+            System.out.println("HERE STEP 2");
             drawThisFrame(sketch, (int) (screenW
-                    * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / sceneAnimationFrames + 1))), 0);
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
+                System.out.println("FINALLY STEP 3");
                 sketch.getSceneGraph().pushScene(new CreditsSceneModel());
             }
         } else if (clickedBack && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, (int) (0 - screenW
-                    * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / sceneAnimationFrames + 1))), 0);
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedHome && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, 0, (int) (screenH
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().reset();
             }
         } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
-                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
         } else if (sketch.getSceneGraph().recentActivity.contains("POP")
-                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (0 - screenW - screenW
-                    * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / sceneAnimationFrames + 1))), 0);
-        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW + screenW
-                    * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / sceneAnimationFrames + 1))), 0);
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
         } else {
             drawThisFrame(sketch, 0, 0);
         }

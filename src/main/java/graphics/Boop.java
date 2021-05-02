@@ -558,7 +558,8 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if ((iterationAmount <= 0.32) || (iterationAmount > 0.56 && iterationAmount <= 0.64)) {
+        } else if ((iterationAmount <= 0.32)
+                || (iterationAmount > 0.56 && iterationAmount <= 0.64)) {
             //All feet down
             lbFoot.draw(sketch, currentX + amountToMove, currentY);
             lfFoot.draw(sketch, currentX + amountToMove, currentY);
@@ -667,7 +668,8 @@ public class Boop {
                                   Image shellEmpty2, float dt) {
         if (totalShellTime <= (minimumShellSeconds + additionalShellSeconds) / 2) {
             shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
-        } else if (totalShellTime > (minimumShellSeconds + additionalShellSeconds) / 2 && shellAnimation1Iterations <= 5) {
+        } else if (totalShellTime > (minimumShellSeconds + additionalShellSeconds)
+                / 2 && shellAnimation1Iterations <= 5) {
             shellEmpty2.draw(sketch, currentX, currentY + boopDimens / 10f);
             shellAnimation1Iterations++;
         } else {

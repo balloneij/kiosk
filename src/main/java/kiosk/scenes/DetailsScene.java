@@ -46,12 +46,14 @@ public class DetailsScene implements Scene {
     private static int buttonImageHeight = buttonRadius * 4 / 5;
 
     //Animations
-    private int startFrame = 0;
-    private int sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedNext = false;
     private boolean clickedMsoe = false;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
 
     /**
      * Detials Scene show a title, body of text, and a button at the bottom.
@@ -121,14 +123,17 @@ public class DetailsScene implements Scene {
         this.nextButton = GraphicsUtil.initializeNextButton(sketch);
         sketch.hookControl(this.nextButton);
 
-        startFrame = sketch.frameCount;
-        sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
 
         this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         if (!this.isRoot) {
             if (this.homeButton.wasClicked()) {
                 clickedHome = true;
@@ -160,14 +165,18 @@ public class DetailsScene implements Scene {
             }
         }
 
+        if (totalTimeOpening < sceneAnimationMilliseconds) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (clickedBack || clickedHome || clickedMsoe || clickedNext) {
+            totalTimeEnding += dt * 1000;
+        }
+
         if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, (int) (screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 if (clickedNext) {
                     sketch.getSceneGraph().pushScene(this.centerButton.getTarget());
                 } else if (clickedMsoe) {
@@ -175,40 +184,34 @@ public class DetailsScene implements Scene {
                 }
             }
         } else if (clickedBack && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, (int) (0 - screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedHome && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, 0, (int) (screenH
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().reset();
             }
         }
         if (sketch.getSceneGraph().recentActivity.contains("RESET")
-                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
         } else if (sketch.getSceneGraph().recentActivity.contains("POP")
-                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch,  (int) (0 - screenW - screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
-        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW + screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
         } else {
             drawThisFrame(sketch, 0, 0);
         }

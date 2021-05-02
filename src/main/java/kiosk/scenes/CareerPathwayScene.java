@@ -30,12 +30,14 @@ public class CareerPathwayScene implements Scene {
     private boolean isRoot = false;
 
     //Animations
-    private int startFrame = 0;
-    private int sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedNext = false;
     private CareerModel desiredCareer;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
 
     /**
      * Create a pathway scene.
@@ -86,8 +88,9 @@ public class CareerPathwayScene implements Scene {
             sketch.hookControl(this.supplementaryButton);
         }
 
-        startFrame = sketch.frameCount;
-        sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
 
         // Attach user input hooks
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
@@ -101,6 +104,8 @@ public class CareerPathwayScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         // Find which button was clicked in the spoke graph
         ButtonControl[] buttons = this.spokeGraph.getButtonControls();
         for (int i = 0; i < buttons.length; i++) {
@@ -138,73 +143,67 @@ public class CareerPathwayScene implements Scene {
             }
         }
 
+        if (totalTimeOpening < sceneAnimationMilliseconds) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (clickedBack || clickedHome || clickedNext) {
+            totalTimeEnding += dt * 1000;
+        }
+
         if ((clickedNext) && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, (int) (screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().pushEndScene(desiredCareer);
             }
         } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
                 .toString().contains("Spoke Graph Prompt")) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
-
             final double availableHeight = (screenH - (screenH / 32f) - (screenH / 6f));
             final double size = Math.min(screenW, availableHeight);
 
             drawThisFrameReversedSpoke(sketch, (int) (((screenW - size) / 2)
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), (int) (0 - screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), (int) (0 - screenW
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedBack && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, (int) (0 - screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedHome && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, 0, (int) (screenH
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().reset();
             }
         } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
-                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, 0, (int) (screenH + screenH
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
         } else if (sketch.getSceneGraph().recentActivity.contains("POP")
-                && sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (0 - screenW - screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
-        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+        } else if (sceneAnimationMilliseconds > totalTimeOpening
                 && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
                 .toString().contains("Spoke Graph Prompt")) {
             drawThisFrameCenteredSpoke(sketch, (int) (screenW + screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))));
-        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))));
+        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW + screenW
-                    * (1 - ((sketch.frameCount - startFrame)
-                    * 1.0 / sceneAnimationFrames + 1))), 0);
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
         } else {
             drawThisFrame(sketch, 0, 0);
         }
@@ -245,8 +244,8 @@ public class CareerPathwayScene implements Scene {
             careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
                     + (((userScore.getCategoryScore(career.riasecCategory)
                     - previousUserScore.getCategoryScore(career.riasecCategory))
-                    * ((sketch.frameCount - startFrame)
-                    / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
+                    * ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds)));
         }
 
         // Create spoke graph
@@ -292,8 +291,8 @@ public class CareerPathwayScene implements Scene {
             careerWeights[i] = userScore.getCategoryScore(career.riasecCategory)
                     + (((previousUserScore.getCategoryScore(career.riasecCategory)
                     - userScore.getCategoryScore(career.riasecCategory))
-                    * ((sketch.frameCount - startFrame)
-                    / (Kiosk.getSettings().sceneAnimationFrames * 1.0f))));
+                    * ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds)));
         }
 
         // Create spoke graph

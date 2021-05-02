@@ -32,9 +32,11 @@ public class CreditsScene implements Scene {
     private static int actionFontSize = screenW / 58;
 
     //Animations
-    private int startFrame = 0;
-    private int sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
     private boolean clickedBack = false;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
 
     private final CreditsSceneModel model;
     private ButtonControl backButton;
@@ -78,8 +80,9 @@ public class CreditsScene implements Scene {
                 + "Jodi Schomaker\nDavid Mancl\nRyan Kresse\n"
                 + "Dr. Taylor\nOur friends & families";
 
-        startFrame = sketch.frameCount;
-        sceneAnimationFrames = Kiosk.getSettings().sceneAnimationFrames;
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
 
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
         this.backButton.init(sketch);
@@ -88,6 +91,8 @@ public class CreditsScene implements Scene {
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         if (this.backButton.wasClicked()) {
             clickedBack = true;
         }
@@ -101,20 +106,24 @@ public class CreditsScene implements Scene {
             }
         }
 
+        if (totalTimeOpening < sceneAnimationMilliseconds) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (clickedBack) {
+            totalTimeEnding += dt * 1000;
+        }
+
         if (clickedBack && !sketch.isEditor) {
-            if (sketch.frameCount > startFrame + sceneAnimationFrames) {
-                startFrame = sketch.frameCount;
-            }
             drawThisFrame(sketch, (int) (0 - screenW
-                    * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / sceneAnimationFrames + 1))), 0);
-            if (startFrame + sceneAnimationFrames <= sketch.frameCount) {
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (sketch.frameCount - startFrame <= sceneAnimationFrames && !sketch.isEditor) {
+        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW + screenW
-                    * (1 - ((sketch.frameCount - startFrame) * 1.0
-                    / sceneAnimationFrames + 1))), 0);
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
         } else { //If it's already a second-or-two old, draw the scene normally
             drawThisFrame(sketch, 0, 0);
         }
