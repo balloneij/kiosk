@@ -129,7 +129,6 @@ public class CareerDescriptionScene implements Scene {
             clickedHome = true;
         } else if (this.supplementaryButton.wasClicked()) {
             clickedMsoe = true;
-            System.out.println("MSOE CLICKED");
         }
     }
 
@@ -153,12 +152,10 @@ public class CareerDescriptionScene implements Scene {
         }
 
         if (clickedMsoe && !sketch.isEditor) {
-            System.out.println("HERE STEP 2");
             drawThisFrame(sketch, (int) (screenW
                     * (1 - ((totalTimeEnding) * 1.0
                     / sceneAnimationMilliseconds + 1))), 0);
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                System.out.println("FINALLY STEP 3");
                 sketch.getSceneGraph().pushScene(new CreditsSceneModel());
             }
         } else if (clickedBack && !sketch.isEditor) {
