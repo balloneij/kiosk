@@ -15,6 +15,7 @@ import kiosk.models.ErrorSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
+import kiosk.scenes.ErrorScene;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
@@ -131,16 +132,15 @@ public class SceneGraph {
     public synchronized void pushScene(String sceneModelId,
                                        Riasec category,
                                        FilterGroupModel nullOrFilter) {
-        boolean containsModel = sceneModels.containsKey(sceneModelId);
+        // this is handled whether the scene exists or not
+        SceneModel nextSceneModel = getSceneById(sceneModelId);
 
-        if (containsModel) {
-            SceneModel nextSceneModel = sceneModels.get(sceneModelId);
-            pushScene(nextSceneModel, category, nullOrFilter);
-        } else {
-            pushScene(new ErrorSceneModel(
-                    "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
-                    Riasec.None, null);
+        if (!containsScene(sceneModelId)) {
+            category = Riasec.None;
+            nullOrFilter = null;
         }
+
+        pushScene(nextSceneModel, category, nullOrFilter);
     }
 
     /**
@@ -293,8 +293,11 @@ public class SceneGraph {
         SceneModel sceneModel = this.sceneModels.get(id);
 
         if (sceneModel == null) {
-            return new ErrorSceneModel("Scene '" + id + "' does not exist");
+            sceneModel = new ErrorSceneModel("You might have deleted a scene that a button led to."
+                    + " Because we can't have a button lead nowhere, this scene can't be deleted.");
+            sceneModel.setId(id);
         }
+
         return sceneModel;
     }
 
@@ -315,6 +318,11 @@ public class SceneGraph {
      * @param newRoot The scene which will become the launching point for the Kiosk.
      */
     public synchronized void setRootSceneModel(SceneModel newRoot) {
+        if (this.root != null) {
+            this.root.setName(this.root.getName()
+                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
+        }
+
         this.root = newRoot;
         // Remove root from original child
         if (root != null) {
