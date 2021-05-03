@@ -263,10 +263,10 @@ public class SpokeGraphPromptScene implements Scene {
             }
         }
 
-        if (totalTimeOpening < sceneAnimationMilliseconds) {
+        if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if (clickedBack || clickedHome || clickedMsoe || clickedNext) {
+        if ((clickedBack || clickedHome || clickedMsoe || clickedNext) && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 

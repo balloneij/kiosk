@@ -143,10 +143,10 @@ public class CareerPathwayScene implements Scene {
             }
         }
 
-        if (totalTimeOpening < sceneAnimationMilliseconds) {
+        if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if (clickedBack || clickedHome || clickedNext) {
+        if ((clickedBack || clickedHome || clickedNext) && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 

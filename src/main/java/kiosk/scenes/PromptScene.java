@@ -194,10 +194,12 @@ public class PromptScene implements Scene {
             }
         }
 
-        if (totalTimeOpening < sceneAnimationMilliseconds) {
+        if ((totalTimeOpening < sceneAnimationMilliseconds)
+                && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if (clickedBack || clickedHome || clickedMsoe || clickedNext) {
+        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+                && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
@@ -220,7 +222,7 @@ public class PromptScene implements Scene {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedHome && !sketch.isEditor) {
-            drawThisFrame(sketch, 0, (int) (screenW
+            drawThisFrame(sketch, 0, (int) (screenH
                     * (1 - ((totalTimeEnding) * 1.0
                     / sceneAnimationMilliseconds + 1))));
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
@@ -242,11 +244,6 @@ public class PromptScene implements Scene {
                     / sceneAnimationMilliseconds + 1)))), 0);
         } else { //If it's already a second-or-two old, draw the scene normally
             drawThisFrame(sketch, 0, 0);
-        }
-
-        if (!isRoot) {
-            homeButton.draw(sketch);
-            backButton.draw(sketch);
         }
     }
 
@@ -285,7 +282,15 @@ public class PromptScene implements Scene {
         }
 
         if (isRoot) {
-            supplementaryButton.draw(sketch, offsetX, offsetY);
+            supplementaryButton.draw(sketch, offsetX, offsetY); //TODO MOVE MSOE BUTTON, NOT WORKING NOW?
+        } else {
+            if (((sketch.getSceneGraph().history.size() == 2 && sketch.getSceneGraph().recentActivity.contains("PUSH")) && !clickedNext) || (sketch.getSceneGraph().history.size() == 2 && sketch.getSceneGraph().recentActivity.contains("POP")) && clickedBack) { //TODO ONLY WHEN ON SCENE AFTER ROOT
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 }
