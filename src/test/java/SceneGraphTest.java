@@ -14,6 +14,7 @@ public class SceneGraphTest {
         SceneModel scene2 = new PromptSceneModel();
         survey.scenes = new SceneModel[] { scene1, scene2 };
         survey.rootSceneId = scene1.getId();
+        survey.careers = new CareerModel[0];
 
         // Act
         SceneGraph sceneGraph = new SceneGraph(survey);
@@ -30,6 +31,7 @@ public class SceneGraphTest {
         SceneModel scene2 = new PromptSceneModel();
         survey.scenes = new SceneModel[] { scene1, scene2 };
         survey.rootSceneId = scene1.getId();
+        survey.careers = new CareerModel[0];
         SceneGraph sceneGraph = new SceneGraph(survey);
 
         // Act
