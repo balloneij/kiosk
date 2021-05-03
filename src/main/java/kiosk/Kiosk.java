@@ -434,6 +434,9 @@ public class Kiosk extends PApplet {
     }
 
     public static Settings getSettings() {
+        if (settings == null) {
+            settings = new Settings();
+        }
         return settings;
     }
 
