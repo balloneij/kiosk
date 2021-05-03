@@ -48,6 +48,7 @@ public class PathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
         if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
@@ -63,7 +64,6 @@ public class PathwayScene implements Scene {
         }
 
         spokeGraph.init(sketch);
-        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
