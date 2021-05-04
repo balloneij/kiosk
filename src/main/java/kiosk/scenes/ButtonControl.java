@@ -217,12 +217,13 @@ public class ButtonControl implements Control<MouseEvent> {
         } else if (this.model.image != null) { // Draw the image, if it exists
             sketch.imageMode(PConstants.CENTER);
             if (this.isPressed) {
-                this.image.draw(sketch, (float) rect.getCenterX(),
-                        (float) rect.getCenterY() + this.rect.height / 10.f);
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f));
             } else {
-                this.image.draw(sketch, (float) rect.getCenterX(), !this.model.noButton
-                        ? (float) rect.getCenterY() + this.rect.height / 10.f
-                        : (float) rect.getCenterY());
+                this.image.draw(sketch, (float) (rect.getCenterX()
+                        + animationOffsetX), !this.model.noButton
+                        ? (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f)
+                        : (float) (rect.getCenterY() + animationOffsetY));
             }
         }
 

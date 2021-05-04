@@ -49,7 +49,7 @@ public class Kiosk extends PApplet {
     private File loadedFile;
     private boolean isFullScreen = false;
     private boolean fontsLoaded = false;
-    private ArrayList<Integer> recentTapFrames;
+    private ArrayList<Float> recentTapTimes;
     private ArrayList<MouseEvent> recentTapEvents;
     private ArrayList<Integer> recentTapColors;
 
@@ -119,7 +119,7 @@ public class Kiosk extends PApplet {
 
         boop = new Boop();
         recentTapEvents = new ArrayList<MouseEvent>();
-        recentTapFrames = new ArrayList<Integer>();
+        recentTapTimes = new ArrayList<Float>();
         recentTapColors = new ArrayList<Integer>();
 
         this.isEditor = isEditor;
@@ -251,12 +251,13 @@ public class Kiosk extends PApplet {
         }
         boop.movementLogic(this, currentScene, dt);
         for (int i = 0; i < recentTapEvents.size(); i++) {
-            if (recentTapFrames.get(i) + 8 >= this.frameCount) {
+            if (recentTapTimes.get(i) < 0.4) {
+                recentTapTimes.set(i, recentTapTimes.get(i) + dt);
                 Graphics.drawTouchResponse(this, recentTapEvents.get(i),
-                        this.frameCount - recentTapFrames.get(i), recentTapColors.get(i));
+                        recentTapTimes.get(i), recentTapColors.get(i));
             }
-            if (recentTapFrames.get(i) + 8 < this.frameCount) {
-                recentTapFrames.remove(i);
+            if (recentTapTimes.get(i) >= 0.4) {
+                recentTapTimes.remove(i);
                 recentTapEvents.remove(i);
                 recentTapColors.remove(i);
             }
@@ -379,7 +380,7 @@ public class Kiosk extends PApplet {
         }
         boop.checkTap(this, event);
         recentTapEvents.add(event);
-        recentTapFrames.add(this.frameCount);
+        recentTapTimes.add(0f);
         recentTapColors.add(Color.randomColor());
     }
 

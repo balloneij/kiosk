@@ -189,9 +189,6 @@ public class CareerDescriptionScene implements Scene {
         } else {
             drawThisFrame(sketch, 0, 0);
         }
-
-        this.homeButton.draw(sketch);
-        this.backButton.draw(sketch);
     }
 
     private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
@@ -234,6 +231,22 @@ public class CareerDescriptionScene implements Scene {
 
         this.centerButton.draw(sketch, offsetX, offsetY);
 
-        this.supplementaryButton.draw(sketch, offsetX, offsetY);
+        if ((sketch.getSceneGraph().history.size() == 2
+                && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                || ((sketch.getSceneGraph().history.size() == 2
+                && sketch.getSceneGraph().recentActivity.contains("POP"))
+                && clickedBack) || clickedHome) {
+            homeButton.draw(sketch, offsetX, offsetY);
+            backButton.draw(sketch, offsetX, offsetY);
+            supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+            homeButton.draw(sketch, offsetX, offsetY);
+            backButton.draw(sketch);
+            supplementaryButton.draw(sketch, offsetX, 0);
+        } else {
+            homeButton.draw(sketch);
+            backButton.draw(sketch);
+            supplementaryButton.draw(sketch, offsetX, 0);
+        }
     }
 }

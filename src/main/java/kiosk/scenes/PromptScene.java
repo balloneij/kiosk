@@ -282,11 +282,18 @@ public class PromptScene implements Scene {
         }
 
         if (isRoot) {
-            supplementaryButton.draw(sketch, offsetX, offsetY); //TODO MOVE MSOE BUTTON, NOT WORKING NOW?
+            supplementaryButton.draw(sketch, offsetX, offsetY);
         } else {
-            if (((sketch.getSceneGraph().history.size() == 2 && sketch.getSceneGraph().recentActivity.contains("PUSH")) && !clickedNext) || (sketch.getSceneGraph().history.size() == 2 && sketch.getSceneGraph().recentActivity.contains("POP")) && clickedBack) { //TODO ONLY WHEN ON SCENE AFTER ROOT
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch, offsetX, offsetY);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
             } else {
                 homeButton.draw(sketch);
                 backButton.draw(sketch);

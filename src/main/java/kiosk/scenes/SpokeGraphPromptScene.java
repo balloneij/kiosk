@@ -9,6 +9,7 @@ import kiosk.SceneGraph;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
+import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
@@ -266,11 +267,19 @@ public class SpokeGraphPromptScene implements Scene {
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if ((clickedBack || clickedHome || clickedMsoe || clickedNext) && sceneAnimationMilliseconds != 0) {
+        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+                && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
-        if ((clickedNext) && !sketch.isEditor
+        if ((clickedMsoe) && !sketch.isEditor) {
+            drawThisFrame(sketch, (int) (screenW
+                    * (1 - ((totalTimeEnding) * 1.0
+                    / sceneAnimationMilliseconds + 1))), 0);
+            if (sceneAnimationMilliseconds <= totalTimeEnding) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+            }
+        } else if ((clickedNext) && !sketch.isEditor
                 && sketch.getSceneGraph().getSceneById(sceneToGoTo)
                 .toString().contains("Career Pathway")) {
             final double availableHeight = (screenH - headerY - headerH);
@@ -287,13 +296,13 @@ public class SpokeGraphPromptScene implements Scene {
         } else if ((clickedNext) && !sketch.isEditor
                 && !sketch.getSceneGraph().getSceneById(sceneToGoTo)
                 .toString().contains("Spoke Graph Prompt")) {
-            drawThisFrame(sketch, 0);
+            drawThisFrame(sketch, 0, 0);
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
         } else if ((clickedNext) && !sketch.isEditor
                 && sketch.getSceneGraph().getSceneById(sceneToGoTo)
                 .toString().contains("Spoke Graph Prompt")) {
-            drawThisFrame(sketch, 0);
+            drawThisFrame(sketch, 0, 0);
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
         } else if (clickedBack && !sketch.isEditor
@@ -313,7 +322,7 @@ public class SpokeGraphPromptScene implements Scene {
 
             sketch.getSceneGraph().popScene();
         } else if (clickedHome && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (screenH
+            drawThisFrame(sketch, 0, (int) (screenH
                     * (1 - ((totalTimeEnding) * 1.0
                     / sceneAnimationMilliseconds + 1))));
 
@@ -322,7 +331,7 @@ public class SpokeGraphPromptScene implements Scene {
             }
         } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
                 && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrameInterpolate(sketch, 0, (int) (screenH
+            drawThisFrame(sketch, 0, (int) (screenH + screenH
                     * (1 - ((totalTimeOpening) * 1.0
                     / sceneAnimationMilliseconds + 1))));
         } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
@@ -345,18 +354,12 @@ public class SpokeGraphPromptScene implements Scene {
         } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             drawThisFrameInterpolate(sketch, 0, 0);
         } else { //If it's already a second-or-two old, draw the scene normally
-            drawThisFrame(sketch, 0);
-        }
-
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            // Draw the back and home buttons
-            this.backButton.draw(sketch);
-            this.homeButton.draw(sketch);
+            drawThisFrame(sketch, 0, 0);
         }
     }
 
-    private void drawThisFrame(Kiosk sketch, int offsetY) {
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, 0, offsetY);
+    private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
 
         // Calculate answer location constants
         float headerBottomY = headerY + headerH + 2 * answersPadding;
@@ -364,27 +367,19 @@ public class SpokeGraphPromptScene implements Scene {
         float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
 
         // Draw the career spoke graph
-        this.spokeGraph.draw(sketch, 0, offsetY);
-
-        if (!isRoot) {
-            // Draw the back and home buttons
-            this.backButton.draw(sketch);
-            this.homeButton.draw(sketch);
-        } else {
-            supplementaryButton.draw(sketch);
-        }
+        this.spokeGraph.draw(sketch, offsetX, offsetY);
 
         // Draw answer buttons
         for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(answersSpokeThickness);
             sketch.stroke(255);
-            sketch.line(answersCenterX, answersCenterY + offsetY,
-                    answer.getCenterX(), answer.getCenterY() + offsetY);
+            sketch.line(answersCenterX + offsetX, answersCenterY + offsetY,
+                    answer.getCenterX() + offsetX, answer.getCenterY() + offsetY);
             answer.draw(sketch, 0, offsetY);
         }
 
         // Draw the center prompt button
-        this.promptButton.draw(sketch, 0, offsetY);
+        this.promptButton.draw(sketch, offsetX, offsetY);
 
         // Draw the career spoke graph
         // Define the size of the square that the spoke graph will fit in
@@ -410,10 +405,25 @@ public class SpokeGraphPromptScene implements Scene {
                 this.model.careerCenterText, careerButtons, careerWeights);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
-        spokeGraph.draw(sketch, 0, offsetY);
+        spokeGraph.draw(sketch, offsetX, offsetY);
 
-        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            supplementaryButton.draw(sketch, 0, offsetY);
+        if (isRoot) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 
@@ -470,6 +480,21 @@ public class SpokeGraphPromptScene implements Scene {
 
         if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 
@@ -521,7 +546,22 @@ public class SpokeGraphPromptScene implements Scene {
         spokeGraph.draw(sketch, offsetX, 0);
 
         if (isRoot) {
-            supplementaryButton.draw(sketch, otherOffsetX, 0);
+            supplementaryButton.draw(sketch, offsetX, 0);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, 0);
+                backButton.draw(sketch, offsetX, 0);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, 0);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 }

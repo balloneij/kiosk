@@ -9,6 +9,7 @@ import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.CreditsSceneModel;
 import processing.core.PConstants;
 
 /**
@@ -34,6 +35,7 @@ public class CareerPathwayScene implements Scene {
     private boolean clickedBack = false;
     private boolean clickedHome = false;
     private boolean clickedNext = false;
+    private boolean clickedMsoe = false;
     private CareerModel desiredCareer;
     private float totalTimeOpening = 0;
     private float totalTimeEnding = 0;
@@ -96,8 +98,6 @@ public class CareerPathwayScene implements Scene {
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
-        sketch.hookControl(this.backButton);
-        sketch.hookControl(this.homeButton);
 
         this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
@@ -119,10 +119,14 @@ public class CareerPathwayScene implements Scene {
             }
         }
 
-        if (this.homeButton.wasClicked()) {
-            clickedHome = true;
-        } else if (this.backButton.wasClicked()) {
-            clickedBack = true;
+        if (!isRoot) {
+            if (this.homeButton.wasClicked()) {
+                clickedHome = true;
+            } else if (this.backButton.wasClicked()) {
+                clickedBack = true;
+            }
+        } else if (this.supplementaryButton.wasClicked()) {
+            clickedMsoe = true;
         }
     }
 
@@ -140,22 +144,29 @@ public class CareerPathwayScene implements Scene {
                 sketch.getSceneGraph().popScene();
             } else if (clickedHome) {
                 sketch.getSceneGraph().reset();
+            } else if (clickedMsoe) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
             }
         }
 
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if ((clickedBack || clickedHome || clickedNext) && sceneAnimationMilliseconds != 0) {
+        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+                && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
-        if ((clickedNext) && !sketch.isEditor) {
+        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
             drawThisFrame(sketch, (int) (screenW
                     * (1 - ((totalTimeEnding) * 1.0
                     / sceneAnimationMilliseconds + 1))), 0);
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().pushEndScene(desiredCareer);
+                if (clickedNext) {
+                    sketch.getSceneGraph().pushEndScene(desiredCareer);
+                } else if (clickedMsoe) {
+                    sketch.getSceneGraph().pushScene(new CreditsSceneModel());
+                }
             }
         } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
                 .toString().contains("Spoke Graph Prompt")) {
@@ -207,11 +218,6 @@ public class CareerPathwayScene implements Scene {
         } else {
             drawThisFrame(sketch, 0, 0);
         }
-
-        if (!isRoot) {
-            this.homeButton.draw(sketch);
-            this.backButton.draw(sketch);
-        }
     }
 
     private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
@@ -219,7 +225,22 @@ public class CareerPathwayScene implements Scene {
         this.spokeGraph.draw(sketch, offsetX, offsetY);
 
         if (isRoot) {
-            supplementaryButton.draw(sketch, offsetX, offsetY);
+            supplementaryButton.draw(sketch, offsetX, 0);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 
@@ -264,8 +285,23 @@ public class CareerPathwayScene implements Scene {
 
         this.spokeGraph.draw(sketch, 0, 0);
 
-        if (sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, 0);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, 0);
+                backButton.draw(sketch, offsetX, 0);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, 0);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 
@@ -312,7 +348,22 @@ public class CareerPathwayScene implements Scene {
         this.spokeGraph.draw(sketch, offsetX, 0);
 
         if (isRoot) {
-            supplementaryButton.draw(sketch, headerOffsetX, 0);
+            supplementaryButton.draw(sketch, offsetX, 0);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, 0);
+                backButton.draw(sketch, offsetX, 0);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, 0);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 }

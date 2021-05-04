@@ -211,17 +211,18 @@ public class Graphics {
      * Draws a circle radiating outwards where the user clicks, to provide feedback.
      * @param sketch to draw to
      * @param e the click event to respond to, contains the coords to draw to
-     * @param framesSinceTap the time since the tap occurred,
+     * @param timeSinceLastTap the time since the tap occurred,
      *                       makes the circle pulse outward gradually
      */
     public static void drawTouchResponse(Kiosk sketch, MouseEvent e,
-                                         int framesSinceTap, int color) {
+                                         float timeSinceLastTap, int color) {
+        System.out.println("DRAWING WITH STROKEWEIGHT = " + (timeSinceLastTap * 21));
         sketch.ellipseMode(PConstants.CENTER);
         sketch.noFill();
-        sketch.strokeWeight(9 - framesSinceTap);
+        sketch.strokeWeight(9 - (timeSinceLastTap * 21));
         sketch.stroke(color);
         sketch.ellipse(e.getX(), e.getY(), sketch.width / 50f
-                + (3 * framesSinceTap), sketch.width / 50f + (3 * framesSinceTap));
+                + (45 * timeSinceLastTap), sketch.width / 50f + (45 * timeSinceLastTap));
         sketch.strokeWeight(1);
     }
 }

@@ -123,8 +123,6 @@ public class GraphicsUtil {
     /**
      * Initialize the MSOE button's ButtonControl model.
      * @param sketch to create on.
-     * @param offsetX the number of pixels to displace this by, rightwards
-     * @param offsetY the number of pixels to displace this by, downwards
      * @return MSOE button control
      */
     public static ButtonControl initializeMsoeButton(Kiosk sketch, float offsetX, float offsetY) {
@@ -142,7 +140,7 @@ public class GraphicsUtil {
                         - commonButtonPadding + offsetX),
                 (int) (sketch.height - (commonButtonHeight * 5 / 4)
                         - commonButtonPadding + offsetY),
-                commonButtonWidth * 3 / 4, commonButtonWidth * 3 / 4, false);
+                723 / 6, 883 / 6, false);
         msoeButton.setNoButton(true);
         msoeButton.init(sketch);
         return msoeButton;

@@ -169,6 +169,13 @@ public class CreditsScene implements Scene {
                 (int) (supporterY * 1.45) + offsetY,
                 sketch.width / 1.75f, sketch.height);
 
-        backButton.draw(sketch, offsetX, offsetY);
+        if (((sketch.getSceneGraph().history.size() == 2
+                && sketch.getSceneGraph().recentActivity.contains("PUSH")))
+                || ((sketch.getSceneGraph().history.size() == 2
+                && sketch.getSceneGraph().recentActivity.contains("POP")) && clickedBack)) {
+            backButton.draw(sketch, offsetX, 0);
+        } else {
+            backButton.draw(sketch);
+        }
     }
 }

@@ -168,7 +168,8 @@ public class DetailsScene implements Scene {
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if ((clickedBack || clickedHome || clickedMsoe || clickedNext) && sceneAnimationMilliseconds != 0) {
+        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+                && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
@@ -215,11 +216,6 @@ public class DetailsScene implements Scene {
         } else {
             drawThisFrame(sketch, 0, 0);
         }
-
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
-            this.homeButton.draw(sketch);
-            this.backButton.draw(sketch);
-        }
     }
 
     private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
@@ -257,6 +253,21 @@ public class DetailsScene implements Scene {
 
         if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 }

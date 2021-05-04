@@ -61,7 +61,7 @@ public class PathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        if (!isRoot) {
+        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -130,7 +130,8 @@ public class PathwayScene implements Scene {
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if ((clickedBack || clickedHome || clickedMsoe || clickedNext) && sceneAnimationMilliseconds != 0) {
+        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+                && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
@@ -177,11 +178,6 @@ public class PathwayScene implements Scene {
         } else {
             drawThisFrame(sketch, 0, 0);
         }
-
-        if (!isRoot) {
-            this.backButton.draw(sketch);
-            this.homeButton.draw(sketch);
-        }
     }
 
     private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
@@ -190,6 +186,21 @@ public class PathwayScene implements Scene {
 
         if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else {
+            if ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("PUSH"))
+                    || ((sketch.getSceneGraph().history.size() == 2
+                    && sketch.getSceneGraph().recentActivity.contains("POP"))
+                    && clickedBack) || clickedHome) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 }
