@@ -205,8 +205,11 @@ public class SceneGraph {
         SceneModel currentScene = history.peekFirst();
 
         // If we are changing the current scene model, recreate the scene
+        // AND get the old scene out of history; it no longer exists and cannot be retrieved
         if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
             this.currentScene = sceneModel.deepCopy().createScene();
+            this.history.pop();
+            this.history.push(sceneModel);
             this.onSceneChange(sceneModel);
         }
 

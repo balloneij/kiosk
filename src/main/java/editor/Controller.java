@@ -127,17 +127,15 @@ public class Controller implements Initializable {
                     // Ignore when the combo box is reset, or the scene type already matches.
                     if (newValue != null
                             && !newValue.toString().equals(
-                            sceneGraph.getCurrentSceneModel().toString())) {
-                        String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
-                        String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
+                                sceneGraph.getCurrentSceneModel().toString())) {
 
                         // A deep copy is NECESSARY here. We are duplicating the scenes
                         // loaded into the scene type combobox.
                         SceneModel newModel = newValue.deepCopy();
-                        newModel.setId(currentSceneId);
-                        newModel.setName(currentSceneName);
-
+                        newModel.setId(sceneGraph.getCurrentSceneModel().getId());
+                        newModel.setName(sceneGraph.getCurrentSceneModel().getName());
                         sceneGraph.registerSceneModel(newModel);
+
                         rebuildToolbar(newModel);
                         rebuildSceneGraphTreeView();
                     }
@@ -190,10 +188,11 @@ public class Controller implements Initializable {
                                 && !((EmptySceneModel) selectedModel).intent))) {
                             deleteScene(selectedModel);
                         } else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Information");
                             alert.setHeaderText("Unable to Delete Scene");
-                            alert.setContentText("The root scene and empty scenes pointed"
-                                    + " to by a button cannot be deleted");
+                            alert.setContentText("The root scene, as well as empty scenes "
+                                    + "pointed to by a button, cannot be deleted.");
                             alert.showAndWait();
                         }
                     }
