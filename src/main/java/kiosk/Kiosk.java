@@ -132,11 +132,8 @@ public class Kiosk extends PApplet {
         final javafx.scene.Scene oldScene = canvas.getScene();
         Stage stage = (Stage) oldScene.getWindow();
 
-        stage.addEventHandler(TouchEvent.ANY, new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                System.out.println("Touch Event");
-            }
+        stage.addEventHandler(TouchEvent.ANY, event -> {
+            System.out.println("Touch Event!");
         });
 
         return surface;
@@ -184,7 +181,7 @@ public class Kiosk extends PApplet {
         } else {
             isFullScreen = false;
         }
-        size(settings.screenW, settings.screenH);
+        size(settings.screenW, settings.screenH, FX2D);
     }
 
     public void enableTimeout() {

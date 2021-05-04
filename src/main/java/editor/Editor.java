@@ -103,13 +103,6 @@ public class Editor extends Kiosk {
             }
         });
 
-        stage.addEventHandler(TouchEvent.ANY, new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                System.out.println("Touch Event");
-            }
-        });
-
         // Attach the scene graph before initialization
         Controller.sceneGraph = sceneGraph;
         Controller.careers = getAllCareers();
