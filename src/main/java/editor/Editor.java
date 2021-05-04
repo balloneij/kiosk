@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +14,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import kiosk.Kiosk;
@@ -98,6 +100,13 @@ public class Editor extends Kiosk {
                         event.consume();
                     }
                 }
+            }
+        });
+
+        stage.addEventHandler(TouchEvent.ANY, new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                System.out.println("Touch Event");
             }
         });
 
