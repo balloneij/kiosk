@@ -5,8 +5,6 @@ import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
-
-import jdk.internal.util.xml.impl.Input;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
@@ -14,9 +12,8 @@ import kiosk.Settings;
 import kiosk.models.ButtonModel;
 import processing.core.PConstants;
 import processing.event.MouseEvent;
-import processing.event.TouchEvent;
 
-public class ButtonControl implements Control<TouchEvent> {
+public class ButtonControl implements Control<MouseEvent> {
 
     private int screenW = Kiosk.getSettings().screenW;
     private int screenH = Kiosk.getSettings().screenH;
@@ -37,7 +34,7 @@ public class ButtonControl implements Control<TouchEvent> {
     private final ButtonModel model;
     private final Rectangle rect;
     private int radius;
-    private final Map<InputEvent, EventListener<TouchEvent>> eventListeners;
+    private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
     private Image image;
     private boolean isPressed;
     private boolean wasClicked;
@@ -493,7 +490,7 @@ public class ButtonControl implements Control<TouchEvent> {
         model.noButton = isButton;
     }
 
-    public Map<InputEvent, EventListener<TouchEvent>> getEventListeners() {
+    public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
         return this.eventListeners;
     }
 
@@ -559,48 +556,45 @@ public class ButtonControl implements Control<TouchEvent> {
         return Math.sqrt(distX * distX + distY * distY);
     }
 
-    private void onMousePressed(TouchEvent event) {
-        System.out.println("Pressed");
-//        if (this.rect.contains(event.getX(), event.getY())) {
-//            this.isPressed = true;
-//            pressX = event.getX();
-//            pressY = event.getY();
-//            offsetX = this.rect.x - pressX;
-//            offsetY = this.rect.y - pressY;
-//        }
+    private void onMousePressed(MouseEvent event) {
+        if (this.rect.contains(event.getX(), event.getY())) {
+            this.isPressed = true;
+            pressX = event.getX();
+            pressY = event.getY();
+            offsetX = this.rect.x - pressX;
+            offsetY = this.rect.y - pressY;
+        }
     }
 
-    private void onMouseReleased(TouchEvent event) {
-        System.out.println("Released");
-//        // Mouse was pressed and released inside the button
-//        if (this.isPressed && this.rect.contains(event.getX(), event.getY())
-//            && !isDragged) {
-//            this.wasClicked = true;
-//            this.isSnapping = false;
-//            draggedButtonModel = null;
-//        }
-//        this.isPressed = false;
-//        // TODO: Move this into some drag complete logic
-//        if (this.model.equals(draggedButtonModel)) {
-//            this.isDragged = false;
-//            this.isSnapping = true;
-//        }
+    private void onMouseReleased(MouseEvent event) {
+        // Mouse was pressed and released inside the button
+        if (this.isPressed && this.rect.contains(event.getX(), event.getY())
+            && !isDragged) {
+            this.wasClicked = true;
+            this.isSnapping = false;
+            draggedButtonModel = null;
+        }
+        this.isPressed = false;
+        // TODO: Move this into some drag complete logic
+        if (this.model.equals(draggedButtonModel)) {
+            this.isDragged = false;
+            this.isSnapping = true;
+        }
     }
 
-    private void onMouseDragged(TouchEvent event) {
-        System.out.println("Dragged");
-//        if (dragDistance(event.getX(), event.getY()) > 10
-//                && this.rect.contains(event.getX(), event.getY())
-//        ) {
-//            if (draggedButtonModel == null) {
-//                this.isDragged = true;
-//                draggedButtonModel = this.model;
-//            }
-//            if (this.model.equals(draggedButtonModel)) {
-//                this.rect.x = event.getX() + offsetX;
-//                this.rect.y = event.getY() + offsetY;
-//            }
-//        }
+    private void onMouseDragged(MouseEvent event) {
+        if (dragDistance(event.getX(), event.getY()) > 10
+                && this.rect.contains(event.getX(), event.getY())
+        ) {
+            if (draggedButtonModel == null) {
+                this.isDragged = true;
+                draggedButtonModel = this.model;
+            }
+            if (this.model.equals(draggedButtonModel)) {
+                this.rect.x = event.getX() + offsetX;
+                this.rect.y = event.getY() + offsetY;
+            }
+        }
     }
 
     public float getCenterX() {
