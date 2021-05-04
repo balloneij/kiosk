@@ -106,6 +106,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
         this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
+        this.eventListeners.put(InputEvent.MouseEntered, this::onMouseEnter);
     }
 
     /**
@@ -580,6 +581,14 @@ public class ButtonControl implements Control<MouseEvent> {
             this.isDragged = false;
             this.isSnapping = true;
         }
+    }
+
+    private void onMouseEnter(MouseEvent event) {
+        onMousePressed(event);
+    }
+
+    private void onMouseExit(MouseEvent event) {
+        onMouseReleased(event);
     }
 
     private void onMouseDragged(MouseEvent event) {
