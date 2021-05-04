@@ -28,8 +28,9 @@ import kiosk.scenes.TimeoutScene;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+import processing.event.TouchEvent;
 
-public class Kiosk extends PApplet {
+public class Kiosk extends PApplet implements EventListener<TouchEvent> {
 
     protected SceneGraph sceneGraph;
     private String surveyPath;
@@ -450,5 +451,10 @@ public class Kiosk extends PApplet {
 
     protected void setHotkeysEnabled(boolean hotkeysEnabled) {
         this.hotkeysEnabled = hotkeysEnabled;
+    }
+
+    @Override
+    public void invoke(TouchEvent arg) {
+        System.out.println("Touch event!");
     }
 }

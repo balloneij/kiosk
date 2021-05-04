@@ -106,7 +106,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
         this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
-        this.eventListeners.put(InputEvent.MouseMoved, this::onMouseEnter);
+        this.eventListeners.put(InputEvent.MouseHovered, this::onMouseHover);
     }
 
     /**
@@ -163,7 +163,7 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
         this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
-        this.eventListeners.put(InputEvent.MouseMoved, this::onMouseEnter);
+        this.eventListeners.put(InputEvent.MouseHovered, this::onMouseHover);
     }
 
     /**
@@ -584,7 +584,7 @@ public class ButtonControl implements Control<MouseEvent> {
         }
     }
 
-    private void onMouseEnter(MouseEvent event) {
+    private void onMouseHover(MouseEvent event) {
         if (this.rect.contains(event.getX(), event.getY())) {
             if (!this.isPressed) {
                 onMousePressed(event);
