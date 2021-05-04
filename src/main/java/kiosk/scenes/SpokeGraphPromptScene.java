@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.Riasec;
@@ -254,16 +255,6 @@ public class SpokeGraphPromptScene implements Scene {
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
 
-        if (sketch.isEditor) {
-            if (clickedNext) {
-                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-            } else if (clickedBack) {
-                sketch.getSceneGraph().popScene();
-            } else if (clickedHome) {
-                sketch.getSceneGraph().reset();
-            }
-        }
-
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
@@ -272,89 +263,32 @@ public class SpokeGraphPromptScene implements Scene {
             totalTimeEnding += dt * 1000;
         }
 
-        if ((clickedMsoe) && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
-            }
-        } else if ((clickedNext) && !sketch.isEditor
-                && sketch.getSceneGraph().getSceneById(sceneToGoTo)
-                .toString().contains("Career Pathway")) {
-            final double availableHeight = (screenH - headerY - headerH);
-            final double size = Math.min(screenW, availableHeight);
-            drawThisFrameOppositeDirections(sketch, (int) (0 - ((screenW - size) / 2)
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogicSpokeGraphPromptScene(sketch,
+                clickedNext, clickedBack, clickedHome, clickedMsoe,
+                sceneToGoTo, riasecToGoTo, filterToGoTo,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                screenW, screenH, headerY, headerH);
 
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-            }
-        } else if ((clickedNext) && !sketch.isEditor
-                && !sketch.getSceneGraph().getSceneById(sceneToGoTo)
-                .toString().contains("Spoke Graph Prompt")) {
-            drawThisFrame(sketch, 0, 0);
-
-            sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-        } else if ((clickedNext) && !sketch.isEditor
-                && sketch.getSceneGraph().getSceneById(sceneToGoTo)
-                .toString().contains("Spoke Graph Prompt")) {
-            drawThisFrame(sketch, 0, 0);
-
-            sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-        } else if (clickedBack && !sketch.isEditor
-                && !sketch.getSceneGraph().history.get(1)
-                .toString().contains("Spoke Graph Prompt")) {
-            drawThisFrameInterpolate(sketch, (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
+        switch (returnVals[3]) {
+            case 1:
+                drawThisFrame(sketch, returnVals[0], returnVals[1]);
+                break;
+            case 2:
+                drawThisFrameInterpolate(sketch, returnVals[0], returnVals[1]);
+                break;
+            case 3:
+                drawThisFrameOppositeDirections(sketch, returnVals[0], returnVals[2]);
+                break;
+            case 4:
+                drawThisFrameInterpolate(sketch, returnVals[0], returnVals[1]);
                 sketch.getSceneGraph().popScene();
-            }
-        } else if (clickedBack && !sketch.isEditor
-                && sketch.getSceneGraph().history.get(1)
-                .toString().contains("Spoke Graph Prompt")) {
-            drawThisFrameInterpolate(sketch, 0, 0);
-
-            sketch.getSceneGraph().popScene();
-        } else if (clickedHome && !sketch.isEditor) {
-            drawThisFrame(sketch, 0, (int) (screenH
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().reset();
-            }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
-                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrame(sketch, 0, (int) (screenH + screenH
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && sketch.getSceneGraph().recentActivity.contains("Career Pathway")
-                && sketch.getSceneGraph().recentActivity.contains("POP")) {
-            drawThisFrameOppositeDirections(sketch, 0, (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")
-                && sketch.getSceneGraph().recentActivity.contains("POP")) {
-            drawThisFrameInterpolate(sketch, (int) (0 - screenW - screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")) {
-            drawThisFrameInterpolate(sketch, (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrameInterpolate(sketch, 0, 0);
-        } else { //If it's already a second-or-two old, draw the scene normally
-            drawThisFrame(sketch, 0, 0);
+                break;
+            case 5:
+                drawThisFrame(sketch, returnVals[0], returnVals[1]);
+                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+                break;
+            default:
+                break;
         }
     }
 
@@ -546,17 +480,17 @@ public class SpokeGraphPromptScene implements Scene {
         spokeGraph.draw(sketch, offsetX, 0);
 
         if (isRoot) {
-            supplementaryButton.draw(sketch, offsetX, 0);
+            supplementaryButton.draw(sketch, otherOffsetX, 0);
         } else {
             if ((sketch.getSceneGraph().history.size() == 2
                     && sketch.getSceneGraph().recentActivity.contains("PUSH"))
                     || ((sketch.getSceneGraph().history.size() == 2
                     && sketch.getSceneGraph().recentActivity.contains("POP"))
                     && clickedBack) || clickedHome) {
-                homeButton.draw(sketch, offsetX, 0);
-                backButton.draw(sketch, offsetX, 0);
+                homeButton.draw(sketch, otherOffsetX, 0);
+                backButton.draw(sketch, otherOffsetX, 0);
             } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
-                homeButton.draw(sketch, offsetX, 0);
+                homeButton.draw(sketch, otherOffsetX, 0);
                 backButton.draw(sketch);
             } else {
                 homeButton.draw(sketch);

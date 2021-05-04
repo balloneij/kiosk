@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.CreditsSceneModel;
@@ -100,12 +101,6 @@ public class CreditsScene implements Scene {
 
     @Override
     public void draw(Kiosk sketch) {
-        if (sketch.isEditor) {
-            if (clickedBack) {
-                sketch.getSceneGraph().popScene();
-            }
-        }
-
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
@@ -113,20 +108,12 @@ public class CreditsScene implements Scene {
             totalTimeEnding += dt * 1000;
         }
 
-        if (clickedBack && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().popScene();
-            }
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-        } else { //If it's already a second-or-two old, draw the scene normally
-            drawThisFrame(sketch, 0, 0);
-        }
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
+                false, clickedBack, false, false,
+                null, null, null,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                dt, screenW, screenH);
+        drawThisFrame(sketch, returnVals[0], returnVals[1]);
     }
 
     private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {

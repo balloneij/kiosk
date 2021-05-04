@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.Riasec;
@@ -115,18 +116,6 @@ public class PathwayScene implements Scene {
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
 
-        if (sketch.isEditor) {
-            if (clickedNext) {
-                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-            } else if (clickedBack) {
-                sketch.getSceneGraph().popScene();
-            } else if (clickedHome) {
-                sketch.getSceneGraph().reset();
-            } else if (clickedMsoe) {
-                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
-            }
-        }
-
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
@@ -135,49 +124,12 @@ public class PathwayScene implements Scene {
             totalTimeEnding += dt * 1000;
         }
 
-        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                if (clickedNext) {
-                    sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-                } else if (clickedMsoe) {
-                    sketch.getSceneGraph().pushScene(new CreditsSceneModel());
-                }
-            }
-        } else if (clickedBack && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().popScene();
-            }
-        } else if (clickedHome && !sketch.isEditor) {
-            drawThisFrame(sketch, 0, (int) (screenH
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().reset();
-            }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
-                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrame(sketch, 0, (int) (screenH + screenH
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
-                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (0 - screenW - screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-        } else if (sceneAnimationMilliseconds > totalTimeOpening
-                && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-        } else {
-            drawThisFrame(sketch, 0, 0);
-        }
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
+                clickedNext, clickedBack, clickedHome, clickedMsoe,
+                sceneToGoTo, riasecToGoTo, filterToGoTo,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                dt, screenW, screenH);
+        drawThisFrame(sketch, returnVals[0], returnVals[1]);
     }
 
     private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {

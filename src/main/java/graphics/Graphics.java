@@ -216,7 +216,6 @@ public class Graphics {
      */
     public static void drawTouchResponse(Kiosk sketch, MouseEvent e,
                                          float timeSinceLastTap, int color) {
-        System.out.println("DRAWING WITH STROKEWEIGHT = " + (timeSinceLastTap * 21));
         sketch.ellipseMode(PConstants.CENTER);
         sketch.noFill();
         sketch.strokeWeight(9 - (timeSinceLastTap * 21));

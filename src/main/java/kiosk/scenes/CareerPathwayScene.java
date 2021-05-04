@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
@@ -137,18 +138,6 @@ public class CareerPathwayScene implements Scene {
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
 
-        if (sketch.isEditor) {
-            if (clickedNext) {
-                sketch.getSceneGraph().pushEndScene(desiredCareer);
-            } else if (clickedBack) {
-                sketch.getSceneGraph().popScene();
-            } else if (clickedHome) {
-                sketch.getSceneGraph().reset();
-            } else if (clickedMsoe) {
-                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
-            }
-        }
-
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
@@ -157,66 +146,23 @@ public class CareerPathwayScene implements Scene {
             totalTimeEnding += dt * 1000;
         }
 
-        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                if (clickedNext) {
-                    sketch.getSceneGraph().pushEndScene(desiredCareer);
-                } else if (clickedMsoe) {
-                    sketch.getSceneGraph().pushScene(new CreditsSceneModel());
-                }
-            }
-        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
-                .toString().contains("Spoke Graph Prompt")) {
-            final double availableHeight = (screenH - (screenH / 32f) - (screenH / 6f));
-            final double size = Math.min(screenW, availableHeight);
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogicCareerPathwayScene(sketch,
+                clickedNext, clickedBack, clickedHome, clickedMsoe,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                screenW, screenH, desiredCareer);
 
-            drawThisFrameReversedSpoke(sketch, (int) (((screenW - size) / 2)
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().popScene();
-            }
-        } else if (clickedBack && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().popScene();
-            }
-        } else if (clickedHome && !sketch.isEditor) {
-            drawThisFrame(sketch, 0, (int) (screenH
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-            if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                sketch.getSceneGraph().reset();
-            }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
-                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrame(sketch, 0, (int) (screenH + screenH
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
-                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (0 - screenW - screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-        } else if (sceneAnimationMilliseconds > totalTimeOpening
-                && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
-                .toString().contains("Spoke Graph Prompt")) {
-            drawThisFrameCenteredSpoke(sketch, (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            drawThisFrame(sketch, (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))), 0);
-        } else {
-            drawThisFrame(sketch, 0, 0);
+        switch (returnVals[3]) {
+            case 1:
+                drawThisFrame(sketch, returnVals[0], returnVals[1]);
+                break;
+            case 2:
+                drawThisFrameCenteredSpoke(sketch, returnVals[0]);
+                break;
+            case 3:
+                drawThisFrameReversedSpoke(sketch, returnVals[0], returnVals[2]);
+                break;
+            default:
+                break;
         }
     }
 
