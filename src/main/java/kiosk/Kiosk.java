@@ -128,7 +128,7 @@ public class Kiosk extends PApplet {
         final javafx.scene.Scene oldScene = canvas.getScene();
         Stage stage = (Stage) oldScene.getWindow();
 
-        stage.addEventHandler(TouchEvent.ANY, event -> {
+        stage.addEventHandler(TouchEvent.TOUCH_PRESSED, event -> {
             System.out.println("Touch Event!");
         });
 
