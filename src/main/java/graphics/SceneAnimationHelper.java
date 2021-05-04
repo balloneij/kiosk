@@ -2,6 +2,7 @@ package graphics;
 
 import kiosk.Kiosk;
 import kiosk.Riasec;
+import kiosk.SceneGraph;
 import kiosk.models.CareerModel;
 import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
@@ -79,13 +80,13 @@ public class SceneAnimationHelper {
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
+        } else if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.RESET)
                 && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             offsetX = 0;
             offsetY = (int) (screenH + screenH
                     * (1 - ((totalTimeOpening) * 1.0
                     / sceneAnimationMilliseconds + 1)));
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
+        } else if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)
                 && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             offsetX = (int) (0 - screenW - screenW
                     * (1 - ((totalTimeOpening) * 1.0
@@ -163,7 +164,7 @@ public class SceneAnimationHelper {
                     sketch.getSceneGraph().pushScene(new CreditsSceneModel());
                 }
             }
-        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
+        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().getFromHistory(1)
                 .toString().contains("Spoke Graph Prompt")) {
             final double availableHeight = (screenH - (screenH / 32f) - (screenH / 6f));
             final double size = Math.min(screenW, availableHeight);
@@ -198,7 +199,7 @@ public class SceneAnimationHelper {
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
+        } else if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.RESET)
                 && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             offsetX = 0;
             offsetY = (int) (screenH + screenH
@@ -206,7 +207,7 @@ public class SceneAnimationHelper {
                     / sceneAnimationMilliseconds + 1)));
             headerOffsetX = 0;
             typeOfAnimation = 1;
-        } else if (sketch.getSceneGraph().recentActivity.contains("POP")
+        } else if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)
                 && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             offsetX = (int) (0 - screenW - screenW
                     * (1 - ((totalTimeOpening) * 1.0
@@ -215,7 +216,7 @@ public class SceneAnimationHelper {
             headerOffsetX = 0;
             typeOfAnimation = 1;
         } else if (sceneAnimationMilliseconds > totalTimeOpening
-                && !sketch.isEditor && sketch.getSceneGraph().history.get(1)
+                && !sketch.isEditor && sketch.getSceneGraph().getFromHistory(1)
                 .toString().contains("Spoke Graph Prompt")) {
             offsetX = (int) (screenW + screenW
                     * (1 - ((totalTimeOpening) * 1.0
@@ -334,7 +335,7 @@ public class SceneAnimationHelper {
             otherOffsetX = 0;
             typeOfAnimation = 5;
         } else if (clickedBack && !sketch.isEditor
-                && !sketch.getSceneGraph().history.get(1)
+                && !sketch.getSceneGraph().getFromHistory(1)
                 .toString().contains("Spoke Graph Prompt")) {
             offsetX = (int) (0 - screenW
                     * (1 - ((totalTimeEnding) * 1.0
@@ -347,7 +348,7 @@ public class SceneAnimationHelper {
                 sketch.getSceneGraph().popScene();
             }
         } else if (clickedBack && !sketch.isEditor
-                && sketch.getSceneGraph().history.get(1)
+                && sketch.getSceneGraph().getFromHistory(1)
                 .toString().contains("Spoke Graph Prompt")) {
             offsetX = 0;
             offsetY = 0;
@@ -364,7 +365,7 @@ public class SceneAnimationHelper {
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().reset();
             }
-        } else if (sketch.getSceneGraph().recentActivity.contains("RESET")
+        } else if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.RESET)
                 && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
             offsetX = 0;
             offsetY = (int) (screenH + screenH
@@ -373,17 +374,19 @@ public class SceneAnimationHelper {
             otherOffsetX = 0;
             typeOfAnimation = 1;
         } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && sketch.getSceneGraph().recentActivity.contains("Career Pathway")
-                && sketch.getSceneGraph().recentActivity.contains("POP")) {
+                && sketch.getSceneGraph().recentScene.equals(SceneGraph.RecentScene.CAREER_PATHWAY)
+                && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)) {
             offsetX = 0;
-            offsetY = (int) (screenW + screenW
+            offsetY = 0;
+            otherOffsetX = (int) (0 - screenW - screenW
                     * (1 - ((totalTimeOpening) * 1.0
                     / sceneAnimationMilliseconds + 1)));
-            otherOffsetX = 0;
             typeOfAnimation = 3;
         } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")
-                && sketch.getSceneGraph().recentActivity.contains("POP")) {
+                && !sketch.getSceneGraph().recentScene
+                .equals(SceneGraph.RecentScene.SPOKE_GRAPH_PROMPT)
+                && sketch.getSceneGraph().recentActivity
+                .equals(SceneGraph.RecentActivity.POP)) {
             offsetX = (int) (0 - screenW - screenW
                     * (1 - ((totalTimeOpening) * 1.0
                     / sceneAnimationMilliseconds + 1)));
@@ -391,7 +394,8 @@ public class SceneAnimationHelper {
             otherOffsetX = 0;
             typeOfAnimation = 2;
         } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && !sketch.getSceneGraph().recentActivity.contains("Spoke Graph Prompt")) {
+                && !sketch.getSceneGraph().recentScene
+                .equals(SceneGraph.RecentScene.SPOKE_GRAPH_PROMPT)) {
             offsetX = (int) (screenW + screenW
                     * (1 - ((totalTimeOpening) * 1.0
                     / sceneAnimationMilliseconds + 1)));

@@ -31,6 +31,8 @@ public class Color {
     public final int dwRed;
     public final int dwGreen;
 
+    private static Random rand;
+
     private static PApplet sketch;
     private static Color instance;
 
@@ -50,6 +52,8 @@ public class Color {
                 DW_LIGHT_ORANGE_RGB[0], DW_LIGHT_ORANGE_RGB[1], DW_LIGHT_ORANGE_RGB[2]);
         dwRed = sketch.color(DW_RED_RGB[0], DW_RED_RGB[1], DW_RED_RGB[2]);
         dwGreen = sketch.color(DW_GREEN_RGB[0], DW_GREEN_RGB[1], DW_GREEN_RGB[2]);
+
+        rand = new Random();
     }
 
     /**
@@ -90,7 +94,6 @@ public class Color {
      * @return the int of a color
      */
     public static int randomColor() {
-        Random rand = new Random();
         rand.nextInt(11);
         switch (rand.nextInt(11)) {
             case 0:

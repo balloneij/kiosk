@@ -22,7 +22,7 @@ public class SceneGraph {
     private final UserScore userScore;
     private UserScore previousUserScore;
     private SceneModel root;
-    public final LinkedList<SceneModel> history;
+    private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
     private Scene previousScene;
@@ -31,7 +31,20 @@ public class SceneGraph {
     // K: category V: fields inside that category
     private final HashMap<String, Set<String>> careerFields = new HashMap<>();
     private final CareerModel[] allCareers;
-    public String recentActivity = "NONE";
+
+    public enum RecentActivity {
+            RESET, POP, PUSH
+    }
+
+    public RecentActivity recentActivity = RecentActivity.RESET;
+
+    public enum RecentScene {
+        CAREER_DESCRIPTION, CAREER_PATHWAY,
+        CREDITS, ERROR, DETAILS, PATHWAY,
+        PROMPT, SPOKE_GRAPH_PROMPT, TIMEOUT
+    }
+
+    public RecentScene recentScene = RecentScene.PROMPT;
 
     /**
      * Creates a scene graph which holds the root scene model, and
@@ -113,7 +126,23 @@ public class SceneGraph {
     public synchronized void pushScene(SceneModel sceneModel,
                                        Riasec category,
                                        FilterGroupModel nullOrFilter) {
-        this.recentActivity = "PUSHED AWAY FROM " + this.history.peek();
+        String lastScene = this.history.peek().toString();
+        if (lastScene.contains("Career Description")) {
+            this.recentScene = RecentScene.CAREER_DESCRIPTION;
+        } else if (lastScene.contains("Career Pathway")) {
+            this.recentScene = RecentScene.CAREER_PATHWAY;
+        } else if (lastScene.contains("Credits")) {
+            this.recentScene = RecentScene.CREDITS;
+        } else if (lastScene.contains("Details")) {
+            this.recentScene = RecentScene.DETAILS;
+        } else if (lastScene.contains("Pathway")) {
+            this.recentScene = RecentScene.PATHWAY;
+        } else if (lastScene.contains("Spoke Graph Prompt")) {
+            this.recentScene = RecentScene.SPOKE_GRAPH_PROMPT;
+        } else if (lastScene.contains("Prompt")) {
+            this.recentScene = RecentScene.PROMPT;
+        }
+        this.recentActivity = RecentActivity.PUSH;
 
         // Update the user score from the category selected on the
         // previous scene
@@ -177,7 +206,24 @@ public class SceneGraph {
      */
     public synchronized void popScene() {
 
-        this.recentActivity = "POPPED OFF " + this.history.peek();
+        String lastScene = this.history.peek().toString();
+        if (lastScene.contains("Career Description")) {
+            this.recentScene = RecentScene.CAREER_DESCRIPTION;
+        } else if (lastScene.contains("Career Pathway")) {
+            this.recentScene = RecentScene.CAREER_PATHWAY;
+        } else if (lastScene.contains("Credits")) {
+            this.recentScene = RecentScene.CREDITS;
+        } else if (lastScene.contains("Details")) {
+            this.recentScene = RecentScene.DETAILS;
+        } else if (lastScene.contains("Pathway")) {
+            this.recentScene = RecentScene.PATHWAY;
+        } else if (lastScene.contains("Spoke Graph Prompt")) {
+            this.recentScene = RecentScene.SPOKE_GRAPH_PROMPT;
+        } else if (lastScene.contains("Prompt")) {
+            this.recentScene = RecentScene.PROMPT;
+        }
+        this.recentActivity = RecentActivity.POP;
+
 
         // Remove the current scene from history
         this.history.pop();
@@ -222,7 +268,7 @@ public class SceneGraph {
         this.history.push(this.root);
         this.onSceneChange(this.root);
 
-        this.recentActivity = "RESET";
+        this.recentActivity = recentActivity.RESET;
     }
 
     /**
@@ -452,5 +498,22 @@ public class SceneGraph {
             }
         }
         return careers;
+    }
+
+    /**
+     * Gets a particular item from the history.
+     * @param index the index to check
+     * @return the scenemodel of that item in the history
+     */
+    public SceneModel getFromHistory(int index) {
+        return history.get(index);
+    }
+
+    /**
+     * Gets the history's size, used when checking root MSOE button placements.
+     * @return the history's size
+     */
+    public int getHistorySize() {
+        return history.size();
     }
 }

@@ -191,15 +191,15 @@ public class CareerDescriptionScene implements Scene {
 
         this.centerButton.draw(sketch, offsetX, offsetY);
 
-        if ((sketch.getSceneGraph().history.size() == 2
-                && sketch.getSceneGraph().recentActivity.contains("PUSH"))
-                || ((sketch.getSceneGraph().history.size() == 2
-                && sketch.getSceneGraph().recentActivity.contains("POP"))
+        if ((sketch.getSceneGraph().getHistorySize() == 2
+                && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
+                || ((sketch.getSceneGraph().getHistorySize() == 2
+                && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
                 && clickedBack) || clickedHome) {
             homeButton.draw(sketch, offsetX, offsetY);
             backButton.draw(sketch, offsetX, offsetY);
             supplementaryButton.draw(sketch, offsetX, offsetY);
-        } else if (clickedMsoe || sketch.getSceneGraph().recentActivity.contains("POP")) {
+        } else if (clickedMsoe) {
             homeButton.draw(sketch, offsetX, offsetY);
             backButton.draw(sketch);
             supplementaryButton.draw(sketch, offsetX, 0);
