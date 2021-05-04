@@ -5,6 +5,8 @@ import graphics.Color;
 import graphics.Graphics;
 import java.awt.Component;
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -16,6 +18,12 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.TouchEvent;
+import javafx.stage.Stage;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -26,11 +34,11 @@ import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
 import processing.core.PApplet;
+import processing.core.PSurface;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-import processing.event.TouchEvent;
 
-public class Kiosk extends PApplet implements EventListener<TouchEvent> {
+public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private String surveyPath;
@@ -115,6 +123,23 @@ public class Kiosk extends PApplet implements EventListener<TouchEvent> {
         Color.setSketch(this);
 
         boop = new Boop();
+    }
+
+    @Override
+    protected PSurface initSurface() {
+        surface = super.initSurface();
+        final Canvas canvas = (Canvas) surface.getNative();
+        final javafx.scene.Scene oldScene = canvas.getScene();
+        Stage stage = (Stage) oldScene.getWindow();
+
+        stage.addEventHandler(TouchEvent.ANY, new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                System.out.println("Touch Event");
+            }
+        });
+
+        return surface;
     }
 
     /**
@@ -451,10 +476,5 @@ public class Kiosk extends PApplet implements EventListener<TouchEvent> {
 
     protected void setHotkeysEnabled(boolean hotkeysEnabled) {
         this.hotkeysEnabled = hotkeysEnabled;
-    }
-
-    @Override
-    public void invoke(TouchEvent arg) {
-        System.out.println("Touch event!");
     }
 }
