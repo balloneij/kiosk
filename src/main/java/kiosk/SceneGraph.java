@@ -15,12 +15,13 @@ import kiosk.models.ErrorSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
+import kiosk.scenes.ErrorScene;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
 
     private final UserScore userScore;
-    private SceneModel root;
+    private String rootId;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
@@ -77,9 +78,11 @@ public class SceneGraph {
             this.registerSceneModel(sceneModel);
         }
 
+        // Set the root and load it as the first scene
         setRootSceneModel(this.sceneModels.get(survey.rootSceneId));
-        this.currentScene = this.root.deepCopy().createScene();
-        this.history.push(this.root);
+        SceneModel root = this.getRootSceneModel();
+        this.currentScene = root.deepCopy().createScene();
+        this.history.push(root);
     }
 
     /**
@@ -88,9 +91,8 @@ public class SceneGraph {
      * @return a survey model representation of the scene graph
      */
     public synchronized LoadedSurveyModel exportSurvey() {
-        String rootSceneId = this.root.getId();
         List<SceneModel> scenes = new ArrayList<>(this.sceneModels.values());
-        return new LoadedSurveyModel(rootSceneId, scenes);
+        return new LoadedSurveyModel(rootId, scenes);
     }
 
     public synchronized void pushScene(SceneModel sceneModel) {
@@ -131,16 +133,15 @@ public class SceneGraph {
     public synchronized void pushScene(String sceneModelId,
                                        Riasec category,
                                        FilterGroupModel nullOrFilter) {
-        boolean containsModel = sceneModels.containsKey(sceneModelId);
+        // this is handled whether the scene exists or not
+        SceneModel nextSceneModel = getSceneById(sceneModelId);
 
-        if (containsModel) {
-            SceneModel nextSceneModel = sceneModels.get(sceneModelId);
-            pushScene(nextSceneModel, category, nullOrFilter);
-        } else {
-            pushScene(new ErrorSceneModel(
-                    "Scene of the id '" + sceneModelId + "' does not exist (yet)"),
-                    Riasec.None, null);
+        if (!containsScene(sceneModelId)) {
+            category = Riasec.None;
+            nullOrFilter = null;
         }
+
+        pushScene(nextSceneModel, category, nullOrFilter);
     }
 
     /**
@@ -189,10 +190,11 @@ public class SceneGraph {
         userScore.reset();
 
         // Reset the root scene
-        this.currentScene = this.root.deepCopy().createScene();
+        SceneModel root = getRootSceneModel();
+        this.currentScene = root.deepCopy().createScene();
         this.history.clear();
-        this.history.push(this.root);
-        this.onSceneChange(this.root);
+        this.history.push(root);
+        this.onSceneChange(root);
     }
 
     /**
@@ -222,7 +224,7 @@ public class SceneGraph {
     public synchronized void unregisterSceneModel(SceneModel sceneModel)
             throws SceneModelException {
         // Can't remove the root scene
-        if (sceneModel != this.root) {
+        if (!sceneModel.getId().equals(rootId)) {
             SceneModel currentScene = getCurrentSceneModel();
 
             // If we are removing the current active scene, pop it before removing
@@ -293,8 +295,11 @@ public class SceneGraph {
         SceneModel sceneModel = this.sceneModels.get(id);
 
         if (sceneModel == null) {
-            return new ErrorSceneModel("Scene '" + id + "' does not exist");
+            sceneModel = new ErrorSceneModel("You might have deleted a scene that a button led to."
+                    + " Because we can't have a button lead nowhere, this scene can't be deleted.");
+            sceneModel.setId(id);
         }
+
         return sceneModel;
     }
 
@@ -307,7 +312,7 @@ public class SceneGraph {
      * @return The root sceneModel
      */
     public synchronized SceneModel getRootSceneModel() {
-        return this.root;
+        return sceneModels.get(this.rootId);
     }
 
     /**
@@ -315,25 +320,16 @@ public class SceneGraph {
      * @param newRoot The scene which will become the launching point for the Kiosk.
      */
     public synchronized void setRootSceneModel(SceneModel newRoot) {
-        if (this.root != null) {
-            this.root.setName(this.root.getName()
+        SceneModel previousRoot = this.getRootSceneModel();
+        if (previousRoot != null) {
+            previousRoot.setName(previousRoot.getName()
                     .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
         }
 
-        this.root = newRoot;
-        // Remove root from original child
-        if (root != null) {
-            this.root.setName(this.root.getName()
-                    .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-
-            // If the new root is the current scene, re-register so the buttons update
-            if (getCurrentSceneModel() != null
-                && root.getId().equals(getCurrentSceneModel().getId())) {
-                registerSceneModel(root);
-            }
+        this.rootId = newRoot.getId();
+        if (!newRoot.getName().startsWith(ChildIdentifiers.ROOT)) {
+            newRoot.setName(ChildIdentifiers.ROOT + newRoot.getName());
         }
-        // Set new root and give em the special star
-        this.root.setName(ChildIdentifiers.ROOT + this.root.getName());
     }
 
     /**

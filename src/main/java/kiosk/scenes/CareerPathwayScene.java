@@ -41,6 +41,8 @@ public class CareerPathwayScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+
         // Grab careers from the Kiosk and userScore from the SceneGraph
         UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
         this.careers = userScore.getCareers();
@@ -68,7 +70,7 @@ public class CareerPathwayScene implements Scene {
         this.spokeGraph.init(sketch);
 
         // Create home and back button
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -82,10 +84,6 @@ public class CareerPathwayScene implements Scene {
         for (ButtonControl careerOption : this.spokeGraph.getButtonControls()) {
             sketch.hookControl(careerOption);
         }
-        sketch.hookControl(this.backButton);
-        sketch.hookControl(this.homeButton);
-
-        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
     }
 
     @Override
@@ -102,10 +100,12 @@ public class CareerPathwayScene implements Scene {
             }
         }
 
-        if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
-        } else if (this.backButton.wasClicked()) {
-            sceneGraph.popScene();
+        if (!isRoot) {
+            if (this.homeButton.wasClicked()) {
+                sceneGraph.reset();
+            } else if (this.backButton.wasClicked()) {
+                sceneGraph.popScene();
+            }
         }
     }
 

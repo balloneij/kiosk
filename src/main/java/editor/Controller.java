@@ -31,6 +31,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -135,8 +136,8 @@ public class Controller implements Initializable {
                         SceneModel newModel = newValue.deepCopy();
                         newModel.setId(currentSceneId);
                         newModel.setName(currentSceneName);
-                        sceneGraph.registerSceneModel(newModel);
 
+                        sceneGraph.registerSceneModel(newModel);
                         rebuildToolbar(newModel);
                         rebuildSceneGraphTreeView();
                     }
@@ -175,6 +176,29 @@ public class Controller implements Initializable {
             createNewScene(true);
             rebuildSceneGraphTreeView();
             rebuildToolbar(sceneGraph.getCurrentSceneModel());
+        });
+
+        sceneGraphTreeView.setOnKeyReleased(t -> {
+            if (t.getCode() == KeyCode.DELETE) {
+                if (sceneGraphTreeView.getSelectionModel().getSelectedItem() != null) {
+                    SceneModel selectedModel =
+                            sceneGraphTreeView.getSelectionModel().getSelectedItem().getValue();
+                    if (selectedModel != null) {
+                        // Operators could be distributed internally, but it reduces clarity
+                        if (!(selectedModel == sceneGraph.getRootSceneModel()
+                                || (selectedModel.getClass().equals(EmptySceneModel.class)
+                                && !((EmptySceneModel) selectedModel).intent))) {
+                            deleteScene(selectedModel);
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setHeaderText("Unable to Delete Scene");
+                            alert.setContentText("The root scene and empty scenes pointed"
+                                    + " to by a button cannot be deleted");
+                            alert.showAndWait();
+                        }
+                    }
+                }
+            }
         });
 
         SceneModelTreeCell.sceneGraph = sceneGraph;
@@ -261,8 +285,10 @@ public class Controller implements Initializable {
                     unvisitedScenes, depths, 0));
         }
 
-        // If we added any orhphans that turned out to later have parents, remove them here
-        for (int i = hiddenRoot.getChildren().size() - 1; i >= 0; i--) {
+        // If we added any orphans that turned out to later have parents, remove them here
+        // Iterate until i >= 1 to avoid removing the root
+        int childrenCount = hiddenRoot.getChildren().size();
+        for (int i = childrenCount - 1; i >= 1; i--) {
             TreeItem<SceneModel> child = hiddenRoot.getChildren().get(i);
             if (depths.get(child.getValue().getId()) > 0) {
                 hiddenRoot.getChildren().remove(i);
@@ -297,7 +323,12 @@ public class Controller implements Initializable {
                     continue;
                 } else if (sceneGraph.getSceneById(childId)
                         .getClass().equals(ErrorSceneModel.class)) {
-                    root.getChildren().add(new TreeItem<>(new ErrorSceneModel()));
+                    // prevents adding an error scene to the treeView
+                    EmptySceneModel replaceError = new EmptySceneModel(childId,
+                            ((ErrorSceneModel) sceneGraph.getSceneById(childId)).errorMsg);
+                    replaceError.intent = false;
+                    sceneGraph.registerSceneModel(replaceError);
+                    root.getChildren().add(new TreeItem<>(replaceError));
                     continue;
                 }
 
@@ -309,10 +340,6 @@ public class Controller implements Initializable {
                         depths.put(childId, depth + 1);
                     }
                     SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                    if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
-                        childSceneModel.setName(childSceneModel.getName()
-                                .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-                    }
                     // Add the parent to the tree element
                     root.getChildren().add(new TreeItem<>(childSceneModel));
                     continue;
@@ -328,10 +355,6 @@ public class Controller implements Initializable {
                 // if the child IS new, indicate that it no longer needs to be added
                 remainingChildren.remove(childId);
                 SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
-                    childSceneModel.setName(childSceneModel.getName()
-                            .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-                }
                 TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
                 root.getChildren()
                         .add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));

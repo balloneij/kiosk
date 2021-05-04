@@ -1,18 +1,15 @@
 package editor.sceneloaders;
 
 import editor.Controller;
-import java.util.Arrays;
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import kiosk.SceneGraph;
 import kiosk.models.CareerPathwaySceneModel;
-import kiosk.models.FilterGroupModel;
 
 /**
  * Used to load the editing controls for the CareerPathwayScene.
@@ -60,7 +57,8 @@ public class CareerPathwaySceneLoader {
 
     // Adds a Node containing a text field for editing the header body.
     protected static Node getHeaderBodyBox(CareerPathwaySceneModel model, SceneGraph graph) {
-        TextField bodyField = new TextField(model.headerBody);
+        TextArea bodyField = new TextArea(model.headerBody);
+        bodyField.setPrefRowCount(2);
 
         // Listener to update the body
         bodyField.textProperty().addListener((observable, oldValue, newValue) -> {
