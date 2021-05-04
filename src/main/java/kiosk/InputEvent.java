@@ -10,6 +10,5 @@ public enum InputEvent {
     MousePressed,
     MouseReleased,
     MouseWheel,
-    KeyPressed,
-    MouseHovered
+    KeyPressed
 }
