@@ -16,6 +16,16 @@
     </properties>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java/editor</directory>
+                <targetPath>editor/</targetPath>
+                <includes>
+                    <include>Editor.fxml</include>
+                    <include>SurveySettings.fxml</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
