@@ -19,6 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TouchPoint;
 import javafx.stage.Stage;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
@@ -43,6 +44,8 @@ public class Kiosk extends PApplet {
     private SceneModel lastSceneModel;
     private boolean currentSceneIsRoot = false;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
+    private final Map<TouchScreenEvent, LinkedList<EventListener<TouchEvent>>> touchListeners;
+    private TouchPoint touchPoint;
     private long lastNanos = 0;
     protected static Settings settings;
     private Boop boop;
@@ -111,9 +114,13 @@ public class Kiosk extends PApplet {
         this.careers = survey.careers;
 
         this.mouseListeners = new LinkedHashMap<>();
-
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.put(e, new LinkedList<>());
+        }
+
+        this.touchListeners = new LinkedHashMap<>();
+        for (TouchScreenEvent e : TouchScreenEvent.values()) {
+            this.touchListeners.put(e, new LinkedList<>());
         }
 
         Color.setSketch(this);
@@ -129,7 +136,22 @@ public class Kiosk extends PApplet {
         Stage stage = (Stage) oldScene.getWindow();
 
         stage.addEventHandler(TouchEvent.TOUCH_PRESSED, event -> {
-            System.out.println("Touch Event!");
+            if (touchPoint == null) {
+                touchPoint = event.getTouchPoint();
+                for (EventListener listener : this.touchListeners.get(TouchScreenEvent.TouchPressed)) {
+                    listener.invoke(event);
+                }
+                boop.checkTap(this, event);
+            }
+        });
+
+        stage.addEventHandler(TouchEvent.TOUCH_RELEASED, event -> {
+            if (touchPoint != null && touchPoint.getId() == event.getTouchPoint().getId()) {
+                touchPoint = null;
+                for (EventListener listener : this.touchListeners.get(TouchScreenEvent.TouchReleased)) {
+                    listener.invoke(event);
+                }
+            }
         });
 
         return surface;
@@ -293,19 +315,13 @@ public class Kiosk extends PApplet {
      */
     public void hookControl(Control control) {
         Map<InputEvent, EventListener> newListeners = control.getEventListeners();
-
         for (InputEvent key : newListeners.keySet()) {
             this.mouseListeners.get(key).push(newListeners.get(key));
         }
-    }
 
-    /**
-     * Hook a map of event listeners to the kiosk.
-     * @param listeners to attach
-     */
-    public void hookControl(Map<InputEvent, EventListener> listeners) {
-        for (InputEvent key : listeners.keySet()) {
-            this.mouseListeners.get(key).push(listeners.get(key));
+        Map<TouchScreenEvent, EventListener> newTouchListeners = control.getTouchEventListeners();
+        for (TouchScreenEvent key : newTouchListeners.keySet()) {
+            this.touchListeners.get(key).push(newTouchListeners.get(key));
         }
     }
 
@@ -425,6 +441,7 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MousePressed)) {
             listener.invoke(event);
         }
+        boop.checkTap(this, event);
     }
 
     /**
