@@ -219,6 +219,7 @@ public class Controller implements Initializable {
             sceneTypeComboBox.getSelectionModel().clearSelection();
         }
 
+        sceneTypeComboBox.setDisable(false);
         previousId = model.getId();
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
@@ -232,8 +233,11 @@ public class Controller implements Initializable {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
             DetailsSceneLoader.loadScene(this, (DetailsSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof EmptySceneModel) {
+            toolbarBox.getChildren().clear();
         } else {
             toolbarBox.getChildren().clear();
+            sceneTypeComboBox.setDisable(true);
         }
     }
 
