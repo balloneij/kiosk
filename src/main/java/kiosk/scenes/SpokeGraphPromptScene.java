@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
 import kiosk.Kiosk;
 import kiosk.Riasec;
@@ -52,6 +53,16 @@ public class SpokeGraphPromptScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
     private boolean isRoot = false;
+
+    //Animations
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+    private SceneAnimationHelper.Clicked clicked;
+    private String sceneToGoTo;
+    private Riasec riasecToGoTo;
+    private FilterGroupModel filterToGoTo;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
 
     /**
      * Creates a Spoke Graph Prompt Scene
@@ -163,6 +174,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Reference to current list of careers
         UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        UserScore previousUserScore = sketch.getPreviousUserScore();
         CareerModel[] careers = userScore.getCareers();
 
         // Create spokes for each of the careers (weighted based on user's RIASEC scores)
@@ -173,7 +185,7 @@ public class SpokeGraphPromptScene implements Scene {
             CareerModel career = careers[i];
             careerButtons[i] = new ButtonModel();
             careerButtons[i].text = career.name;
-            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+            careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory);
         }
 
         // Create spoke graph
@@ -195,36 +207,43 @@ public class SpokeGraphPromptScene implements Scene {
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
         } else {
-            this.supplementaryButton = GraphicsUtil.initializeMsoeButtonUpperRight(sketch);
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(
+                    sketch, answersPadding, 0 - (3 * screenH / 4f));
             sketch.hookControl(this.supplementaryButton);
         }
 
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
+
         this.promptButton.init(sketch);
+
+        clicked = SceneAnimationHelper.Clicked.NONE;
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         // Check for button clicks on the scene graph
         for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
-                String scene = button.getTarget();
-                Riasec riasec = button.getModel().category;
-                FilterGroupModel filter = button.getModel().filter;
-                sceneGraph.pushScene(scene, riasec, filter);
+                clicked = SceneAnimationHelper.Clicked.NEXT;
+                sceneToGoTo = button.getTarget();
+                riasecToGoTo = button.getModel().category;
+                filterToGoTo = button.getModel().filter;
                 break;
             }
         }
 
         if (!isRoot) {
             if (this.homeButton.wasClicked()) {
-                sceneGraph.reset();
+                clicked = SceneAnimationHelper.Clicked.HOME;
             } else if (this.backButton.wasClicked()) {
-                sceneGraph.popScene();
+                clicked = SceneAnimationHelper.Clicked.BACK;
             }
-        } else {
-            if (this.supplementaryButton != null && this.supplementaryButton.wasClicked()) {
-                sceneGraph.pushScene(new CreditsSceneModel());
-            }
+        } else if (this.supplementaryButton.wasClicked()) {
+            clicked = SceneAnimationHelper.Clicked.MSOE;
         }
     }
 
@@ -234,7 +253,46 @@ public class SpokeGraphPromptScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
+
+        if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (!clicked.equals(SceneAnimationHelper.Clicked.NONE)
+                && sceneAnimationMilliseconds != 0) {
+            totalTimeEnding += dt * 1000;
+        }
+
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogicSpokeGraphPromptScene(sketch,
+                clicked,
+                sceneToGoTo, riasecToGoTo, filterToGoTo,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                screenW, screenH, headerY, headerH);
+
+        switch (returnVals[3]) {
+            case 1:
+                drawThisFrame(sketch, returnVals[0], returnVals[1]);
+                break;
+            case 2:
+                drawThisFrameInterpolate(sketch, returnVals[0], returnVals[1]);
+                break;
+            case 3:
+                drawThisFrameOppositeDirections(sketch, returnVals[0], returnVals[2]);
+                break;
+            case 4:
+                drawThisFrameInterpolate(sketch, returnVals[0], returnVals[1]);
+                sketch.getSceneGraph().popScene();
+                break;
+            case 5:
+                drawThisFrame(sketch, returnVals[0], returnVals[1]);
+                sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
 
         // Calculate answer location constants
         float headerBottomY = headerY + headerH + 2 * answersPadding;
@@ -242,37 +300,207 @@ public class SpokeGraphPromptScene implements Scene {
         float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
 
         // Draw the career spoke graph
-        this.spokeGraph.draw(sketch);
-
-        if (!isRoot) {
-            // Draw the back and home buttons
-            this.backButton.draw(sketch);
-            this.homeButton.draw(sketch);
-        } else {
-            supplementaryButton.draw(sketch);
-        }
+        this.spokeGraph.draw(sketch, offsetX, offsetY);
 
         // Draw answer buttons
         for (ButtonControl answer : answerButtons) {
             sketch.strokeWeight(answersSpokeThickness);
             sketch.stroke(255);
-            sketch.line(answersCenterX, answersCenterY,
-                    answer.getCenterX(), answer.getCenterY());
-            answer.draw(sketch);
+            sketch.line(answersCenterX + offsetX, answersCenterY + offsetY,
+                    answer.getCenterX() + offsetX, answer.getCenterY() + offsetY);
+            answer.draw(sketch, offsetX, offsetY);
         }
 
         // Draw the center prompt button
-        this.promptButton.draw(sketch);
+        this.promptButton.draw(sketch, offsetX, offsetY);
 
         // Draw the career spoke graph
-        this.spokeGraph.draw(sketch);
+        // Define the size of the square that the spoke graph will fit in
+        final double availableHeight = (screenH - headerY - headerH);
+        final double size = Math.min(screenW, availableHeight);
+        // Reference to current list of careers
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        CareerModel[] careers = userScore.getCareers();
 
-        if (!isRoot) {
-            // Draw the back and home buttons
-            this.backButton.draw(sketch);
-            this.homeButton.draw(sketch);
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
+            careerButtons[i] = new ButtonModel();
+            careerButtons[i].text = career.name;
+            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+        }
+
+        // Create spoke graph
+        spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                this.model.careerCenterText, careerButtons, careerWeights);
+        spokeGraph.setDisabled(true);
+        spokeGraph.init(sketch);
+        spokeGraph.draw(sketch, offsetX, offsetY);
+
+        if (isRoot) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
         } else {
-            supplementaryButton.draw(sketch);
+            if ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
+                    || ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK))
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)
+                    || sketch.getSceneGraph().recentActivity
+                    .equals(SceneGraph.RecentActivity.POP)) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
+        }
+    }
+
+    private void drawThisFrameInterpolate(Kiosk sketch, int offsetX, int offsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
+
+        // Calculate answer location constants
+        float headerBottomY = headerY + headerH + 2 * answersPadding;
+        int answersCenterX = (screenW * 3 / 4);
+        float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
+
+        // Draw answer buttons
+        for (ButtonControl answer : answerButtons) {
+            sketch.strokeWeight(answersSpokeThickness);
+            sketch.stroke(255);
+            sketch.line(answersCenterX + offsetX, answersCenterY + offsetY,
+                    answer.getCenterX() + offsetX, answer.getCenterY() + offsetY);
+            answer.draw(sketch, offsetX, offsetY);
+        }
+
+        // Draw the center prompt button
+        this.promptButton.draw(sketch, offsetX, offsetY);
+
+        // Draw the career spoke graph
+        // Define the size of the square that the spoke graph will fit in
+        final double availableHeight = (screenH - headerY - headerH);
+        final double size = Math.min(screenW, availableHeight);
+        // Reference to current list of careers
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        UserScore previousUserScore = sketch.getPreviousUserScore();
+        CareerModel[] careers = userScore.getCareers();
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
+            careerButtons[i] = new ButtonModel();
+            careerButtons[i].text = career.name;
+            careerWeights[i] = previousUserScore.getCategoryScore(career.riasecCategory)
+                    + (((userScore.getCategoryScore(career.riasecCategory)
+                    - previousUserScore.getCategoryScore(career.riasecCategory))
+                    * ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds)));
+        }
+
+        // Create spoke graph
+        spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                this.model.careerCenterText, careerButtons, careerWeights);
+        spokeGraph.setDisabled(true);
+        spokeGraph.init(sketch);
+        spokeGraph.draw(sketch, offsetX, offsetY);
+
+        if (isRoot) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else {
+            if ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
+                    || ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK))
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE) || sketch.getSceneGraph()
+                    .recentActivity.equals(SceneGraph.RecentActivity.POP)) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
+        }
+    }
+
+    private void drawThisFrameOppositeDirections(Kiosk sketch, int offsetX, int otherOffsetX) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle,
+                model.headerBody, otherOffsetX, 0);
+
+        // Calculate answer location constants
+        float headerBottomY = headerY + headerH + 2 * answersPadding;
+        int answersCenterX = (screenW * 3 / 4);
+        float answersCenterY = headerBottomY + (screenH - headerBottomY) / 2 - answersPadding;
+
+        // Draw answer buttons
+        for (ButtonControl answer : answerButtons) {
+            sketch.strokeWeight(answersSpokeThickness);
+            sketch.stroke(255);
+            sketch.line(answersCenterX + otherOffsetX, answersCenterY,
+                    answer.getCenterX() + otherOffsetX, answer.getCenterY());
+            answer.draw(sketch, otherOffsetX, 0);
+        }
+
+        // Draw the center prompt button
+        this.promptButton.draw(sketch, otherOffsetX, 0);
+
+        // Draw the career spoke graph
+        // Define the size of the square that the spoke graph will fit in
+        final double availableHeight = (screenH - headerY - headerH);
+        final double size = Math.min(screenW, availableHeight);
+        // Reference to current list of careers
+        UserScore userScore = sketch.getUserScore(); // Reference to user's RIASEC scores
+        CareerModel[] careers = userScore.getCareers();
+
+        // Create spokes for each of the careers (weighted based on user's RIASEC scores)
+        ButtonModel[] careerButtons = new ButtonModel[careers.length];
+        double[] careerWeights = new double[careers.length];
+
+        for (int i = 0; i < careers.length; i++) {
+            CareerModel career = careers[i];
+            careerButtons[i] = new ButtonModel();
+            careerButtons[i].text = career.name;
+            careerWeights[i] = userScore.getCategoryScore(career.riasecCategory);
+        }
+
+        // Create spoke graph
+        spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
+                this.model.careerCenterText, careerButtons, careerWeights);
+        spokeGraph.setDisabled(true);
+        spokeGraph.init(sketch);
+        spokeGraph.draw(sketch, offsetX, 0);
+
+        if (isRoot) {
+            supplementaryButton.draw(sketch, otherOffsetX, 0);
+        } else {
+            if ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
+                    || ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK))
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
+                homeButton.draw(sketch, otherOffsetX, 0);
+                backButton.draw(sketch, otherOffsetX, 0);
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
+                homeButton.draw(sketch, otherOffsetX, 0);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 }

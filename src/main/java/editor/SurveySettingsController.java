@@ -154,7 +154,7 @@ public class SurveySettingsController implements Initializable {
         timeOutSpinner.increment(settings.timeoutMillis / 1000);
         timeOutGraceSpinner.setEditable(true);
         timeOutGraceSpinner.increment(settings.gracePeriodMillis / 1000);
-        sceneAnimationSpinner.getValueFactory().setValue(settings.sceneAnimationFrames);
+        sceneAnimationSpinner.getValueFactory().setValue(settings.sceneAnimationMilliseconds);
         buttonAnimationSpinner.getValueFactory().setValue(settings.buttonAnimationFrames);
         buttonAnimationLengthSpinner.getValueFactory()
                 .setValue(settings.buttonAnimationLengthFrames);
@@ -207,7 +207,7 @@ public class SurveySettingsController implements Initializable {
         settings.screenW = width;
         settings.timeoutMillis = timeOut * 1000; // Convert ms to seconds
         settings.gracePeriodMillis = timeOutGraceSpinner.getValue() * 1000; // Convert ms to seconds
-        settings.sceneAnimationFrames = sceneAnimationSpinner.getValue();
+        settings.sceneAnimationMilliseconds = sceneAnimationSpinner.getValue();
         settings.buttonAnimationFrames = buttonAnimationSpinner.getValue();
         settings.buttonAnimationLengthFrames = buttonAnimationLengthSpinner.getValue();
         settings.writeSettings();
@@ -216,13 +216,14 @@ public class SurveySettingsController implements Initializable {
         restartNeeded = currentSettings == null
                 ? settings.screenH != Editor.getSettings().screenH
                 || settings.screenW != Editor.getSettings().screenW
-                || settings.sceneAnimationFrames != Editor.getSettings().sceneAnimationFrames
+                || settings.sceneAnimationMilliseconds
+                != Editor.getSettings().sceneAnimationMilliseconds
                 || settings.buttonAnimationFrames != Editor.getSettings().buttonAnimationFrames
                 || settings.buttonAnimationLengthFrames != Editor.getSettings()
                 .buttonAnimationLengthFrames :
             currentSettings.screenH != settings.screenH
                 || settings.screenW != currentSettings.screenW
-                || settings.sceneAnimationFrames != currentSettings.sceneAnimationFrames
+                || settings.sceneAnimationMilliseconds != currentSettings.sceneAnimationMilliseconds
                 || settings.buttonAnimationFrames != currentSettings.buttonAnimationFrames
                 || settings.buttonAnimationLengthFrames != currentSettings
                     .buttonAnimationLengthFrames;

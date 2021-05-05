@@ -1,6 +1,7 @@
 package graphics;
 
 import java.util.Random;
+import javafx.scene.input.TouchEvent;
 import kiosk.Kiosk;
 import kiosk.models.ImageModel;
 import kiosk.scenes.Image;
@@ -15,17 +16,19 @@ public class Boop {
     private final int randomGoLeftChance = 50;
     private final int randomSwapSpeedChance = 50;
     private final int randomSwapAnimationChance = 50;
-    private final int choiceFrequencyInFrames = 30;
-    private final int stoppingBreakInFrames = 25;
+    private final int randomRoscoeAnimationChance = 33;
+    private final double choiceFrequencyInSeconds = 3.5f;
+    private final float stoppingBreakInSeconds = 1.5f;
     private final int movementPercentage = 75;
     private final int limbMovementRange = 1;
     private final float speedSlow = 0.5f;
     private final float speedFast = 0.75f;
     private final float speedZoom = 2.5f;
-    private final int minimumShellFrames = 100;
-    private final int minimumHappyFrames = 250;
-    private final int minimumBlinkFrames = 30;
-    private final int framesBetweenBlinks = 200;
+    private final double minimumShellSeconds = 1.5f;
+    private final float minimumHappySeconds = 4.5f;
+    private float totalUnblinkingTime;
+    private final float secondsBetweenBlinks = 3.5f;
+    private boolean isBlinking = false;
 
     private int width;
     private int boopDimens;
@@ -36,36 +39,43 @@ public class Boop {
     private Image lfFoot;
     private Image rbFoot;
     private Image rfFoot;
+    private Image leftHideLeg;
+    private Image rightHideLeg;
     private Image shell;
-    private Image shellEmpty;
-    private Image shellLook;
-    private Image shellLook1;
-    private Image shellLook2;
+    private Image shellHide;
     private Image head;
+    private Image headPeek;
+    private Image headPeek1;
+    private Image headPeek2;
     private Image headHappy;
     private Image headHappyBlink;
     private Image headBlink;
     private Image headLook;
     private Image headLookBlink;
+    private Image headRoscoe;
 
     private Image lbFootR;
     private Image lfFootR;
     private Image rbFootR;
     private Image rfFootR;
+    private Image leftHideLegR;
+    private Image rightHideLegR;
     private Image shellR;
-    private Image shellEmptyR;
-    private Image shellLookR;
-    private Image shellLook1R;
-    private Image shellLook2R;
+    private Image shellHideR;
     private Image headR;
+    private Image headPeekR;
+    private Image headPeek1R;
+    private Image headPeek2R;
     private Image headHappyR;
     private Image headHappyBlinkR;
     private Image headBlinkR;
     private Image headLookR;
     private Image headLookBlinkR;
+    private Image headRoscoeR;
 
     private boolean choseLeft;
     private boolean choseShake;
+    private boolean choseRoscoeAnimation;
 
     private enum BoopState {
         HAPPY_LEFT, HAPPY_RIGHT,
@@ -80,15 +90,18 @@ public class Boop {
     private float currentX;
     private float currentY;
     private int timesNotMoved = 0;
-    private int lastMovementFrame;
-    private int firstMovementFrame;
-    private int additionalShellFrames;
-    private int lastClickedFrame;
-    private int firstHappyFrame = -1;
-    private int additionalHappyFrames;
+    private float totalMovementTime;
+    private float totalStoppedTime;
+    private float additionalShellSeconds;
+    private float totalHappyTime = -1;
+    private float additionalHappySeconds;
     private boolean shouldZoomAway;
     private boolean startedHappyAnimation = false;
     private final Random rand = new Random();
+
+    private float totalShellTime;
+    private int shellAnimation1Iterations = 0;
+    private int shellAnimation2Iterations = 0;
 
     public Boop() {
         this.boopState = BoopState.STATIC_LEFT;
@@ -100,14 +113,15 @@ public class Boop {
      * Boop will never walk off screen.
      * @param sketch to draw to
      * @param currentScene the scene the user is currently viewing
+     * @param dt the number of seconds that have passed since the last draw
      */
-    public void movementLogic(Kiosk sketch, Scene currentScene) {
-        minX = 0;
-        maxX = width;
+    public void movementLogic(Kiosk sketch, Scene currentScene, float dt) {
+        minX = width / screenBoundaryFraction;
+        maxX = width * ((screenBoundaryFraction - 1) / screenBoundaryFraction);
         if (currentScene.getClass().toString().contains("CareerDescriptionScene")
                 && !startedHappyAnimation) {
-            firstHappyFrame = sketch.frameCount;
-            additionalHappyFrames = rand.nextInt(30);
+            totalHappyTime = 0;
+            additionalHappySeconds = rand.nextFloat();
             if (choseLeft) {
                 boopState = BoopState.HAPPY_LEFT;
             } else {
@@ -127,32 +141,28 @@ public class Boop {
             maxX = width * ((screenBoundaryFraction - 1) / screenBoundaryFraction);
         }
         boolean choseScootAnimation;
-        if (currentX >= width * (screenBoundaryFraction - 1 / screenBoundaryFraction)) {
+        if (currentX >= width * (screenBoundaryFraction - 1 / screenBoundaryFraction)
+                || currentX >= maxX) {
             //Boop is too close to the right edge of the screen!
             //Somebody tell him to stop!
             //oh god he can't hear us he has airpods in oh god
             //Oh the hu-manatee!
             choseLeft = true;
             boopState = BoopState.SCOOT_LEFT;
-        } else if (currentX <= width / screenBoundaryFraction) {
+            shouldZoomAway = true;
+        } else if (currentX <= width / screenBoundaryFraction || currentX <= minX) {
             //Boop is too close to the left edge of the screen!
             //Somebody tell him to stop!
             //oh god he can't hear us he has airpods in oh god
             //Oh the hu-manatee!
             choseLeft = false;
             boopState = BoopState.SCOOT_RIGHT;
-        } else if (currentX <= minX) {
-            choseLeft = false;
-            boopState = BoopState.SCOOT_RIGHT;
-            shouldZoomAway = true;
-        } else if (currentX >= maxX) {
-            choseLeft = true;
-            boopState = BoopState.SCOOT_LEFT;
             shouldZoomAway = true;
         } else {
             shouldZoomAway = false;
         }
-        if (sketch.frameCount % choiceFrequencyInFrames == 0
+        if ((totalMovementTime >= choiceFrequencyInSeconds
+                || totalStoppedTime >= choiceFrequencyInSeconds)
                 && !boopState.equals(BoopState.IN_SHELL_LEFT)
                 && !boopState.equals(BoopState.IN_SHELL_RIGHT)) {
             if (!boopState.equals(BoopState.HAPPY_RIGHT)
@@ -162,27 +172,28 @@ public class Boop {
                         || boopState.equals(BoopState.TIPTOE_LEFT)
                         || boopState.equals(BoopState.TIPTOE_RIGHT)) {
                     int randInt = rand.nextInt(randomBounds);
-                    if (randInt >= movementPercentage) {
+                    if (randInt >= movementPercentage
+                            && totalMovementTime >= choiceFrequencyInSeconds) {
                         //If Boop randomly decides to stop...
                         if (choseLeft) {
                             boopState = BoopState.STATIC_LEFT;
                         } else {
                             boopState = BoopState.STATIC_RIGHT;
                         }
+                        totalMovementTime = 0;
+                        totalStoppedTime = 0;
                     } else {
                         //If Boop keeps moving...
-                        lastMovementFrame = sketch.frameCount;
+                        totalMovementTime += dt;
                     }
                 } else {
-                    if (lastMovementFrame < sketch.frameCount + stoppingBreakInFrames) {
+                    if (totalStoppedTime >= stoppingBreakInSeconds) {
                         //Boop must stay put for at least
-                        // STOPPING_BREAK_IN_FRAMES frames after stopping.
+                        // stoppingBreakInSeconds seconds after stopping.
                         int randInt = rand.nextInt(randomBounds) + timesNotMoved;
                         if (randInt >= movementPercentage) {
                             //If Boop randomly decides to start moving...
                             //Randomly decide if he should start moving left or right.
-                            lastMovementFrame = sketch.frameCount;
-                            firstMovementFrame = sketch.frameCount;
                             timesNotMoved = 0;
 
                             randInt = rand.nextInt(randomBounds);
@@ -202,38 +213,51 @@ public class Boop {
                                     boopState = BoopState.TIPTOE_RIGHT;
                                 }
                             }
+                            totalMovementTime = 0;
+                            totalStoppedTime = 0;
                         } else {
                             //If Boop randomly decides to stay where he is...
                             //Make it more likely that he will move next time.
                             timesNotMoved++;
+                            totalStoppedTime += dt;
                         }
                     }
                 }
             }
+        } else if (boopState.equals(BoopState.SCOOT_LEFT)
+                || boopState.equals(BoopState.SCOOT_RIGHT)
+                || boopState.equals(BoopState.TIPTOE_LEFT)
+                || boopState.equals(BoopState.TIPTOE_RIGHT)) {
+            totalMovementTime += dt;
+            totalStoppedTime = 0;
+        } else {
+            totalStoppedTime += dt;
+            totalMovementTime = 0;
         }
-        drawThisFrame(sketch);
+        drawThisFrame(sketch, dt);
     }
 
     /**
      * Draws the current frame of Boop's animation.
      * @param sketch to draw to
+     * @param dt the number of seconds that have passed since the last draw
      */
-    private void drawThisFrame(Kiosk sketch) {
+    private void drawThisFrame(Kiosk sketch, float dt) {
         if (boopState.equals(BoopState.SCOOT_LEFT)
                 || boopState.equals(BoopState.SCOOT_RIGHT)
                 || boopState.equals(BoopState.TIPTOE_LEFT)
                 || boopState.equals(BoopState.TIPTOE_RIGHT)) {
             //Boop is moving, draw him somewhere else depending on his speed.
             if (shouldZoomAway) {
-                drawBoop(sketch, speedZoom);
+                drawBoop(sketch, speedZoom, dt);
             } else if (rand.nextInt(randomBounds) >= randomSwapSpeedChance) {
-                drawBoop(sketch, speedSlow);
+                drawBoop(sketch, speedSlow, dt);
             } else {
-                drawBoop(sketch, speedFast);
+                drawBoop(sketch, speedFast, dt);
             }
         } else {
             //Boop isn't moving right or left, draw him where he currently is.
-            drawBoop(sketch, 0);
+            drawBoop(sketch, 0, dt);
         }
     }
 
@@ -242,115 +266,147 @@ public class Boop {
      * on frame count, speed, animation style chosen, etc.
      * @param sketch to draw to
      * @param amountToMove the amount that Boop should move across the screen each frame
+     * @param dt the number of seconds that have passed since the last draw
      */
-    private void drawBoop(Kiosk sketch, float amountToMove) {
+    private void drawBoop(Kiosk sketch, float amountToMove, float dt) {
         sketch.imageMode(PConstants.CENTER);
-        int frameCheck = sketch.frameCount % framesBetweenBlinks;
+        boolean shouldBlink = (((secondsBetweenBlinks - totalUnblinkingTime) < 0) && !isBlinking);
         switch (boopState) {
             case SCOOT_LEFT:
-                if (frameCheck <= minimumBlinkFrames) {
+                if (shouldBlink || isBlinking) {
                     scootAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot,
                             shell, headLookBlink, 0 - amountToMove);
+                    totalUnblinkingTime -= 3 * dt;
+                    isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
                     scootAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot,
                             shell, headLook, 0 - amountToMove);
+                    totalUnblinkingTime += dt;
                 }
                 break;
             case SCOOT_RIGHT:
-                if (frameCheck <= minimumBlinkFrames) {
+                if (shouldBlink || isBlinking) {
                     scootAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
                             shellR, headLookBlinkR, amountToMove);
+                    totalUnblinkingTime -= 3 * dt;
+                    isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
                     scootAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
                             shellR, headLookR, amountToMove);
+                    totalUnblinkingTime += dt;
                 }
                 break;
             case TIPTOE_LEFT:
-                if (frameCheck <= minimumBlinkFrames) {
+                if (shouldBlink || isBlinking) {
                     tiptoeAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot,
                             shell, headLookBlink, 0 - amountToMove);
+                    totalUnblinkingTime -= 3 * dt;
+                    isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
                     tiptoeAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot,
                             shell, headLook, 0 - amountToMove);
+                    totalUnblinkingTime += dt;
                 }
                 break;
             case TIPTOE_RIGHT:
-                if (frameCheck <= minimumBlinkFrames) {
+                if (shouldBlink || isBlinking) {
                     tiptoeAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
                             shellR, headLookBlinkR, amountToMove);
+                    totalUnblinkingTime -= 3 * dt;
+                    isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
                     tiptoeAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
                             shellR, headLookR, amountToMove);
+                    totalUnblinkingTime += dt;
                 }
                 break;
             case STATIC_LEFT:
-                if (frameCheck <= minimumBlinkFrames) {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headBlink);
+                if (shouldBlink || isBlinking) {
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headBlink, dt);
+                    totalUnblinkingTime -= 3 * dt;
+                    isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, head);
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, head, dt);
+                    totalUnblinkingTime += dt;
                 }
                 break;
             case STATIC_RIGHT:
-                if (frameCheck <= minimumBlinkFrames) {
+                if (shouldBlink || isBlinking) {
                     staticAnimation(sketch, lbFootR, lfFootR,
-                            rbFootR, rfFootR, shellR, headBlinkR);
+                            rbFootR, rfFootR, shellR, headBlinkR, dt);
+                    totalUnblinkingTime -= 3 * dt;
+                    isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
                     staticAnimation(sketch, lbFootR, lfFootR,
-                            rbFootR, rfFootR, shellR, headR);
+                            rbFootR, rfFootR, shellR, headR, dt);
+                    totalUnblinkingTime += dt;
                 }
                 break;
             case HAPPY_LEFT:
-                if (frameCheck <= minimumBlinkFrames) {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headHappyBlink);
+                if (shouldBlink || isBlinking) {
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot,
+                            rfFoot, shell, headHappyBlink, dt);
+                    totalUnblinkingTime -= 3 * dt;
+                    isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headHappy);
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headHappy, dt);
+                    totalUnblinkingTime += dt;
                 }
                 startedHappyAnimation = true;
-                if (sketch.frameCount >= firstHappyFrame
-                        + minimumHappyFrames + additionalHappyFrames) {
+                totalHappyTime += dt;
+                if (totalHappyTime >= minimumHappySeconds + additionalHappySeconds) {
                     //Boop is currently experiencing depression...
                     //He's been happy for more than enough frames, put him out of his misery..
                     boopState = BoopState.STATIC_LEFT;
                 }
                 break;
             case HAPPY_RIGHT:
-                if (frameCheck <= minimumBlinkFrames) {
+                if (shouldBlink || isBlinking) {
                     staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
-                            shellR, headHappyBlinkR);
+                            shellR, headHappyBlinkR, dt);
+                    totalUnblinkingTime = -1;
                 } else {
                     staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
-                            shellR, headHappyR);
+                            shellR, headHappyR, dt);
+                    totalUnblinkingTime += dt;
                 }
                 startedHappyAnimation = true;
-                if (sketch.frameCount >= firstHappyFrame
-                        + minimumHappyFrames + additionalHappyFrames) {
+                totalHappyTime += dt;
+                if (totalHappyTime >= minimumHappySeconds + additionalHappySeconds) {
                     //Boop is currently experiencing depression...
                     //He's been happy for more than enough frames, put him out of his misery..
                     boopState = BoopState.STATIC_RIGHT;
                 }
                 break;
             case IN_SHELL_LEFT:
-                if (choseShake) {
-                    inShellAnimation2(sketch, shellEmpty, shellEmptyR);
+                if (choseRoscoeAnimation) {
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headRoscoe, dt);
+                } else if (choseShake) {
+                    inShellAnimation2(sketch, shellHide, shellHideR, dt);
                 } else {
-                    inShellAnimation(sketch, shellEmpty, shellLook, shellLook1, shellLook2);
+                    inShellAnimation(sketch, shellHide, headPeek,
+                            headPeek1, headPeek2, leftHideLeg, rightHideLeg, dt);
                 }
-                if (sketch.frameCount >= lastClickedFrame
-                        + minimumShellFrames + additionalShellFrames) {
+                if (totalShellTime >= (minimumShellSeconds + additionalShellSeconds)) {
                     //Boop is exiting his shell...
                     boopState = BoopState.STATIC_LEFT;
+                    totalShellTime = 0;
                 }
                 break;
             case IN_SHELL_RIGHT:
-                if (choseShake) {
-                    inShellAnimation2(sketch, shellEmptyR, shellEmpty);
+                if (choseRoscoeAnimation) {
+                    staticAnimation(sketch, lbFootR, lfFootR, rbFootR,
+                            rfFootR, shellR, headRoscoeR, dt);
+                } else if (choseShake) {
+                    inShellAnimation2(sketch, shellHideR, shellHide, dt);
                 } else {
-                    inShellAnimation(sketch, shellEmptyR, shellLookR, shellLook1R, shellLook2R);
+                    inShellAnimation(sketch, shellHideR, headPeekR,
+                            headPeek1R, headPeek2R, leftHideLegR, rightHideLegR, dt);
                 }
-                if (sketch.frameCount >= lastClickedFrame
-                        + minimumShellFrames + additionalShellFrames) {
+                if (totalShellTime >= (minimumShellSeconds + additionalShellSeconds)) {
                     //Boop is exiting his shell...
                     boopState = BoopState.STATIC_RIGHT;
+                    totalShellTime = 0;
                 }
                 break;
             default:
@@ -371,8 +427,8 @@ public class Boop {
      */
     private void scootAnimation(Kiosk sketch, Image lbFoot, Image lfFoot, Image rbFoot,
                                 Image rfFoot, Image shell, Image head, float amountToMove) {
-        int frameNumber = (sketch.frameCount - firstMovementFrame) % 12;
-        if (frameNumber == 0 || frameNumber == 1) {
+        float iterationAmount = totalMovementTime % 0.48f;
+        if (iterationAmount <= 0.08) {
             //Right front foot and left back foot forwards a bit
             lbFoot.draw(sketch, currentX + amountToMove
                     + limbMovementRange, currentY);
@@ -383,7 +439,7 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 2 || frameNumber == 3) {
+        } else if (iterationAmount <= 0.16) {
             //Right front foot and left back foot forwards a lot
             lbFoot.draw(sketch, currentX + amountToMove
                     + limbMovementRange + limbMovementRange, currentY);
@@ -394,7 +450,7 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 4 || frameNumber == 5) {
+        } else if (iterationAmount <= 0.24) {
             //Right front foot and left back foot forwards a lot,
             // body and head forwards a bit
             lbFoot.draw(sketch, currentX + amountToMove
@@ -408,7 +464,7 @@ public class Boop {
             head.draw(sketch, currentX + amountToMove
                     + limbMovementRange, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 6 || frameNumber == 7) {
+        } else if (iterationAmount <= 0.32) {
             //Right front foot, left back foot, body and head forwards a lot
             lbFoot.draw(sketch, currentX + amountToMove
                     + limbMovementRange + limbMovementRange, currentY);
@@ -421,7 +477,7 @@ public class Boop {
             head.draw(sketch, currentX + amountToMove
                     + limbMovementRange + limbMovementRange, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 8 || frameNumber == 9) {
+        } else if (iterationAmount <= 0.40) {
             //Right front foot, left back foot, body and head forwards a lot,
             // left front foot and right back foot forwards a bit
             lbFoot.draw(sketch, currentX + amountToMove
@@ -437,7 +493,7 @@ public class Boop {
             head.draw(sketch, currentX + amountToMove
                     + limbMovementRange + limbMovementRange, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 10 || frameNumber == 11) {
+        } else if (iterationAmount <= 0.48) {
             //Right front foot, left, back foot, body, head,
             // left front foot and right back foot forwards a lot
             lbFoot.draw(sketch, currentX + amountToMove
@@ -454,7 +510,7 @@ public class Boop {
                     + limbMovementRange + limbMovementRange, currentY);
             currentX = currentX + amountToMove;
         }
-        if (frameNumber == 11) {
+        if (iterationAmount >= 0.48 - 0.016) {
             currentX = currentX + limbMovementRange + limbMovementRange;
         }
     }
@@ -472,9 +528,8 @@ public class Boop {
      */
     private void tiptoeAnimation(Kiosk sketch, Image lbFoot, Image lfFoot, Image rbFoot,
                                  Image rfFoot, Image shell, Image head, float amountToMove) {
-        int frameNumber = (sketch.frameCount - firstMovementFrame) % 32;
-        if (frameNumber == 0 || frameNumber == 1
-                || frameNumber == 2 || frameNumber == 3) {
+        float iterationAmount = totalMovementTime % 0.64f;
+        if (iterationAmount <= 0.08) {
             //Right front foot up
             lbFoot.draw(sketch, currentX + amountToMove, currentY);
             lfFoot.draw(sketch, currentX + amountToMove, currentY);
@@ -484,8 +539,7 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 4 || frameNumber == 5
-                || frameNumber == 6 || frameNumber == 7) {
+        } else if (iterationAmount <= 0.16) {
             //Right front foot and left back foot up
             lbFoot.draw(sketch, currentX + amountToMove,
                     currentY - limbMovementRange * 2);
@@ -496,8 +550,7 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 8 || frameNumber == 9
-                || frameNumber == 10 || frameNumber == 11) {
+        } else if (iterationAmount <= 0.24) {
             //Left back foot up
             lbFoot.draw(sketch, currentX + amountToMove,
                     currentY - limbMovementRange * 2);
@@ -507,10 +560,8 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 12 || frameNumber == 13
-                || frameNumber == 14 || frameNumber == 15
-                || frameNumber == 28 || frameNumber == 29
-                || frameNumber == 30 || frameNumber == 31) {
+        } else if ((iterationAmount <= 0.32)
+                || (iterationAmount > 0.56 && iterationAmount <= 0.64)) {
             //All feet down
             lbFoot.draw(sketch, currentX + amountToMove, currentY);
             lfFoot.draw(sketch, currentX + amountToMove, currentY);
@@ -519,8 +570,7 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 16 || frameNumber == 17
-                || frameNumber == 18 || frameNumber == 19) {
+        } else if (iterationAmount <= 0.40) {
             //Left front foot up
             lbFoot.draw(sketch, currentX + amountToMove, currentY);
             lfFoot.draw(sketch, currentX + amountToMove,
@@ -530,8 +580,7 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 20 || frameNumber == 21
-                || frameNumber == 22 || frameNumber == 23) {
+        } else if (iterationAmount <= 0.48) {
             //Left front foot and right back foot up
             lbFoot.draw(sketch, currentX + amountToMove, currentY);
             lfFoot.draw(sketch, currentX + amountToMove,
@@ -542,8 +591,7 @@ public class Boop {
             shell.draw(sketch, currentX + amountToMove, currentY);
             head.draw(sketch, currentX + amountToMove, currentY);
             currentX = currentX + amountToMove;
-        } else if (frameNumber == 24 || frameNumber == 25
-                || frameNumber == 26 || frameNumber == 27) {
+        } else if (iterationAmount <= 0.56) {
             //Right back foot up
             lbFoot.draw(sketch, currentX + amountToMove, currentY);
             lfFoot.draw(sketch, currentX + amountToMove, currentY);
@@ -567,40 +615,52 @@ public class Boop {
      * @param head the head to be used
      */
     private void staticAnimation(Kiosk sketch, Image lbFoot, Image lfFoot, Image rbFoot,
-                                 Image rfFoot, Image shell, Image head) {
+                                 Image rfFoot, Image shell, Image head, float dt) {
         lbFoot.draw(sketch, currentX, currentY);
         lfFoot.draw(sketch, currentX, currentY);
         rbFoot.draw(sketch, currentX, currentY);
         rfFoot.draw(sketch, currentX, currentY);
         shell.draw(sketch, currentX, currentY);
         head.draw(sketch, currentX, currentY);
+
+        if (choseRoscoeAnimation) {
+            totalShellTime += dt;
+        }
     }
 
     /**
      * Draws Boop amidst his hiding-in-shell animation where he looks around at the end.
      * @param sketch to draw to
      * @param shellEmpty the empty shell to be used
-     * @param shellLook the empty shell with Boop's head popping out to use
-     * @param shellLook1 the empty shell with Boop's head popping out,
+     * @param shellPeek  Boop's head popping out to use
+     * @param shellPeek1 Boop's head popping out,
      *                   looking to one side to use
-     * @param shellLook2 the empty shell with boop's head popping out,
+     * @param shellPeek2 Boop's head popping out,
      *                   looking to the other side to use
+     * @param leftLeg    Boop's left leg to draw
+     * @param rightLeg   Boop's right leg to draw
+     * @param dt the number of seconds that have passed since the last draw
      */
     private void inShellAnimation(Kiosk sketch, Image shellEmpty,
-                                  Image shellLook, Image shellLook1, Image shellLook2) {
-        int frameNumber = (sketch.frameCount - lastClickedFrame)
-                % (minimumShellFrames + additionalShellFrames);
-        if (frameNumber == 0) {
-            shellLook2.draw(sketch, currentX, currentY + boopDimens / 10f);
-        } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 3f)) {
+                                  Image shellPeek, Image shellPeek1, Image shellPeek2,
+                                  Image leftLeg, Image rightLeg, float dt) {
+        if (totalShellTime <= (minimumShellSeconds + additionalShellSeconds) / 3) {
             shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
-        } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 2f)) {
-            shellLook.draw(sketch, currentX, currentY + boopDimens / 10f);
-        } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 3f * 2)) {
-            shellLook1.draw(sketch, currentX, currentY + boopDimens / 10f);
+        } else if (totalShellTime <= (minimumShellSeconds + additionalShellSeconds) / 2) {
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellPeek.draw(sketch, currentX, currentY + boopDimens / 10f);
+        } else if (totalShellTime <= (minimumShellSeconds + additionalShellSeconds) / 3f * 2) {
+            leftLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            rightLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellPeek1.draw(sketch, currentX, currentY + boopDimens / 10f);
         } else {
-            shellLook2.draw(sketch, currentX, currentY + boopDimens / 10f);
+            leftLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            rightLeg.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellPeek2.draw(sketch, currentX, currentY + boopDimens / 10f);
         }
+        totalShellTime += dt;
     }
 
     /**
@@ -608,23 +668,27 @@ public class Boop {
      * @param sketch to draw to
      * @param shellEmpty the empty shell to be used
      * @param shellEmpty2 the empty shell facing the opposite way to be used
+     * @param dt the number of seconds that have passed since the last draw
      */
     private void inShellAnimation2(Kiosk sketch, Image shellEmpty,
-                                  Image shellEmpty2) {
-        int frameNumber = (sketch.frameCount - lastClickedFrame)
-                % (minimumShellFrames + additionalShellFrames);
-        if (frameNumber == 0) {
+                                  Image shellEmpty2, float dt) {
+        if (totalShellTime <= (minimumShellSeconds + additionalShellSeconds) / 2) {
             shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
-        } else if (frameNumber <= ((minimumShellFrames + additionalShellFrames) / 2f)) {
-            shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
-        } else if (frameNumber > ((minimumShellFrames + additionalShellFrames) / 2f)
-                && (frameNumber % 10 == 0 || frameNumber % 10 == 1 || frameNumber % 10 == 2
-                || frameNumber % 10 == 3 || frameNumber % 10 == 4)) {
+        } else if (totalShellTime > (minimumShellSeconds + additionalShellSeconds)
+                / 2 && shellAnimation1Iterations <= 5) {
             shellEmpty2.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellAnimation1Iterations++;
         } else {
             shellEmpty.draw(sketch, currentX, currentY + boopDimens / 10f);
+            shellAnimation2Iterations++;
+            if (shellAnimation2Iterations > 5) {
+                shellAnimation1Iterations = 0;
+                shellAnimation2Iterations = 0;
+            }
         }
+        totalShellTime += dt;
     }
+
 
     /**
      * Compares Boop's location to the tap's location.
@@ -635,18 +699,60 @@ public class Boop {
                 && currentX <= event.getX() + boopDimens / 2f) {
             if (currentY >= event.getY() - boopDimens / 2f
                     && currentY <= event.getY() + boopDimens / 2f) {
-                lastClickedFrame = sketch.frameCount;
-                additionalShellFrames = rand.nextInt(10);
-                if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
-                    choseShake = true;
-                } else {
-                    choseShake = false;
+                additionalShellSeconds = rand.nextFloat();
+                choseRoscoeAnimation = false;
+                if (sketch.getSceneGraph().getCurrentSceneModel().getName().contains("Credits")) {
+                    if (rand.nextInt(randomBounds) < randomRoscoeAnimationChance) {
+                        choseRoscoeAnimation = true;
+                    }
+                }
+                if (!choseRoscoeAnimation) {
+                    if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
+                        choseShake = true;
+                    } else {
+                        choseShake = false;
+                    }
                 }
                 if (choseLeft) {
                     boopState = BoopState.IN_SHELL_LEFT;
                 } else {
                     boopState = BoopState.IN_SHELL_RIGHT;
                 }
+            }
+        }
+    }
+
+    /**
+     * Compares Boop's location to the tap's location.
+     * @param event the screen tap just registered
+     */
+    public void checkTap(Kiosk sketch, TouchEvent event) {
+        int x = (int) event.getTouchPoint().getX();
+        int y = (int) event.getTouchPoint().getY();
+        if (currentX >= x - boopDimens / 2f
+                && currentX <= x + boopDimens / 2f) {
+            if (currentY >= y - boopDimens / 2f
+                    && currentY <= y + boopDimens / 2f) {
+                additionalShellSeconds = rand.nextFloat();
+                choseRoscoeAnimation = false;
+                if (sketch.getSceneGraph().getCurrentSceneModel().getName().contains("Credits")) {
+                    if (rand.nextInt(randomBounds) < randomRoscoeAnimationChance) {
+                        choseRoscoeAnimation = true;
+                    }
+                }
+                if (!choseRoscoeAnimation) {
+                    if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
+                        choseShake = true;
+                    } else {
+                        choseShake = false;
+                    }
+                }
+                if (choseLeft) {
+                    boopState = BoopState.IN_SHELL_LEFT;
+                } else {
+                    boopState = BoopState.IN_SHELL_RIGHT;
+                }
+
             }
         }
     }
@@ -661,25 +767,29 @@ public class Boop {
         boopDimens = height / 8;
 
         lbFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftBackFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Back_Foot.png", boopDimens, boopDimens));
         lfFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftFrontFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Front_Foot.png", boopDimens, boopDimens));
         rbFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightBackFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Back_Foot.png", boopDimens, boopDimens));
         rfFoot = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightFrontFoot.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Front_Foot.png", boopDimens, boopDimens));
+        leftHideLeg = Image.createImage(sketch,
+                new ImageModel("assets/boop/Left_Leg.png", boopDimens, boopDimens));
+        rightHideLeg = Image.createImage(sketch,
+                new ImageModel("assets/boop/Right_Leg.png", boopDimens, boopDimens));
         shell = Image.createImage(sketch,
                 new ImageModel("assets/boop/Shell.png", boopDimens, boopDimens));
-        shellEmpty = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Empty.png", boopDimens, boopDimens));
-        shellLook = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look.png", boopDimens, boopDimens));
-        shellLook1 = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_1.png", boopDimens, boopDimens));
-        shellLook2 = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_2.png", boopDimens, boopDimens));
+        shellHide = Image.createImage(sketch,
+                new ImageModel("assets/boop/Shell_Hide.png", boopDimens, boopDimens));
         head = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head.png", boopDimens, boopDimens));
+        headPeek = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek.png", boopDimens, boopDimens));
+        headPeek1 = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Left.png", boopDimens, boopDimens));
+        headPeek2 = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Right.png", boopDimens, boopDimens));
         headHappy = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Happy.png", boopDimens, boopDimens));
         headHappyBlink = Image.createImage(sketch,
@@ -690,27 +800,33 @@ public class Boop {
                 new ImageModel("assets/boop/Head_Look.png", boopDimens, boopDimens));
         headLookBlink = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Look_Blink.png", boopDimens, boopDimens));
+        headRoscoe = Image.createImage(sketch,
+                new ImageModel("assets/boop/Head_Roscoe.png", boopDimens, boopDimens));
 
         lbFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftBackFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Back_Foot_r.png", boopDimens, boopDimens));
         lfFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/LeftFrontFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Left_Front_Foot_r.png", boopDimens, boopDimens));
         rbFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightBackFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Back_Foot_r.png", boopDimens, boopDimens));
         rfFootR = Image.createImage(sketch,
-                new ImageModel("assets/boop/RightFrontFoot_r.png", boopDimens, boopDimens));
+                new ImageModel("assets/boop/Right_Front_Foot_r.png", boopDimens, boopDimens));
+        leftHideLegR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Left_Leg_r.png", boopDimens, boopDimens));
+        rightHideLegR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Right_Leg_r.png", boopDimens, boopDimens));
         shellR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Shell_r.png", boopDimens, boopDimens));
-        shellEmptyR = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Empty_r.png", boopDimens, boopDimens));
-        shellLookR = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_r.png", boopDimens, boopDimens));
-        shellLook1R = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_1_r.png", boopDimens, boopDimens));
-        shellLook2R = Image.createImage(sketch,
-                new ImageModel("assets/boop/Shell_Look_2_r.png", boopDimens, boopDimens));
+        shellHideR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Shell_Hide_r.png", boopDimens, boopDimens));
         headR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_r.png", boopDimens, boopDimens));
+        headPeekR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_r.png", boopDimens, boopDimens));
+        headPeek1R = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Left_r.png", boopDimens, boopDimens));
+        headPeek2R = Image.createImage(sketch,
+                new ImageModel("assets/boop/Peek_Right_r.png", boopDimens, boopDimens));
         headHappyR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Happy_r.png", boopDimens, boopDimens));
         headHappyBlinkR = Image.createImage(sketch,
@@ -721,9 +837,10 @@ public class Boop {
                 new ImageModel("assets/boop/Head_Look_r.png", boopDimens, boopDimens));
         headLookBlinkR = Image.createImage(sketch,
                 new ImageModel("assets/boop/Head_Look_Blink_r.png", boopDimens, boopDimens));
+        headRoscoeR = Image.createImage(sketch,
+                new ImageModel("assets/boop/Head_Roscoe_r.png", boopDimens, boopDimens));
 
         currentX = width / 2f;
         currentY = height - boopDimens / 2f;
-        lastMovementFrame = 0;
     }
 }

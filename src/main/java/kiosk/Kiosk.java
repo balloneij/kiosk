@@ -11,6 +11,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TouchPoint;
+import javafx.stage.Stage;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
@@ -26,11 +30,13 @@ import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
 import processing.core.PApplet;
+import processing.core.PSurface;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 public class Kiosk extends PApplet {
 
+    public boolean isEditor;
     protected SceneGraph sceneGraph;
     private String surveyPath;
     private CareerModel[] careers;
@@ -38,6 +44,8 @@ public class Kiosk extends PApplet {
     private SceneModel lastSceneModel;
     private boolean currentSceneIsRoot = false;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
+    private final Map<TouchScreenEvent, LinkedList<EventListener<TouchEvent>>> touchListeners;
+    private TouchPoint touchPoint;
     private long lastNanos = 0;
     protected static Settings settings;
     private Boop boop;
@@ -48,6 +56,9 @@ public class Kiosk extends PApplet {
     private File loadedFile;
     private boolean isFullScreen = false;
     private boolean fontsLoaded = false;
+    private ArrayList<Float> recentTapTimes;
+    private ArrayList<MouseEvent> recentTapEvents;
+    private ArrayList<Integer> recentTapColors;
 
     private static JFileChooser fileChooser;
 
@@ -56,7 +67,7 @@ public class Kiosk extends PApplet {
      * @param surveyPath to load from
      */
     public Kiosk(String surveyPath) {
-        this(surveyPath, Settings.readSettings());
+        this(surveyPath, Settings.readSettings(), false);
     }
 
     /**
@@ -65,7 +76,7 @@ public class Kiosk extends PApplet {
      * @param surveyPath the path of the survey XML
      * @param settings the settings to use
      */
-    public Kiosk(String surveyPath, Settings settings) {
+    public Kiosk(String surveyPath, Settings settings, boolean isEditor) {
         // Configure fileChooser style
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -106,14 +117,54 @@ public class Kiosk extends PApplet {
         this.careers = survey.careers;
 
         this.mouseListeners = new LinkedHashMap<>();
-
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.put(e, new LinkedList<>());
+        }
+
+        this.touchListeners = new LinkedHashMap<>();
+        for (TouchScreenEvent e : TouchScreenEvent.values()) {
+            this.touchListeners.put(e, new LinkedList<>());
         }
 
         Color.setSketch(this);
 
         boop = new Boop();
+        recentTapEvents = new ArrayList<MouseEvent>();
+        recentTapTimes = new ArrayList<Float>();
+        recentTapColors = new ArrayList<Integer>();
+
+        this.isEditor = isEditor;
+    }
+
+    @Override
+    protected PSurface initSurface() {
+        surface = super.initSurface();
+        final Canvas canvas = (Canvas) surface.getNative();
+        final javafx.scene.Scene oldScene = canvas.getScene();
+        Stage stage = (Stage) oldScene.getWindow();
+
+        stage.addEventHandler(TouchEvent.TOUCH_PRESSED, event -> {
+            if (touchPoint == null) {
+                touchPoint = event.getTouchPoint();
+                for (EventListener listener :
+                        this.touchListeners.get(TouchScreenEvent.TouchPressed)) {
+                    listener.invoke(event);
+                }
+                boop.checkTap(this, event);
+            }
+        });
+
+        stage.addEventHandler(TouchEvent.TOUCH_RELEASED, event -> {
+            if (touchPoint != null && touchPoint.getId() == event.getTouchPoint().getId()) {
+                touchPoint = null;
+                for (EventListener listener :
+                        this.touchListeners.get(TouchScreenEvent.TouchReleased)) {
+                    listener.invoke(event);
+                }
+            }
+        });
+
+        return surface;
     }
 
     /**
@@ -146,8 +197,9 @@ public class Kiosk extends PApplet {
         sceneGraph.reset();
     }
 
-    public void reloadSettings() {
-        settings = Settings.readSettings();
+    public void reloadSettings(boolean isFullScreen) {
+        settings = Settings.readSettings(isFullScreen);
+        settings.setFullScreen(isFullScreen);
     }
 
     @Override
@@ -158,7 +210,7 @@ public class Kiosk extends PApplet {
         } else {
             isFullScreen = false;
         }
-        size(settings.screenW, settings.screenH);
+        size(settings.screenW, settings.screenH, FX2D);
     }
 
     public void enableTimeout() {
@@ -247,7 +299,19 @@ public class Kiosk extends PApplet {
                         (Kiosk.settings.gracePeriodMillis - currentSceneMillis);
             }
         }
-        boop.movementLogic(this, currentScene);
+        boop.movementLogic(this, currentScene, dt);
+        for (int i = 0; i < recentTapEvents.size(); i++) {
+            if (recentTapTimes.get(i) < 0.4) {
+                recentTapTimes.set(i, recentTapTimes.get(i) + dt);
+                Graphics.drawTouchResponse(this, recentTapEvents.get(i),
+                        recentTapTimes.get(i), recentTapColors.get(i));
+            }
+            if (recentTapTimes.get(i) >= 0.4) {
+                recentTapTimes.remove(i);
+                recentTapEvents.remove(i);
+                recentTapColors.remove(i);
+            }
+        }
     }
 
     /**
@@ -258,6 +322,10 @@ public class Kiosk extends PApplet {
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.get(e).clear();
         }
+    }
+
+    public UserScore getPreviousUserScore() {
+        return this.sceneGraph.getPreviousUserScore();
     }
 
     public UserScore getUserScore() {
@@ -274,19 +342,13 @@ public class Kiosk extends PApplet {
      */
     public void hookControl(Control control) {
         Map<InputEvent, EventListener> newListeners = control.getEventListeners();
-
         for (InputEvent key : newListeners.keySet()) {
             this.mouseListeners.get(key).push(newListeners.get(key));
         }
-    }
 
-    /**
-     * Hook a map of event listeners to the kiosk.
-     * @param listeners to attach
-     */
-    public void hookControl(Map<InputEvent, EventListener> listeners) {
-        for (InputEvent key : listeners.keySet()) {
-            this.mouseListeners.get(key).push(listeners.get(key));
+        Map<TouchScreenEvent, EventListener> newTouchListeners = control.getTouchEventListeners();
+        for (TouchScreenEvent key : newTouchListeners.keySet()) {
+            this.touchListeners.get(key).push(newTouchListeners.get(key));
         }
     }
 
@@ -303,13 +365,14 @@ public class Kiosk extends PApplet {
                 // F2 Key Press
                 File file = showFileOpener();
                 if (file != null) {
-                    reloadSettings();
+                    this.surveyPath = file.getPath();
+                    reloadSettings(isFullScreen);
                     loadSurveyFile(file);
                 }
             } else if (event.getKeyCode() == 116) {
                 // F5 Key Press
                 if (loadedFile != null) {
-                    reloadSettings();
+                    reloadSettings(isFullScreen);
                     loadSurveyFile(loadedFile);
                 }
                 this.sceneGraph.reset();
@@ -317,7 +380,7 @@ public class Kiosk extends PApplet {
                 // F11 Key Press
                 Settings s = Settings.readSettings();
                 s.setFullScreen(!isFullScreen);
-                Kiosk kioskNew = new Kiosk(this.surveyPath, s);
+                Kiosk kioskNew = new Kiosk(this.surveyPath, s, false);
                 kioskNew.setFontsLoaded(true);
                 kioskNew.run();
                 this.noLoop();
@@ -361,6 +424,9 @@ public class Kiosk extends PApplet {
             listener.invoke(event);
         }
         boop.checkTap(this, event);
+        recentTapEvents.add(event);
+        recentTapTimes.add(0f);
+        recentTapColors.add(Color.randomColor());
     }
 
     @Override
@@ -406,6 +472,7 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MousePressed)) {
             listener.invoke(event);
         }
+        boop.checkTap(this, event);
     }
 
     /**
@@ -455,4 +522,9 @@ public class Kiosk extends PApplet {
     protected void setHotkeysEnabled(boolean hotkeysEnabled) {
         this.hotkeysEnabled = hotkeysEnabled;
     }
+
+    public SceneGraph getSceneGraph() {
+        return this.sceneGraph;
+    }
 }
+

@@ -1,6 +1,7 @@
 package graphics;
 
 import java.util.Arrays;
+import java.util.List;
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
@@ -26,8 +27,8 @@ public class SpokeGraph {
     private final ButtonControl[] buttonControls;
     private double[] weights;
 
-    private final int[] rgbColor1 = new int[] { 20, 20, 200 };
-    private final int[] rgbColor2 = new int[] { 200, 20, 20 };
+    private final int[] rgbColor1 = new int[] { 252, 177, 22 };
+    private final int[] rgbColor2 = new int[] { 0, 174, 106 };
 
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
@@ -60,7 +61,20 @@ public class SpokeGraph {
         this.centerY = (float) (y + size / 2);
         this.weights = weights;
 
-        double[] normalWeights = normalizeWeights(weights);
+        int amountOfZeros = 0;
+        boolean itemHigherThanOne = false;
+        for (int i = 0; i < weights.length; i++) {
+            if (weights[i] == 0) {
+                amountOfZeros++;
+            } else if ((weights[i]) > 1) {
+                itemHigherThanOne = true;
+            }
+        }
+
+        double[] normalWeights = weights;
+        if (amountOfZeros <= weights.length - 1 && itemHigherThanOne) {
+            normalWeights = normalizeWeights(weights);
+        }
 
         // Worst case Spokegraph
         //      O
@@ -111,6 +125,18 @@ public class SpokeGraph {
         }
     }
 
+    /**
+     * Sets all of the button colors correctly.
+     * @param buttons the buttons to draw colors for
+     */
+    public void setButtonColors(List<int[]> buttons) {
+        if (this.buttonControls != null && buttons.size() == this.buttonControls.length) {
+            for (int i = 0; i < buttons.size(); i++) {
+                this.buttonControls[i].getModel().rgb = buttons.get(i);
+            }
+        }
+    }
+
     private double[] normalizeWeights(double[] weights) {
         // Find the min and max weights in the weights array
         double minWeight = Double.POSITIVE_INFINITY;
@@ -132,8 +158,8 @@ public class SpokeGraph {
                 newWeights[i] = (weights[i] - minWeight) / (maxWeight - minWeight);
             }
         } else {
-            // If the min and max are the same, just use 0.5 for all
-            Arrays.fill(newWeights, 0.5);
+            // If the min and max are the same, just use 0 for all
+            Arrays.fill(newWeights, 0);
         }
 
         return newWeights;
@@ -154,17 +180,18 @@ public class SpokeGraph {
      * Draw the spoke graph.
      * @param sketch to draw to
      */
-    public void draw(Kiosk sketch) {
+    public void draw(Kiosk sketch, double offsetX, double offsetY) {
         checkInit(); // Prints a warning if the SpokeGraph wasn't initialized
 
         // Draw the buttons and spokes
         for (ButtonControl buttonControl : this.buttonControls) {
             sketch.stroke(255);
             sketch.strokeWeight(SPOKE_THICKNESS);
-            sketch.line(centerX, centerY,
-                    buttonControl.getCenterX(), buttonControl.getCenterY());
+            sketch.line((float) (centerX + offsetX), (float) (centerY + offsetY),
+                    (float) (buttonControl.getCenterX() + offsetX),
+                    (float) (buttonControl.getCenterY() + offsetY));
 
-            buttonControl.draw(sketch);
+            buttonControl.draw(sketch, offsetX, offsetY);
         }
 
         // Set draw modes
@@ -174,13 +201,13 @@ public class SpokeGraph {
 
         // Draw the center circle
         sketch.fill(0);
-        sketch.ellipse(centerX, centerY,
+        sketch.ellipse((float) (centerX + offsetX), (float) (centerY + offsetY),
                 (float) (maxButtonRadius + minButtonRadius),
                 (float) (maxButtonRadius + minButtonRadius));
         sketch.fill(255);
 
         GraphicsUtil.textWithOutline(this.centerText,
-                centerX, centerY,
+                (float) (centerX + offsetX), (float) (centerY + offsetY),
                 centerSquareSize, centerSquareSize, sketch);
     }
 

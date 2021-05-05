@@ -21,15 +21,32 @@ import kiosk.scenes.Scene;
 public class SceneGraph {
 
     private final UserScore userScore;
+    private UserScore previousUserScore;
+    private SceneModel root;
     private String rootId;
     private final LinkedList<SceneModel> history;
     private final HashMap<String, SceneModel> sceneModels;
     private Scene currentScene;
+    private Scene previousScene;
     private LinkedList<EventListener<SceneModel>> sceneChangeCallbacks;
     private final Set<String> careerCategories = new HashSet<>();
     // K: category V: fields inside that category
     private final HashMap<String, Set<String>> careerFields = new HashMap<>();
     private final CareerModel[] allCareers;
+
+    public enum RecentActivity {
+            RESET, POP, PUSH
+    }
+
+    public RecentActivity recentActivity = RecentActivity.RESET;
+
+    public enum RecentScene {
+        CAREER_DESCRIPTION, CAREER_PATHWAY,
+        CREDITS, ERROR, DETAILS, PATHWAY,
+        PROMPT, SPOKE_GRAPH_PROMPT, TIMEOUT
+    }
+
+    public RecentScene recentScene = RecentScene.PROMPT;
 
     /**
      * Creates a scene graph which holds the root scene model, and
@@ -38,6 +55,7 @@ public class SceneGraph {
      */
     public SceneGraph(LoadedSurveyModel survey) {
         this.userScore = new UserScore(survey.careers);
+        this.previousUserScore = new UserScore(survey.careers);
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
         this.sceneChangeCallbacks = new LinkedList<>();
@@ -70,6 +88,7 @@ public class SceneGraph {
         // Reset to a new, initial state
         this.history.clear();
         userScore.reset();
+        previousUserScore.reset();
         this.sceneModels.clear();
         this.sceneChangeCallbacks.clear();
 
@@ -80,6 +99,7 @@ public class SceneGraph {
 
         // Set the root and load it as the first scene
         setRootSceneModel(this.sceneModels.get(survey.rootSceneId));
+        this.previousScene = this.currentScene;
         SceneModel root = this.getRootSceneModel();
         this.currentScene = root.deepCopy().createScene();
         this.history.push(root);
@@ -109,11 +129,36 @@ public class SceneGraph {
     public synchronized void pushScene(SceneModel sceneModel,
                                        Riasec category,
                                        FilterGroupModel nullOrFilter) {
+        String lastScene = this.history.peek().toString();
+        if (lastScene.contains("Career Description")) {
+            this.recentScene = RecentScene.CAREER_DESCRIPTION;
+        } else if (lastScene.contains("Career Pathway")) {
+            this.recentScene = RecentScene.CAREER_PATHWAY;
+        } else if (lastScene.contains("Credits")) {
+            this.recentScene = RecentScene.CREDITS;
+        } else if (lastScene.contains("Details")) {
+            this.recentScene = RecentScene.DETAILS;
+        } else if (lastScene.contains("Pathway")) {
+            this.recentScene = RecentScene.PATHWAY;
+        } else if (lastScene.contains("Spoke Graph Prompt")) {
+            this.recentScene = RecentScene.SPOKE_GRAPH_PROMPT;
+        } else if (lastScene.contains("Prompt")) {
+            this.recentScene = RecentScene.PROMPT;
+        }
+        this.recentActivity = RecentActivity.PUSH;
+
         // Update the user score from the category selected on the
         // previous scene
+        previousUserScore.setRealistic(userScore.getCategoryScore(Riasec.Realistic));
+        previousUserScore.setInvestigative(userScore.getCategoryScore(Riasec.Investigative));
+        previousUserScore.setArtistic(userScore.getCategoryScore(Riasec.Artistic));
+        previousUserScore.setSocial(userScore.getCategoryScore(Riasec.Social));
+        previousUserScore.setEnterprising(userScore.getCategoryScore(Riasec.Enterprising));
+        previousUserScore.setConventional(userScore.getCategoryScore(Riasec.Conventional));
         userScore.apply(category, nullOrFilter);
 
         // Add the new scene
+        this.previousScene = this.currentScene;
         this.currentScene = sceneModel.deepCopy().createScene();
         this.history.push(sceneModel);
         this.onSceneChange(sceneModel);
@@ -162,10 +207,36 @@ public class SceneGraph {
      * on the last SceneModel.
      */
     public synchronized void popScene() {
+
+        String lastScene = this.history.peek().toString();
+        if (lastScene.contains("Career Description")) {
+            this.recentScene = RecentScene.CAREER_DESCRIPTION;
+        } else if (lastScene.contains("Career Pathway")) {
+            this.recentScene = RecentScene.CAREER_PATHWAY;
+        } else if (lastScene.contains("Credits")) {
+            this.recentScene = RecentScene.CREDITS;
+        } else if (lastScene.contains("Details")) {
+            this.recentScene = RecentScene.DETAILS;
+        } else if (lastScene.contains("Pathway")) {
+            this.recentScene = RecentScene.PATHWAY;
+        } else if (lastScene.contains("Spoke Graph Prompt")) {
+            this.recentScene = RecentScene.SPOKE_GRAPH_PROMPT;
+        } else if (lastScene.contains("Prompt")) {
+            this.recentScene = RecentScene.PROMPT;
+        }
+        this.recentActivity = RecentActivity.POP;
+
+
         // Remove the current scene from history
         this.history.pop();
 
         // Undo the last operation on the user score
+        previousUserScore.setRealistic(userScore.getCategoryScore(Riasec.Realistic));
+        previousUserScore.setInvestigative(userScore.getCategoryScore(Riasec.Investigative));
+        previousUserScore.setArtistic(userScore.getCategoryScore(Riasec.Artistic));
+        previousUserScore.setSocial(userScore.getCategoryScore(Riasec.Social));
+        previousUserScore.setEnterprising(userScore.getCategoryScore(Riasec.Enterprising));
+        previousUserScore.setConventional(userScore.getCategoryScore(Riasec.Conventional));
         userScore.undo();
 
         // Set the next scene from the stack
@@ -173,9 +244,11 @@ public class SceneGraph {
 
         if (next == null) {
             ErrorSceneModel errorScene = new ErrorSceneModel("Popped too far from history");
+            this.previousScene = this.currentScene;
             this.currentScene = errorScene.createScene();
             this.onSceneChange(errorScene);
         } else {
+            this.previousScene = this.currentScene;
             this.currentScene = next.deepCopy().createScene();
             this.onSceneChange(next);
         }
@@ -187,14 +260,17 @@ public class SceneGraph {
      */
     public synchronized void reset() {
         // Reset the user score
+        previousUserScore.reset();
         userScore.reset();
 
         // Reset the root scene
         SceneModel root = getRootSceneModel();
+        this.previousScene = this.currentScene;
         this.currentScene = root.deepCopy().createScene();
         this.history.clear();
         this.history.push(root);
         this.onSceneChange(root);
+        this.recentActivity = RecentActivity.RESET;
     }
 
     /**
@@ -207,6 +283,7 @@ public class SceneGraph {
         // If we are changing the current scene model, recreate the scene
         // AND get the old scene out of history; it no longer exists and cannot be retrieved
         if (currentScene != null && sceneModel.getId().equals(currentScene.getId())) {
+            this.previousScene = this.currentScene;
             this.currentScene = sceneModel.deepCopy().createScene();
             this.history.pop();
             this.history.push(sceneModel);
@@ -258,6 +335,7 @@ public class SceneGraph {
         sceneModels.put(newId, sceneModel);
 
         if (this.getCurrentSceneModel().getId().equals(sceneModel.getId())) {
+            this.previousScene = this.currentScene;
             this.currentScene = sceneModel.deepCopy().createScene();
             this.onSceneChange(sceneModel);
         }
@@ -283,6 +361,14 @@ public class SceneGraph {
      */
     public synchronized Scene getCurrentScene() {
         return currentScene;
+    }
+
+    /**
+     * Get the previous scene that was somewhat-recently pushed to the state.
+     * @return The previous scene.
+     */
+    public synchronized Scene getPreviousScene() {
+        return previousScene;
     }
 
     public synchronized SceneModel getCurrentSceneModel() {
@@ -347,6 +433,10 @@ public class SceneGraph {
         return sceneModels.values();
     }
 
+    public UserScore getPreviousUserScore() {
+        return previousUserScore;
+    }
+
     public UserScore getUserScore() {
         return userScore;
     }
@@ -407,5 +497,22 @@ public class SceneGraph {
             }
         }
         return careers;
+    }
+
+    /**
+     * Gets a particular item from the history.
+     * @param index the index to check
+     * @return the scenemodel of that item in the history
+     */
+    public SceneModel getFromHistory(int index) {
+        return history.get(index);
+    }
+
+    /**
+     * Gets the history's size, used when checking root MSOE button placements.
+     * @return the history's size
+     */
+    public int getHistorySize() {
+        return history.size();
     }
 }

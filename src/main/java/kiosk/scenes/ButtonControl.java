@@ -5,15 +5,18 @@ import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.input.TouchEvent;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
 import kiosk.Settings;
+import kiosk.TouchScreenEvent;
 import kiosk.models.ButtonModel;
 import processing.core.PConstants;
+import processing.event.Event;
 import processing.event.MouseEvent;
 
-public class ButtonControl implements Control<MouseEvent> {
+public class ButtonControl implements Control<MouseEvent, TouchEvent> {
 
     private int screenW = Kiosk.getSettings().screenW;
     private int screenH = Kiosk.getSettings().screenH;
@@ -35,6 +38,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private final Rectangle rect;
     private int radius;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
+    private final Map<TouchScreenEvent, EventListener<TouchEvent>> touchEventListeners;
     private Image image;
     private boolean isPressed;
     private boolean wasClicked;
@@ -49,6 +53,8 @@ public class ButtonControl implements Control<MouseEvent> {
     private int buttonAnimationFrames;
     private double buttonAnimationIntensity;
     private float buttonAnimationLengthFrames;
+    private double animationOffsetX;
+    private double animationOffsetY;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -106,6 +112,9 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
         this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
+
+        this.touchEventListeners = new HashMap<>();
+        this.touchEventListeners.put(TouchScreenEvent.TouchPressed, this::onTouchPressed);
     }
 
     /**
@@ -162,6 +171,9 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
         this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
+
+        this.touchEventListeners = new HashMap<>();
+        this.touchEventListeners.put(TouchScreenEvent.TouchPressed, this::onTouchPressed);
     }
 
     /**
@@ -184,6 +196,18 @@ public class ButtonControl implements Control<MouseEvent> {
      *
      * @param sketch to draw to
      */
+    public void draw(Kiosk sketch, double offsetX, double offsetY) {
+        animationOffsetX = offsetX;
+        animationOffsetY = offsetY;
+        draw(sketch);
+    }
+
+    /**
+     * Draw's the appropriate button to the sketch using
+     * coordinates and information provided upon initialization.
+     *
+     * @param sketch to draw to
+     */
     public void draw(Kiosk sketch) {
         // Set the Font
         if (!fontSizeOverwritten) {
@@ -196,19 +220,20 @@ public class ButtonControl implements Control<MouseEvent> {
         // Draw the shape
         if (!this.model.noButton) {
             if (this.model.isCircle) {
-                this.drawCircle(sketch, 1);
+                this.drawCircle(sketch);
             } else {
-                this.drawRectangle(sketch, 1);
+                this.drawRectangle(sketch);
             }
         } else if (this.model.image != null) { // Draw the image, if it exists
             sketch.imageMode(PConstants.CENTER);
             if (this.isPressed) {
-                this.image.draw(sketch, (float) rect.getCenterX(),
-                        (float) rect.getCenterY() + this.rect.height / 10.f);
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f));
             } else {
-                this.image.draw(sketch, (float) rect.getCenterX(), !this.model.noButton
-                        ? (float) rect.getCenterY() + this.rect.height / 10.f
-                        : (float) rect.getCenterY());
+                this.image.draw(sketch, (float) (rect.getCenterX()
+                        + animationOffsetX), !this.model.noButton
+                        ? (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f)
+                        : (float) (rect.getCenterY() + animationOffsetY));
             }
         }
 
@@ -242,9 +267,9 @@ public class ButtonControl implements Control<MouseEvent> {
      *
      * @param sketch to draw to
      */
-    private void drawRectangle(Kiosk sketch, double sizeMultiplier) {
+    private void drawRectangle(Kiosk sketch) {
         setDrawModifiers(sketch);
-        drawOutline(sketch, sizeMultiplier);
+        drawOutline(sketch, 1);
 
         // If pressed, draw the text lower and don't draw the main button
         // This makes it look like the button is pushed into the screen
@@ -258,26 +283,29 @@ public class ButtonControl implements Control<MouseEvent> {
                 double offset = calculateAnimationOffset(sketch);
                 setFill(sketch);
                 sketch.stroke(59, 58, 57, 63f);
-                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + (float) (this.rect.height / 2.f
-                                + (this.rect.height / 10.f * offset)),
+                Graphics.drawRoundedRectangle(sketch, (float)
+                                (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + (float) (this.rect.height / 2.f
+                                + (this.rect.height / 10.f * offset))),
                         (int) (this.rect.width), (int)
                                 (this.rect.height), defaultCornerRadius);
                 textWithOutline(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) (this.rect.getCenterY() + (this.rect.height / 10.f * offset)),
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY
+                                + (this.rect.height / 10.f * offset)),
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
                 drawImage(sketch, offset);
             } else {
                 setNormalFillAndStroke(sketch);
-                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + this.rect.height / 2.f,
+                Graphics.drawRoundedRectangle(sketch, (float)
+                                (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f),
                         this.rect.width, this.rect.height, defaultCornerRadius);
                 textWithOutline(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY(),
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY),
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
@@ -286,9 +314,9 @@ public class ButtonControl implements Control<MouseEvent> {
         }
     }
 
-    private void drawCircle(Kiosk sketch, double sizeMultiplier) {
+    private void drawCircle(Kiosk sketch) {
         setDrawModifiers(sketch);
-        drawOutline(sketch, sizeMultiplier);
+        drawOutline(sketch, 1);
 
         // If pressed, draw the text lower and don't draw the main button
         // This makes it look like the button is pushed into the screen
@@ -301,27 +329,28 @@ public class ButtonControl implements Control<MouseEvent> {
                     && !this.disabled && this.shouldAnimate) {
                 double offset = calculateAnimationOffset(sketch);
                 setFill(sketch);
-                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + (float) (this.rect.height / 2.f
-                                + (this.rect.height / 10.f * offset)),
-                        (float) (this.rect.width * sizeMultiplier),
-                        (float) (this.rect.height * sizeMultiplier));
+                sketch.ellipse((float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + (float) (this.rect.height / 2.f
+                                + (this.rect.height / 10.f * offset))),
+                        (float) (this.rect.width),
+                        (float) (this.rect.height));
                 textWithOutline(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) (this.rect.getCenterY() + (this.rect.height / 10.f * offset)),
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY
+                                + (this.rect.height / 10.f * offset)),
                         (float) this.rect.width,
                         (float) this.rect.height,
                         sketch, isLightButton());
                 drawImage(sketch, offset);
             } else {
                 setNormalFillAndStroke(sketch);
-                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + this.rect.height / 2.f,
-                        (float) (this.rect.width * sizeMultiplier),
-                        (float) (this.rect.height * sizeMultiplier));
+                sketch.ellipse((float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height / 2.f),
+                        (float) (this.rect.width),
+                        (float) (this.rect.height));
                 textWithOutline(this.model.text,
-                        (float) this.rect.getCenterX(),
-                        (float) this.rect.getCenterY(),
+                        (float) (this.rect.getCenterX() + animationOffsetX),
+                        (float) (this.rect.getCenterY() + animationOffsetY),
                         this.rect.width, this.rect.height,
                         sketch, isLightButton());
                 drawImage(sketch);
@@ -345,13 +374,16 @@ public class ButtonControl implements Control<MouseEvent> {
             sketch.stroke(Color.DW_BLACK_RGB[0], Color.DW_BLACK_RGB[1],
                     Color.DW_BLACK_RGB[2], 63f);
             if (model.isCircle) {
-                sketch.ellipse(this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                sketch.ellipse((float) (this.rect.x + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height
+                                / 2.f + this.rect.height / 10.f),
                         (int) (this.rect.width * sizeMultiplier),
                         (int) (this.rect.height * sizeMultiplier));
             } else {
-                Graphics.drawRoundedRectangle(sketch, this.rect.x + this.rect.width / 2.f,
-                        this.rect.y + this.rect.height / 2.f + this.rect.height / 10.f,
+                Graphics.drawRoundedRectangle(sketch, (float) (this.rect.x
+                                + animationOffsetX + this.rect.width / 2.f),
+                        (float) (this.rect.y + animationOffsetY + this.rect.height
+                                / 2.f + this.rect.height / 10.f),
                         this.rect.width, this.rect.height, defaultCornerRadius);
             }
         }
@@ -360,8 +392,8 @@ public class ButtonControl implements Control<MouseEvent> {
     private void drawText(Kiosk sketch) {
         if (!this.model.text.equals("")) {
             textWithOutline(this.model.text,
-                    (float) this.rect.getCenterX(),
-                    (float) this.rect.getCenterY() + this.rect.height / 10.f,
+                    (float) (this.rect.getCenterX() + animationOffsetX),
+                    (float) (this.rect.getCenterY() + animationOffsetY + this.rect.height / 10.f),
                     this.rect.width, this.rect.height,
                     sketch, isLightButton());
         }
@@ -371,11 +403,11 @@ public class ButtonControl implements Control<MouseEvent> {
         if (this.model.image != null) {
             sketch.imageMode(PConstants.CENTER);
             if (this.isPressed && !this.disabled) {
-                this.image.draw(sketch, (float) rect.getCenterX(),
-                        (float) rect.getCenterY() + this.rect.height / 10.f);
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f));
             } else {
-                this.image.draw(sketch, (float) rect.getCenterX(),
-                        (float) (rect.getCenterY()));
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY));
             }
         }
     }
@@ -384,11 +416,12 @@ public class ButtonControl implements Control<MouseEvent> {
         if (this.model.image != null) {
             sketch.imageMode(PConstants.CENTER);
             if (this.isPressed && !this.disabled) {
-                this.image.draw(sketch, (float) rect.getCenterX(),
-                        (float) (rect.getCenterY() + this.rect.height / 10.f));
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY + this.rect.height / 10.f));
             } else {
-                this.image.draw(sketch, (float) rect.getCenterX(),
-                        (float) (rect.getCenterY() + (this.rect.height / 10.f * offset)));
+                this.image.draw(sketch, (float) (rect.getCenterX() + animationOffsetX),
+                        (float) (rect.getCenterY() + animationOffsetY
+                                + (this.rect.height / 10.f * offset)));
             }
         }
     }
@@ -458,6 +491,7 @@ public class ButtonControl implements Control<MouseEvent> {
         return ((this.model.rgb[0] + this.model.rgb[1] + this.model.rgb[2]) / 3) >= 225;
     }
 
+
     // TODO maybe this should be extracted to a graphics class
     private void textWithOutline(String text, float x, float y, float w,
                                  float h, Kiosk sketch, boolean blackTextDesired) {
@@ -492,6 +526,11 @@ public class ButtonControl implements Control<MouseEvent> {
 
     public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
         return this.eventListeners;
+    }
+
+    @Override
+    public Map<TouchScreenEvent, EventListener<TouchEvent>> getTouchEventListeners() {
+        return this.touchEventListeners;
     }
 
     /**
@@ -529,6 +568,7 @@ public class ButtonControl implements Control<MouseEvent> {
         updateRadius();
     }
 
+
     // Helper method for updating the radius and calculating new centerSquareSize
     private void updateRadius() {
         this.radius = Math.min(this.rect.width / 2, this.rect.height / 2);
@@ -544,6 +584,7 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private static ButtonModel draggedButtonModel;
     private boolean isDragged = false;
+
     private int pressX;
     private int pressY;
     private int offsetX;
@@ -557,10 +598,22 @@ public class ButtonControl implements Control<MouseEvent> {
     }
 
     private void onMousePressed(MouseEvent event) {
-        if (this.rect.contains(event.getX(), event.getY())) {
+        if (!this.isPressed && this.rect.contains(event.getX(), event.getY())) {
             this.isPressed = true;
             pressX = event.getX();
             pressY = event.getY();
+            offsetX = this.rect.x - pressX;
+            offsetY = this.rect.y - pressY;
+        }
+    }
+
+    private void onTouchPressed(TouchEvent touchEvent) {
+        int x = (int) touchEvent.getTouchPoint().getX();
+        int y = (int) touchEvent.getTouchPoint().getY();
+        if (!this.isPressed && this.rect.contains(x, y)) {
+            this.isPressed = true;
+            pressX = x;
+            pressY = y;
             offsetX = this.rect.x - pressX;
             offsetY = this.rect.y - pressY;
         }
@@ -586,7 +639,7 @@ public class ButtonControl implements Control<MouseEvent> {
         if (dragDistance(event.getX(), event.getY()) > 10
                 && this.rect.contains(event.getX(), event.getY())
         ) {
-            if (draggedButtonModel == null) {
+            if (draggedButtonModel == null && this.isPressed) {
                 this.isDragged = true;
                 draggedButtonModel = this.model;
             }
@@ -594,6 +647,13 @@ public class ButtonControl implements Control<MouseEvent> {
                 this.rect.x = event.getX() + offsetX;
                 this.rect.y = event.getY() + offsetY;
             }
+        } else if (draggedButtonModel == this.model) {
+            // This case covers when we drag a button a few pixels from the edge.
+            // Without this case we have to move very slowly toward  the edge in
+            // order to drag the button. With this case, once we have the button
+            // confirmed we can move it without checking the bounds.
+            this.rect.x = event.getX() + offsetX;
+            this.rect.y = event.getY() + offsetY;
         }
     }
 
