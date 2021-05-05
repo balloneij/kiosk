@@ -9,7 +9,7 @@ public class DetailsSceneModel implements SceneModel {
     public String name;
     public String title;
     public String body;
-    public ButtonModel button;
+    public ButtonModel[] targets;
 
     /**
      * Stores all relevant information needed for the Details Scene.
@@ -21,7 +21,7 @@ public class DetailsSceneModel implements SceneModel {
         this.name = "Details Scene";
         this.title = "";
         this.body = "";
-        this.button = new ButtonModel();
+        this.targets = new ButtonModel[] {new ButtonModel()};
     }
 
     @Override
@@ -52,18 +52,28 @@ public class DetailsSceneModel implements SceneModel {
     @Override
     public SceneModel deepCopy() {
         DetailsSceneModel copy = new DetailsSceneModel();
+        ButtonModel[] targetsCopy = new ButtonModel[this.targets.length];
+        for (int i = 0; i < targetsCopy.length; i++) {
+            ButtonModel button = this.targets[i];
+            targetsCopy[i] = button.deepCopy();
+        }
         copy.id = this.id;
         copy.name = name;
         copy.title = title;
-        copy.button = this.button.deepCopy();
         copy.body = this.body;
+        copy.targets = targetsCopy;
 
         return copy;
     }
 
     @Override
     public String[] getTargets() {
-        return new String[] {button.target};
+        String[] ids = new String[this.targets.length];
+
+        for (int i = 0; i < this.targets.length; i++) {
+            ids[i] = this.targets[i].target;
+        }
+        return ids;
     }
 
     @Override

@@ -10,6 +10,7 @@ import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.CreditsSceneModel;
 import processing.core.PConstants;
 
 /**

@@ -147,6 +147,25 @@ public class GraphicsUtil {
         return msoeButton;
     }
 
+    public static ButtonControl initializeMsoeButtonUpperRight(Kiosk sketch) {
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
+
+        commonButtonWidth = screenW / 8;
+        commonButtonHeight = screenH / 8;
+        commonButtonPadding = screenH / 20;
+
+        ButtonModel msoeButtonModel = new ButtonModel();
+        msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
+        ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
+                sketch.width - (commonButtonWidth)  + (commonButtonPadding / 3),
+                commonButtonPadding - (commonButtonPadding / 3),
+                commonButtonWidth * 3 / 4, commonButtonWidth * 3 / 4, false);
+        msoeButton.setNoButton(true);
+        msoeButton.init(sketch);
+        return msoeButton;
+    }
+
     /**
      * Draws the header.
      * @param sketch to draw to

@@ -90,7 +90,7 @@ public class DetailsSceneLoader {
 
     private static Node getButton(DetailsSceneModel model,
                                      SceneGraph graph, Controller controller) {
-        ButtonModel answer = model.button;
+        ButtonModel answer = model.targets[0];
 
         if (answer.target.equals("null")) {
             answer.target = controller.createNewScene(false).getId();
