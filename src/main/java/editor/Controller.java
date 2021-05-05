@@ -42,7 +42,18 @@ import kiosk.CareerModelLoader;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
-import kiosk.models.*;
+import kiosk.models.CareerDescriptionModel;
+import kiosk.models.CareerModel;
+import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.DefaultSceneModel;
+import kiosk.models.DetailsSceneModel;
+import kiosk.models.EmptySceneModel;
+import kiosk.models.ErrorSceneModel;
+import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PathwaySceneModel;
+import kiosk.models.PromptSceneModel;
+import kiosk.models.SceneModel;
+import kiosk.models.SpokeGraphPromptSceneModel;
 
 public class Controller implements Initializable {
 
