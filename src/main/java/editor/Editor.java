@@ -2,6 +2,8 @@ package editor;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 import javafx.application.Platform;
@@ -110,7 +112,11 @@ public class Editor extends Kiosk {
         Parent root = null;
         try {
             File editorFxml = new File("src/main/java/editor/Editor.fxml");
-            loader = new FXMLLoader(editorFxml.toURI().toURL());
+            if (!editorFxml.exists()) {
+                loader = new FXMLLoader(this.getClass().getResource("Editor.fxml"));
+            } else {
+                loader = new FXMLLoader(editorFxml.toURI().toURL());
+            }
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();

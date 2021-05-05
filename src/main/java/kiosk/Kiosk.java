@@ -433,6 +433,10 @@ public class Kiosk extends PApplet {
         this.fontsLoaded = fontsLoaded;
     }
 
+    /**
+     * Gets the current settings configuration.
+     * @return The current Settings Object
+     */
     public static Settings getSettings() {
         if (settings == null) {
             settings = new Settings();
