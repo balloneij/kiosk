@@ -95,8 +95,8 @@ public class DetailsScene implements Scene {
         this.centerButton = new ButtonControl(
             this.model.targets[0],
             (sketchWidth / 2) - (buttonWidth * 5 / 8),
-            foregroundYPadding + foregroundHeight
-                - (buttonWidth * 5 / 4 + buttonPadding),
+                (int) (foregroundYPadding * 0.85 + foregroundHeight
+                - (buttonWidth * 5 / 4 + buttonPadding)),
                 buttonWidth * 5 / 4,
                 buttonWidth * 5 / 4
         );
