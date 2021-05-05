@@ -10,6 +10,7 @@ import kiosk.SceneGraph;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
+import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;

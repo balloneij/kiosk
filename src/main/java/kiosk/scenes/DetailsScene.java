@@ -6,6 +6,7 @@ import graphics.SceneAnimationHelper;
 import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
+import kiosk.models.CreditsSceneModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.FilterGroupModel;
 import processing.core.PConstants;
@@ -106,16 +107,16 @@ public class DetailsScene implements Scene {
             sketch.hookControl(this.supplementaryButton);
         }
 
-        if (this.model.button.image != null) {
-            this.model.button.image.width = buttonImageWidth;
-            this.model.button.image.height = buttonImageHeight;
+        if (this.model.targets[0].image != null) {
+            this.model.targets[0].image.width = buttonImageWidth;
+            this.model.targets[0].image.height = buttonImageHeight;
         }
 
         this.centerButton = new ButtonControl(
-            this.model.button,
+            this.model.targets[0],
             (sketchWidth / 2) - (buttonWidth * 5 / 8),
-            foregroundYPadding + foregroundHeight
-                - (buttonWidth * 5 / 4 + buttonPadding),
+                (int) (foregroundYPadding * 0.85 + foregroundHeight
+                - (buttonWidth * 5 / 4 + buttonPadding)),
                 buttonWidth * 5 / 4,
                 buttonWidth * 5 / 4
         );
