@@ -1,5 +1,6 @@
 package editor;
 
+import editor.sceneloaders.CareerDescriptionSceneLoader;
 import editor.sceneloaders.CareerPathwaySceneLoader;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
@@ -37,22 +38,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import kiosk.CareerModelLoader;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
-import kiosk.models.CareerDescriptionModel;
-import kiosk.models.CareerModel;
-import kiosk.models.CareerPathwaySceneModel;
-import kiosk.models.DetailsSceneModel;
-import kiosk.models.EmptySceneModel;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.FilterGroupModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.PathwaySceneModel;
-import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
-import kiosk.models.SpokeGraphPromptSceneModel;
-import kiosk.scenes.EmptyScene;
+import kiosk.models.*;
 
 public class Controller implements Initializable {
 
@@ -220,6 +210,7 @@ public class Controller implements Initializable {
             sceneTypeComboBox.getSelectionModel().clearSelection();
         }
 
+        sceneTypeComboBox.setDisable(false);
         previousId = model.getId();
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
@@ -233,6 +224,10 @@ public class Controller implements Initializable {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
             DetailsSceneLoader.loadScene(this, (DetailsSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof CareerDescriptionModel) {
+            sceneTypeComboBox.setDisable(true);
+            CareerDescriptionSceneLoader.loadScene(
+                    this, (CareerDescriptionModel) model, toolbarBox, sceneGraph);
         } else {
             toolbarBox.getChildren().clear();
         }
@@ -588,13 +583,36 @@ public class Controller implements Initializable {
                     hasPendingChanges = false;
                     Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
                 } else if (result.get() == UnsavedChangesAlert.NO_SAVE) {
-                    LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
-                    sceneGraph.loadSurvey(surveyModel);
+                    File careersFile = new File("careers.csv");
+                    if (!careersFile.exists()) {
+                        try {
+                            careersFile.createNewFile();
+                        } catch (IOException e) {
+                            // Recoverable without any issues
+                        }
+                    }
+
+                    // Load survey and careers from fields
+                    LoadedSurveyModel survey = LoadedSurveyModel.readFromFile(this.surveyFile);
+                    CareerModelLoader careerModelLoader = new CareerModelLoader(careersFile);
+                    careers = careerModelLoader.load();
+                    Controller.careers = survey.careers;
+
+                    // Update scene graph
+                    sceneGraph.loadSurvey(survey);
                     sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
                     sceneGraph.reset();
+
+                    // Push any issues as the first scene
+                    if (careerModelLoader.hasIssues()) {
+                        DefaultSceneModel model = new DefaultSceneModel();
+                        model.message = careerModelLoader.getIssuesSummary();
+                        sceneGraph.pushScene(model);
+                    }
+
                     rebuildSceneGraphTreeView();
                     rebuildToolbar(sceneGraph.getCurrentSceneModel());
-                    this.hasPendingChanges = false;
+                    Controller.hasPendingChanges = false;
                     Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
                 }
             }

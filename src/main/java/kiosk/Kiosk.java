@@ -1,11 +1,16 @@
 package kiosk;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import graphics.Boop;
 import graphics.Color;
 import graphics.Graphics;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -16,10 +21,12 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
@@ -102,8 +109,26 @@ public class Kiosk extends PApplet {
             defaultScenes.add(new DefaultSceneModel());
             survey = new LoadedSurveyModel(defaultScenes);
         }
-        this.sceneGraph = new SceneGraph(survey);
+
+        File careersFile = new File("careers.csv");
+        if (!careersFile.exists()) {
+            try {
+                careersFile.createNewFile();
+            } catch (IOException e) {
+                // Recoverable without any issues
+            }
+        }
+
+        CareerModelLoader careerModelLoader = new CareerModelLoader(careersFile);
+        survey.careers = careerModelLoader.load();
         this.careers = survey.careers;
+        this.sceneGraph = new SceneGraph(survey);
+
+        if (careerModelLoader.hasIssues()) {
+            DefaultSceneModel model = new DefaultSceneModel();
+            model.message = careerModelLoader.getIssuesSummary();
+            this.sceneGraph.pushScene(model);
+        }
 
         this.mouseListeners = new LinkedHashMap<>();
 

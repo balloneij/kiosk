@@ -2,6 +2,7 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import java.io.File;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.CareerDescriptionModel;
@@ -72,7 +73,12 @@ public class CareerDescriptionScene implements Scene {
         this.model.image = new ImageModel();
         this.model.image.width = imageSize;
         this.model.image.height = imageSize;
-        this.image = Image.createImage(sketch, this.model.image);
+
+        File imageFile = new File(this.model.image.path);
+        if (!imageFile.exists()) {
+            this.model.image.path = "assets/default.png";
+        }
+        image = Image.createImage(sketch, this.model.image);
 
         // Buttons
         this.homeButton = GraphicsUtil.initializeHomeButton(sketch);

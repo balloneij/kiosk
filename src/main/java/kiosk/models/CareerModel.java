@@ -1,6 +1,7 @@
 package kiosk.models;
 
 import javafx.scene.text.Text;
+import kiosk.CareerModelLoader;
 import kiosk.Riasec;
 
 /**
@@ -13,9 +14,18 @@ public class CareerModel {
     public String field; // Computer engineering, biology, education, etc.
     public Riasec riasecCategory;
     public String description;
+    public String imagePath;
 
+    /**
+     * Creates a career model with default values.
+     */
     public CareerModel() {
-        this("Career", Riasec.Artistic, "field", "category", "description from .csv");
+        this("Career",
+                Riasec.Artistic,
+                "field",
+                "category",
+                "description from .csv",
+                CareerModelLoader.DEFAULT_IMAGE_PATH);
     }
 
     /**
@@ -27,16 +37,23 @@ public class CareerModel {
      * @param description The description of the career itself
      */
     public CareerModel(String name, Riasec riasecCategory,
-                       String field, String category, String description) {
+                       String field, String category, String description,
+                       String imagePath) {
         this.name = name;
         this.riasecCategory = riasecCategory;
         this.field = field;
         this.category = category;
         this.description = description;
+        this.imagePath = imagePath;
     }
 
+    /**
+     * Create a deep copy.
+     * @return a new, unique, career model
+     */
     public CareerModel deepCopy() {
         return new CareerModel(this.name, this.riasecCategory,
-                this.field, this.category, this.description);
+                this.field, this.category, this.description,
+                this.imagePath);
     }
 }
