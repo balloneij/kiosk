@@ -1,6 +1,8 @@
 package graphics;
 
 import java.util.Arrays;
+import java.util.List;
+
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
@@ -108,6 +110,14 @@ public class SpokeGraph {
             buttonControls[i] = new ButtonControl(button,
                     (int) (buttonX - radius), (int) (buttonY - radius),
                     (int) radius);
+        }
+    }
+
+    public void setButtonColors(List<int[]> buttons) {
+        if (this.buttonControls != null && buttons.size() == this.buttonControls.length) {
+            for (int i = 0; i < buttons.size(); i++) {
+                this.buttonControls[i].getModel().rgb = buttons.get(i);
+            }
         }
     }
 
