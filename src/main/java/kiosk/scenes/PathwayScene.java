@@ -4,6 +4,8 @@ import graphics.Graphics;
 import graphics.GraphicsUtil;
 import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
+import java.util.ArrayList;
+import java.util.List;
 import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
@@ -11,9 +13,6 @@ import kiosk.models.ButtonModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.PathwaySceneModel;
 import processing.core.PConstants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PathwayScene implements Scene {
 

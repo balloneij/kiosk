@@ -181,7 +181,8 @@ public class CareerDescriptionScene implements Scene {
         float textW = foregroundWidth
                 - (textX - foregroundCornerX)
                 - padding;
-        sketch.text(this.model.careerModel.description, textX + offsetX, imageY + offsetY, textW, imageSize);
+        sketch.text(this.model.careerModel.description,
+                textX + offsetX, imageY + offsetY, textW, imageSize);
 
         this.centerButton.draw(sketch, offsetX, offsetY);
 

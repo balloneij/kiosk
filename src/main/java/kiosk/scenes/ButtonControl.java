@@ -5,7 +5,6 @@ import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
-
 import javafx.scene.input.TouchEvent;
 import kiosk.EventListener;
 import kiosk.InputEvent;
@@ -524,6 +523,7 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     public void setNoButton(boolean isButton) {
         model.noButton = isButton;
     }
+
     public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
         return this.eventListeners;
     }
@@ -590,11 +590,13 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     private int offsetX;
     private int offsetY;
     private boolean isSnapping;
+
     private double dragDistance(int x, int y) {
         int distX = pressX - x;
         int distY = pressY - y;
         return Math.sqrt(distX * distX + distY * distY);
     }
+
     private void onMousePressed(MouseEvent event) {
         if (!this.isPressed && this.rect.contains(event.getX(), event.getY())) {
             this.isPressed = true;

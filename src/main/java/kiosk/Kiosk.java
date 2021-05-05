@@ -11,16 +11,15 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TouchPoint;
+import javafx.stage.Stage;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import javafx.scene.canvas.Canvas;
-import javafx.scene.input.TouchEvent;
-import javafx.scene.input.TouchPoint;
-import javafx.stage.Stage;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -147,7 +146,8 @@ public class Kiosk extends PApplet {
         stage.addEventHandler(TouchEvent.TOUCH_PRESSED, event -> {
             if (touchPoint == null) {
                 touchPoint = event.getTouchPoint();
-                for (EventListener listener : this.touchListeners.get(TouchScreenEvent.TouchPressed)) {
+                for (EventListener listener :
+                        this.touchListeners.get(TouchScreenEvent.TouchPressed)) {
                     listener.invoke(event);
                 }
                 boop.checkTap(this, event);
@@ -157,7 +157,8 @@ public class Kiosk extends PApplet {
         stage.addEventHandler(TouchEvent.TOUCH_RELEASED, event -> {
             if (touchPoint != null && touchPoint.getId() == event.getTouchPoint().getId()) {
                 touchPoint = null;
-                for (EventListener listener : this.touchListeners.get(TouchScreenEvent.TouchReleased)) {
+                for (EventListener listener :
+                        this.touchListeners.get(TouchScreenEvent.TouchReleased)) {
                     listener.invoke(event);
                 }
             }

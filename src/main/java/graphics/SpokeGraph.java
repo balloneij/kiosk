@@ -2,7 +2,6 @@ package graphics;
 
 import java.util.Arrays;
 import java.util.List;
-
 import kiosk.Kiosk;
 import kiosk.models.ButtonModel;
 import kiosk.scenes.ButtonControl;
@@ -126,6 +125,10 @@ public class SpokeGraph {
         }
     }
 
+    /**
+     * Sets all of the button colors correctly.
+     * @param buttons the buttons to draw colors for
+     */
     public void setButtonColors(List<int[]> buttons) {
         if (this.buttonControls != null && buttons.size() == this.buttonControls.length) {
             for (int i = 0; i < buttons.size(); i++) {

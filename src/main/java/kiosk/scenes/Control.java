@@ -8,5 +8,6 @@ import kiosk.TouchScreenEvent;
 public interface Control<T, K> {
 
     Map<InputEvent, EventListener<T>> getEventListeners();
+
     Map<TouchScreenEvent, EventListener<K>> getTouchEventListeners();
 }
