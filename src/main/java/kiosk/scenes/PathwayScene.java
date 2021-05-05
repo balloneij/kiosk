@@ -12,6 +12,9 @@ import kiosk.models.FilterGroupModel;
 import kiosk.models.PathwaySceneModel;
 import processing.core.PConstants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PathwayScene implements Scene {
 
     // Pull constants from the settings
@@ -35,6 +38,8 @@ public class PathwayScene implements Scene {
     private float totalTimeEnding = 0;
     private float dt = 0;
 
+    private List<int[]> originalButtonColors;
+
     /**
      * Create a pathway scene.
      * @param model to base the scene off of
@@ -45,6 +50,11 @@ public class PathwayScene implements Scene {
         screenH = Kiosk.getSettings().screenH;
         for (ButtonModel careerModel : model.buttonModels) {
             careerModel.isCircle = true;
+        }
+
+        this.originalButtonColors = new ArrayList<>();
+        for (ButtonModel buttonModel : model.buttonModels) {
+            this.originalButtonColors.add(buttonModel.rgb);
         }
 
         // Create the spoke graph
@@ -80,6 +90,8 @@ public class PathwayScene implements Scene {
         spokeGraph.init(sketch);
 
         clicked = SceneAnimationHelper.Clicked.NONE;
+
+        spokeGraph.setButtonColors(this.originalButtonColors);
     }
 
     @Override
