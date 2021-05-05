@@ -116,20 +116,26 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         textField = new TextField(getName());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
+                String id = getItem().getId();
+                SceneModel model = sceneGraph.getSceneById(id);
+
+                // Ensure the name is unique
                 if (sceneGraph.getSceneModelByName(textField.getText()) == null) {
-                    getItem().setName(textField.getText());
+                    model.setName(textField.getText());
                 } else {
                     alert.setContentText(String.format("There is already a scene with the name %s."
                             + "\r\n Please try a different name.", textField.getText()));
                     if (!alert.isShowing()) {
                         alert.showAndWait();
                     }
-                    textField.setText(getItem().getName());
-                    textField.positionCaret(getItem().getName().length());
+                    textField.setText(model.getName());
+                    textField.positionCaret(model.getName().length());
                 }
-                controller.rebuildToolbar(getItem());
+
+                commitEdit(model);
+                sceneGraph.registerSceneModel(model);
+                controller.rebuildToolbar(model);
                 controller.rebuildSceneGraphTreeView();
-                commitEdit(getItem());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();
             }

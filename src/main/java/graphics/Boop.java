@@ -1,6 +1,8 @@
 package graphics;
 
 import java.util.Random;
+
+import javafx.scene.input.TouchEvent;
 import kiosk.Kiosk;
 import kiosk.models.ImageModel;
 import kiosk.scenes.Image;
@@ -635,6 +637,33 @@ public class Boop {
                 && currentX <= event.getX() + boopDimens / 2f) {
             if (currentY >= event.getY() - boopDimens / 2f
                     && currentY <= event.getY() + boopDimens / 2f) {
+                lastClickedFrame = sketch.frameCount;
+                additionalShellFrames = rand.nextInt(10);
+                if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {
+                    choseShake = true;
+                } else {
+                    choseShake = false;
+                }
+                if (choseLeft) {
+                    boopState = BoopState.IN_SHELL_LEFT;
+                } else {
+                    boopState = BoopState.IN_SHELL_RIGHT;
+                }
+            }
+        }
+    }
+
+    /**
+     * Compares Boop's location to the tap's location.
+     * @param event the screen tap just registered
+     */
+    public void checkTap(Kiosk sketch, TouchEvent event) {
+        int x = (int) event.getTouchPoint().getX();
+        int y = (int) event.getTouchPoint().getY();
+        if (currentX >= x - boopDimens / 2f
+                && currentX <= x + boopDimens / 2f) {
+            if (currentY >= y - boopDimens / 2f
+                    && currentY <= y + boopDimens / 2f) {
                 lastClickedFrame = sketch.frameCount;
                 additionalShellFrames = rand.nextInt(10);
                 if (rand.nextInt(randomBounds) > randomSwapAnimationChance) {

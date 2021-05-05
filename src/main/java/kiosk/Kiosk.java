@@ -22,6 +22,10 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import kiosk.models.ButtonModel;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TouchPoint;
+import javafx.stage.Stage;
 import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
@@ -33,6 +37,7 @@ import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
 import processing.core.PApplet;
+import processing.core.PSurface;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -45,10 +50,12 @@ public class Kiosk extends PApplet {
     private SceneModel lastSceneModel;
     private boolean currentSceneIsRoot = false;
     private final Map<InputEvent, LinkedList<EventListener<MouseEvent>>> mouseListeners;
-    private int lastMillis = 0;
+    private final Map<TouchScreenEvent, LinkedList<EventListener<TouchEvent>>> touchListeners;
+    private TouchPoint touchPoint;
+    private long lastNanos = 0;
     protected static Settings settings;
     private Boop boop;
-    private int newSceneMillis;
+    private long newSceneMillis;
     private boolean timeoutActive = false;
     private boolean hotkeysEnabled = true;
     private boolean shouldTimeout = true;
@@ -131,14 +138,47 @@ public class Kiosk extends PApplet {
         }
 
         this.mouseListeners = new LinkedHashMap<>();
-
         for (InputEvent e : InputEvent.values()) {
             this.mouseListeners.put(e, new LinkedList<>());
+        }
+
+        this.touchListeners = new LinkedHashMap<>();
+        for (TouchScreenEvent e : TouchScreenEvent.values()) {
+            this.touchListeners.put(e, new LinkedList<>());
         }
 
         Color.setSketch(this);
 
         boop = new Boop();
+    }
+
+    @Override
+    protected PSurface initSurface() {
+        surface = super.initSurface();
+        final Canvas canvas = (Canvas) surface.getNative();
+        final javafx.scene.Scene oldScene = canvas.getScene();
+        Stage stage = (Stage) oldScene.getWindow();
+
+        stage.addEventHandler(TouchEvent.TOUCH_PRESSED, event -> {
+            if (touchPoint == null) {
+                touchPoint = event.getTouchPoint();
+                for (EventListener listener : this.touchListeners.get(TouchScreenEvent.TouchPressed)) {
+                    listener.invoke(event);
+                }
+                boop.checkTap(this, event);
+            }
+        });
+
+        stage.addEventHandler(TouchEvent.TOUCH_RELEASED, event -> {
+            if (touchPoint != null && touchPoint.getId() == event.getTouchPoint().getId()) {
+                touchPoint = null;
+                for (EventListener listener : this.touchListeners.get(TouchScreenEvent.TouchReleased)) {
+                    listener.invoke(event);
+                }
+            }
+        });
+
+        return surface;
     }
 
     /**
@@ -183,7 +223,7 @@ public class Kiosk extends PApplet {
         } else {
             isFullScreen = false;
         }
-        size(settings.screenW, settings.screenH);
+        size(settings.screenW, settings.screenH, FX2D);
     }
 
     public void enableTimeout() {
@@ -197,7 +237,7 @@ public class Kiosk extends PApplet {
     @Override
     public void setup() {
         super.setup();
-        this.lastMillis = millis();
+        this.lastNanos = System.nanoTime();
         boop.loadVariables(this);
         if (!fontsLoaded) {
             Graphics.loadFonts();
@@ -209,10 +249,17 @@ public class Kiosk extends PApplet {
     public void draw() {
         // Clear out the previous frame
         this.background(0);
+
+        // Check for frameCount rollover
+        if (this.frameCount <= 0) {
+            this.frameCount = this.frameCount - Integer.MIN_VALUE + 1;
+        }
+
         // Compute the time delta in seconds
-        int currMillis = millis();
-        float dt = (float) (currMillis - this.lastMillis) / 1000;
-        this.lastMillis = currMillis;
+        long currentNanos = System.nanoTime();
+        long currentMillis = currentNanos / 1000000;
+        float dt = (float) (currentNanos - this.lastNanos) / 1000000000;
+        this.lastNanos = currentNanos;
 
         // Get the current scene and sceneModel
         Scene currentScene = this.sceneGraph.getCurrentScene();
@@ -228,7 +275,7 @@ public class Kiosk extends PApplet {
             }
 
             // Record when a new scene is loaded
-            this.newSceneMillis = currMillis;
+            this.newSceneMillis = currentMillis;
 
             this.lastScene = currentScene;
             this.lastSceneModel = currentSceneModel;
@@ -243,7 +290,7 @@ public class Kiosk extends PApplet {
         currentScene.draw(this);
 
         // Check for timeout
-        int currentSceneMillis = currMillis - this.newSceneMillis;
+        long currentSceneMillis = currentMillis - this.newSceneMillis;
         if (!currentSceneIsRoot) {
             if (timeoutActive && currentSceneMillis > Kiosk.settings.gracePeriodMillis) {
                 // Clear the timeoutActive flag
@@ -262,7 +309,7 @@ public class Kiosk extends PApplet {
                 timeoutActive = true;
             } else if (timeoutActive && this.sceneGraph.getCurrentScene() instanceof TimeoutScene) {
                 ((TimeoutScene) this.sceneGraph.getCurrentScene()).remainingTime =
-                        Kiosk.settings.gracePeriodMillis - currentSceneMillis;
+                        (Kiosk.settings.gracePeriodMillis - currentSceneMillis);
             }
         }
         boop.movementLogic(this, currentScene);
@@ -292,19 +339,13 @@ public class Kiosk extends PApplet {
      */
     public void hookControl(Control control) {
         Map<InputEvent, EventListener> newListeners = control.getEventListeners();
-
         for (InputEvent key : newListeners.keySet()) {
             this.mouseListeners.get(key).push(newListeners.get(key));
         }
-    }
 
-    /**
-     * Hook a map of event listeners to the kiosk.
-     * @param listeners to attach
-     */
-    public void hookControl(Map<InputEvent, EventListener> listeners) {
-        for (InputEvent key : listeners.keySet()) {
-            this.mouseListeners.get(key).push(listeners.get(key));
+        Map<TouchScreenEvent, EventListener> newTouchListeners = control.getTouchEventListeners();
+        for (TouchScreenEvent key : newTouchListeners.keySet()) {
+            this.touchListeners.get(key).push(newTouchListeners.get(key));
         }
     }
 
@@ -424,6 +465,7 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MousePressed)) {
             listener.invoke(event);
         }
+        boop.checkTap(this, event);
     }
 
     /**
@@ -451,7 +493,14 @@ public class Kiosk extends PApplet {
         this.fontsLoaded = fontsLoaded;
     }
 
+    /**
+     * Gets the current settings configuration.
+     * @return The current Settings Object
+     */
     public static Settings getSettings() {
+        if (settings == null) {
+            settings = new Settings();
+        }
         return settings;
     }
 

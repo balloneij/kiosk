@@ -128,15 +128,13 @@ public class Controller implements Initializable {
                     // Ignore when the combo box is reset, or the scene type already matches.
                     if (newValue != null
                             && !newValue.toString().equals(
-                            sceneGraph.getCurrentSceneModel().toString())) {
-                        String currentSceneId = sceneGraph.getCurrentSceneModel().getId();
-                        String currentSceneName = sceneGraph.getCurrentSceneModel().getName();
+                                sceneGraph.getCurrentSceneModel().toString())) {
 
                         // A deep copy is NECESSARY here. We are duplicating the scenes
                         // loaded into the scene type combobox.
                         SceneModel newModel = newValue.deepCopy();
-                        newModel.setId(currentSceneId);
-                        newModel.setName(currentSceneName);
+                        newModel.setId(sceneGraph.getCurrentSceneModel().getId());
+                        newModel.setName(sceneGraph.getCurrentSceneModel().getName());
                         sceneGraph.registerSceneModel(newModel);
 
                         rebuildToolbar(newModel);
@@ -191,10 +189,11 @@ public class Controller implements Initializable {
                                 && !((EmptySceneModel) selectedModel).intent))) {
                             deleteScene(selectedModel);
                         } else {
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Information");
                             alert.setHeaderText("Unable to Delete Scene");
-                            alert.setContentText("The root scene and empty scenes pointed"
-                                    + " to by a button cannot be deleted");
+                            alert.setContentText("The root scene, as well as empty scenes "
+                                    + "pointed to by a button, cannot be deleted.");
                             alert.showAndWait();
                         }
                     }
@@ -239,8 +238,11 @@ public class Controller implements Initializable {
             sceneTypeComboBox.setDisable(true);
             CareerDescriptionSceneLoader.loadScene(
                     this, (CareerDescriptionModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof EmptySceneModel) {
+            toolbarBox.getChildren().clear();
         } else {
             toolbarBox.getChildren().clear();
+            sceneTypeComboBox.setDisable(true);
         }
     }
 
@@ -291,8 +293,10 @@ public class Controller implements Initializable {
                     unvisitedScenes, depths, 0));
         }
 
-        // If we added any orhphans that turned out to later have parents, remove them here
-        for (int i = hiddenRoot.getChildren().size() - 1; i >= 0; i--) {
+        // If we added any orphans that turned out to later have parents, remove them here
+        // Iterate until i >= 1 to avoid removing the root
+        int childrenCount = hiddenRoot.getChildren().size();
+        for (int i = childrenCount - 1; i >= 1; i--) {
             TreeItem<SceneModel> child = hiddenRoot.getChildren().get(i);
             if (depths.get(child.getValue().getId()) > 0) {
                 hiddenRoot.getChildren().remove(i);
@@ -344,10 +348,6 @@ public class Controller implements Initializable {
                         depths.put(childId, depth + 1);
                     }
                     SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                    if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
-                        childSceneModel.setName(childSceneModel.getName()
-                                .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-                    }
                     // Add the parent to the tree element
                     root.getChildren().add(new TreeItem<>(childSceneModel));
                     continue;
@@ -363,10 +363,6 @@ public class Controller implements Initializable {
                 // if the child IS new, indicate that it no longer needs to be added
                 remainingChildren.remove(childId);
                 SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                if (!childSceneModel.equals(sceneGraph.getRootSceneModel())) {
-                    childSceneModel.setName(childSceneModel.getName()
-                            .replaceAll(ChildIdentifiers.ROOT, ChildIdentifiers.CHILD));
-                }
                 TreeItem<SceneModel> child = new TreeItem<>(childSceneModel);
                 root.getChildren()
                         .add(buildSubtree(child, rootParentId, unvisitedScenes, depths, depth + 1));
@@ -713,8 +709,13 @@ public class Controller implements Initializable {
      */
     @FXML
     public void editSurveySettings() throws IOException {
+        FXMLLoader loader;
         File editorFxml = new File("src/main/java/editor/SurveySettings.fxml");
-        FXMLLoader loader = new FXMLLoader(editorFxml.toURI().toURL());
+        if (editorFxml.exists()) {
+            loader = new FXMLLoader(editorFxml.toURI().toURL());
+        } else {
+            loader = new FXMLLoader(this.getClass().getResource("SurveySettings.fxml"));
+        }
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Stage popupWindow = new Stage();
