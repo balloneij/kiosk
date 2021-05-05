@@ -4,8 +4,10 @@ import graphics.Graphics;
 import graphics.GraphicsUtil;
 import graphics.SceneAnimationHelper;
 import kiosk.Kiosk;
+import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.DetailsSceneModel;
+import kiosk.models.FilterGroupModel;
 import processing.core.PConstants;
 
 
@@ -48,6 +50,9 @@ public class DetailsScene implements Scene {
     //Animations
     private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
     private SceneAnimationHelper.Clicked clicked;
+    private String sceneToGoTo;
+    private Riasec riasecToGoTo;
+    private FilterGroupModel filterToGoTo;
     private float totalTimeOpening = 0;
     private float totalTimeEnding = 0;
     private float dt = 0;
@@ -145,8 +150,14 @@ public class DetailsScene implements Scene {
 
         if (this.centerButton.wasClicked()) {
             clicked = SceneAnimationHelper.Clicked.NEXT;
+            sceneToGoTo = this.centerButton.getTarget();
+            riasecToGoTo = this.centerButton.getModel().category;
+            filterToGoTo = this.centerButton.getModel().filter;
         } else if (this.nextButton.wasClicked()) {
             clicked = SceneAnimationHelper.Clicked.NEXT;
+            sceneToGoTo = this.centerButton.getTarget();
+            riasecToGoTo = this.centerButton.getModel().category;
+            filterToGoTo = this.centerButton.getModel().filter;
         }
     }
 
@@ -162,7 +173,7 @@ public class DetailsScene implements Scene {
 
         int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
                 clicked,
-                null, null, null,
+                sceneToGoTo, riasecToGoTo, filterToGoTo,
                 totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
                 screenW, screenH);
         drawThisFrame(sketch, returnVals[0], returnVals[1]);
