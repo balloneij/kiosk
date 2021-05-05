@@ -155,8 +155,9 @@ public class Kiosk extends PApplet {
         sceneGraph.reset();
     }
 
-    public void reloadSettings() {
-        settings = Settings.readSettings();
+    public void reloadSettings(boolean isFullScreen) {
+        settings = Settings.readSettings(isFullScreen);
+        settings.setFullScreen(isFullScreen);
     }
 
     @Override
@@ -328,13 +329,14 @@ public class Kiosk extends PApplet {
                 // F2 Key Press
                 File file = showFileOpener();
                 if (file != null) {
-                    reloadSettings();
+                    this.surveyPath = file.getPath();
+                    reloadSettings(isFullScreen);
                     loadSurveyFile(file);
                 }
             } else if (event.getKeyCode() == 116) {
                 // F5 Key Press
                 if (loadedFile != null) {
-                    reloadSettings();
+                    reloadSettings(isFullScreen);
                     loadSurveyFile(loadedFile);
                 }
                 this.sceneGraph.reset();

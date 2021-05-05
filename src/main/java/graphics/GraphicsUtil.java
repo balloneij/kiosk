@@ -134,13 +134,14 @@ public class GraphicsUtil {
         commonButtonPadding = screenH / 20;
 
         ButtonModel msoeButtonModel = new ButtonModel();
-        msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
+        msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png",
+                (int) (commonButtonWidth * 0.75), (int) (commonButtonWidth * 0.9));
         ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
-                (int) (sketch.width - (commonButtonWidth * 3 / 4)
+                (int) (sketch.width - (commonButtonWidth * 6 / 7)
                         - commonButtonPadding + offsetX),
-                (int) (sketch.height - (commonButtonHeight * 5 / 4)
+                (int) (sketch.height - (commonButtonHeight * 3 / 2)
                         - commonButtonPadding + offsetY),
-                723 / 6, 883 / 6, false);
+                (int) (commonButtonWidth * 0.75), (int) (commonButtonWidth * 0.9), false);
         msoeButton.setNoButton(true);
         msoeButton.init(sketch);
         return msoeButton;

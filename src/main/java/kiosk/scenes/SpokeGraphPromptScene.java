@@ -207,7 +207,7 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.hookControl(this.backButton);
         } else {
             this.supplementaryButton = GraphicsUtil.initializeMsoeButton(
-                    sketch, 0, 0 - (3 * screenH / 4f));
+                    sketch, answersPadding, 0 - (3 * screenH / 4f));
             sketch.hookControl(this.supplementaryButton);
         }
 
