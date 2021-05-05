@@ -10,7 +10,6 @@ import kiosk.SceneGraph;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
-import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
@@ -56,10 +55,7 @@ public class SpokeGraphPromptScene implements Scene {
 
     //Animations
     private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
-    private boolean clickedBack = false;
-    private boolean clickedHome = false;
-    private boolean clickedNext = false;
-    private boolean clickedMsoe = false;
+    private SceneAnimationHelper.Clicked clicked;
     private String sceneToGoTo;
     private Riasec riasecToGoTo;
     private FilterGroupModel filterToGoTo;
@@ -220,6 +216,8 @@ public class SpokeGraphPromptScene implements Scene {
         totalTimeEnding = 0;
 
         this.promptButton.init(sketch);
+
+        clicked = SceneAnimationHelper.Clicked.NONE;
     }
 
     @Override
@@ -229,7 +227,7 @@ public class SpokeGraphPromptScene implements Scene {
         // Check for button clicks on the scene graph
         for (ButtonControl button : this.answerButtons) {
             if (button.wasClicked()) {
-                clickedNext = true;
+                clicked = SceneAnimationHelper.Clicked.NEXT;
                 sceneToGoTo = button.getTarget();
                 riasecToGoTo = button.getModel().category;
                 filterToGoTo = button.getModel().filter;
@@ -239,12 +237,12 @@ public class SpokeGraphPromptScene implements Scene {
 
         if (!isRoot) {
             if (this.homeButton.wasClicked()) {
-                clickedHome = true;
+                clicked = SceneAnimationHelper.Clicked.HOME;
             } else if (this.backButton.wasClicked()) {
-                clickedBack = true;
+                clicked = SceneAnimationHelper.Clicked.BACK;
             }
         } else if (this.supplementaryButton.wasClicked()) {
-            clickedMsoe = true;
+            clicked = SceneAnimationHelper.Clicked.MSOE;
         }
     }
 
@@ -258,13 +256,13 @@ public class SpokeGraphPromptScene implements Scene {
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+        if (!clicked.equals(SceneAnimationHelper.Clicked.NONE)
                 && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
         int[] returnVals = SceneAnimationHelper.sceneAnimationLogicSpokeGraphPromptScene(sketch,
-                clickedNext, clickedBack, clickedHome, clickedMsoe,
+                clicked,
                 sceneToGoTo, riasecToGoTo, filterToGoTo,
                 totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
                 screenW, screenH, headerY, headerH);
@@ -348,10 +346,12 @@ public class SpokeGraphPromptScene implements Scene {
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
                     || ((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
-                    && clickedBack) || clickedHome) {
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK))
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch, offsetX, offsetY);
-            } else if (clickedMsoe || sketch.getSceneGraph().recentActivity
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)
+                    || sketch.getSceneGraph().recentActivity
                     .equals(SceneGraph.RecentActivity.POP)) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch);
@@ -420,10 +420,11 @@ public class SpokeGraphPromptScene implements Scene {
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
                     || ((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
-                    && clickedBack) || clickedHome) {
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK))
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch, offsetX, offsetY);
-            } else if (clickedMsoe || sketch.getSceneGraph()
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE) || sketch.getSceneGraph()
                     .recentActivity.equals(SceneGraph.RecentActivity.POP)) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch);
@@ -488,10 +489,11 @@ public class SpokeGraphPromptScene implements Scene {
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
                     || ((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
-                    && clickedBack) || clickedHome) {
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK))
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
                 homeButton.draw(sketch, otherOffsetX, 0);
                 backButton.draw(sketch, otherOffsetX, 0);
-            } else if (clickedMsoe) {
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
                 homeButton.draw(sketch, otherOffsetX, 0);
                 backButton.draw(sketch);
             } else {

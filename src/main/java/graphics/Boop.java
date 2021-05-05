@@ -321,33 +321,34 @@ public class Boop {
                 break;
             case STATIC_LEFT:
                 if (shouldBlink || isBlinking) {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headBlink);
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headBlink, dt);
                     totalUnblinkingTime -= 3 * dt;
                     isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, head);
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, head, dt);
                     totalUnblinkingTime += dt;
                 }
                 break;
             case STATIC_RIGHT:
                 if (shouldBlink || isBlinking) {
                     staticAnimation(sketch, lbFootR, lfFootR,
-                            rbFootR, rfFootR, shellR, headBlinkR);
+                            rbFootR, rfFootR, shellR, headBlinkR, dt);
                     totalUnblinkingTime -= 3 * dt;
                     isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
                     staticAnimation(sketch, lbFootR, lfFootR,
-                            rbFootR, rfFootR, shellR, headR);
+                            rbFootR, rfFootR, shellR, headR, dt);
                     totalUnblinkingTime += dt;
                 }
                 break;
             case HAPPY_LEFT:
                 if (shouldBlink || isBlinking) {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headHappyBlink);
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot,
+                            rfFoot, shell, headHappyBlink, dt);
                     totalUnblinkingTime -= 3 * dt;
                     isBlinking = !(totalUnblinkingTime <= 0);
                 } else {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headHappy);
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headHappy, dt);
                     totalUnblinkingTime += dt;
                 }
                 startedHappyAnimation = true;
@@ -361,11 +362,11 @@ public class Boop {
             case HAPPY_RIGHT:
                 if (shouldBlink || isBlinking) {
                     staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
-                            shellR, headHappyBlinkR);
+                            shellR, headHappyBlinkR, dt);
                     totalUnblinkingTime = -1;
                 } else {
                     staticAnimation(sketch, lbFootR, lfFootR, rbFootR, rfFootR,
-                            shellR, headHappyR);
+                            shellR, headHappyR, dt);
                     totalUnblinkingTime += dt;
                 }
                 startedHappyAnimation = true;
@@ -378,7 +379,7 @@ public class Boop {
                 break;
             case IN_SHELL_LEFT:
                 if (choseRoscoeAnimation) {
-                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headRoscoe);
+                    staticAnimation(sketch, lbFoot, lfFoot, rbFoot, rfFoot, shell, headRoscoe, dt);
                 } else if (choseShake) {
                     inShellAnimation2(sketch, shellHide, shellHideR, dt);
                 } else {
@@ -394,7 +395,7 @@ public class Boop {
             case IN_SHELL_RIGHT:
                 if (choseRoscoeAnimation) {
                     staticAnimation(sketch, lbFootR, lfFootR, rbFootR,
-                            rfFootR, shellR, headRoscoeR);
+                            rfFootR, shellR, headRoscoeR, dt);
                 } else if (choseShake) {
                     inShellAnimation2(sketch, shellHideR, shellHide, dt);
                 } else {
@@ -613,13 +614,17 @@ public class Boop {
      * @param head the head to be used
      */
     private void staticAnimation(Kiosk sketch, Image lbFoot, Image lfFoot, Image rbFoot,
-                                 Image rfFoot, Image shell, Image head) {
+                                 Image rfFoot, Image shell, Image head, float dt) {
         lbFoot.draw(sketch, currentX, currentY);
         lfFoot.draw(sketch, currentX, currentY);
         rbFoot.draw(sketch, currentX, currentY);
         rfFoot.draw(sketch, currentX, currentY);
         shell.draw(sketch, currentX, currentY);
         head.draw(sketch, currentX, currentY);
+
+        if (choseRoscoeAnimation) {
+            totalShellTime += dt;
+        }
     }
 
     /**

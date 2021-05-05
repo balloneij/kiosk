@@ -9,70 +9,68 @@ import kiosk.models.FilterGroupModel;
 
 public class SceneAnimationHelper {
 
+    public enum Clicked {
+        BACK, HOME, NEXT, MSOE, NONE
+    }
+
     /**
      * The logic to determine the animation for all scene types except for
      * SpokeGraphPromptScenes and CareerPathwayScenes,
      * as they involve spoke interpolation.
      * @param sketch to draw to
-     * @param clickedNext if the "Next" button was just clicked
-     * @param clickedBack if the "Back" button was just clicked
-     * @param clickedHome if the "Home" button was just clicked
-     * @param clickedMsoe if the "MSOE" button was just clicked
+     * @param clicked an enum stating what type of click just occurred
      * @param sceneToGoTo the scene to travel to, if "Next" was pressed
      * @param riasecToGoTo the riasec type to travel to, if "Next" was pressed
      * @param filterToGoTo the filter to use while travelling, if "Next" was pressed
      * @param totalTimeOpening the time currently spent animating the scene in
      * @param totalTimeEnding the time currently spent animating the scene out
      * @param sceneAnimationMilliseconds the duration of scene animations
-     * @param dt the time spent between the last draw update
      * @param screenW the screen width
      * @param screenH the screen height
      * @return an array of ints, where [0] is the offsetX and [1] is the offsetY.
      */
     public static int[] sceneAnimationLogic(Kiosk sketch,
-                                           boolean clickedNext, boolean clickedBack,
-                                            boolean clickedHome, boolean clickedMsoe,
+                                           Clicked clicked,
                                            String sceneToGoTo, Riasec riasecToGoTo,
                                             FilterGroupModel filterToGoTo,
                                            float totalTimeOpening, float totalTimeEnding,
-                                            int sceneAnimationMilliseconds, float dt,
+                                            int sceneAnimationMilliseconds,
                                            int screenW, int screenH) {
         int offsetX;
         int offsetY;
 
         if (sketch.isEditor) {
-            if (clickedNext) {
+            if (clicked.equals(Clicked.NEXT)) {
                 sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-            } else if (clickedBack) {
+            } else if (clicked.equals(Clicked.BACK)) {
                 sketch.getSceneGraph().popScene();
-            } else if (clickedHome) {
+            } else if (clicked.equals(Clicked.HOME)) {
                 sketch.getSceneGraph().reset();
-            } else if (clickedMsoe) {
+            } else if (clicked.equals(Clicked.MSOE)) {
                 sketch.getSceneGraph().pushScene(new CreditsSceneModel());
             }
         }
 
-        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
-            offsetX = (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+        double offsetToUseX = screenW
+                * (1 - ((totalTimeEnding) * 1.0
+                / sceneAnimationMilliseconds + 1));
+        if ((clicked.equals(Clicked.NEXT) || clicked.equals(Clicked.MSOE)) && !sketch.isEditor) {
+            offsetX = (int) offsetToUseX;
             offsetY = 0;
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                if (clickedNext) {
+                if (clicked.equals(Clicked.NEXT)) {
                     sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-                } else if (clickedMsoe) {
+                } else {
                     sketch.getSceneGraph().pushScene(new CreditsSceneModel());
                 }
             }
-        } else if (clickedBack && !sketch.isEditor) {
-            offsetX = (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+        } else if (clicked.equals(Clicked.BACK) && !sketch.isEditor) {
+            offsetX = (int) (0 - offsetToUseX);
             offsetY = 0;
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedHome && !sketch.isEditor) {
+        } else if (clicked.equals(Clicked.HOME) && !sketch.isEditor) {
             offsetX = 0;
             offsetY = (int) (screenH
                     * (1 - ((totalTimeEnding) * 1.0
@@ -86,20 +84,21 @@ public class SceneAnimationHelper {
             offsetY = (int) (screenH + screenH
                     * (1 - ((totalTimeOpening) * 1.0
                     / sceneAnimationMilliseconds + 1)));
-        } else if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)
-                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            offsetX = (int) (0 - screenW - screenW
+        } else {
+            double offsetToUseOpeningX = screenW
                     * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
-            offsetY = 0;
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            offsetX = (int) ((screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1))));
-            offsetY = 0;
-        } else { //If it's already a second-or-two old, draw the scene normally
-            offsetX = 0;
-            offsetY = 0;
+                    / sceneAnimationMilliseconds + 1));
+            if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)
+                    && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
+                offsetX = (int) (0 - screenW - offsetToUseOpeningX);
+                offsetY = 0;
+            } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
+                offsetX = (int) ((screenW + offsetToUseOpeningX));
+                offsetY = 0;
+            } else { //If it's already a second-or-two old, draw the scene normally
+                offsetX = 0;
+                offsetY = 0;
+            }
         }
 
         return new int[] {offsetX, offsetY};
@@ -109,10 +108,7 @@ public class SceneAnimationHelper {
      * The logic to determine the animation for CareerPathwayScenes,
      * involves interpolation.
      * @param sketch to draw to
-     * @param clickedNext if the "Next" button was just clicked
-     * @param clickedBack if the "Back" button was just clicked
-     * @param clickedHome if the "Home" button was just clicked
-     * @param clickedMsoe if the "MSOE" button was just clicked
+     * @param clicked an enum stating what type of click just occurred
      * @param totalTimeOpening the time currently spent animating the scene in
      * @param totalTimeEnding the time currently spent animating the scene out
      * @param sceneAnimationMilliseconds the duration of scene animations
@@ -124,10 +120,7 @@ public class SceneAnimationHelper {
      *         [2] is the headerOffsetX, [3] is the typeOfAnimation.
      */
     public static int[] sceneAnimationLogicCareerPathwayScene(Kiosk sketch,
-                                                              boolean clickedNext,
-                                                              boolean clickedBack,
-                                                              boolean clickedHome,
-                                                              boolean clickedMsoe,
+                                                              Clicked clicked,
                                                               float totalTimeOpening,
                                                               float totalTimeEnding,
                                                               int sceneAnimationMilliseconds,
@@ -139,32 +132,34 @@ public class SceneAnimationHelper {
         int typeOfAnimation;
 
         if (sketch.isEditor) {
-            if (clickedNext) {
+            if (clicked.equals(Clicked.NEXT)) {
                 sketch.getSceneGraph().pushEndScene(desiredCareer);
-            } else if (clickedBack) {
+            } else if (clicked.equals(Clicked.BACK)) {
                 sketch.getSceneGraph().popScene();
-            } else if (clickedHome) {
+            } else if (clicked.equals(Clicked.HOME)) {
                 sketch.getSceneGraph().reset();
-            } else if (clickedMsoe) {
+            } else if (clicked.equals(Clicked.MSOE)) {
                 sketch.getSceneGraph().pushScene(new CreditsSceneModel());
             }
         }
 
-        if ((clickedNext || clickedMsoe) && !sketch.isEditor) {
-            offsetX = (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+        double offsetToUseX = screenW
+                * (1 - ((totalTimeEnding) * 1.0
+                / sceneAnimationMilliseconds + 1));
+        if ((clicked.equals(Clicked.NEXT) || clicked.equals(Clicked.MSOE)) && !sketch.isEditor) {
+            offsetX = (int) offsetToUseX;
             offsetY = 0;
             headerOffsetX = 0;
             typeOfAnimation = 1;
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
-                if (clickedNext) {
+                if (clicked.equals(Clicked.NEXT)) {
                     sketch.getSceneGraph().pushEndScene(desiredCareer);
-                } else if (clickedMsoe) {
+                } else {
                     sketch.getSceneGraph().pushScene(new CreditsSceneModel());
                 }
             }
-        } else if (clickedBack && !sketch.isEditor && sketch.getSceneGraph().getFromHistory(1)
+        } else if (clicked.equals(Clicked.BACK) && !sketch.isEditor
+                && sketch.getSceneGraph().getFromHistory(1)
                 .toString().contains("Spoke Graph Prompt")) {
             final double availableHeight = (screenH - (screenH / 32f) - (screenH / 6f));
             final double size = Math.min(screenW, availableHeight);
@@ -172,24 +167,20 @@ public class SceneAnimationHelper {
                     * (1 - ((totalTimeEnding) * 1.0
                     / sceneAnimationMilliseconds + 1)));
             offsetY = 0;
-            headerOffsetX = (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+            headerOffsetX = (int) (0 - offsetToUseX);
             typeOfAnimation = 3;
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedBack && !sketch.isEditor) {
-            offsetX = (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+        } else if (clicked.equals(Clicked.BACK) && !sketch.isEditor) {
+            offsetX = (int) (0 - offsetToUseX);
             offsetY = 0;
             headerOffsetX = 0;
             typeOfAnimation = 1;
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedHome && !sketch.isEditor) {
+        } else if (clicked.equals(Clicked.HOME) && !sketch.isEditor) {
             offsetX = 0;
             offsetY = (int) (screenH
                     * (1 - ((totalTimeEnding) * 1.0
@@ -207,35 +198,34 @@ public class SceneAnimationHelper {
                     / sceneAnimationMilliseconds + 1)));
             headerOffsetX = 0;
             typeOfAnimation = 1;
-        } else if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)
-                && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            offsetX = (int) (0 - screenW - screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
-            offsetY = 0;
-            headerOffsetX = 0;
-            typeOfAnimation = 1;
-        } else if (sceneAnimationMilliseconds > totalTimeOpening
-                && !sketch.isEditor && sketch.getSceneGraph().getFromHistory(1)
-                .toString().contains("Spoke Graph Prompt")) {
-            offsetX = (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
-            offsetY = 0;
-            headerOffsetX = 0;
-            typeOfAnimation = 2;
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            offsetX = (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
-            offsetY = 0;
-            headerOffsetX = 0;
-            typeOfAnimation = 1;
         } else {
-            offsetX = 0;
-            offsetY = 0;
-            headerOffsetX = 0;
-            typeOfAnimation = 1;
+            double offsetToUseOpeningX = screenW
+                    * (1 - ((totalTimeOpening) * 1.0
+                    / sceneAnimationMilliseconds + 1));
+            if (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)
+                    && sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
+                offsetX = (int) (0 - screenW - offsetToUseOpeningX);
+                offsetY = 0;
+                headerOffsetX = 0;
+                typeOfAnimation = 1;
+            } else if (sceneAnimationMilliseconds > totalTimeOpening
+                    && !sketch.isEditor && sketch.getSceneGraph().getFromHistory(1)
+                    .toString().contains("Spoke Graph Prompt")) {
+                offsetX = (int) (screenW + offsetToUseOpeningX);
+                offsetY = 0;
+                headerOffsetX = 0;
+                typeOfAnimation = 2;
+            } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
+                offsetX = (int) (screenW + offsetToUseOpeningX);
+                offsetY = 0;
+                headerOffsetX = 0;
+                typeOfAnimation = 1;
+            } else {
+                offsetX = 0;
+                offsetY = 0;
+                headerOffsetX = 0;
+                typeOfAnimation = 1;
+            }
         }
 
         return new int[] {offsetX, offsetY, headerOffsetX, typeOfAnimation};
@@ -245,10 +235,7 @@ public class SceneAnimationHelper {
      * The logic to determine the animation for SpokeGraphPromptScenes,
      * involves interpolation.
      * @param sketch to draw to
-     * @param clickedNext if the "Next" button was just clicked
-     * @param clickedBack if the "Back" button was just clicked
-     * @param clickedHome if the "Home" button was just clicked
-     * @param clickedMsoe if the "MSOE" button was just clicked
+     * @param clicked an enum stating what type of click just occurred
      * @param sceneToGoTo the scene to travel to, if "Next" was pressed
      * @param riasecToGoTo the riasec type to travel to, if "Next" was pressed
      * @param filterToGoTo the filter to use while travelling, if "Next" was pressed
@@ -263,10 +250,7 @@ public class SceneAnimationHelper {
      *         [2] is the otherOffsetX, [3] is the typeOfAnimation.
      */
     public static int[] sceneAnimationLogicSpokeGraphPromptScene(Kiosk sketch,
-                                                                 boolean clickedNext,
-                                                                 boolean clickedBack,
-                                                                 boolean clickedHome,
-                                                                 boolean clickedMsoe,
+                                                                 Clicked clicked,
                                                                  String sceneToGoTo,
                                                                  Riasec riasecToGoTo,
                                                                  FilterGroupModel filterToGoTo,
@@ -283,26 +267,27 @@ public class SceneAnimationHelper {
         int typeOfAnimation;
 
         if (sketch.isEditor) {
-            if (clickedNext) {
+            if (clicked.equals(Clicked.NEXT)) {
                 sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-            } else if (clickedBack) {
+            } else if (clicked.equals(Clicked.BACK)) {
                 sketch.getSceneGraph().popScene();
-            } else if (clickedHome) {
+            } else if (clicked.equals(Clicked.HOME)) {
                 sketch.getSceneGraph().reset();
             }
         }
 
-        if ((clickedMsoe) && !sketch.isEditor) {
-            offsetX = (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+        double offsetToUseX = screenW
+                * (1 - ((totalTimeEnding) * 1.0
+                / sceneAnimationMilliseconds + 1));
+        if ((clicked.equals(Clicked.MSOE)) && !sketch.isEditor) {
+            offsetX = (int) offsetToUseX;
             offsetY = 0;
             otherOffsetX = 0;
             typeOfAnimation = 1;
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().pushScene(new CreditsSceneModel());
             }
-        } else if ((clickedNext) && !sketch.isEditor
+        } else if ((clicked.equals(Clicked.NEXT)) && !sketch.isEditor
                 && sketch.getSceneGraph().getSceneById(sceneToGoTo)
                 .toString().contains("Career Pathway")) {
             final double availableHeight = (screenH - headerY - headerH);
@@ -311,14 +296,12 @@ public class SceneAnimationHelper {
                     * (1 - ((totalTimeEnding) * 1.0
                     / sceneAnimationMilliseconds + 1)));
             offsetY = 0;
-            otherOffsetX = (int) (screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+            otherOffsetX = (int) offsetToUseX;
             typeOfAnimation = 3;
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
             }
-        } else if ((clickedNext) && !sketch.isEditor
+        } else if ((clicked.equals(Clicked.NEXT)) && !sketch.isEditor
                 && !sketch.getSceneGraph().getSceneById(sceneToGoTo)
                 .toString().contains("Spoke Graph Prompt")) {
             offsetX = 0;
@@ -327,19 +310,17 @@ public class SceneAnimationHelper {
             typeOfAnimation = 1;
 
             sketch.getSceneGraph().pushScene(sceneToGoTo, riasecToGoTo, filterToGoTo);
-        } else if ((clickedNext) && !sketch.isEditor
+        } else if ((clicked.equals(Clicked.NEXT)) && !sketch.isEditor
                 && sketch.getSceneGraph().getSceneById(sceneToGoTo)
                 .toString().contains("Spoke Graph Prompt")) {
             offsetX = 0;
             offsetY = 0;
             otherOffsetX = 0;
             typeOfAnimation = 5;
-        } else if (clickedBack && !sketch.isEditor
+        } else if (clicked.equals(Clicked.BACK) && !sketch.isEditor
                 && !sketch.getSceneGraph().getFromHistory(1)
                 .toString().contains("Spoke Graph Prompt")) {
-            offsetX = (int) (0 - screenW
-                    * (1 - ((totalTimeEnding) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
+            offsetX = (int) (0 - offsetToUseX);
             offsetY = 0;
             otherOffsetX = 0;
             typeOfAnimation = 2;
@@ -347,14 +328,14 @@ public class SceneAnimationHelper {
             if (sceneAnimationMilliseconds <= totalTimeEnding) {
                 sketch.getSceneGraph().popScene();
             }
-        } else if (clickedBack && !sketch.isEditor
+        } else if (clicked.equals(Clicked.BACK) && !sketch.isEditor
                 && sketch.getSceneGraph().getFromHistory(1)
                 .toString().contains("Spoke Graph Prompt")) {
             offsetX = 0;
             offsetY = 0;
             otherOffsetX = 0;
             typeOfAnimation = 4;
-        } else if (clickedHome && !sketch.isEditor) {
+        } else if (clicked.equals(Clicked.HOME) && !sketch.isEditor) {
             offsetX = 0;
             offsetY = (int) (screenH
                     * (1 - ((totalTimeEnding) * 1.0
@@ -373,45 +354,47 @@ public class SceneAnimationHelper {
                     / sceneAnimationMilliseconds + 1)));
             otherOffsetX = 0;
             typeOfAnimation = 1;
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && sketch.getSceneGraph().recentScene.equals(SceneGraph.RecentScene.CAREER_PATHWAY)
-                && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP)) {
-            offsetX = 0;
-            offsetY = 0;
-            otherOffsetX = (int) (0 - screenW - screenW
+        } else {
+            double offsetToUseOpeningPartialX = screenW
                     * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
-            typeOfAnimation = 3;
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && !sketch.getSceneGraph().recentScene
-                .equals(SceneGraph.RecentScene.SPOKE_GRAPH_PROMPT)
-                && sketch.getSceneGraph().recentActivity
-                .equals(SceneGraph.RecentActivity.POP)) {
-            offsetX = (int) (0 - screenW - screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
-            offsetY = 0;
-            otherOffsetX = 0;
-            typeOfAnimation = 2;
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
-                && !sketch.getSceneGraph().recentScene
-                .equals(SceneGraph.RecentScene.SPOKE_GRAPH_PROMPT)) {
-            offsetX = (int) (screenW + screenW
-                    * (1 - ((totalTimeOpening) * 1.0
-                    / sceneAnimationMilliseconds + 1)));
-            offsetY = 0;
-            otherOffsetX = 0;
-            typeOfAnimation = 2;
-        } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
-            offsetX = 0;
-            offsetY = 0;
-            otherOffsetX = 0;
-            typeOfAnimation = 2;
-        } else { //If it's already a second-or-two old, draw the scene normally
-            offsetX = 0;
-            offsetY = 0;
-            otherOffsetX = 0;
-            typeOfAnimation = 1;
+                    / sceneAnimationMilliseconds + 1));
+            double offsetToUseOpeningX = 0 - screenW - offsetToUseOpeningPartialX;
+            if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
+                    && sketch.getSceneGraph().recentScene
+                    .equals(SceneGraph.RecentScene.CAREER_PATHWAY)
+                    && sketch.getSceneGraph().recentActivity
+                    .equals(SceneGraph.RecentActivity.POP)) {
+                offsetX = 0;
+                offsetY = 0;
+                otherOffsetX = (int) offsetToUseOpeningX;
+                typeOfAnimation = 3;
+            } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
+                    && !sketch.getSceneGraph().recentScene
+                    .equals(SceneGraph.RecentScene.SPOKE_GRAPH_PROMPT)
+                    && sketch.getSceneGraph().recentActivity
+                    .equals(SceneGraph.RecentActivity.POP)) {
+                offsetX = (int) offsetToUseOpeningX;
+                offsetY = 0;
+                otherOffsetX = 0;
+                typeOfAnimation = 2;
+            } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor
+                    && !sketch.getSceneGraph().recentScene
+                    .equals(SceneGraph.RecentScene.SPOKE_GRAPH_PROMPT)) {
+                offsetX = (int) (screenW + offsetToUseOpeningPartialX);
+                offsetY = 0;
+                otherOffsetX = 0;
+                typeOfAnimation = 2;
+            } else if (sceneAnimationMilliseconds > totalTimeOpening && !sketch.isEditor) {
+                offsetX = 0;
+                offsetY = 0;
+                otherOffsetX = 0;
+                typeOfAnimation = 2;
+            } else { //If it's already a second-or-two old, draw the scene normally
+                offsetX = 0;
+                offsetY = 0;
+                otherOffsetX = 0;
+                typeOfAnimation = 1;
+            }
         }
 
         return new int[] {offsetX, offsetY, otherOffsetX, typeOfAnimation};

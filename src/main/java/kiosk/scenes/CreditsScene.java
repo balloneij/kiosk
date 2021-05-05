@@ -34,7 +34,7 @@ public class CreditsScene implements Scene {
 
     //Animations
     private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
-    private boolean clickedBack = false;
+    private SceneAnimationHelper.Clicked clicked;
     private float totalTimeOpening = 0;
     private float totalTimeEnding = 0;
     private float dt = 0;
@@ -88,6 +88,8 @@ public class CreditsScene implements Scene {
         this.backButton = GraphicsUtil.initializeBackButton(sketch);
         this.backButton.init(sketch);
         sketch.hookControl(this.backButton);
+
+        clicked = SceneAnimationHelper.Clicked.NONE;
     }
 
     @Override
@@ -95,7 +97,7 @@ public class CreditsScene implements Scene {
         this.dt = dt;
 
         if (this.backButton.wasClicked()) {
-            clickedBack = true;
+            clicked = SceneAnimationHelper.Clicked.BACK;
         }
     }
 
@@ -104,15 +106,15 @@ public class CreditsScene implements Scene {
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if (clickedBack && sceneAnimationMilliseconds != 0) {
+        if (clicked.equals(SceneAnimationHelper.Clicked.BACK) && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
         int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
-                false, clickedBack, false, false,
+                clicked,
                 null, null, null,
                 totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
-                dt, screenW, screenH);
+                screenW, screenH);
         drawThisFrame(sketch, returnVals[0], returnVals[1]);
     }
 
@@ -160,7 +162,8 @@ public class CreditsScene implements Scene {
                 && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH)))
                 || ((sketch.getSceneGraph().getHistorySize() == 2
                 && sketch.getSceneGraph().recentActivity
-                .equals(SceneGraph.RecentActivity.POP)) && clickedBack)) {
+                .equals(SceneGraph.RecentActivity.POP))
+                && clicked.equals(SceneAnimationHelper.Clicked.BACK))) {
             backButton.draw(sketch, offsetX, 0);
         } else {
             backButton.draw(sketch);

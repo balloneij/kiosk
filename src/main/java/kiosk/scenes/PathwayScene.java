@@ -8,7 +8,6 @@ import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.PathwaySceneModel;
 import processing.core.PConstants;
@@ -28,10 +27,7 @@ public class PathwayScene implements Scene {
 
     //Animations
     private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
-    private boolean clickedBack = false;
-    private boolean clickedHome = false;
-    private boolean clickedNext = false;
-    private boolean clickedMsoe = false;
+    private SceneAnimationHelper.Clicked clicked;
     private String sceneToGoTo;
     private Riasec riasecToGoTo;
     private FilterGroupModel filterToGoTo;
@@ -82,6 +78,8 @@ public class PathwayScene implements Scene {
 
         spokeGraph.init(sketch);
         this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+
+        clicked = SceneAnimationHelper.Clicked.NONE;
     }
 
     @Override
@@ -90,7 +88,7 @@ public class PathwayScene implements Scene {
 
         for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
-                clickedNext = true;
+                clicked = SceneAnimationHelper.Clicked.NEXT;
                 sceneToGoTo = button.getTarget();
                 riasecToGoTo = button.getModel().category;
                 filterToGoTo = button.getModel().filter;
@@ -100,12 +98,12 @@ public class PathwayScene implements Scene {
 
         if (!isRoot) {
             if (this.homeButton.wasClicked()) {
-                clickedHome = true;
+                clicked = SceneAnimationHelper.Clicked.HOME;
             } else if (this.backButton.wasClicked()) {
-                clickedBack = true;
+                clicked = SceneAnimationHelper.Clicked.BACK;
             }
         } else if (this.supplementaryButton.wasClicked()) {
-            clickedMsoe = true;
+            clicked = SceneAnimationHelper.Clicked.MSOE;
         }
     }
 
@@ -119,16 +117,16 @@ public class PathwayScene implements Scene {
         if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+        if (!clicked.equals(SceneAnimationHelper.Clicked.NONE)
                 && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
         int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
-                clickedNext, clickedBack, clickedHome, clickedMsoe,
+                clicked,
                 sceneToGoTo, riasecToGoTo, filterToGoTo,
                 totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
-                dt, screenW, screenH);
+                screenW, screenH);
         drawThisFrame(sketch, returnVals[0], returnVals[1]);
     }
 
@@ -143,10 +141,11 @@ public class PathwayScene implements Scene {
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
                     || ((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
-                    && clickedBack) || clickedHome) {
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK)
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME))) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch, offsetX, offsetY);
-            } else if (clickedMsoe) {
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch);
             } else {

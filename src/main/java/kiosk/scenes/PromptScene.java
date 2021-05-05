@@ -7,7 +7,6 @@ import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.PromptSceneModel;
 import processing.core.PConstants;
@@ -46,10 +45,8 @@ public class PromptScene implements Scene {
 
     //Animations
     private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
-    private boolean clickedBack = false;
-    private boolean clickedHome = false;
-    private boolean clickedNext = false;
-    private boolean clickedMsoe = false;
+    private SceneAnimationHelper.Clicked clicked;
+
     private String sceneToGoTo;
     private Riasec riasecToGoTo;
     private FilterGroupModel filterToGoTo;
@@ -137,6 +134,8 @@ public class PromptScene implements Scene {
             this.buttons[i] = button;
 
             x += buttonWidth + buttonPadding;
+
+            clicked = SceneAnimationHelper.Clicked.NONE;
         }
 
         if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
@@ -162,7 +161,7 @@ public class PromptScene implements Scene {
 
         for (ButtonControl button : this.buttons) {
             if (button.wasClicked()) {
-                clickedNext = true;
+                clicked = SceneAnimationHelper.Clicked.NEXT;
                 sceneToGoTo = button.getTarget();
                 riasecToGoTo = button.getModel().category;
                 filterToGoTo = button.getModel().filter;
@@ -172,12 +171,12 @@ public class PromptScene implements Scene {
 
         if (!isRoot) {
             if (this.homeButton.wasClicked()) {
-                clickedHome = true;
+                clicked = SceneAnimationHelper.Clicked.HOME;
             } else if (this.backButton.wasClicked()) {
-                clickedBack = true;
+                clicked = SceneAnimationHelper.Clicked.BACK;
             }
         } else if (this.supplementaryButton.wasClicked()) {
-            clickedMsoe = true;
+            clicked = SceneAnimationHelper.Clicked.MSOE;
         }
     }
 
@@ -188,16 +187,16 @@ public class PromptScene implements Scene {
                 && sceneAnimationMilliseconds != 0) {
             totalTimeOpening += dt * 1000;
         }
-        if ((clickedBack || clickedHome || clickedMsoe || clickedNext)
+        if (!clicked.equals(SceneAnimationHelper.Clicked.NONE)
                 && sceneAnimationMilliseconds != 0) {
             totalTimeEnding += dt * 1000;
         }
 
         int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
-                clickedNext, clickedBack, clickedHome, clickedMsoe,
+                clicked,
                 sceneToGoTo, riasecToGoTo, filterToGoTo,
                 totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
-                dt, screenW, screenH);
+                screenW, screenH);
         drawThisFrame(sketch, returnVals[0], returnVals[1]);
 
     }
@@ -241,14 +240,16 @@ public class PromptScene implements Scene {
         } else {
             if (((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity
-                    .equals(SceneGraph.RecentActivity.PUSH)) && !clickedNext)
+                    .equals(SceneGraph.RecentActivity.PUSH))
+                    && !clicked.equals(SceneAnimationHelper.Clicked.NEXT)
                     || ((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity
                     .equals(SceneGraph.RecentActivity.POP))
-                    && clickedBack) || clickedHome) {
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK)
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)))) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch, offsetX, offsetY);
-            } else if (clickedMsoe) {
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch);
             } else {
