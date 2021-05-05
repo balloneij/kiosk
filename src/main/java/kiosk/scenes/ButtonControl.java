@@ -5,15 +5,19 @@ import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
+
+import javafx.scene.input.TouchEvent;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
 import kiosk.Settings;
+import kiosk.TouchScreenEvent;
 import kiosk.models.ButtonModel;
 import processing.core.PConstants;
+import processing.event.Event;
 import processing.event.MouseEvent;
 
-public class ButtonControl implements Control<MouseEvent> {
+public class ButtonControl implements Control<MouseEvent, TouchEvent> {
 
     private int screenW = Kiosk.getSettings().screenW;
     private int screenH = Kiosk.getSettings().screenH;
@@ -35,6 +39,7 @@ public class ButtonControl implements Control<MouseEvent> {
     private final Rectangle rect;
     private int radius;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
+    private final Map<TouchScreenEvent, EventListener<TouchEvent>> touchEventListeners;
     private Image image;
     private boolean isPressed;
     private boolean wasClicked;
@@ -106,6 +111,9 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
         this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
+
+        this.touchEventListeners = new HashMap<>();
+        this.touchEventListeners.put(TouchScreenEvent.TouchPressed, this::onTouchPressed);
     }
 
     /**
@@ -162,6 +170,9 @@ public class ButtonControl implements Control<MouseEvent> {
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
         this.eventListeners.put(InputEvent.MouseReleased, this::onMouseReleased);
         this.eventListeners.put(InputEvent.MouseDragged, this::onMouseDragged);
+
+        this.touchEventListeners = new HashMap<>();
+        this.touchEventListeners.put(TouchScreenEvent.TouchPressed, this::onTouchPressed);
     }
 
     /**
@@ -458,6 +469,7 @@ public class ButtonControl implements Control<MouseEvent> {
         return ((this.model.rgb[0] + this.model.rgb[1] + this.model.rgb[2]) / 3) >= 225;
     }
 
+
     // TODO maybe this should be extracted to a graphics class
     private void textWithOutline(String text, float x, float y, float w,
                                  float h, Kiosk sketch, boolean blackTextDesired) {
@@ -489,9 +501,13 @@ public class ButtonControl implements Control<MouseEvent> {
     public void setNoButton(boolean isButton) {
         model.noButton = isButton;
     }
-
     public Map<InputEvent, EventListener<MouseEvent>> getEventListeners() {
         return this.eventListeners;
+    }
+
+    @Override
+    public Map<TouchScreenEvent, EventListener<TouchEvent>> getTouchEventListeners() {
+        return this.touchEventListeners;
     }
 
     /**
@@ -529,6 +545,7 @@ public class ButtonControl implements Control<MouseEvent> {
         updateRadius();
     }
 
+
     // Helper method for updating the radius and calculating new centerSquareSize
     private void updateRadius() {
         this.radius = Math.min(this.rect.width / 2, this.rect.height / 2);
@@ -544,23 +561,34 @@ public class ButtonControl implements Control<MouseEvent> {
 
     private static ButtonModel draggedButtonModel;
     private boolean isDragged = false;
+
     private int pressX;
     private int pressY;
     private int offsetX;
     private int offsetY;
     private boolean isSnapping;
-
     private double dragDistance(int x, int y) {
         int distX = pressX - x;
         int distY = pressY - y;
         return Math.sqrt(distX * distX + distY * distY);
     }
-
     private void onMousePressed(MouseEvent event) {
-        if (this.rect.contains(event.getX(), event.getY())) {
+        if (!this.isPressed && this.rect.contains(event.getX(), event.getY())) {
             this.isPressed = true;
             pressX = event.getX();
             pressY = event.getY();
+            offsetX = this.rect.x - pressX;
+            offsetY = this.rect.y - pressY;
+        }
+    }
+
+    private void onTouchPressed(TouchEvent touchEvent) {
+        int x = (int) touchEvent.getTouchPoint().getX();
+        int y = (int) touchEvent.getTouchPoint().getY();
+        if (!this.isPressed && this.rect.contains(x, y)) {
+            this.isPressed = true;
+            pressX = x;
+            pressY = y;
             offsetX = this.rect.x - pressX;
             offsetY = this.rect.y - pressY;
         }
