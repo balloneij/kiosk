@@ -273,6 +273,8 @@ public class SceneAnimationHelper {
                 sketch.getSceneGraph().popScene();
             } else if (clicked.equals(Clicked.HOME)) {
                 sketch.getSceneGraph().reset();
+            } else if (clicked.equals(Clicked.MSOE)) {
+                sketch.getSceneGraph().pushScene(new CreditsSceneModel());
             }
         }
 

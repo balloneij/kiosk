@@ -4,14 +4,12 @@ import editor.Editor;
 import javafx.scene.control.TreeItem;
 import kiosk.SceneGraph;
 import kiosk.Settings;
-import kiosk.models.ButtonModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.tree.Tree;
 
 import java.util.Arrays;
 import java.util.List;
@@ -69,31 +67,4 @@ public class RootAndOrphanTest {
         assertStartsWithSymbol(rootSceneModel.get(0), ChildIdentifiers.ROOT);
         assertTrue(rootSceneModel.get(0).getValue().getName().charAt(1) != ChildIdentifiers.ROOT.charAt(0));
     }
-
-    @Test
-    void secondElementSetToRoot() {
-        PromptSceneModel a = new PromptSceneModel();
-        a.setName("A");
-        PromptSceneModel b = new PromptSceneModel();
-        b.setName("B");
-        a.answers = new ButtonModel[] { new ButtonModel("To B", b.getId())};
-        Controller controller = createController(a, b);
-
-        TreeItem<SceneModel> scenes = controller.buildSceneGraphTreeView();
-        TreeItem<SceneModel> aTi = assertChildCountAndGet(1, scenes).get(0);
-        assertStartsWithSymbol(aTi, ChildIdentifiers.ROOT);
-        assertEquals("A", aTi.getValue().getName().substring(1));
-
-
-        // Rebuild with B as the root.
-        Controller.sceneGraph.setRootSceneModel(b);
-        scenes = controller.buildSceneGraphTreeView();
-        aTi = assertChildCountAndGet(1, scenes).get(0);
-        assertEquals("A", aTi.getValue().getName());
-
-        TreeItem<SceneModel> bTi = assertChildCountAndGet(1, aTi).get(0);
-        assertStartsWithSymbol(bTi, ChildIdentifiers.ROOT);
-        assertEquals("B", bTi.getValue().getName().substring(1));
-    }
-
 }

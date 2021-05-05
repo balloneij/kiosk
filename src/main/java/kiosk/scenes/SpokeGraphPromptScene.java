@@ -307,7 +307,7 @@ public class SpokeGraphPromptScene implements Scene {
             sketch.stroke(255);
             sketch.line(answersCenterX + offsetX, answersCenterY + offsetY,
                     answer.getCenterX() + offsetX, answer.getCenterY() + offsetY);
-            answer.draw(sketch, 0, offsetY);
+            answer.draw(sketch, offsetX, offsetY);
         }
 
         // Draw the center prompt button

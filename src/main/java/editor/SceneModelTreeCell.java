@@ -8,6 +8,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import kiosk.SceneGraph;
+import kiosk.models.EmptySceneModel;
 import kiosk.models.SceneModel;
 
 public class SceneModelTreeCell extends TreeCell<SceneModel> {
@@ -82,7 +83,11 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         } else {
             // Determine if scene is the root; if so, disable some options
             // This is more indicative than just not adding the items in the first place
-            if (getItem().getId().equals(Controller.sceneGraph.getRootSceneModel().getId())) {
+            // Also checks if the scene is empty AND it wasn't created on purpose;
+            // scenes created automatically cannot be deleted by the user
+            if (getItem().getId().equals(Controller.sceneGraph.getRootSceneModel().getId())
+                    || (getItem().getClass().equals(EmptySceneModel.class)
+                    && !(((EmptySceneModel) getItem()).intent))) {
                 rootMenuItem.setDisable(true);
                 deleteMenuItem.setDisable(true);
             } else {
@@ -111,20 +116,26 @@ public class SceneModelTreeCell extends TreeCell<SceneModel> {
         textField = new TextField(getName());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
+                String id = getItem().getId();
+                SceneModel model = sceneGraph.getSceneById(id);
+
+                // Ensure the name is unique
                 if (sceneGraph.getSceneModelByName(textField.getText()) == null) {
-                    getItem().setName(textField.getText());
+                    model.setName(textField.getText());
                 } else {
                     alert.setContentText(String.format("There is already a scene with the name %s."
                             + "\r\n Please try a different name.", textField.getText()));
                     if (!alert.isShowing()) {
                         alert.showAndWait();
                     }
-                    textField.setText(getItem().getName());
-                    textField.positionCaret(getItem().getName().length());
+                    textField.setText(model.getName());
+                    textField.positionCaret(model.getName().length());
                 }
-                controller.rebuildToolbar(getItem());
+
+                commitEdit(model);
+                sceneGraph.registerSceneModel(model);
+                controller.rebuildToolbar(model);
                 controller.rebuildSceneGraphTreeView();
-                commitEdit(getItem());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();
             }

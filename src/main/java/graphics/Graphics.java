@@ -218,7 +218,11 @@ public class Graphics {
                                          float timeSinceLastTap, int color) {
         sketch.ellipseMode(PConstants.CENTER);
         sketch.noFill();
-        sketch.strokeWeight(9 - (timeSinceLastTap * 21));
+        float weight = (9 - (timeSinceLastTap * 21));
+        if (weight <= 0) {
+            weight = 0;
+        }
+        sketch.strokeWeight(weight);
         sketch.stroke(color);
         sketch.ellipse(e.getX(), e.getY(), sketch.width / 50f
                 + (45 * timeSinceLastTap), sketch.width / 50f + (45 * timeSinceLastTap));

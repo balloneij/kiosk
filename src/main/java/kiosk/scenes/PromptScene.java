@@ -134,11 +134,11 @@ public class PromptScene implements Scene {
             this.buttons[i] = button;
 
             x += buttonWidth + buttonPadding;
-
-            clicked = SceneAnimationHelper.Clicked.NONE;
         }
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+
+        if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -152,7 +152,7 @@ public class PromptScene implements Scene {
         totalTimeOpening = 0;
         totalTimeEnding = 0;
 
-        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+        clicked = SceneAnimationHelper.Clicked.NONE;
     }
 
     @Override
