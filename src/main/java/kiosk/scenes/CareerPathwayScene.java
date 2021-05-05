@@ -171,19 +171,19 @@ public class CareerPathwayScene implements Scene {
         if (isRoot) {
             supplementaryButton.draw(sketch, offsetX, offsetY);
         } else {
-            if ((sketch.getSceneGraph().getHistorySize() == 2
+            if (((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
                     || ((sketch.getSceneGraph().getHistorySize() == 2
                     && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
                     && clicked.equals(SceneAnimationHelper.Clicked.BACK))
-                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME))
+                    || (sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
+                    || (clicked.equals(SceneAnimationHelper.Clicked.NEXT))) {
                 homeButton.draw(sketch, offsetX, offsetY);
                 backButton.draw(sketch, offsetX, offsetY);
-            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)
-                    || sketch.getSceneGraph().recentActivity
-                    .equals(SceneGraph.RecentActivity.POP)) {
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
                 homeButton.draw(sketch, offsetX, offsetY);
-                backButton.draw(sketch);
+                backButton.draw(sketch, 0, 0);
             } else {
                 homeButton.draw(sketch);
                 backButton.draw(sketch);

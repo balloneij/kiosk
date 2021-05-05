@@ -11,6 +11,7 @@ public class CareerDescriptionModel implements SceneModel {
     public String body;
     public CareerModel careerModel;
     public ButtonModel button;
+    public ImageModel image;
 
     /**
      * Stores all relevant information needed for the final Career
@@ -25,7 +26,8 @@ public class CareerDescriptionModel implements SceneModel {
                 + " you can either go back and explore other careers, or"
                 + " start over from the beginning.";
         this.careerModel = new CareerModel();
-        this.button = new ButtonModel("Go to the beginning", "null");
+        this.button = new ButtonModel("Explore other careers", "null");
+        this.image = null;
     }
 
     @Override
@@ -61,6 +63,7 @@ public class CareerDescriptionModel implements SceneModel {
         copy.body = this.body;
         copy.button = this.button.deepCopy();
         copy.careerModel = this.careerModel;
+        copy.image = this.image == null ? null : this.image.deepCopy();
 
         return copy;
     }

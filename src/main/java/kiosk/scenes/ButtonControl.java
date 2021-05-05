@@ -609,7 +609,7 @@ public class ButtonControl implements Control<MouseEvent> {
         if (dragDistance(event.getX(), event.getY()) > 10
                 && this.rect.contains(event.getX(), event.getY())
         ) {
-            if (draggedButtonModel == null) {
+            if (draggedButtonModel == null && this.isPressed) {
                 this.isDragged = true;
                 draggedButtonModel = this.model;
             }
@@ -617,6 +617,13 @@ public class ButtonControl implements Control<MouseEvent> {
                 this.rect.x = event.getX() + offsetX;
                 this.rect.y = event.getY() + offsetY;
             }
+        } else if (draggedButtonModel == this.model) {
+            // This case covers when we drag a button a few pixels from the edge.
+            // Without this case we have to move very slowly toward  the edge in
+            // order to drag the button. With this case, once we have the button
+            // confirmed we can move it without checking the bounds.
+            this.rect.x = event.getX() + offsetX;
+            this.rect.y = event.getY() + offsetY;
         }
     }
 
