@@ -2,18 +2,17 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
+import java.util.ArrayList;
+import java.util.List;
 import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.PathwaySceneModel;
-import kiosk.models.SceneModel;
 import processing.core.PConstants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PathwayScene implements Scene {
 
@@ -27,6 +26,16 @@ public class PathwayScene implements Scene {
     private ButtonControl homeButton;
     private ButtonControl supplementaryButton;
     private boolean isRoot = false;
+
+    //Animations
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+    private SceneAnimationHelper.Clicked clicked;
+    private String sceneToGoTo;
+    private Riasec riasecToGoTo;
+    private FilterGroupModel filterToGoTo;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
 
     private List<int[]> originalButtonColors;
 
@@ -73,28 +82,39 @@ public class PathwayScene implements Scene {
             sketch.hookControl(careerOption);
         }
 
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
+
         spokeGraph.init(sketch);
+
+        clicked = SceneAnimationHelper.Clicked.NONE;
+
         spokeGraph.setButtonColors(this.originalButtonColors);
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         for (ButtonControl button : this.spokeGraph.getButtonControls()) {
             if (button.wasClicked()) {
-                String scene = button.getTarget();
-                Riasec riasec = button.getModel().category;
-                FilterGroupModel filter = button.getModel().filter;
-                sceneGraph.pushScene(scene, riasec, filter);
+                clicked = SceneAnimationHelper.Clicked.NEXT;
+                sceneToGoTo = button.getTarget();
+                riasecToGoTo = button.getModel().category;
+                filterToGoTo = button.getModel().filter;
                 break;
             }
         }
 
         if (!isRoot) {
             if (this.homeButton.wasClicked()) {
-                sceneGraph.reset();
+                clicked = SceneAnimationHelper.Clicked.HOME;
             } else if (this.backButton.wasClicked()) {
-                sceneGraph.popScene();
+                clicked = SceneAnimationHelper.Clicked.BACK;
             }
+        } else if (this.supplementaryButton.wasClicked()) {
+            clicked = SceneAnimationHelper.Clicked.MSOE;
         }
     }
 
@@ -104,15 +124,45 @@ public class PathwayScene implements Scene {
         // Text Properties
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.fill(0);
-        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody);
-        this.spokeGraph.draw(sketch);
 
-        if (!isRoot) {
-            this.backButton.draw(sketch);
-            this.homeButton.draw(sketch);
-        } else {
-            supplementaryButton.draw(sketch);
+        if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (!clicked.equals(SceneAnimationHelper.Clicked.NONE)
+                && sceneAnimationMilliseconds != 0) {
+            totalTimeEnding += dt * 1000;
         }
 
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
+                clicked,
+                sceneToGoTo, riasecToGoTo, filterToGoTo,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                screenW, screenH);
+        drawThisFrame(sketch, returnVals[0], returnVals[1]);
+    }
+
+    private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
+        GraphicsUtil.drawHeader(sketch, model.headerTitle, model.headerBody, offsetX, offsetY);
+        this.spokeGraph.draw(sketch, offsetX, offsetY);
+
+        if (isRoot) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else {
+            if ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
+                    || ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK)
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME))) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
+        }
     }
 }

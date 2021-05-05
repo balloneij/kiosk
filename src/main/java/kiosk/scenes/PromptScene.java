@@ -2,11 +2,11 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.PromptSceneModel;
 import processing.core.PConstants;
@@ -44,7 +44,15 @@ public class PromptScene implements Scene {
     private static int buttonY = screenH * 7 / 12;
 
     //Animations
-    private int startFrame = 0;
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+    private SceneAnimationHelper.Clicked clicked;
+
+    private String sceneToGoTo;
+    private Riasec riasecToGoTo;
+    private FilterGroupModel filterToGoTo;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
 
     private final PromptSceneModel model;
     private final ButtonControl[] buttons;
@@ -92,7 +100,6 @@ public class PromptScene implements Scene {
 
     @Override
     public void init(Kiosk sketch) {
-        startFrame = sketch.frameCount;
         final int sketchHeight = Kiosk.getSettings().screenH;
 
         // Start the X on the far left so we simply need to add
@@ -129,7 +136,9 @@ public class PromptScene implements Scene {
             x += buttonWidth + buttonPadding;
         }
 
-        if (!sketch.getRootSceneModel().getId().equals(this.model.getId())) {
+        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+
+        if (!isRoot) {
             this.homeButton = GraphicsUtil.initializeHomeButton(sketch);
             sketch.hookControl(this.homeButton);
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
@@ -139,113 +148,114 @@ public class PromptScene implements Scene {
             sketch.hookControl(this.supplementaryButton);
         }
 
-        this.isRoot = sketch.getRootSceneModel().getId().equals(this.model.getId());
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
+
+        clicked = SceneAnimationHelper.Clicked.NONE;
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         for (ButtonControl button : this.buttons) {
             if (button.wasClicked()) {
-                String scene = button.getTarget();
-                Riasec riasec = button.getModel().category;
-                FilterGroupModel filter = button.getModel().filter;
-                sceneGraph.pushScene(scene, riasec, filter);
+                clicked = SceneAnimationHelper.Clicked.NEXT;
+                sceneToGoTo = button.getTarget();
+                riasecToGoTo = button.getModel().category;
+                filterToGoTo = button.getModel().filter;
                 break;
             }
         }
 
         if (!isRoot) {
             if (this.homeButton.wasClicked()) {
-                sceneGraph.reset();
+                clicked = SceneAnimationHelper.Clicked.HOME;
             } else if (this.backButton.wasClicked()) {
-                sceneGraph.popScene();
+                clicked = SceneAnimationHelper.Clicked.BACK;
             }
         } else if (this.supplementaryButton.wasClicked()) {
-            sceneGraph.pushScene(new CreditsSceneModel());
+            clicked = SceneAnimationHelper.Clicked.MSOE;
         }
     }
 
     @Override
     public void draw(Kiosk sketch) {
-        final int centerX = Kiosk.getSettings().screenW / 2;
 
-        //TODO MAKE ANIMATION LESS CHOPPY WHEN LESS FRAMES DESIRED
-        //     Implement Seth's idea of white box gradually revealing text
-        //If this scene is new, animate the items to gradually show up on screen
-        if (sketch.frameCount - startFrame < Kiosk.getSettings().sceneAnimationFrames) {
-            // Draw the white foreground box
-            sketch.fill(255);
-            Graphics.drawRoundedRectangle(sketch,
-                    foregroundXPadding, foregroundYPadding,
-                    (float) (foregroundWidth * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (foregroundHeight * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)),
-                    (float) (foregroundCurveRadius * ((sketch.frameCount - startFrame) * 1.0
-                            / Kiosk.getSettings().sceneAnimationFrames)));
-            // Draw text
-            sketch.rectMode(PConstants.CENTER);
-            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-            sketch.fill(0);
-            if (sketch.frameCount - startFrame > (Kiosk.getSettings().sceneAnimationFrames / 2)) {
-                // Title
-                Graphics.useGothic(sketch, (int) (titleFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.title, centerX, titleY,
-                        sketch.width / 1.5f, sketch.height / 5f);
-                // Prompt
-                Graphics.useGothic(sketch, (int) (promptFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), false);
-                sketch.text(this.model.prompt, centerX, promptY,
-                        sketch.width / 1.5f, sketch.height / 5f);
-                // Action
-                Graphics.useGothic(sketch, (int) (actionFontSize
-                        * ((sketch.frameCount - startFrame) * 1.0
-                        / (Kiosk.getSettings().sceneAnimationFrames + 1))), true);
-                sketch.text(this.model.actionPhrase, centerX, actionY,
-                        sketch.width / 1.5f, sketch.height / 6f);
-            }
-        } else { //If it's already a second-or-two old, draw the scene normally
-            // Draw the white foreground box
-            sketch.fill(255);
-            Graphics.drawRoundedRectangle(sketch,
-                    foregroundXPadding, foregroundYPadding,
-                    foregroundWidth, foregroundHeight,
-                    foregroundCurveRadius);
-
-            // Draw text
-            sketch.rectMode(PConstants.CENTER);
-            sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
-            sketch.fill(0);
-
-            // Title
-            Graphics.useGothic(sketch, titleFontSize, true);
-            sketch.text(this.model.title, centerX, titleY,
-                    sketch.width / 1.5f, sketch.height / 5f);
-
-            // Prompt
-            Graphics.useGothic(sketch, promptFontSize, false);
-            sketch.text(this.model.prompt, centerX, promptY,
-                    sketch.width / 1.5f, sketch.height / 5f);
-
-            // Action
-            Graphics.useGothic(sketch, actionFontSize, true);
-            sketch.text(this.model.actionPhrase, centerX, actionY,
-                    sketch.width / 1.5f, sketch.height / 6f);
-
-            // Draw buttons
-            for (ButtonControl button : this.buttons) {
-                button.draw(sketch);
-            }
+        if ((totalTimeOpening < sceneAnimationMilliseconds)
+                && sceneAnimationMilliseconds != 0) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (!clicked.equals(SceneAnimationHelper.Clicked.NONE)
+                && sceneAnimationMilliseconds != 0) {
+            totalTimeEnding += dt * 1000;
         }
 
-        if (!isRoot) {
-            homeButton.draw(sketch);
-            backButton.draw(sketch);
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
+                clicked,
+                sceneToGoTo, riasecToGoTo, filterToGoTo,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                screenW, screenH);
+        drawThisFrame(sketch, returnVals[0], returnVals[1]);
+
+    }
+
+    private void drawThisFrame(Kiosk sketch, float offsetX, float offsetY) {
+        final int centerX = Kiosk.getSettings().screenW / 2;
+        // Draw the white foreground box
+        sketch.fill(255);
+        Graphics.drawRoundedRectangle(sketch,
+                foregroundXPadding + offsetX, foregroundYPadding + offsetY,
+                foregroundWidth, foregroundHeight,
+                foregroundCurveRadius);
+
+        // Draw text
+        sketch.rectMode(PConstants.CENTER);
+        sketch.textAlign(PConstants.CENTER, PConstants.CENTER);
+        sketch.fill(0);
+
+        // Title
+        Graphics.useGothic(sketch, titleFontSize, true);
+        sketch.text(this.model.title, centerX + offsetX, titleY + offsetY,
+                sketch.width / 1.5f, sketch.height / 5f);
+
+        // Prompt
+        Graphics.useGothic(sketch, promptFontSize, false);
+        sketch.text(this.model.prompt, centerX + offsetX, promptY + offsetY,
+                sketch.width / 1.5f, sketch.height / 5f);
+
+        // Action
+        Graphics.useGothic(sketch, actionFontSize, true);
+        sketch.text(this.model.actionPhrase, centerX + offsetX, actionY + offsetY,
+                sketch.width / 1.5f, sketch.height / 6f);
+
+        // Draw buttons
+        for (ButtonControl button : this.buttons) {
+            button.draw(sketch, offsetX, offsetY);
+        }
+
+        if (isRoot) {
+            supplementaryButton.draw(sketch, offsetX, offsetY);
         } else {
-            supplementaryButton.draw(sketch);
+            if (((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity
+                    .equals(SceneGraph.RecentActivity.PUSH))
+                    && !clicked.equals(SceneAnimationHelper.Clicked.NEXT)
+                    || ((sketch.getSceneGraph().getHistorySize() == 2
+                    && sketch.getSceneGraph().recentActivity
+                    .equals(SceneGraph.RecentActivity.POP))
+                    && clicked.equals(SceneAnimationHelper.Clicked.BACK)
+                    || clicked.equals(SceneAnimationHelper.Clicked.HOME)))) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch, offsetX, offsetY);
+            } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
+                homeButton.draw(sketch, offsetX, offsetY);
+                backButton.draw(sketch);
+            } else {
+                homeButton.draw(sketch);
+                backButton.draw(sketch);
+            }
         }
     }
 }

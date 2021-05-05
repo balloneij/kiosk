@@ -9,6 +9,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PGraphics;
+import processing.event.MouseEvent;
 
 public class Graphics {
 
@@ -204,5 +205,27 @@ public class Graphics {
         pg.endDraw();
 
         return pg;
+    }
+
+    /**
+     * Draws a circle radiating outwards where the user clicks, to provide feedback.
+     * @param sketch to draw to
+     * @param e the click event to respond to, contains the coords to draw to
+     * @param timeSinceLastTap the time since the tap occurred,
+     *                       makes the circle pulse outward gradually
+     */
+    public static void drawTouchResponse(Kiosk sketch, MouseEvent e,
+                                         float timeSinceLastTap, int color) {
+        sketch.ellipseMode(PConstants.CENTER);
+        sketch.noFill();
+        float weight = (9 - (timeSinceLastTap * 21));
+        if (weight <= 0) {
+            weight = 0;
+        }
+        sketch.strokeWeight(weight);
+        sketch.stroke(color);
+        sketch.ellipse(e.getX(), e.getY(), sketch.width / 50f
+                + (45 * timeSinceLastTap), sketch.width / 50f + (45 * timeSinceLastTap));
+        sketch.strokeWeight(1);
     }
 }

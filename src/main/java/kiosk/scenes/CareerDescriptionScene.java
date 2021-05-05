@@ -2,10 +2,10 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
+import graphics.SceneAnimationHelper;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.CareerDescriptionModel;
-import kiosk.models.CreditsSceneModel;
 import kiosk.models.ImageModel;
 import processing.core.PConstants;
 
@@ -15,6 +15,9 @@ public class CareerDescriptionScene implements Scene {
     // Button
     private static int buttonWidth;
     private static int buttonHeight;
+
+    private static int screenW;
+    private static int screenH;
 
     // White foreground
     private static int foregroundWidth;
@@ -36,14 +39,21 @@ public class CareerDescriptionScene implements Scene {
     private ButtonControl supplementaryButton;
     private Image image;
 
+    //Animations
+    private int sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+    private SceneAnimationHelper.Clicked clicked;
+    private float totalTimeOpening = 0;
+    private float totalTimeEnding = 0;
+    private float dt = 0;
+
     /**
      * Career Description Scene shows a title, body of text, and a button at the bottom.
      * @param model The model object where we get our information.
      */
     public CareerDescriptionScene(CareerDescriptionModel model) {
         this.model = model;
-        int screenW = Kiosk.getSettings().screenW;
-        int screenH = Kiosk.getSettings().screenH;
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
 
         // Button
         buttonWidth = screenW / 8;
@@ -94,31 +104,55 @@ public class CareerDescriptionScene implements Scene {
         this.centerButton.init(sketch);
         sketch.hookControl(this.centerButton);
 
+        sceneAnimationMilliseconds = Kiosk.getSettings().sceneAnimationMilliseconds;
+        totalTimeOpening = 0;
+        totalTimeEnding = 0;
+
         this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
         this.supplementaryButton.init(sketch);
         sketch.hookControl(this.supplementaryButton);
+
+        clicked = SceneAnimationHelper.Clicked.NONE;
     }
 
     @Override
     public void update(float dt, SceneGraph sceneGraph) {
+        this.dt = dt;
+
         if (this.homeButton.wasClicked()) {
-            sceneGraph.reset();
+            clicked = SceneAnimationHelper.Clicked.HOME;
         } else if (this.centerButton.wasClicked()) {
-            sceneGraph.popScene();
+            clicked = SceneAnimationHelper.Clicked.BACK;
         } else if (this.supplementaryButton.wasClicked()) {
-            sceneGraph.pushScene(new CreditsSceneModel());
+            clicked = SceneAnimationHelper.Clicked.MSOE;
         }
     }
 
     @Override
     public void draw(Kiosk sketch) {
-        final int centerX = Kiosk.getSettings().screenW / 2;
+        if ((totalTimeOpening < sceneAnimationMilliseconds) && sceneAnimationMilliseconds != 0) {
+            totalTimeOpening += dt * 1000;
+        }
+        if (!clicked.equals(SceneAnimationHelper.Clicked.NONE) && sceneAnimationMilliseconds != 0) {
+            totalTimeEnding += dt * 1000;
+        }
 
+        int[] returnVals = SceneAnimationHelper.sceneAnimationLogic(sketch,
+                clicked,
+                null, null, null,
+                totalTimeOpening, totalTimeEnding, sceneAnimationMilliseconds,
+                screenW, screenH);
+        drawThisFrame(sketch, returnVals[0], returnVals[1]);
+
+    }
+
+    private void drawThisFrame(Kiosk sketch, int offsetX, int offsetY) {
+        final int centerX = Kiosk.getSettings().screenW / 2;
         // Draw the white foreground box
         sketch.fill(255);
         sketch.rectMode(PConstants.CORNER);
-        sketch.rect(foregroundCornerX, foregroundCornerY,
-                foregroundWidth, foregroundHeight,
+        sketch.rect(foregroundCornerX + offsetX, foregroundCornerY + offsetY,
+                foregroundWidth + offsetX, foregroundHeight + offsetY,
                 foregroundCurveRadius);
 
         // Career Name
@@ -128,7 +162,7 @@ public class CareerDescriptionScene implements Scene {
         Graphics.useGothic(sketch, titleFontSize, true);
         sketch.textAlign(PConstants.CENTER, PConstants.TOP);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(this.model.careerModel.name, centerX, (int) (titleY * 1.15),
+        sketch.text(this.model.careerModel.name, centerX + offsetX, (int) (titleY * 1.15) + offsetY,
                 (int) (foregroundWidth * 0.95), foregroundHeight / 5f);
 
         // Image
@@ -136,7 +170,7 @@ public class CareerDescriptionScene implements Scene {
 
         float imageX = foregroundCornerX + padding;
         float imageY = foregroundCornerY + (foregroundHeight / 2f) - (imageSize / 2f);
-        this.image.draw(sketch, imageX, imageY);
+        this.image.draw(sketch, imageX + offsetX, imageY + offsetY);
 
         // Body
         Graphics.useGothic(sketch, descriptionFontSize, false);
@@ -147,11 +181,28 @@ public class CareerDescriptionScene implements Scene {
         float textW = foregroundWidth
                 - (textX - foregroundCornerX)
                 - padding;
-        sketch.text(this.model.careerModel.description, textX, imageY, textW, imageSize);
+        sketch.text(this.model.careerModel.description,
+                textX + offsetX, imageY + offsetY, textW, imageSize);
 
-        // Buttons
-        this.centerButton.draw(sketch);
-        this.homeButton.draw(sketch);
-        this.supplementaryButton.draw(sketch);
+        this.centerButton.draw(sketch, offsetX, offsetY);
+
+        if ((sketch.getSceneGraph().getHistorySize() == 2
+                && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.PUSH))
+                || ((sketch.getSceneGraph().getHistorySize() == 2
+                && sketch.getSceneGraph().recentActivity.equals(SceneGraph.RecentActivity.POP))
+                && clicked.equals(SceneAnimationHelper.Clicked.BACK))
+                || clicked.equals(SceneAnimationHelper.Clicked.HOME)) {
+            centerButton.draw(sketch, offsetX, offsetY);
+            homeButton.draw(sketch, offsetX, offsetY);
+            supplementaryButton.draw(sketch, offsetX, offsetY);
+        } else if (clicked.equals(SceneAnimationHelper.Clicked.MSOE)) {
+            centerButton.draw(sketch, offsetX, offsetY);
+            homeButton.draw(sketch, offsetX, offsetY);
+            supplementaryButton.draw(sketch, offsetX, 0);
+        } else {
+            centerButton.draw(sketch);
+            homeButton.draw(sketch);
+            supplementaryButton.draw(sketch, offsetX, 0);
+        }
     }
 }
