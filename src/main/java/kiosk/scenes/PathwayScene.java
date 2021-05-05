@@ -7,6 +7,7 @@ import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
+import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.PathwaySceneModel;
 import kiosk.models.SceneModel;
@@ -83,6 +84,10 @@ public class PathwayScene implements Scene {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
                 sceneGraph.popScene();
+            }
+        } else {
+            if (this.supplementaryButton != null && this.supplementaryButton.wasClicked()) {
+                sceneGraph.pushScene(new CreditsSceneModel());
             }
         }
     }

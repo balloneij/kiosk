@@ -9,6 +9,7 @@ import kiosk.SceneGraph;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
+import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
@@ -194,7 +195,7 @@ public class SpokeGraphPromptScene implements Scene {
             this.backButton = GraphicsUtil.initializeBackButton(sketch);
             sketch.hookControl(this.backButton);
         } else {
-            this.supplementaryButton = GraphicsUtil.initializeMsoeButton(sketch);
+            this.supplementaryButton = GraphicsUtil.initializeMsoeButtonUpperRight(sketch);
             sketch.hookControl(this.supplementaryButton);
         }
 
@@ -219,6 +220,10 @@ public class SpokeGraphPromptScene implements Scene {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
                 sceneGraph.popScene();
+            }
+        } else {
+            if (this.supplementaryButton != null && this.supplementaryButton.wasClicked()) {
+                sceneGraph.pushScene(new CreditsSceneModel());
             }
         }
     }

@@ -9,6 +9,7 @@ import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.CreditsSceneModel;
 import processing.core.PConstants;
 
 /**
@@ -105,6 +106,10 @@ public class CareerPathwayScene implements Scene {
                 sceneGraph.reset();
             } else if (this.backButton.wasClicked()) {
                 sceneGraph.popScene();
+            }
+        } else {
+            if (this.supplementaryButton != null && this.supplementaryButton.wasClicked()) {
+                sceneGraph.pushScene(new CreditsSceneModel());
             }
         }
     }
