@@ -1,6 +1,8 @@
 package graphics;
 
 import java.util.Random;
+
+import editor.Editor;
 import javafx.scene.input.TouchEvent;
 import kiosk.Kiosk;
 import kiosk.models.ImageModel;
@@ -728,6 +730,9 @@ public class Boop {
      */
     public void checkTap(Kiosk sketch, TouchEvent event) {
         int x = (int) event.getTouchPoint().getX();
+        if (sketch.isEditor) {
+            x -= Editor.TOOLBAR_WIDTH;
+        }
         int y = (int) event.getTouchPoint().getY();
         if (currentX >= x - boopDimens / 2f
                 && currentX <= x + boopDimens / 2f) {

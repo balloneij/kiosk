@@ -5,7 +5,7 @@
    <string>rootSceneId</string>
    <void method="set">
     <object idref="LoadedSurveyModel0"/>
-    <string>Generatedca39c0dd-1319-4aa7-b00f-3d04920e0596</string>
+    <string>Generated4f64d883-f34a-4625-a7f3-55e952092baa</string>
    </void>
   </void>
   <void class="kiosk.models.LoadedSurveyModel" method="getField">
@@ -1255,7 +1255,7 @@
         <string>id</string>
         <void method="set">
          <object idref="PromptSceneModel0"/>
-         <string>Generatedca39c0dd-1319-4aa7-b00f-3d04920e0596</string>
+         <string>Generated4f64d883-f34a-4625-a7f3-55e952092baa</string>
         </void>
        </void>
        <void class="kiosk.models.PromptSceneModel" method="getField">
@@ -3481,15 +3481,15 @@ What big problem do you want to help solve?</string>
 <void class="kiosk.models.ButtonModel" id="Field1" method="getField">
  <string>rgb</string>
  <void id="intArray1" method="get">
-  <object idref="ButtonModel17"/>
+  <object idref="ButtonModel18"/>
   <void index="1">
-   <int>108</int>
+   <int>98</int>
   </void>
   <void index="2">
-   <int>103</int>
+   <int>38</int>
   </void>
   <void index="0">
-   <int>51</int>
+   <int>219</int>
   </void>
  </void>
 </void>
@@ -3513,15 +3513,15 @@ What big problem do you want to help solve?</string>
 <void class="kiosk.models.ButtonModel" id="Field3" method="getField">
  <string>rgb</string>
  <void id="intArray3" method="get">
-  <object idref="ButtonModel18"/>
+  <object idref="ButtonModel17"/>
   <void index="1">
-   <int>98</int>
+   <int>108</int>
   </void>
   <void index="2">
-   <int>38</int>
+   <int>103</int>
   </void>
   <void index="0">
-   <int>219</int>
+   <int>51</int>
   </void>
  </void>
 </void>

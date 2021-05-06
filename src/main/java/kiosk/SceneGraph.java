@@ -3,7 +3,6 @@ package kiosk;
 import editor.ChildIdentifiers;
 import editor.Controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 import kiosk.models.*;
-import kiosk.scenes.ErrorScene;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
