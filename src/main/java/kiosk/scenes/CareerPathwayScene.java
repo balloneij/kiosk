@@ -76,7 +76,8 @@ public class CareerPathwayScene implements Scene {
                 GraphicsUtil.headerY + GraphicsUtil.headerH,
                 model.centerText,
                 careerButtons,
-                careerWeights);
+                careerWeights,
+                model.centerColor);
         this.spokeGraph.init(sketch);
 
         // Create home and back button
@@ -223,7 +224,8 @@ public class CareerPathwayScene implements Scene {
                 GraphicsUtil.headerY + GraphicsUtil.headerH,
                 model.centerText,
                 careerButtons,
-                careerWeights);
+                careerWeights,
+                model.centerColor);
         this.spokeGraph.init(sketch);
 
         // Attach user input hooks
@@ -288,7 +290,8 @@ public class CareerPathwayScene implements Scene {
                 GraphicsUtil.headerY + GraphicsUtil.headerH,
                 model.centerText,
                 careerButtons,
-                careerWeights);
+                careerWeights,
+                model.centerColor);
         this.spokeGraph.init(sketch);
 
         // Attach user input hooks

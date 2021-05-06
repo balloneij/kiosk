@@ -3,6 +3,8 @@ package kiosk.models;
 import kiosk.scenes.Scene;
 import kiosk.scenes.SpokeGraphPromptScene;
 
+import java.util.Arrays;
+
 public final class SpokeGraphPromptSceneModel implements SceneModel {
 
     public String id;
@@ -12,6 +14,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String careerCenterText;
     public String promptText;
     public ButtonModel[] answers;
+    public int[] answerCenterColor;
+    public int[] careersCenterColor;
 
     /**
      * Creates a new SG prompt scene model.
@@ -37,6 +41,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         model.careerCenterText = "";
         model.promptText = "";
         model.answers = new ButtonModel[]{};
+        model.answerCenterColor = new int[] { 0, 0, 0 };
+        model.careersCenterColor = new int[] { 0, 0, 0 };
         return model;
     }
 
@@ -81,6 +87,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         copy.careerCenterText = this.careerCenterText;
         copy.promptText = this.promptText;
         copy.answers = answersCopy;
+        copy.answerCenterColor = Arrays.copyOf(this.answerCenterColor, 3);
+        copy.careersCenterColor = Arrays.copyOf(this.careersCenterColor, 3);
         return copy;
     }
 

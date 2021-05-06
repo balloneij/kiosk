@@ -10,7 +10,6 @@ import kiosk.SceneGraph;
 import kiosk.UserScore;
 import kiosk.models.ButtonModel;
 import kiosk.models.CareerModel;
-import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 import processing.core.PConstants;
@@ -154,7 +153,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         ButtonModel prompt = new ButtonModel();
         prompt.isCircle = true;
-        prompt.rgb = new int[]{ 0, 0, 0 };
+        prompt.rgb = this.model.answerCenterColor;
         prompt.text = this.model.promptText;
         this.promptButton = new ButtonControl(
                 prompt,
@@ -190,7 +189,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Create spoke graph
         this.spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
-                this.model.careerCenterText, careerButtons, careerWeights);
+                this.model.careerCenterText, careerButtons, careerWeights, model.answerCenterColor);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
 
@@ -335,7 +334,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Create spoke graph
         spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
-                this.model.careerCenterText, careerButtons, careerWeights);
+                this.model.careerCenterText, careerButtons, careerWeights, model.careersCenterColor);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, offsetY);
@@ -409,7 +408,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Create spoke graph
         spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
-                this.model.careerCenterText, careerButtons, careerWeights);
+                this.model.careerCenterText, careerButtons, careerWeights, model.careersCenterColor);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, offsetY);
@@ -478,7 +477,7 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Create spoke graph
         spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
-                this.model.careerCenterText, careerButtons, careerWeights);
+                this.model.careerCenterText, careerButtons, careerWeights, model.answerCenterColor);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, 0);

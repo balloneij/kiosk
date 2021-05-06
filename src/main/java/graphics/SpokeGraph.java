@@ -32,6 +32,7 @@ public class SpokeGraph {
 
     private boolean wasInit = false;
     private boolean initWarningPrinted = false;
+    private int[] centerColor;
 
     /**
      * Create a spoke graph.
@@ -41,8 +42,8 @@ public class SpokeGraph {
      * @param centerText text of the center wheel
      * @param buttons to create a spoke graph off of
      */
-    public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons) {
-        this(size, x, y, centerText, buttons, new double[buttons.length]);
+    public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons, int[] centerColor) {
+        this(size, x, y, centerText, buttons, new double[buttons.length], centerColor);
         Arrays.fill(weights, 0); // Set all weights to 0
     }
 
@@ -55,11 +56,12 @@ public class SpokeGraph {
      * @param buttons to create a spoke graph off of
      */
     public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons,
-                      double[] weights) {
+                      double[] weights, int[] centerColor) {
         this.centerText = centerText;
         this.centerX = (float) (x + size / 2);
         this.centerY = (float) (y + size / 2);
         this.weights = weights;
+        this.centerColor = centerColor;
 
         int amountOfZeros = 0;
         boolean itemHigherThanOne = false;
@@ -200,7 +202,7 @@ public class SpokeGraph {
         sketch.noStroke();
 
         // Draw the center circle
-        sketch.fill(0);
+        sketch.fill(this.centerColor[0], this.centerColor[1], this.centerColor[2]);
         sketch.ellipse((float) (centerX + offsetX), (float) (centerY + offsetY),
                 (float) (maxButtonRadius + minButtonRadius),
                 (float) (maxButtonRadius + minButtonRadius));

@@ -5,7 +5,7 @@
    <string>rootSceneId</string>
    <void method="set">
     <object idref="LoadedSurveyModel0"/>
-    <string>Generated7ef622c6-2823-4ec7-b46d-7cef3b97cb8b</string>
+    <string>Generated4f64d883-f34a-4625-a7f3-55e952092baa</string>
    </void>
   </void>
   <void class="kiosk.models.LoadedSurveyModel" method="getField">
@@ -1255,7 +1255,7 @@
         <string>id</string>
         <void method="set">
          <object idref="PromptSceneModel0"/>
-         <string>Generated7ef622c6-2823-4ec7-b46d-7cef3b97cb8b</string>
+         <string>Generated4f64d883-f34a-4625-a7f3-55e952092baa</string>
         </void>
        </void>
        <void class="kiosk.models.PromptSceneModel" method="getField">
@@ -2161,6 +2161,13 @@ What big problem do you want to help solve?</string>
          <array class="kiosk.models.CareerModel" length="0"/>
         </void>
        </void>
+       <void class="kiosk.models.CareerPathwaySceneModel" method="getField">
+        <string>centerColor</string>
+        <void method="set">
+         <object idref="CareerPathwaySceneModel0"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
       </object>
      </void>
      <void index="7">
@@ -2297,6 +2304,20 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
          </array>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answerCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careersCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel0"/>
+         <array class="int" length="3"/>
         </void>
        </void>
       </object>
@@ -2437,6 +2458,20 @@ What big problem do you want to help solve?</string>
          </array>
         </void>
        </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answerCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careersCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel1"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
       </object>
      </void>
      <void index="9">
@@ -2564,6 +2599,20 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
          </array>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answerCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careersCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel2"/>
+         <array class="int" length="3"/>
         </void>
        </void>
       </object>
@@ -3107,6 +3156,20 @@ What big problem do you want to help solve?</string>
          </array>
         </void>
        </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answerCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel3"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careersCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel3"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
       </object>
      </void>
      <void index="12">
@@ -3234,6 +3297,20 @@ What big problem do you want to help solve?</string>
            </object>
           </void>
          </array>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answerCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careersCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel4"/>
+         <array class="int" length="3"/>
         </void>
        </void>
       </object>
@@ -3365,6 +3442,20 @@ What big problem do you want to help solve?</string>
          </array>
         </void>
        </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>answerCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel5"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
+       <void class="kiosk.models.SpokeGraphPromptSceneModel" method="getField">
+        <string>careersCenterColor</string>
+        <void method="set">
+         <object idref="SpokeGraphPromptSceneModel5"/>
+         <array class="int" length="3"/>
+        </void>
+       </void>
       </object>
      </void>
     </array>
@@ -3374,15 +3465,15 @@ What big problem do you want to help solve?</string>
 <void class="kiosk.models.ButtonModel" id="Field0" method="getField">
  <string>rgb</string>
  <void id="intArray0" method="get">
-  <object idref="ButtonModel17"/>
+  <object idref="ButtonModel19"/>
   <void index="1">
-   <int>108</int>
+   <int>97</int>
   </void>
   <void index="2">
-   <int>103</int>
+   <int>157</int>
   </void>
   <void index="0">
-   <int>51</int>
+   <int>21</int>
   </void>
  </void>
 </void>
@@ -3422,15 +3513,15 @@ What big problem do you want to help solve?</string>
 <void class="kiosk.models.ButtonModel" id="Field3" method="getField">
  <string>rgb</string>
  <void id="intArray3" method="get">
-  <object idref="ButtonModel19"/>
+  <object idref="ButtonModel17"/>
   <void index="1">
-   <int>97</int>
+   <int>108</int>
   </void>
   <void index="2">
-   <int>157</int>
+   <int>103</int>
   </void>
   <void index="0">
-   <int>21</int>
+   <int>51</int>
   </void>
  </void>
 </void>

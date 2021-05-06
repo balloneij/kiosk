@@ -6,10 +6,17 @@ import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.Node;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import kiosk.Kiosk;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
+import kiosk.models.CareerPathwaySceneModel;
 import kiosk.models.CreditsSceneModel;
 import kiosk.models.FilterGroupModel;
 import kiosk.models.PathwaySceneModel;
@@ -63,7 +70,8 @@ public class PathwayScene implements Scene {
                 screenW / 2f - size / 2,
                 GraphicsUtil.headerY + GraphicsUtil.headerH,
                 this.model.centerText,
-                this.model.buttonModels);
+                this.model.buttonModels,
+                model.centerColor);
     }
 
     @Override
