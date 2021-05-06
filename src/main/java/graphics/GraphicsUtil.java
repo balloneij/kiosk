@@ -215,7 +215,7 @@ public class GraphicsUtil {
         Graphics.useGothic(sketch, headerBodyFontSize, false);
         sketch.rectMode(PConstants.CENTER);
         sketch.text(body, (int) (headerCenterX + offsetX),
-                (int) ((headerBodyY * 1.15) + offsetY), (int) (headerW * 0.95), headerH / 2);
+                (int) ((headerBodyY * 1.1) + offsetY), (int) (headerW * 0.95), headerH / 2);
     }
 
     /**
