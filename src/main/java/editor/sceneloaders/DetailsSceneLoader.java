@@ -94,6 +94,7 @@ public class DetailsSceneLoader {
 
         if (answer.target.equals("null")) {
             answer.target = controller.createNewScene(false).getId();
+            graph.registerSceneModel(model); // Re-register the model to update the scene
         }
 
         // Setup the text field for editing the answer

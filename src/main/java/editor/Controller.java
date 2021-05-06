@@ -336,22 +336,25 @@ public class Controller implements Initializable {
                     continue;
                 }
 
-                if (depths.get(childId) < depth
-                        || childId.equals(rootModel.getId())) {
-                    // This is how we determine if this is THE parent,
-                    // or just a child that needs pruning
-                    if (depths.get(childId) == 0 && !childId.equals(rootParentId)) {
+                // needs to re-check in the case that a scene targeted by two scenes was deleted
+                if (depths.containsKey(childId)) {
+                    if (depths.get(childId) < depth
+                            || childId.equals(rootModel.getId())) {
+                        // This is how we determine if this is THE parent,
+                        // or just a child that needs pruning
+                        if (depths.get(childId) == 0 && !childId.equals(rootParentId)) {
+                            depths.put(childId, depth + 1);
+                        }
+                        SceneModel childSceneModel = sceneGraph.getSceneById(childId);
+                        // Add the parent to the tree element
+                        root.getChildren().add(new TreeItem<>(childSceneModel));
+                        continue;
+                    } else if (depths.get(childId) < depth + 1) {
                         depths.put(childId, depth + 1);
                     }
-                    SceneModel childSceneModel = sceneGraph.getSceneById(childId);
-                    // Add the parent to the tree element
-                    root.getChildren().add(new TreeItem<>(childSceneModel));
-                    continue;
-                } else if (depths.get(childId) < depth + 1) {
+                } else {
                     depths.put(childId, depth + 1);
                 }
-            } else {
-                depths.put(childId, depth + 1);
             }
 
             // check that the child being added is new
@@ -490,7 +493,7 @@ public class Controller implements Initializable {
      * @param intent Whether the user has intentionally created the scene, or
      *     whether the scene was created automatically via a new
      *     button
-     * @return the newly-created scene
+     * @return the newly-created EmptySceneModel
      * @apiNote  It's a good idea to call rebuildSceneGraphTreeView() and
      *     rebuildToolBar() soon after using this method.
      * @implNote   rebuildSceneGraphTreeView() cannot be called __in__ this
@@ -502,7 +505,7 @@ public class Controller implements Initializable {
      *     for an empty scene instead of the current scene.
      */
     @FXML
-    public SceneModel createNewScene(boolean intent) {
+    public EmptySceneModel createNewScene(boolean intent) {
         EmptySceneModel model = new EmptySceneModel();
         model.message = "This scene is empty! Change the scene type on the left side";
         model.intent = intent;
