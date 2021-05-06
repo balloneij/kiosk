@@ -569,13 +569,16 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     }
 
     private void onMousePressed(MouseEvent event) {
-        if (!this.isPressed && this.rect.contains(event.getX(), event.getY())) {
+        int x = event.getX();
+        int y = event.getY();
+        if (!this.isPressed && this.rect.contains(x, y)) {
             this.isPressed = true;
             this.isSnapping = false;
-            pressX = event.getX();
-            pressY = event.getY();
+            pressX = x;
+            pressY = y;
             offsetX = this.rect.x - pressX;
             offsetY = this.rect.y - pressY;
+            System.out.println("press " + x + ", " + y);
         }
     }
 
@@ -589,6 +592,7 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
             pressY = y;
             offsetX = this.rect.x - pressX;
             offsetY = this.rect.y - pressY;
+            System.out.println("touch " + x + ", " + y);
         }
     }
 
