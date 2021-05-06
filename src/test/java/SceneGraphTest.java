@@ -1,4 +1,3 @@
-import kiosk.CareerModelLoader;
 import kiosk.SceneGraph;
 import kiosk.models.*;
 import org.junit.jupiter.api.Test;

@@ -7,9 +7,9 @@ import java.io.IOException;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import kiosk.CareerModelLoader;
 import kiosk.SceneGraph;
 import kiosk.models.CareerDescriptionModel;
+import kiosk.models.CareerModelLoader;
 
 public class CareerDescriptionSceneLoader {
 
