@@ -111,14 +111,6 @@ public class Kiosk extends PApplet {
         }
 
         File careersFile = new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH);
-        if (!careersFile.exists()) {
-            try {
-                careersFile.createNewFile();
-            } catch (IOException e) {
-                // Recoverable without any issues
-            }
-        }
-
         CareerModelLoader careerModelLoader = new CareerModelLoader(careersFile);
         this.sceneGraph = new SceneGraph(survey, careerModelLoader);
 

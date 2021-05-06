@@ -11,8 +11,14 @@ public class Doctor {
     private boolean hasIssues = false;
     private final StringBuilder summary;
 
+    /**
+     * Create a doctor for keeping track of issues.
+     */
     public Doctor() {
         this.summary = new StringBuilder();
+        this.summary.append("There are some potential issues with your careers.csv file.\n"
+                + "You can fix them and restart the kiosk, "
+                + "or simply press 'Restart' to continue\n\n");
     }
 
     /**

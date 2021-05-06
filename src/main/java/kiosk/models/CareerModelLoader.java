@@ -2,14 +2,15 @@ package kiosk.models;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import kiosk.Doctor;
-import kiosk.Riasec;
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
+import kiosk.Doctor;
+import kiosk.Riasec;
 
 public class CareerModelLoader {
 
@@ -49,9 +50,18 @@ public class CareerModelLoader {
      * @return a list of careers loaded from disk
      */
     public CareerModel[] load() {
+        if (!this.csvFile.exists()) {
+            createBlankCsv();
+        }
+
         LinkedList<CareerModel> careers = new LinkedList<>();
         try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
-            for (int rowNumber = 0; reader.peek() != null; rowNumber++) {
+            // Discard the first row because it's the header
+            if (reader.peek() != null) {
+                reader.readNext();
+            }
+
+            for (int rowNumber = 1; reader.peek() != null; rowNumber++) {
                 String[] row = reader.readNext();
 
                 if (validateRow(rowNumber, row)) {
@@ -91,6 +101,15 @@ public class CareerModelLoader {
             careersResult[i] = careers.pop();
         }
         return careersResult;
+    }
+
+    private void createBlankCsv() {
+        try (PrintWriter printWriter = new PrintWriter(this.csvFile)) {
+            printWriter.println(
+                    "Categories,Fields,Holland Codes,Career Name,Description,Image Path");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean validateRow(int rowNumber, String[] row) {
