@@ -1,5 +1,6 @@
 package graphics;
 
+import java.util.Random;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
@@ -30,6 +31,8 @@ public class Color {
     public final int dwRed;
     public final int dwGreen;
 
+    private static Random rand;
+
     private static PApplet sketch;
     private static Color instance;
 
@@ -49,6 +52,8 @@ public class Color {
                 DW_LIGHT_ORANGE_RGB[0], DW_LIGHT_ORANGE_RGB[1], DW_LIGHT_ORANGE_RGB[2]);
         dwRed = sketch.color(DW_RED_RGB[0], DW_RED_RGB[1], DW_RED_RGB[2]);
         dwGreen = sketch.color(DW_GREEN_RGB[0], DW_GREEN_RGB[1], DW_GREEN_RGB[2]);
+
+        rand = new Random();
     }
 
     /**
@@ -82,5 +87,41 @@ public class Color {
         rgb = (rgb << 8) + color[1];
         rgb = (rgb << 8) + color[2];
         return rgb;
+    }
+
+    /**
+     * Randomly chooses a DW color.
+     * @return the int of a color
+     */
+    public static int randomColor() {
+        rand.nextInt(11);
+        switch (rand.nextInt(11)) {
+            case 0:
+                return sketch.color(DW_WHITE_RGB[0], DW_WHITE_RGB[1], DW_WHITE_RGB[2]);
+            case 1:
+                return sketch.color(DW_BLACK_RGB[0], DW_BLACK_RGB[1], DW_BLACK_RGB[2]);
+            case 2:
+                return sketch.color(DW_BLUE_RGB[0], DW_BLUE_RGB[1], DW_BLUE_RGB[2]);
+            case 3:
+                return sketch.color(DW_LIGHT_BLUE_RGB[0],
+                        DW_LIGHT_BLUE_RGB[1], DW_LIGHT_BLUE_RGB[2]);
+            case 4:
+                return sketch.color(DW_DARK_BLUE_RGB[0], DW_DARK_BLUE_RGB[1], DW_DARK_BLUE_RGB[2]);
+            case 5:
+                return sketch.color(DW_MAROON_RGB[0], DW_MAROON_RGB[1], DW_MAROON_RGB[2]);
+            case 6:
+                return sketch.color(DW_TEAL_RGB[0], DW_TEAL_RGB[1], DW_TEAL_RGB[2]);
+            case 7:
+                return sketch.color(DW_ORANGE_RGB[0], DW_ORANGE_RGB[1], DW_ORANGE_RGB[2]);
+            case 8:
+                return sketch.color(DW_LIGHT_ORANGE_RGB[0],
+                        DW_LIGHT_ORANGE_RGB[1], DW_LIGHT_ORANGE_RGB[2]);
+            case 9:
+                return sketch.color(DW_RED_RGB[0], DW_RED_RGB[1], DW_RED_RGB[2]);
+            case 10:
+                return sketch.color(DW_GREEN_RGB[0], DW_GREEN_RGB[1], DW_GREEN_RGB[2]);
+            default:
+                return sketch.color(DW_BLACK_RGB[0], DW_BLACK_RGB[1], DW_BLACK_RGB[2]);
+        }
     }
 }

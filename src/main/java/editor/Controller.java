@@ -162,12 +162,7 @@ public class Controller implements Initializable {
         // https://docs.oracle.com/javafx/2/ui_controls/tree-view.htm Example 13-3
         sceneGraphTreeView.setCellFactory(p -> new SceneModelTreeCell(this));
 
-        sceneGraph.addSceneChangeCallback(newSceneModel -> sceneTypeComboBox
-                .getItems()
-                .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
-                .stream()
-                .findFirst()
-                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel)));
+        sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
 
         MenuItem newSceneMenuItem = new MenuItem("Create a New Scene");
         sceneGraphTreeView.setContextMenu(new ContextMenu(newSceneMenuItem));
@@ -208,6 +203,7 @@ public class Controller implements Initializable {
         } else {
             Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
+        populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
     }
 
     /**
@@ -220,8 +216,8 @@ public class Controller implements Initializable {
             sceneTypeComboBox.getSelectionModel().clearSelection();
         }
 
-        sceneTypeComboBox.setDisable(false);
         previousId = model.getId();
+        sceneTypeComboBox.setDisable(false);
         if (model instanceof PromptSceneModel) {
             PromptSceneLoader.loadScene(this, (PromptSceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof SpokeGraphPromptSceneModel) {
@@ -581,6 +577,8 @@ public class Controller implements Initializable {
             // If we load a file, the toolbar can hold old values.
             // Rebuild toolbar to clear them all out
             rebuildToolbar(sceneGraph.getCurrentSceneModel());
+            sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
+            populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
             this.hasPendingChanges = false;
             Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
@@ -595,41 +593,27 @@ public class Controller implements Initializable {
                 sceneGraph.reset();
                 rebuildSceneGraphTreeView();
                 rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
+                populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
                 hasPendingChanges = false;
                 Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
             } else if (result.get() == UnsavedChangesAlert.NO_SAVE) {
-                File careersFile = new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH);
-                if (!careersFile.exists()) {
-                    try {
-                        careersFile.createNewFile();
-                    } catch (IOException e) {
-                        // Recoverable without any issues
-                    }
-                }
-
-                // Load survey and careers from fields
-                LoadedSurveyModel survey = LoadedSurveyModel.readFromFile(this.surveyFile);
-
-                // Create career loader
-                CareerModelLoader careerModelLoader =
-                        new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
-
-                // Reload the survey
-                sceneGraph.loadSurvey(survey, careerModelLoader);
-
-                // Push any issues as the first scene
+                LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
+                sceneGraph.loadSurvey(surveyModel);
                 sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
-                if (careerModelLoader.hasIssues()) {
-                    DefaultSceneModel model = new DefaultSceneModel();
-                    model.message = careerModelLoader.getIssuesSummary();
-                    sceneGraph.pushScene(model);
-                }
-
+                sceneGraph.reset();
                 rebuildSceneGraphTreeView();
                 rebuildToolbar(sceneGraph.getCurrentSceneModel());
-                Controller.hasPendingChanges = false;
+                sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
+                populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
+                this.hasPendingChanges = false;
                 Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
             }
+
+            rebuildSceneGraphTreeView();
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
+            Controller.hasPendingChanges = false;
+            Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
     }
 
@@ -737,6 +721,15 @@ public class Controller implements Initializable {
 
     private LoadedSurveyModel createSurvey() {
         return sceneGraph.exportSurvey();
+    }
+
+    private void populateSceneTypeChooser(SceneModel newSceneModel) {
+        sceneTypeComboBox
+                .getItems()
+                .filtered(scene -> scene.toString().equals(newSceneModel.toString()))
+                .stream()
+                .findFirst()
+                .ifPresent(sceneModel -> sceneTypeComboBox.setValue(sceneModel));
     }
 
     private class EditorSceneChangeCallback implements EventListener<SceneModel> {

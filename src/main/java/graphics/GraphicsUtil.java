@@ -112,11 +112,42 @@ public class GraphicsUtil {
 
     /**
      * Initialize the MSOE button's ButtonControl model.
+     * Uses the other initializeMsoeButton, by passing 0's for the offsets.
      * @param sketch to create on.
      * @return MSOE button control
      */
     public static ButtonControl initializeMsoeButton(Kiosk sketch) {
+        return initializeMsoeButton(sketch, 0, 0);
+    }
 
+    /**
+     * Initialize the MSOE button's ButtonControl model.
+     * @param sketch to create on.
+     * @return MSOE button control
+     */
+    public static ButtonControl initializeMsoeButton(Kiosk sketch, float offsetX, float offsetY) {
+        screenW = Kiosk.getSettings().screenW;
+        screenH = Kiosk.getSettings().screenH;
+
+        commonButtonWidth = screenW / 8;
+        commonButtonHeight = screenH / 8;
+        commonButtonPadding = screenH / 20;
+
+        ButtonModel msoeButtonModel = new ButtonModel();
+        msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png",
+                (int) (commonButtonWidth * 0.75), (int) (commonButtonWidth * 0.9));
+        ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
+                (int) (sketch.width - (commonButtonWidth * 6 / 7)
+                        - commonButtonPadding + offsetX),
+                (int) (sketch.height - (commonButtonHeight * 3 / 2)
+                        - commonButtonPadding + offsetY),
+                (int) (commonButtonWidth * 0.75), (int) (commonButtonWidth * 0.9), false);
+        msoeButton.setNoButton(true);
+        msoeButton.init(sketch);
+        return msoeButton;
+    }
+
+    public static ButtonControl initializeMsoeButtonUpperRight(Kiosk sketch) {
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
 
@@ -127,8 +158,8 @@ public class GraphicsUtil {
         ButtonModel msoeButtonModel = new ButtonModel();
         msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
         ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
-                sketch.width - (commonButtonWidth * 3 / 4) - commonButtonPadding,
-                sketch.height - (commonButtonHeight * 5 / 4) - commonButtonPadding,
+                sketch.width - (commonButtonWidth)  + (commonButtonPadding / 3),
+                commonButtonPadding - (commonButtonPadding / 3),
                 commonButtonWidth * 3 / 4, commonButtonWidth * 3 / 4, false);
         msoeButton.setNoButton(true);
         msoeButton.init(sketch);
@@ -141,15 +172,16 @@ public class GraphicsUtil {
      * @param title text
      * @param body text
      */
-    public static void drawHeader(Kiosk sketch, String title, String body) {
+    public static void drawHeader(Kiosk sketch, String title,
+                                  String body, double offsetX, double offsetY) {
 
         screenW = Kiosk.getSettings().screenW;
         screenH = Kiosk.getSettings().screenH;
 
         headerW = screenW * 3f / 4;
         headerH = screenH / 6f;
-        headerX = (screenW - headerW) / 2;
-        headerY = screenH / 32f;
+        headerX = (float) (((screenW - headerW) / 2));
+        headerY = (float) ((screenH / 32f));
         headerCenterX = headerX + (headerW / 2);
         headerCenterY = headerY + (headerH / 2);
         headerCurveRadius = (int) (headerH);
@@ -167,7 +199,8 @@ public class GraphicsUtil {
         sketch.stroke(255);
 
         Graphics.drawRoundedRectangle(sketch,
-                headerX + headerW / 2, headerY + headerH / 2,
+                (float) (headerX + offsetX + headerW / 2),
+                (float) (headerY + offsetY + headerH / 2),
                 headerW, headerH, headerCurveRadius);
 
         // Draw the title and body
@@ -176,13 +209,13 @@ public class GraphicsUtil {
 
         Graphics.useGothic(sketch, headerTitleFontSize, true);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(title, headerCenterX, headerTitleY,
+        sketch.text(title, (int) (headerCenterX + offsetX), (int) (headerTitleY + offsetY),
                 (int) (headerW * 0.95), headerH / 2);
 
         Graphics.useGothic(sketch, headerBodyFontSize, false);
         sketch.rectMode(PConstants.CENTER);
-        sketch.text(body, headerCenterX,
-                (int) (headerBodyY * 1.15), (int) (headerW * 0.95), headerH / 2);
+        sketch.text(body, (int) (headerCenterX + offsetX),
+                (int) ((headerBodyY * 1.15) + offsetY), (int) (headerW * 0.95), headerH / 2);
     }
 
     /**

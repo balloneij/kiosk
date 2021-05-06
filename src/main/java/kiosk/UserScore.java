@@ -70,17 +70,19 @@ public class UserScore {
      * backwards in the survey.
      */
     public void undo() {
-        ScoreOperation operation = this.history.pop();
+        if (!this.history.isEmpty()) {
+            ScoreOperation operation = this.history.pop();
 
-        // Careers were removed in the previous operation, so add them back
-        if (operation.careersRemoved != null) {
-            for (String career : operation.careersRemoved) {
-                includedCareers.put(career, allCareers.get(career));
+            // Careers were removed in the previous operation, so add them back
+            if (operation.careersRemoved != null) {
+                for (String career : operation.careersRemoved) {
+                    includedCareers.put(career, allCareers.get(career));
+                }
             }
-        }
 
-        // Undo RIASEC operation
-        this.subtract(operation.category);
+            // Undo RIASEC operation
+            this.subtract(operation.category);
+        }
     }
 
     /**
@@ -172,24 +174,48 @@ public class UserScore {
         return realistic;
     }
 
+    public void setRealistic(int value) {
+        realistic = value;
+    }
+
     public int getInvestigative() {
         return investigative;
+    }
+
+    public void setInvestigative(int value) {
+        investigative = value;
     }
 
     public int getArtistic() {
         return artistic;
     }
 
+    public void setArtistic(int value) {
+        artistic = value;
+    }
+
     public int getSocial() {
         return social;
+    }
+
+    public void setSocial(int value) {
+        social = value;
     }
 
     public int getEnterprising() {
         return enterprising;
     }
 
+    public void setEnterprising(int value) {
+        enterprising = value;
+    }
+
     public int getConventional() {
         return conventional;
+    }
+
+    public void setConventional(int value) {
+        conventional = value;
     }
 
     @Override
