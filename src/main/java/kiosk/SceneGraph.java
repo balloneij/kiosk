@@ -52,8 +52,6 @@ public class SceneGraph {
      * @param survey model to load from
      */
     public SceneGraph(LoadedSurveyModel survey, CareerModelLoader careerModelLoader) {
-    public SceneGraph(LoadedSurveyModel survey) {
-        this.userScore = new UserScore(survey.careers);
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
         this.sceneChangeCallbacks = new LinkedList<>();
