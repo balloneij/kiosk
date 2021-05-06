@@ -1,15 +1,9 @@
 import editor.Controller;
 import editor.Editor;
 import javafx.scene.control.TreeItem;
-import kiosk.CareerModelLoader;
 import kiosk.SceneGraph;
 import kiosk.Settings;
-import kiosk.models.ButtonModel;
-import kiosk.models.EmptySceneModel;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
+import kiosk.models.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,5 @@
 package kiosk.models;
 
-import javafx.scene.text.Text;
-import kiosk.CareerModelLoader;
 import kiosk.Riasec;
 
 /**

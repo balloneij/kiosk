@@ -1,15 +1,11 @@
 package kiosk;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import graphics.Boop;
 import graphics.Color;
 import graphics.Graphics;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,13 +21,8 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import kiosk.models.CareerModel;
-import kiosk.models.DefaultSceneModel;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.PromptSceneModel;
-import kiosk.models.SceneModel;
-import kiosk.models.TimeoutSceneModel;
+
+import kiosk.models.*;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
@@ -120,14 +111,6 @@ public class Kiosk extends PApplet {
         }
 
         File careersFile = new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH);
-        if (!careersFile.exists()) {
-            try {
-                careersFile.createNewFile();
-            } catch (IOException e) {
-                // Recoverable without any issues
-            }
-        }
-
         CareerModelLoader careerModelLoader = new CareerModelLoader(careersFile);
         this.sceneGraph = new SceneGraph(survey, careerModelLoader);
 
@@ -379,6 +362,11 @@ public class Kiosk extends PApplet {
         }
     }
 
+    @Override
+    protected void handleKeyEvent(KeyEvent event) {
+        super.handleKeyEvent(event);
+    }
+
     /**
      * Event handler for when any key is pressed. Only certain keys have responses...
      * F2 - Open JFileChooser to select (only) an XML file
@@ -387,6 +375,7 @@ public class Kiosk extends PApplet {
      */
     @Override
     public void keyPressed(KeyEvent event) {
+        super.keyPressed(event);
         if (this.hotkeysEnabled) {
             if (event.getKeyCode() == 113) {
                 // F2 Key Press
