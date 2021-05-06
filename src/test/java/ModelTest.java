@@ -65,7 +65,6 @@ public class ModelTest {
         LoadedSurveyModel modelRead = writer.test();
 
         // Assert
-        assertEquals(model.careers.length, modelRead.careers.length);
         assertEquals(model.rootSceneId, modelRead.rootSceneId);
     }
 

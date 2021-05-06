@@ -1,5 +1,6 @@
 package editor;
 
+import editor.sceneloaders.CareerDescriptionSceneLoader;
 import editor.sceneloaders.CareerPathwaySceneLoader;
 import editor.sceneloaders.DetailsSceneLoader;
 import editor.sceneloaders.PathwaySceneLoader;
@@ -37,22 +38,22 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import kiosk.CareerModelLoader;
 import kiosk.EventListener;
 import kiosk.SceneGraph;
 import kiosk.SceneModelException;
 import kiosk.models.CareerDescriptionModel;
 import kiosk.models.CareerModel;
 import kiosk.models.CareerPathwaySceneModel;
+import kiosk.models.DefaultSceneModel;
 import kiosk.models.DetailsSceneModel;
 import kiosk.models.EmptySceneModel;
 import kiosk.models.ErrorSceneModel;
-import kiosk.models.FilterGroupModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.PathwaySceneModel;
 import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
-import kiosk.scenes.EmptyScene;
 
 public class Controller implements Initializable {
 
@@ -229,6 +230,10 @@ public class Controller implements Initializable {
             PathwaySceneLoader.loadScene(this, (PathwaySceneModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof DetailsSceneModel) {
             DetailsSceneLoader.loadScene(this, (DetailsSceneModel) model, toolbarBox, sceneGraph);
+        } else if (model instanceof CareerDescriptionModel) {
+            sceneTypeComboBox.setDisable(true);
+            CareerDescriptionSceneLoader.loadScene(
+                    this, (CareerDescriptionModel) model, toolbarBox, sceneGraph);
         } else if (model instanceof EmptySceneModel) {
             toolbarBox.getChildren().clear();
         } else {
@@ -556,47 +561,59 @@ public class Controller implements Initializable {
             // Update the scene graph, reattach the editor callback, refresh the editor
             // Note: rebuildToolbar() is invoked on sceneGraph.reset(), but we must explicitly
             // rebuild the tree view.
-            sceneGraph.loadSurvey(survey);
+            CareerModelLoader careerModelLoader =
+                    new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
+            sceneGraph.loadSurvey(survey, careerModelLoader);
             sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
             sceneGraph.reset();
+
+            // Display any issues
+            if (careerModelLoader.hasIssues()) {
+                DefaultSceneModel model = new DefaultSceneModel();
+                model.message = careerModelLoader.getIssuesSummary();
+                sceneGraph.pushScene(model);
+            }
+
             rebuildSceneGraphTreeView();
             // If we load a file, the toolbar can hold old values.
             // Rebuild toolbar to clear them all out
             rebuildToolbar(sceneGraph.getCurrentSceneModel());
             sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
             populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
-            this.hasPendingChanges = false;
+            Controller.hasPendingChanges = false;
             Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
     }
 
     @FXML
     private void reloadSurvey() {
-        if (hasPendingChanges) {
-            Optional<ButtonType> result = UnsavedChangesAlert.showAndWait();
-            if (result.isPresent()) {
-                if (result.get() == UnsavedChangesAlert.SAVE) {
-                    saveSurvey();
-                    sceneGraph.reset();
-                    rebuildSceneGraphTreeView();
-                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
-                    sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
-                    populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
-                    hasPendingChanges = false;
-                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
-                } else if (result.get() == UnsavedChangesAlert.NO_SAVE) {
-                    LoadedSurveyModel surveyModel = LoadedSurveyModel.readFromFile(this.surveyFile);
-                    sceneGraph.loadSurvey(surveyModel);
-                    sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
-                    sceneGraph.reset();
-                    rebuildSceneGraphTreeView();
-                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
-                    sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
-                    populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
-                    this.hasPendingChanges = false;
-                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
-                }
+        Optional<ButtonType> result = UnsavedChangesAlert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == UnsavedChangesAlert.SAVE) {
+                saveSurvey();
             }
+
+            // Reload from disk
+            LoadedSurveyModel survey = LoadedSurveyModel.readFromFile(this.surveyFile);
+            CareerModelLoader careerModelLoader =
+                    new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
+            sceneGraph.loadSurvey(survey, careerModelLoader);
+            sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
+            sceneGraph.reset();
+
+            // Display any issues
+            if (careerModelLoader.hasIssues()) {
+                DefaultSceneModel model = new DefaultSceneModel();
+                model.message = careerModelLoader.getIssuesSummary();
+                sceneGraph.pushScene(model);
+            }
+
+            rebuildSceneGraphTreeView();
+            rebuildToolbar(sceneGraph.getCurrentSceneModel());
+            sceneGraph.addSceneChangeCallback(this::populateSceneTypeChooser);
+            populateSceneTypeChooser(sceneGraph.getCurrentSceneModel());
+            Controller.hasPendingChanges = false;
+            Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
         }
     }
 
@@ -703,9 +720,7 @@ public class Controller implements Initializable {
     }
 
     private LoadedSurveyModel createSurvey() {
-        LoadedSurveyModel survey = sceneGraph.exportSurvey();
-        survey.careers = careers;
-        return survey;
+        return sceneGraph.exportSurvey();
     }
 
     private void populateSceneTypeChooser(SceneModel newSceneModel) {

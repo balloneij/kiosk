@@ -1,11 +1,16 @@
 package kiosk;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import graphics.Boop;
 import graphics.Color;
 import graphics.Graphics;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -24,6 +29,7 @@ import kiosk.models.CareerModel;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
+import kiosk.models.PromptSceneModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
 import kiosk.scenes.Control;
@@ -39,7 +45,6 @@ public class Kiosk extends PApplet {
     public boolean isEditor;
     protected SceneGraph sceneGraph;
     private String surveyPath;
-    private CareerModel[] careers;
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private boolean currentSceneIsRoot = false;
@@ -113,8 +118,24 @@ public class Kiosk extends PApplet {
             defaultScenes.add(new DefaultSceneModel());
             survey = new LoadedSurveyModel(defaultScenes);
         }
-        this.sceneGraph = new SceneGraph(survey);
-        this.careers = survey.careers;
+
+        File careersFile = new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH);
+        if (!careersFile.exists()) {
+            try {
+                careersFile.createNewFile();
+            } catch (IOException e) {
+                // Recoverable without any issues
+            }
+        }
+
+        CareerModelLoader careerModelLoader = new CareerModelLoader(careersFile);
+        this.sceneGraph = new SceneGraph(survey, careerModelLoader);
+
+        if (careerModelLoader.hasIssues()) {
+            DefaultSceneModel model = new DefaultSceneModel();
+            model.message = careerModelLoader.getIssuesSummary();
+            this.sceneGraph.pushScene(model);
+        }
 
         this.mouseListeners = new LinkedHashMap<>();
         for (InputEvent e : InputEvent.values()) {
@@ -191,10 +212,20 @@ public class Kiosk extends PApplet {
             exception.printStackTrace();
         }
 
-        // Update the scene graph
-        sceneGraph.loadSurvey(survey);
-        this.careers = survey.careers;
+        // Create career loader
+        CareerModelLoader careerModelLoader =
+                new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
+
+        // Reload the survey
+        sceneGraph.loadSurvey(survey, careerModelLoader);
+
+        // Push any issues as the first scene
         sceneGraph.reset();
+        if (careerModelLoader.hasIssues()) {
+            DefaultSceneModel model = new DefaultSceneModel();
+            model.message = careerModelLoader.getIssuesSummary();
+            sceneGraph.pushScene(model);
+        }
     }
 
     public void reloadSettings(boolean isFullScreen) {
@@ -330,10 +361,6 @@ public class Kiosk extends PApplet {
 
     public UserScore getUserScore() {
         return this.sceneGraph.getUserScore();
-    }
-
-    public CareerModel[] getAllCareers() {
-        return careers;
     }
 
     /**

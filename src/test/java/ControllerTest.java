@@ -1,6 +1,7 @@
 import editor.Controller;
 import editor.Editor;
 import javafx.scene.control.TreeItem;
+import kiosk.CareerModelLoader;
 import kiosk.SceneGraph;
 import kiosk.Settings;
 import kiosk.models.ButtonModel;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,8 +55,8 @@ public class ControllerTest {
         sceneModels.add(c);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        SceneGraph sceneGraph = new SceneGraph(loadedSurveyModel);
-        Controller.sceneGraph = sceneGraph;
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        Controller.sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller controller = new Controller();
 
         // Execution
@@ -112,7 +114,8 @@ public class ControllerTest {
         sceneModels.add(e);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        SceneGraph sceneGraph = new SceneGraph(loadedSurveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        SceneGraph sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller.sceneGraph = sceneGraph;
         Controller controller = new Controller();
 
@@ -169,7 +172,8 @@ public class ControllerTest {
         sceneModels.add(orphan);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        SceneGraph sceneGraph = new SceneGraph(loadedSurveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        SceneGraph sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller.sceneGraph = sceneGraph;
         Controller controller = new Controller();
 
@@ -229,7 +233,8 @@ public class ControllerTest {
         sceneModels.add(b);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        SceneGraph sceneGraph = new SceneGraph(loadedSurveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        SceneGraph sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller.sceneGraph = sceneGraph;
         Controller controller = new Controller();
 
@@ -272,7 +277,8 @@ public class ControllerTest {
         sceneModels.add(b);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        Controller.sceneGraph = new SceneGraph(loadedSurveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        Controller.sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller controller = new Controller();
 
         // Execution
@@ -301,7 +307,8 @@ public class ControllerTest {
         sceneModels.add(b);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        Controller.sceneGraph = new SceneGraph(loadedSurveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        Controller.sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller controller = new Controller();
 
         // Execution
@@ -336,7 +343,8 @@ public class ControllerTest {
         sceneModels.add(d);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        Controller.sceneGraph = new SceneGraph(loadedSurveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        Controller.sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller controller = new Controller();
 
         // Execution
@@ -358,7 +366,8 @@ public class ControllerTest {
         sceneModels.add(a);
 
         LoadedSurveyModel loadedSurveyModel = new LoadedSurveyModel(sceneModels);
-        Controller.sceneGraph = new SceneGraph(loadedSurveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        Controller.sceneGraph = new SceneGraph(loadedSurveyModel, careerModelLoader);
         Controller controller = new Controller();
 
         // Execution

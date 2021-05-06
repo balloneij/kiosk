@@ -16,6 +16,9 @@ public class DefaultSceneModel implements SceneModel {
     public String id;
     public String name;
 
+    /**
+     * Creates a default scene.
+     */
     public DefaultSceneModel() {
         this.id = IdGenerator.getInstance().getNextId();
         this.name = "Default Scene";
@@ -48,7 +51,11 @@ public class DefaultSceneModel implements SceneModel {
 
     @Override
     public SceneModel deepCopy() {
-        return new DefaultSceneModel();
+        DefaultSceneModel newModel = new DefaultSceneModel();
+        newModel.message = message;
+        newModel.id = id;
+        newModel.name = name;
+        return newModel;
     }
 
     @Override

@@ -2,6 +2,8 @@ package kiosk;
 
 import editor.ChildIdentifiers;
 import editor.Controller;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,18 +11,14 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import kiosk.models.CareerDescriptionModel;
-import kiosk.models.CareerModel;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.FilterGroupModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.SceneModel;
+
+import kiosk.models.*;
 import kiosk.scenes.ErrorScene;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
 
-    private final UserScore userScore;
+    private UserScore userScore;
     private UserScore previousUserScore;
     private SceneModel root;
     private String rootId;
@@ -32,7 +30,7 @@ public class SceneGraph {
     private final Set<String> careerCategories = new HashSet<>();
     // K: category V: fields inside that category
     private final HashMap<String, Set<String>> careerFields = new HashMap<>();
-    private final CareerModel[] allCareers;
+    private CareerModel[] allCareers;
 
     public enum RecentActivity {
             RESET, POP, PUSH
@@ -53,17 +51,37 @@ public class SceneGraph {
      * history while being traversed.
      * @param survey model to load from
      */
-    public SceneGraph(LoadedSurveyModel survey) {
-        this.userScore = new UserScore(survey.careers);
-        this.previousUserScore = new UserScore(survey.careers);
+    public SceneGraph(LoadedSurveyModel survey, CareerModelLoader careerModelLoader) {
         this.history = new LinkedList<>();
         this.sceneModels = new HashMap<>();
         this.sceneChangeCallbacks = new LinkedList<>();
-        this.loadSurvey(survey);
+        this.loadSurvey(survey, careerModelLoader);
+    }
 
-        // Store careers, categories, and fields
-        this.allCareers = survey.careers;
-        for (CareerModel career : survey.careers) {
+    /**
+     * Load survey from a model. History and callbacks are cleared.
+     * sceneChangeCallbacks are _not_ called (because they were
+     * just cleared, dummy). Re-add callbacks and invoke SceneGraph.reset()
+     * if you would like the callbacks to be invoked.
+     * @param survey to load
+     */
+    public synchronized void loadSurvey(LoadedSurveyModel survey,
+                                        CareerModelLoader careerModelLoader) {
+        // Reset to a new, initial state
+        this.history.clear();
+        this.sceneModels.clear();
+        this.sceneChangeCallbacks.clear();
+
+        // Register the new scene models
+        for (SceneModel sceneModel : survey.scenes) {
+            this.registerSceneModel(sceneModel);
+        }
+
+        // Reset all careers
+        careerCategories.clear();
+        careerFields.clear();
+        this.allCareers = careerModelLoader.load();
+        for (CareerModel career : this.allCareers) {
             careerCategories.add(career.category);
 
             Set<String> fields;
@@ -75,27 +93,10 @@ public class SceneGraph {
             }
             fields.add(career.field);
         }
-    }
 
-    /**
-     * Load survey from a model. History and callbacks are cleared.
-     * sceneChangeCallbacks are _not_ called (because they were
-     * just cleared, dummy). Re-add callbacks and invoke SceneGraph.reset()
-     * if you would like the callbacks to be invoked.
-     * @param survey to load
-     */
-    public synchronized void loadSurvey(LoadedSurveyModel survey) {
-        // Reset to a new, initial state
-        this.history.clear();
-        userScore.reset();
-        previousUserScore.reset();
-        this.sceneModels.clear();
-        this.sceneChangeCallbacks.clear();
-
-        // Register the new scene models
-        for (SceneModel sceneModel : survey.scenes) {
-            this.registerSceneModel(sceneModel);
-        }
+        // Create a new user score
+        this.userScore = new UserScore(allCareers);
+        this.previousUserScore = new UserScore(allCareers);
 
         // Set the root and load it as the first scene
         setRootSceneModel(this.sceneModels.get(survey.rootSceneId));

@@ -2,6 +2,7 @@ import editor.ChildIdentifiers;
 import editor.Controller;
 import editor.Editor;
 import javafx.scene.control.TreeItem;
+import kiosk.CareerModelLoader;
 import kiosk.SceneGraph;
 import kiosk.Settings;
 import kiosk.models.LoadedSurveyModel;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +36,8 @@ public class RootAndOrphanTest {
 
     Controller createController(SceneModel ...scenes) {
         LoadedSurveyModel surveyModel = new LoadedSurveyModel(Arrays.asList(scenes));
-        Controller.sceneGraph = new SceneGraph(surveyModel);
+        CareerModelLoader careerModelLoader = new CareerModelLoader(new File("non_existent.xxx"));
+        Controller.sceneGraph = new SceneGraph(surveyModel, careerModelLoader);
         return new Controller();
     }
 
