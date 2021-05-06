@@ -1,11 +1,13 @@
 package kiosk.scenes;
 
+import editor.Editor;
 import graphics.Color;
 import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.input.TouchEvent;
+import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
@@ -59,6 +61,7 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     private int offsetY;
     private boolean isSnapping;
     private boolean isDragging = false;
+    private boolean isEditor = false;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -184,9 +187,9 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
             this.image = Image.createImage(sketch, model.image);
         }
         wasInit = true;
-    }
 
-    long lastTime = 0;
+        this.isEditor = sketch.isEditor;
+    }
 
     /**
      * Draw's the appropriate button to the sketch using
@@ -578,13 +581,16 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
             pressY = y;
             offsetX = this.rect.x - pressX;
             offsetY = this.rect.y - pressY;
-            System.out.println("press " + x + ", " + y);
         }
     }
 
     private void onTouchPressed(TouchEvent touchEvent) {
         int x = (int) touchEvent.getTouchPoint().getX();
+        if (isEditor) {
+            x -= Editor.TOOLBAR_WIDTH;
+        }
         int y = (int) touchEvent.getTouchPoint().getY();
+
         if (!this.isPressed && this.rect.contains(x, y)) {
             this.isPressed = true;
             this.isSnapping = false;
@@ -592,7 +598,6 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
             pressY = y;
             offsetX = this.rect.x - pressX;
             offsetY = this.rect.y - pressY;
-            System.out.println("touch " + x + ", " + y);
         }
     }
 
