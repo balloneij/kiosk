@@ -3,6 +3,8 @@ package kiosk.models;
 import kiosk.scenes.PathwayScene;
 import kiosk.scenes.Scene;
 
+import java.util.Arrays;
+
 public class PathwaySceneModel implements SceneModel {
 
     public String id;
@@ -70,7 +72,7 @@ public class PathwaySceneModel implements SceneModel {
         copy.headerBody = this.headerBody;
         copy.centerText = this.centerText;
         copy.buttonModels = answersCopy;
-        copy.centerColor = this.centerColor;
+        copy.centerColor = Arrays.copyOf(this.centerColor, 3);
         return copy;
     }
 

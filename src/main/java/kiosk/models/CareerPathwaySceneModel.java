@@ -73,7 +73,7 @@ public class CareerPathwaySceneModel implements SceneModel {
         model.headerTitle = headerTitle;
         model.headerBody = headerBody;
         model.careers = Arrays.copyOf(careers, careers.length);
-        model.centerColor = this.centerColor;
+        model.centerColor = Arrays.copyOf(this.centerColor, 3);
         return model;
     }
 
