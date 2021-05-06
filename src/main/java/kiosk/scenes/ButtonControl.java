@@ -1,11 +1,13 @@
 package kiosk.scenes;
 
+import editor.Editor;
 import graphics.Color;
 import graphics.Graphics;
 import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.input.TouchEvent;
+import javafx.stage.Stage;
 import kiosk.EventListener;
 import kiosk.InputEvent;
 import kiosk.Kiosk;
@@ -13,7 +15,6 @@ import kiosk.Settings;
 import kiosk.TouchScreenEvent;
 import kiosk.models.ButtonModel;
 import processing.core.PConstants;
-import processing.event.Event;
 import processing.event.MouseEvent;
 
 public class ButtonControl implements Control<MouseEvent, TouchEvent> {
@@ -27,22 +28,17 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     private int colorDeltaOnClick = -25;
 
     // Constants for home and back button
-    private int buttonWidth = Kiosk.getSettings().screenW / 8;
     private int buttonHeight = Kiosk.getSettings().screenH / 6;
     // Radius of the rounded edge on rectangle buttons
     private int defaultCornerRadius = buttonHeight / 5;
-    private int buttonPadding = 20;
 
-    private float textSizeMultiplier = 1;
     private final ButtonModel model;
     private final Rectangle rect;
-    private int radius;
     private final Map<InputEvent, EventListener<MouseEvent>> eventListeners;
     private final Map<TouchScreenEvent, EventListener<TouchEvent>> touchEventListeners;
     private Image image;
     private boolean isPressed;
     private boolean wasClicked;
-    private float centerSquareSize = 0;
     private boolean disabled = false;
     private boolean shouldAnimate;
     private boolean wasInit = false;
@@ -55,6 +51,17 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     private float buttonAnimationLengthFrames;
     private double animationOffsetX;
     private double animationOffsetY;
+    private int releaseX;
+    private int releaseY;
+    private long releaseTimeMillis;
+
+    private int pressX;
+    private int pressY;
+    private int offsetX;
+    private int offsetY;
+    private boolean isSnapping;
+    private boolean isDragging = false;
+    private boolean isEditor = false;
 
     /**
      * Button UI control. Visual representation of a ButtonModel.
@@ -83,7 +90,6 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
         centerX = x;
         centerY = y;
         this.rect = new Rectangle(x, y, w, h);
-        updateRadius(); // Radius only used when button is circle
         this.image = null;
         this.disabled = false;
         this.shouldAnimate = doesAnimate;
@@ -102,11 +108,9 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
         colorDeltaOnClick = -25;
 
         // Constants for home and back button
-        buttonWidth = Kiosk.getSettings().screenW / 8;
         buttonHeight = Kiosk.getSettings().screenH / 6;
         // Radius of the rounded edge on rectangle buttons
         defaultCornerRadius = buttonHeight / 5;
-        buttonPadding = 20;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -142,7 +146,6 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
         centerX = x;
         centerY = y;
         this.rect = new Rectangle(x, y, radius * 2, radius * 2);
-        updateRadius(); // Radius only used when button is circle
         this.image = null;
         this.disabled = false;
         shouldAnimate = doesAnimate;
@@ -161,11 +164,9 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
         colorDeltaOnClick = -25;
 
         // Constants for home and back button
-        buttonWidth = screenW / 8;
         buttonHeight = screenH / 6;
         // Radius of the rounded edge on rectangle buttons
         defaultCornerRadius = buttonHeight / 5;
-        buttonPadding = 20;
 
         this.eventListeners = new HashMap<>();
         this.eventListeners.put(InputEvent.MousePressed, this::onMousePressed);
@@ -186,9 +187,9 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
             this.image = Image.createImage(sketch, model.image);
         }
         wasInit = true;
-    }
 
-    long lastTime = 0;
+        this.isEditor = sketch.isEditor;
+    }
 
     /**
      * Draw's the appropriate button to the sketch using
@@ -213,7 +214,6 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
         if (!fontSizeOverwritten) {
             Graphics.useGothic(sketch, fontSize, true);
             checkInit(); // Prints a warning if the button wasn't initialized
-            textSizeMultiplier = 1;
         }
         fontSizeOverwritten = false;
 
@@ -238,26 +238,25 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
         }
 
         if (isSnapping) {
-            long deltaTime = 0;
-            if (lastTime != 0) {
-                deltaTime = System.currentTimeMillis() - lastTime;
-                lastTime = System.currentTimeMillis();
-            } else {
-                lastTime = System.currentTimeMillis();
-            }
+            // It takes 800 ms to return to place
+            final int snapTime = 800;
 
-            float distX = centerX - this.rect.x;
-            float distY = centerY - this.rect.y;
-            if (Math.sqrt(distX * distX + distY * distY) < 10) {
-                this.isSnapping = false;
-                this.isDragged = false;
+            long currentTime = System.currentTimeMillis();
+            long deltaTime = currentTime - releaseTimeMillis;
+
+            double percentCompletion = (double) Math.min(snapTime, deltaTime) / snapTime;
+
+            double dx = releaseX - centerX;
+            double dy = releaseY - centerY;
+
+            if (percentCompletion < 1) {
+                this.rect.x = centerX + (int) (dx * (1 - easeOutElastic(percentCompletion)));
+                this.rect.y = centerY + (int) (dy * (1 - easeOutElastic(percentCompletion)));
+            } else {
                 this.rect.x = centerX;
                 this.rect.y = centerY;
-                draggedButtonModel = null;
-                this.lastTime = 0;
-            } else {
-                this.rect.y += (int) (distY * deltaTime / 100f);
-                this.rect.x += (int) (distX * deltaTime / 100f);
+                this.isSnapping = false;
+                this.isDragging = false;
             }
         }
     }
@@ -560,36 +559,11 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
 
     public void setWidth(int width) {
         this.rect.width = width;
-        updateRadius();
     }
 
     public void setHeight(int height) {
         this.rect.height = height;
-        updateRadius();
     }
-
-
-    // Helper method for updating the radius and calculating new centerSquareSize
-    private void updateRadius() {
-        this.radius = Math.min(this.rect.width / 2, this.rect.height / 2);
-
-        // The text has to fit inside the largest square possible inside the circle
-        // so we're using the Pythagorean theorem to get the sides of the square, and
-        // the diameter is the hypotenuse.
-        // Additionally, we're using the diameter of the minimumButtonRadius in
-        // order to keep all the font sizes consistent
-        // Images must fit inside this circle too
-        this.centerSquareSize = (float) Math.sqrt(Math.pow(this.radius * 2, 2) / 2);
-    }
-
-    private static ButtonModel draggedButtonModel;
-    private boolean isDragged = false;
-
-    private int pressX;
-    private int pressY;
-    private int offsetX;
-    private int offsetY;
-    private boolean isSnapping;
 
     private double dragDistance(int x, int y) {
         int distX = pressX - x;
@@ -598,10 +572,13 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     }
 
     private void onMousePressed(MouseEvent event) {
-        if (!this.isPressed && this.rect.contains(event.getX(), event.getY())) {
+        int x = event.getX();
+        int y = event.getY();
+        if (!this.isPressed && this.rect.contains(x, y)) {
             this.isPressed = true;
-            pressX = event.getX();
-            pressY = event.getY();
+            this.isSnapping = false;
+            pressX = x;
+            pressY = y;
             offsetX = this.rect.x - pressX;
             offsetY = this.rect.y - pressY;
         }
@@ -609,9 +586,14 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
 
     private void onTouchPressed(TouchEvent touchEvent) {
         int x = (int) touchEvent.getTouchPoint().getX();
+        if (isEditor) {
+            x -= Editor.TOOLBAR_WIDTH;
+        }
         int y = (int) touchEvent.getTouchPoint().getY();
+
         if (!this.isPressed && this.rect.contains(x, y)) {
             this.isPressed = true;
+            this.isSnapping = false;
             pressX = x;
             pressY = y;
             offsetX = this.rect.x - pressX;
@@ -622,38 +604,29 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
     private void onMouseReleased(MouseEvent event) {
         // Mouse was pressed and released inside the button
         if (this.isPressed && this.rect.contains(event.getX(), event.getY())
-            && !isDragged) {
+            && !isDragging) {
             this.wasClicked = true;
-            this.isSnapping = false;
-            draggedButtonModel = null;
         }
         this.isPressed = false;
-        // TODO: Move this into some drag complete logic
-        if (this.model.equals(draggedButtonModel)) {
-            this.isDragged = false;
+
+        // Check for drag release
+        if (this.isDragging) {
+            this.isDragging = false;
             this.isSnapping = true;
+            this.releaseX = rect.x;
+            this.releaseY = rect.y;
+            this.releaseTimeMillis = System.currentTimeMillis();
         }
     }
 
     private void onMouseDragged(MouseEvent event) {
-        if (dragDistance(event.getX(), event.getY()) > 10
-                && this.rect.contains(event.getX(), event.getY())
-        ) {
-            if (draggedButtonModel == null && this.isPressed) {
-                this.isDragged = true;
-                draggedButtonModel = this.model;
-            }
-            if (this.model.equals(draggedButtonModel)) {
-                this.rect.x = event.getX() + offsetX;
-                this.rect.y = event.getY() + offsetY;
-            }
-        } else if (draggedButtonModel == this.model) {
-            // This case covers when we drag a button a few pixels from the edge.
-            // Without this case we have to move very slowly toward  the edge in
-            // order to drag the button. With this case, once we have the button
-            // confirmed we can move it without checking the bounds.
-            this.rect.x = event.getX() + offsetX;
-            this.rect.y = event.getY() + offsetY;
+        int mouseX = event.getX();
+        int mouseY = event.getY();
+
+        if (this.isPressed && dragDistance(mouseX, mouseY) > 10) {
+            this.isDragging = true;
+            this.rect.x = mouseX + offsetX;
+            this.rect.y = mouseY + offsetY;
         }
     }
 
@@ -684,5 +657,15 @@ public class ButtonControl implements Control<MouseEvent, TouchEvent> {
             throw new IllegalStateException("Button was not init! Call ButtonControl.init() "
                 + "in the init method of the scene!");
         }
+    }
+
+    private double easeOutElastic(double x) {
+        final double c4 = (2 * Math.PI) / 3;
+
+        return x == 0
+                ? 0
+                : x == 1
+                ? 1
+                : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
     }
 }
