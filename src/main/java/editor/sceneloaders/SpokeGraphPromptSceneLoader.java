@@ -319,6 +319,7 @@ public class SpokeGraphPromptSceneLoader {
         });
 
         vBox.getChildren().add(colorPicker);
+        vBox.setPadding(PADDING);
         return vBox;
     }
 
@@ -338,6 +339,7 @@ public class SpokeGraphPromptSceneLoader {
         });
 
         vBox.getChildren().add(colorPicker);
+        vBox.setPadding(PADDING);
         return vBox;
     }
 }

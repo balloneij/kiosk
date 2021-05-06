@@ -35,9 +35,9 @@ public class CareerPathwaySceneLoader {
                 getHeaderTitleBox(model, graph),
                 getHeaderBodyBox(model, graph),
                 getCenterTextBox(model, graph),
-                new Text(" This is the final scene in the survey;\n users"
-                        + " now learn about their recommended careers"),
-                getCenterColor(model, graph)
+                getCenterColor(model, graph),
+        new Text(" This is the final scene in the survey;\n users"
+                                + " now learn about their recommended careers")
         );
 
         // Clear the editor pane and re-populate with the new Nodes
@@ -105,6 +105,7 @@ public class CareerPathwaySceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
         vBox.getChildren().add(colorPicker);
+        vBox.setPadding(PADDING);
         return vBox;
     }
 }

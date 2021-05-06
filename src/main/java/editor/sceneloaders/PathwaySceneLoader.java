@@ -281,6 +281,7 @@ public class PathwaySceneLoader {
         });
 
         vBox.getChildren().add(colorPicker);
+        vBox.setPadding(PADDING);
         return vBox;
     }
 
