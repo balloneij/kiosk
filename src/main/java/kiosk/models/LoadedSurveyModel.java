@@ -24,7 +24,6 @@ public class LoadedSurveyModel implements Serializable {
 
     public String rootSceneId;
     public SceneModel[] scenes;
-    public CareerModel[] careers;
 
     /**
      * Creates a survey with a single, error scene.
@@ -48,7 +47,6 @@ public class LoadedSurveyModel implements Serializable {
             sceneModel
         };
         model.rootSceneId = sceneModel.getId();
-        model.careers = new CareerModel[0];
         return model;
     }
 
@@ -67,7 +65,6 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = sceneModels.get(0).getId();
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
-        this.careers = new CareerModel[0];
     }
 
     /**
@@ -96,7 +93,6 @@ public class LoadedSurveyModel implements Serializable {
         this.rootSceneId = rootSceneId;
         this.scenes = new SceneModel[sceneModels.size()];
         this.scenes = sceneModels.toArray(scenes);
-        this.careers = new CareerModel[0];
     }
 
     /**
@@ -356,7 +352,6 @@ public class LoadedSurveyModel implements Serializable {
         LoadedSurveyModel survey = LoadedSurveyModel.create();
         survey.rootSceneId = eyeCatcher.id;
         survey.scenes = scenes.toArray(new SceneModel[0]);
-        survey.careers = careers.toArray(new CareerModel[0]);
 
         return survey;
     }

@@ -45,7 +45,6 @@ public class Kiosk extends PApplet {
 
     protected SceneGraph sceneGraph;
     private String surveyPath;
-    private CareerModel[] careers;
     private Scene lastScene;
     private SceneModel lastSceneModel;
     private boolean currentSceneIsRoot = false;
@@ -117,7 +116,7 @@ public class Kiosk extends PApplet {
             survey = new LoadedSurveyModel(defaultScenes);
         }
 
-        File careersFile = new File("careers.csv");
+        File careersFile = new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH);
         if (!careersFile.exists()) {
             try {
                 careersFile.createNewFile();
@@ -127,9 +126,7 @@ public class Kiosk extends PApplet {
         }
 
         CareerModelLoader careerModelLoader = new CareerModelLoader(careersFile);
-        survey.careers = careerModelLoader.load();
-        this.careers = survey.careers;
-        this.sceneGraph = new SceneGraph(survey);
+        this.sceneGraph = new SceneGraph(survey, careerModelLoader);
 
         if (careerModelLoader.hasIssues()) {
             DefaultSceneModel model = new DefaultSceneModel();
@@ -205,10 +202,20 @@ public class Kiosk extends PApplet {
             exception.printStackTrace();
         }
 
-        // Update the scene graph
-        sceneGraph.loadSurvey(survey);
-        this.careers = survey.careers;
+        // Create career loader
+        CareerModelLoader careerModelLoader =
+                new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
+
+        // Reload the survey
+        sceneGraph.loadSurvey(survey, careerModelLoader);
+
+        // Push any issues as the first scene
         sceneGraph.reset();
+        if (careerModelLoader.hasIssues()) {
+            DefaultSceneModel model = new DefaultSceneModel();
+            model.message = careerModelLoader.getIssuesSummary();
+            sceneGraph.pushScene(model);
+        }
     }
 
     public void reloadSettings() {
@@ -327,10 +334,6 @@ public class Kiosk extends PApplet {
 
     public UserScore getUserScore() {
         return this.sceneGraph.getUserScore();
-    }
-
-    public CareerModel[] getAllCareers() {
-        return careers;
     }
 
     /**

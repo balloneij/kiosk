@@ -565,9 +565,18 @@ public class Controller implements Initializable {
             // Update the scene graph, reattach the editor callback, refresh the editor
             // Note: rebuildToolbar() is invoked on sceneGraph.reset(), but we must explicitly
             // rebuild the tree view.
-            sceneGraph.loadSurvey(survey);
+            CareerModelLoader careerModelLoader = new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
+            sceneGraph.loadSurvey(survey, careerModelLoader);
             sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
             sceneGraph.reset();
+
+            // Display any issues
+            if (careerModelLoader.hasIssues()) {
+                DefaultSceneModel model = new DefaultSceneModel();
+                model.message = careerModelLoader.getIssuesSummary();
+                sceneGraph.pushScene(model);
+            }
+
             rebuildSceneGraphTreeView();
             // If we load a file, the toolbar can hold old values.
             // Rebuild toolbar to clear them all out
@@ -579,49 +588,47 @@ public class Controller implements Initializable {
 
     @FXML
     private void reloadSurvey() {
-        if (hasPendingChanges) {
-            Optional<ButtonType> result = UnsavedChangesAlert.showAndWait();
-            if (result.isPresent()) {
-                if (result.get() == UnsavedChangesAlert.SAVE) {
-                    saveSurvey();
-                    sceneGraph.reset();
-                    rebuildSceneGraphTreeView();
-                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
-                    hasPendingChanges = false;
-                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
-                } else if (result.get() == UnsavedChangesAlert.NO_SAVE) {
-                    File careersFile = new File("careers.csv");
-                    if (!careersFile.exists()) {
-                        try {
-                            careersFile.createNewFile();
-                        } catch (IOException e) {
-                            // Recoverable without any issues
-                        }
+        Optional<ButtonType> result = UnsavedChangesAlert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == UnsavedChangesAlert.SAVE) {
+                saveSurvey();
+                sceneGraph.reset();
+                rebuildSceneGraphTreeView();
+                rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                hasPendingChanges = false;
+                Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
+            } else if (result.get() == UnsavedChangesAlert.NO_SAVE) {
+                File careersFile = new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH);
+                if (!careersFile.exists()) {
+                    try {
+                        careersFile.createNewFile();
+                    } catch (IOException e) {
+                        // Recoverable without any issues
                     }
-
-                    // Load survey and careers from fields
-                    LoadedSurveyModel survey = LoadedSurveyModel.readFromFile(this.surveyFile);
-                    CareerModelLoader careerModelLoader = new CareerModelLoader(careersFile);
-                    careers = careerModelLoader.load();
-                    Controller.careers = survey.careers;
-
-                    // Update scene graph
-                    sceneGraph.loadSurvey(survey);
-                    sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
-                    sceneGraph.reset();
-
-                    // Push any issues as the first scene
-                    if (careerModelLoader.hasIssues()) {
-                        DefaultSceneModel model = new DefaultSceneModel();
-                        model.message = careerModelLoader.getIssuesSummary();
-                        sceneGraph.pushScene(model);
-                    }
-
-                    rebuildSceneGraphTreeView();
-                    rebuildToolbar(sceneGraph.getCurrentSceneModel());
-                    Controller.hasPendingChanges = false;
-                    Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
                 }
+
+                // Load survey and careers from fields
+                LoadedSurveyModel survey = LoadedSurveyModel.readFromFile(this.surveyFile);
+
+                // Create career loader
+                CareerModelLoader careerModelLoader =
+                        new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
+
+                // Reload the survey
+                sceneGraph.loadSurvey(survey, careerModelLoader);
+
+                // Push any issues as the first scene
+                sceneGraph.addSceneChangeCallback(new EditorSceneChangeCallback(this));
+                if (careerModelLoader.hasIssues()) {
+                    DefaultSceneModel model = new DefaultSceneModel();
+                    model.message = careerModelLoader.getIssuesSummary();
+                    sceneGraph.pushScene(model);
+                }
+
+                rebuildSceneGraphTreeView();
+                rebuildToolbar(sceneGraph.getCurrentSceneModel());
+                Controller.hasPendingChanges = false;
+                Editor.setTitle(surveyFile != null ? surveyFile.getName() : "No file loaded");
             }
         }
     }
@@ -729,9 +736,7 @@ public class Controller implements Initializable {
     }
 
     private LoadedSurveyModel createSurvey() {
-        LoadedSurveyModel survey = sceneGraph.exportSurvey();
-        survey.careers = careers;
-        return survey;
+        return sceneGraph.exportSurvey();
     }
 
     private class EditorSceneChangeCallback implements EventListener<SceneModel> {

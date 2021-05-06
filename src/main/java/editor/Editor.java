@@ -105,7 +105,6 @@ public class Editor extends Kiosk {
 
         // Attach the scene graph before initialization
         Controller.sceneGraph = sceneGraph;
-        Controller.careers = getAllCareers();
 
         // Load FXML and the controller
         FXMLLoader loader = null;

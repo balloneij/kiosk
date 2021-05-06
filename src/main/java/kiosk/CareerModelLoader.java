@@ -11,6 +11,7 @@ import kiosk.models.CareerModel;
 
 public class CareerModelLoader {
 
+    public static final String DEFAULT_CAREERS_CSV_PATH = "careers.csv";
     public static final String DEFAULT_IMAGE_PATH = "assets/default.png";
     private static final int COLUMN_COUNT = 6;
 

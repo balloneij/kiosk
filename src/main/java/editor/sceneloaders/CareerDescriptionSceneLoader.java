@@ -7,6 +7,7 @@ import java.io.IOException;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import kiosk.CareerModelLoader;
 import kiosk.SceneGraph;
 import kiosk.models.CareerDescriptionModel;
 
@@ -47,7 +48,7 @@ public class CareerDescriptionSceneLoader {
         button.setText("Open the csv");
         button.setOnAction(event -> {
             try {
-                Desktop.getDesktop().open(new File("careers.csv"));
+                Desktop.getDesktop().open(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
             } catch (IOException e) {
                 e.printStackTrace();
             }
