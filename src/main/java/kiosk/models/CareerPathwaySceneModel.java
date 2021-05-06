@@ -14,6 +14,7 @@ public class CareerPathwaySceneModel implements SceneModel {
     public String headerTitle;
     public String headerBody;
     public CareerModel[] careers;
+    public int[] centerColor;
 
     @Override
     public Scene createScene() {
@@ -39,6 +40,7 @@ public class CareerPathwaySceneModel implements SceneModel {
         model.headerTitle = "Title";
         model.headerBody = "Heading";
         model.careers = new CareerModel[] {};
+        model.centerColor = new int[] { 0, 0, 0 };
         return model;
     }
 
@@ -71,6 +73,7 @@ public class CareerPathwaySceneModel implements SceneModel {
         model.headerTitle = headerTitle;
         model.headerBody = headerBody;
         model.careers = Arrays.copyOf(careers, careers.length);
+        model.centerColor = this.centerColor;
         return model;
     }
 

@@ -12,6 +12,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
     public String careerCenterText;
     public String promptText;
     public ButtonModel[] answers;
+    public int[] answerCenterColor;
+    public int[] careersCenterColor;
 
     /**
      * Creates a new SG prompt scene model.
@@ -37,6 +39,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         model.careerCenterText = "";
         model.promptText = "";
         model.answers = new ButtonModel[]{};
+        model.answerCenterColor = new int[] { 0, 0, 0 };
+        model.careersCenterColor = new int[] { 0, 0, 0 };
         return model;
     }
 
@@ -81,6 +85,8 @@ public final class SpokeGraphPromptSceneModel implements SceneModel {
         copy.careerCenterText = this.careerCenterText;
         copy.promptText = this.promptText;
         copy.answers = answersCopy;
+        copy.answerCenterColor = this.answerCenterColor;
+        copy.careersCenterColor = this.careersCenterColor;
         return copy;
     }
 

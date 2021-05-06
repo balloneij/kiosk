@@ -43,6 +43,7 @@ public class PathwaySceneLoader {
                 getHeaderTitleBox(model, graph),
                 getHeaderBodyBox(model, graph),
                 getCenterTextBox(model, graph),
+                getCenterColor(model, graph),
                 getAnswersBox(controller, model, graph)
         );
 
@@ -264,4 +265,23 @@ public class PathwaySceneLoader {
                 targetsBox, SceneLoader.getFilterBox(graph, model, answer), separator);
         return answerVbox;
     }
+    private static Node getCenterColor(PathwaySceneModel model, SceneGraph graph) {
+        VBox vBox = new VBox(new Label("Answers Center Color"));
+        // Setup the color picker for changing the answer color
+        Color initialColor = Color.rgb(model.centerColor[0], model.centerColor[1], model.centerColor[2]);
+        ColorPicker colorPicker = new ColorPicker(initialColor);
+        colorPicker.setOnAction(event -> {
+            // Set the answer color to the new color
+            Color newColor = colorPicker.getValue();
+            model.centerColor[0] = (int) (newColor.getRed() * COLOR_RANGE);
+            model.centerColor[1] = (int) (newColor.getGreen() * COLOR_RANGE);
+            model.centerColor[2] = (int) (newColor.getBlue() * COLOR_RANGE);
+
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        vBox.getChildren().add(colorPicker);
+        return vBox;
+    }
+
 }

@@ -11,6 +11,7 @@ public class PathwaySceneModel implements SceneModel {
     public String headerBody;
     public String centerText;
     public ButtonModel[] buttonModels;
+    public int[] centerColor;
 
     /**
      * Creates a new pathway scene model.
@@ -26,6 +27,7 @@ public class PathwaySceneModel implements SceneModel {
         this.headerBody = "";
         this.centerText = "";
         this.buttonModels = new ButtonModel[]{};
+        this.centerColor = new int[] { 0, 0, 0 };
     }
 
     @Override
@@ -68,6 +70,7 @@ public class PathwaySceneModel implements SceneModel {
         copy.headerBody = this.headerBody;
         copy.centerText = this.centerText;
         copy.buttonModels = answersCopy;
+        copy.centerColor = this.centerColor;
         return copy;
     }
 

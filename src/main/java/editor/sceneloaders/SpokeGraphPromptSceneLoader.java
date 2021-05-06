@@ -22,8 +22,6 @@ import javafx.stage.FileChooser;
 import kiosk.Riasec;
 import kiosk.SceneGraph;
 import kiosk.models.ButtonModel;
-import kiosk.models.CareerPathwaySceneModel;
-import kiosk.models.FilterGroupModel;
 import kiosk.models.ImageModel;
 import kiosk.models.SpokeGraphPromptSceneModel;
 
@@ -55,6 +53,8 @@ public class SpokeGraphPromptSceneLoader {
                 getHeaderBodyBox(model, graph),
                 getCareerBox(model, graph),
                 getPromptBox(model, graph),
+                getCareerCenterColor(model, graph),
+                getAnswerCenterColor(model, graph),
                 getAnswersBox(controller, model, graph)
         );
 
@@ -301,5 +301,43 @@ public class SpokeGraphPromptSceneLoader {
         answerVbox.getChildren().addAll(answerField, editingControls, targetsBox, riasecBox,
             separator);
         return answerVbox;
+    }
+
+    private static Node getCareerCenterColor(SpokeGraphPromptSceneModel model, SceneGraph graph) {
+        VBox vBox = new VBox(new Label("Career Center Color"));
+        // Setup the color picker for changing the answer color
+        Color initialColor = Color.rgb(model.answerCenterColor[0], model.answerCenterColor[1], model.answerCenterColor[2]);
+        ColorPicker colorPicker = new ColorPicker(initialColor);
+        colorPicker.setOnAction(event -> {
+            // Set the answer color to the new color
+            Color newColor = colorPicker.getValue();
+            model.careersCenterColor[0] = (int) (newColor.getRed() * COLOR_RANGE);
+            model.careersCenterColor[1] = (int) (newColor.getGreen() * COLOR_RANGE);
+            model.careersCenterColor[2] = (int) (newColor.getBlue() * COLOR_RANGE);
+
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        vBox.getChildren().add(colorPicker);
+        return vBox;
+    }
+
+    private static Node getAnswerCenterColor(SpokeGraphPromptSceneModel model, SceneGraph graph) {
+        VBox vBox = new VBox(new Label("Answers Center Color"));
+        // Setup the color picker for changing the answer color
+        Color initialColor = Color.rgb(model.answerCenterColor[0], model.answerCenterColor[1], model.answerCenterColor[2]);
+        ColorPicker colorPicker = new ColorPicker(initialColor);
+        colorPicker.setOnAction(event -> {
+            // Set the answer color to the new color
+            Color newColor = colorPicker.getValue();
+            model.answerCenterColor[0] = (int) (newColor.getRed() * COLOR_RANGE);
+            model.answerCenterColor[1] = (int) (newColor.getGreen() * COLOR_RANGE);
+            model.answerCenterColor[2] = (int) (newColor.getBlue() * COLOR_RANGE);
+
+            graph.registerSceneModel(model); // Re-register the model to update the scene
+        });
+
+        vBox.getChildren().add(colorPicker);
+        return vBox;
     }
 }
