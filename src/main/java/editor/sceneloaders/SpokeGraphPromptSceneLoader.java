@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -153,20 +154,28 @@ public class SpokeGraphPromptSceneLoader {
         // Setup the button for adding answers
         Button addButton = new Button("+");
         addButton.setOnAction(event -> {
-            ButtonModel newAnswer = new ButtonModel();
-            newAnswer.target = controller.createNewScene(false).getId();
+            if (model.answers.length < 4) {
+                ButtonModel newAnswer = new ButtonModel();
+                newAnswer.target = controller.createNewScene(false).getId();
 
-            // Add the new answer to the PromptSceneModel's answers
-            ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
-            answersList.add(newAnswer);
-            model.answers = answersList.toArray(new ButtonModel[0]);
-            graph.registerSceneModel(model); // Re-register the model to update the scene
+                // Add the new answer to the PromptSceneModel's answers
+                ArrayList<ButtonModel> answersList = new ArrayList<>(Arrays.asList(model.answers));
+                answersList.add(newAnswer);
+                model.answers = answersList.toArray(new ButtonModel[0]);
+                graph.registerSceneModel(model); // Re-register the model to update the scene
 
-            // Add editing controls for the new answer
-            int index = vbox.getChildren().size() - 1; // Add controls just before the add button
-            vbox.getChildren().add(index,
-                    createAnswerNode(controller, newAnswer, vbox, model, graph));
-            controller.rebuildSceneGraphTreeView();
+                // Add editing controls for the new answer
+                int index = vbox.getChildren().size() - 1; // Add controls just before the add button
+                vbox.getChildren().add(index,
+                        createAnswerNode(controller, newAnswer, vbox, model, graph));
+                controller.rebuildSceneGraphTreeView();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText("Unable to Create Answer");
+                alert.setContentText("This scene can only support up to four answers");
+                alert.showAndWait();
+            }
         });
 
         vbox.getChildren().add(addButton);
