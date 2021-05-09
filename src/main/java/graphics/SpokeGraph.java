@@ -103,7 +103,7 @@ public class SpokeGraph {
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
             double weight = normalWeights[i];
-            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 3 / 2;
+            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 3 / 2; // todo can this be done by adjusting maxButtonRadius?
             if(buttons.length > 4) {
                 radius = radius / (buttons.length / (float) 4);
             }
