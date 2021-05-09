@@ -90,7 +90,6 @@ public class SpokeGraph {
         this.maxButtonRadius = size / 8.0;
         this.minButtonRadius = maxButtonRadius * MIN_BUTTON_RADIUS_RATIO;
 
-        double spokeLength = maxButtonRadius * 2;
         double angleDelta = (2 * Math.PI) / buttons.length;
 
         // The text has to fit inside the largest square possible inside the circle
@@ -104,7 +103,11 @@ public class SpokeGraph {
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
             double weight = normalWeights[i];
-            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
+            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 3 / 2;
+            if(buttons.length > 4) {
+                radius = radius / (buttons.length / (float) 4);
+            }
+            double spokeLength = maxButtonRadius * 5 / 2 - radius;
             final float diameter = radius * 2;
             final double centerSquareSize = Math.sqrt(Math.pow(diameter, 2) / 2);
             final float buttonX = (float)
