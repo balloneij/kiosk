@@ -55,7 +55,7 @@ public class GraphicsUtil {
         backButtonModel.text = "← Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         ButtonControl backButton = new ButtonControl(backButtonModel,
-            commonButtonPadding, sketch.height
+                (int)(commonButtonPadding * .6), sketch.height
             - (commonButtonHeight * 3 / 4) - commonButtonPadding,
             commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
         backButton.init(sketch);
@@ -79,7 +79,7 @@ public class GraphicsUtil {
         homeButtonModel.text = "◄◄ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
         ButtonControl homeButton = new ButtonControl(homeButtonModel,
-            commonButtonPadding, commonButtonPadding,
+                (int)(commonButtonPadding * .6), commonButtonPadding,
             commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
         homeButton.init(sketch);
         return homeButton;
