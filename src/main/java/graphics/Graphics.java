@@ -219,13 +219,14 @@ public class Graphics {
         sketch.ellipseMode(PConstants.CENTER);
         sketch.noFill();
         float weight = (9 - (timeSinceLastTap * 21));
-        if (weight <= 0) {
-            weight = 0;
+        if (weight <= 1) {
+            weight = 1;
         }
         sketch.strokeWeight(weight);
         sketch.stroke(color);
         sketch.ellipse(e.getX(), e.getY(), sketch.width / 50f
                 + (45 * timeSinceLastTap), sketch.width / 50f + (45 * timeSinceLastTap));
         sketch.strokeWeight(1);
+        sketch.stroke(Color.toRgb(Color.DW_WHITE_RGB));
     }
 }
