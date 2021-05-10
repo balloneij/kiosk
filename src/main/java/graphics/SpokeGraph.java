@@ -87,7 +87,7 @@ public class SpokeGraph {
         // Diameter of two circle + two spoke lengths = 8 total radius'
         // Therefore, we divide our total available space by 8, and the max
         // size of the entire graph will be confined to that area
-        this.maxButtonRadius = size / 12.0; // todo used to be 8
+        this.maxButtonRadius = size / 8.0;
         this.minButtonRadius = maxButtonRadius * MIN_BUTTON_RADIUS_RATIO;
 
         double angleDelta = (2 * Math.PI) / buttons.length;
@@ -103,11 +103,11 @@ public class SpokeGraph {
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
             double weight = normalWeights[i];
-            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight); // todo
+            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 3 / 2;
             if(buttons.length > 4) {
                 radius = radius / (buttons.length / (float) 4);
             }
-            double spokeLength = maxButtonRadius * 5 / 2 - radius;
+            double spokeLength = maxButtonRadius * 5 / 2 - radius * 0.8;
             final float diameter = radius * 2;
             final double centerSquareSize = Math.sqrt(Math.pow(diameter, 2) / 2);
             final float buttonX = (float)
