@@ -1,9 +1,8 @@
 package kiosk.models;
 
+import java.util.Arrays;
 import kiosk.scenes.PathwayScene;
 import kiosk.scenes.Scene;
-
-import java.util.Arrays;
 
 public class PathwaySceneModel implements SceneModel {
 

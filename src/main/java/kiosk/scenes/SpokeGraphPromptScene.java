@@ -334,7 +334,8 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Create spoke graph
         spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
-                this.model.careerCenterText, careerButtons, careerWeights, model.careersCenterColor);
+                this.model.careerCenterText, careerButtons,
+                careerWeights, model.careersCenterColor);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, offsetY);
@@ -408,7 +409,8 @@ public class SpokeGraphPromptScene implements Scene {
 
         // Create spoke graph
         spokeGraph = new SpokeGraph(size, 0, headerY + headerH,
-                this.model.careerCenterText, careerButtons, careerWeights, model.careersCenterColor);
+                this.model.careerCenterText, careerButtons,
+                careerWeights, model.careersCenterColor);
         spokeGraph.setDisabled(true);
         spokeGraph.init(sketch);
         spokeGraph.draw(sketch, offsetX, offsetY);

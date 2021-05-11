@@ -2,7 +2,6 @@ package kiosk;
 
 import editor.ChildIdentifiers;
 import editor.Controller;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,8 +9,13 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import kiosk.models.*;
+import kiosk.models.CareerDescriptionModel;
+import kiosk.models.CareerModel;
+import kiosk.models.CareerModelLoader;
+import kiosk.models.ErrorSceneModel;
+import kiosk.models.FilterGroupModel;
+import kiosk.models.LoadedSurveyModel;
+import kiosk.models.SceneModel;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {

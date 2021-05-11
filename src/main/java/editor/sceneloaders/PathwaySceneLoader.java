@@ -265,10 +265,12 @@ public class PathwaySceneLoader {
                 targetsBox, SceneLoader.getFilterBox(graph, model, answer), separator);
         return answerVbox;
     }
+
     private static Node getCenterColor(PathwaySceneModel model, SceneGraph graph) {
-        VBox vBox = new VBox(new Label("Answers Center Color"));
+        VBox vbox = new VBox(new Label("Answers Center Color"));
         // Setup the color picker for changing the answer color
-        Color initialColor = Color.rgb(model.centerColor[0], model.centerColor[1], model.centerColor[2]);
+        Color initialColor = Color.rgb(model.centerColor[0],
+                model.centerColor[1], model.centerColor[2]);
         ColorPicker colorPicker = new ColorPicker(initialColor);
         colorPicker.setOnAction(event -> {
             // Set the answer color to the new color
@@ -280,9 +282,9 @@ public class PathwaySceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        vBox.getChildren().add(colorPicker);
-        vBox.setPadding(PADDING);
-        return vBox;
+        vbox.getChildren().add(colorPicker);
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 
 }

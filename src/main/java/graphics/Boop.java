@@ -1,8 +1,7 @@
 package graphics;
 
-import java.util.Random;
-
 import editor.Editor;
+import java.util.Random;
 import javafx.scene.input.TouchEvent;
 import kiosk.Kiosk;
 import kiosk.models.ImageModel;

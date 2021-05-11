@@ -165,7 +165,8 @@ public class SpokeGraphPromptSceneLoader {
                 graph.registerSceneModel(model); // Re-register the model to update the scene
 
                 // Add editing controls for the new answer
-                int index = vbox.getChildren().size() - 1; // Add controls just before the add button
+                int index = vbox.getChildren().size() - 1;
+                // Add controls just before the add button
                 vbox.getChildren().add(index,
                         createAnswerNode(controller, newAnswer, vbox, model, graph));
                 controller.rebuildSceneGraphTreeView();
@@ -313,9 +314,10 @@ public class SpokeGraphPromptSceneLoader {
     }
 
     private static Node getCareerCenterColor(SpokeGraphPromptSceneModel model, SceneGraph graph) {
-        VBox vBox = new VBox(new Label("Career Center Color"));
+        VBox vbox = new VBox(new Label("Career Center Color"));
         // Setup the color picker for changing the answer color
-        Color initialColor = Color.rgb(model.answerCenterColor[0], model.answerCenterColor[1], model.answerCenterColor[2]);
+        Color initialColor = Color.rgb(model.answerCenterColor[0],
+                model.answerCenterColor[1], model.answerCenterColor[2]);
         ColorPicker colorPicker = new ColorPicker(initialColor);
         colorPicker.setOnAction(event -> {
             // Set the answer color to the new color
@@ -327,15 +329,16 @@ public class SpokeGraphPromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        vBox.getChildren().add(colorPicker);
-        vBox.setPadding(PADDING);
-        return vBox;
+        vbox.getChildren().add(colorPicker);
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 
     private static Node getAnswerCenterColor(SpokeGraphPromptSceneModel model, SceneGraph graph) {
-        VBox vBox = new VBox(new Label("Answers Center Color"));
+        VBox vbox = new VBox(new Label("Answers Center Color"));
         // Setup the color picker for changing the answer color
-        Color initialColor = Color.rgb(model.answerCenterColor[0], model.answerCenterColor[1], model.answerCenterColor[2]);
+        Color initialColor = Color.rgb(model.answerCenterColor[0],
+                model.answerCenterColor[1], model.answerCenterColor[2]);
         ColorPicker colorPicker = new ColorPicker(initialColor);
         colorPicker.setOnAction(event -> {
             // Set the answer color to the new color
@@ -347,8 +350,8 @@ public class SpokeGraphPromptSceneLoader {
             graph.registerSceneModel(model); // Re-register the model to update the scene
         });
 
-        vBox.getChildren().add(colorPicker);
-        vBox.setPadding(PADDING);
-        return vBox;
+        vbox.getChildren().add(colorPicker);
+        vbox.setPadding(PADDING);
+        return vbox;
     }
 }

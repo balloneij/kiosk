@@ -42,7 +42,8 @@ public class SpokeGraph {
      * @param centerText text of the center wheel
      * @param buttons to create a spoke graph off of
      */
-    public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons, int[] centerColor) {
+    public SpokeGraph(double size, double x, double y,
+                      String centerText, ButtonModel[] buttons, int[] centerColor) {
         this(size, x, y, centerText, buttons, new double[buttons.length], centerColor);
         Arrays.fill(weights, 0); // Set all weights to 0
     }
@@ -105,7 +106,9 @@ public class SpokeGraph {
             double weight = normalWeights[i];
             float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 3 / 2;
             if (buttons.length > 5) {
-                radius = radius * ((float) 5 / buttons.length); // todo anyone else know a good way to shrink circles as we add more? re-define min and max radii?
+                radius = radius * ((float) 5 / buttons.length);
+                // todo anyone else know a good way to shrink circles as we add more?
+                //  re-define min and max radii?
             }
             double spokeLength = maxButtonRadius * 9 / 4 - radius * 0.8;
             final float diameter = radius * 2;
