@@ -196,7 +196,7 @@ public class GraphicsUtil {
 
         // Draw the white header box
         sketch.fill(255);
-        sketch.stroke(255);
+        sketch.stroke(59, 58, 57, 63f);
 
         Graphics.drawRoundedRectangle(sketch,
                 (float) (headerX + offsetX + headerW / 2),
