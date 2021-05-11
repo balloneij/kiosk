@@ -104,10 +104,10 @@ public class SpokeGraph {
         for (int i = 0; i < buttons.length; i++) {
             double weight = normalWeights[i];
             float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 3 / 2;
-            if(buttons.length > 4) {
-                radius = radius / (buttons.length / (float) 4);
+            if (buttons.length > 5) {
+                radius = radius * ((float) 5 / buttons.length); // todo anyone else know a good way to shrink circles as we add more? re-define min and max radii?
             }
-            double spokeLength = maxButtonRadius * 5 / 2 - radius * 0.8;
+            double spokeLength = maxButtonRadius * 9 / 4 - radius * 0.8;
             final float diameter = radius * 2;
             final double centerSquareSize = Math.sqrt(Math.pow(diameter, 2) / 2);
             final float buttonX = (float)

@@ -68,7 +68,7 @@ public class PathwayScene implements Scene {
         float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         this.spokeGraph = new SpokeGraph(size,
                 screenW / 2f - size / 2,
-                GraphicsUtil.headerY + GraphicsUtil.headerH,
+                GraphicsUtil.headerY + GraphicsUtil.headerH * 0.95,
                 this.model.centerText,
                 this.model.buttonModels,
                 model.centerColor);
