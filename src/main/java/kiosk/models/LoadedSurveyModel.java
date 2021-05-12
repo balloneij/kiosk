@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -199,9 +200,32 @@ public class LoadedSurveyModel implements Serializable {
         HashMap<String, FilterGroupModel> categoryFilters = new HashMap<>();
 
         // Load careers from CSV
-        List<CareerModel> careers = loadCareers(new File("sample_careers.tsv"));
+        CareerModelLoader loader =
+                new CareerModelLoader(new File(CareerModelLoader.DEFAULT_CAREERS_CSV_PATH));
 
-        // Create filters based off of the sample careers
+        CareerModel[] careers = loader.load();
+
+        LinkedList<String> fields = new LinkedList<>();
+        LinkedList<String> categories = new LinkedList<>();
+
+        // Find the unique fields and categories
+        {
+            HashSet<String> fieldsSet = new HashSet<>();
+            HashSet<String> categoriesSet = new HashSet<>();
+
+            for (CareerModel career : careers) {
+                if (!fieldsSet.contains(career.field)) {
+                    fields.add(career.field);
+                    fieldsSet.add(career.field);
+                }
+                if (!categoriesSet.contains(career.category)) {
+                    categories.add(career.category);
+                    categoriesSet.add(career.category);
+                }
+            }
+        }
+
+        // Create filters based off of the careers
         for (CareerModel career : careers) {
             FilterGroupModel fieldFilter;
             if (fieldFilters.containsKey(career.field)) {
@@ -229,18 +253,6 @@ public class LoadedSurveyModel implements Serializable {
         // Create scenes
         LinkedList<SceneModel> scenes = new LinkedList<>();
 
-        // Eye catching scene
-        PromptSceneModel eyeCatcher = new PromptSceneModel();
-        scenes.push(eyeCatcher);
-        eyeCatcher.name = "Eye Catcher";
-        eyeCatcher.title = "Eye grabbing scene";
-        eyeCatcher.prompt = "Eventually this should be a scene that grabs\n"
-                + "attention. Maybe a fun animation or something?";
-        ButtonModel eyeCatcherButton = new ButtonModel();
-        eyeCatcherButton.text = "Let's go";
-        eyeCatcherButton.target = "titleScene";
-        eyeCatcher.answers = new ButtonModel[]{ eyeCatcherButton };
-
         // Title scene
         PromptSceneModel titleScene = new PromptSceneModel();
         scenes.push(titleScene);
@@ -258,7 +270,6 @@ public class LoadedSurveyModel implements Serializable {
 
         // Category scene
         PromptSceneModel categoryScene = new PromptSceneModel();
-        scenes.push(categoryScene);
         categoryScene.id = "categoryScene";
         categoryScene.name = "Category Scene";
         categoryScene.title = "Wonderful!";
@@ -266,46 +277,25 @@ public class LoadedSurveyModel implements Serializable {
                 + "What challenges do you want to take on?";
         categoryScene.actionPhrase = "Choose one of the Icons. Explore different paths.\n"
                 + "You can always go back and begin again";
-        ButtonModel humanButton = new ButtonModel();
-        humanButton.text = "";
-        humanButton.target = "fieldPickerHuman";
-        humanButton.isCircle = true;
-        humanButton.rgb = new int[] { 152, 33, 107 };
-        humanButton.image = new ImageModel("assets/Human.png", 80, 80);
-        humanButton.filter = categoryFilters.get("Human");
-        ButtonModel natureButton = new ButtonModel();
-        natureButton.text = "";
-        natureButton.target = "fieldPickerNature";
-        natureButton.isCircle = true;
-        natureButton.rgb = new int[] { 51, 108, 103 };
-        natureButton.image = new ImageModel("assets/Nature.png", 80, 80);
-        natureButton.filter = categoryFilters.get("Nature");
-        ButtonModel smartMachinesButton = new ButtonModel();
-        smartMachinesButton.text = "";
-        smartMachinesButton.target = "fieldPickerSmartMachine";
-        smartMachinesButton.isCircle = true;
-        smartMachinesButton.rgb = new int[] { 219, 98, 38 };
-        smartMachinesButton.image = new ImageModel("assets/SmartMachines.png", 80, 80);
-        smartMachinesButton.filter = categoryFilters.get("Smart Machine");
-        ButtonModel spaceButton = new ButtonModel();
-        spaceButton.text = "";
-        spaceButton.target = "fieldPickerSpace";
-        spaceButton.isCircle = true;
-        spaceButton.rgb = new int[] { 21, 97, 157 };
-        spaceButton.image = new ImageModel("assets/Space.png", 80, 80);
-        spaceButton.filter = categoryFilters.get("Space");
-        categoryScene.answers = new ButtonModel[] {
-            humanButton,
-            natureButton,
-            smartMachinesButton,
-            spaceButton
-        };
+        categoryScene.answers = new ButtonModel[categories.size()];
+        int j = 0;
+        for (String category : categories) {
+            ButtonModel button = new ButtonModel();
+            button.text = category;
+            button.target = "fieldPicker" + category;
+            button.isCircle = true;
+            button.rgb = new int[] { 152, 33, 107 };
+            button.filter = categoryFilters.get(category);
+            categoryScene.answers[j] = button;
+            j++;
+        }
+        scenes.push(categoryScene);
 
         // Field picker for each category
-        scenes.push(createFieldPicker(fieldFilters, careers, Category.Human));
-        scenes.push(createFieldPicker(fieldFilters, careers, Category.Nature));
-        scenes.push(createFieldPicker(fieldFilters, careers, Category.SmartMachine));
-        scenes.push(createFieldPicker(fieldFilters, careers, Category.Space));
+        List<CareerModel> careersList = Arrays.asList(careers);
+        for (String category : categories) {
+            scenes.push(createFieldPicker(fieldFilters, careersList, category));
+        }
 
         // Construct a 6 question survey. One question for each category of RIASEC
         final int questionCount = 6;
@@ -316,25 +306,25 @@ public class LoadedSurveyModel implements Serializable {
             scene.headerTitle = "Let's talk about your field!";
             scene.headerBody = "Select the answer that best applies to you";
             scene.careerCenterText = "Fields";
-            scene.promptText = "Select one";
+            scene.promptText = "Put your question here!";
 
             // Alternate between the categories buttons provided
             if (i % 2 == 0) {
                 scene.answers = new ButtonModel[] {
-                    new ButtonModel("Artistic",
+                    new ButtonModel("Artistic answer",
                             "fieldPrompt" + (i + 1), Riasec.Artistic),
-                    new ButtonModel("Realistic",
+                    new ButtonModel("Realistic answer",
                             "fieldPrompt" + (i + 1), Riasec.Realistic),
-                    new ButtonModel("Conventional",
+                    new ButtonModel("Conventional answer",
                             "fieldPrompt" + (i + 1), Riasec.Conventional)
                 };
             } else {
                 scene.answers = new ButtonModel[] {
-                    new ButtonModel("Enterprising",
+                    new ButtonModel("Enterprising answer",
                             "fieldPrompt" + (i + 1), Riasec.Enterprising),
-                    new ButtonModel("Social",
+                    new ButtonModel("Social answer",
                             "fieldPrompt" + (i + 1), Riasec.Social),
-                    new ButtonModel("Investigative",
+                    new ButtonModel("Investigative answer",
                             "fieldPrompt" + (i + 1), Riasec.Investigative)
                 };
             }
@@ -350,7 +340,7 @@ public class LoadedSurveyModel implements Serializable {
         }
 
         LoadedSurveyModel survey = LoadedSurveyModel.create();
-        survey.rootSceneId = eyeCatcher.id;
+        survey.rootSceneId = titleScene.id;
         survey.scenes = scenes.toArray(new SceneModel[0]);
 
         return survey;
@@ -358,13 +348,12 @@ public class LoadedSurveyModel implements Serializable {
 
     private static SceneModel createFieldPicker(HashMap<String, FilterGroupModel> fieldFilters,
                                                 List<CareerModel> careers,
-                                                Category category) {
+                                                String category) {
         final int maxFields = 8;
 
         List<CareerModel> categoryCareers = careers
                 .stream()
-                .filter(career -> Category.valueOf(
-                        career.category.replace(" ", "")).equals(category))
+                .filter(career -> career.category.equals(category))
                 .collect(Collectors.toList());
 
         HashSet<String> uniqueFields = new HashSet<>();
@@ -374,8 +363,8 @@ public class LoadedSurveyModel implements Serializable {
 
         PathwaySceneModel scene = new PathwaySceneModel();
 
-        scene.id = "fieldPicker" + category.name();
-        scene.name = "Field Picker " + category.name();
+        scene.id = "fieldPicker" + category;
+        scene.name = "Field Picker " + category;
 
         String[] fieldsArray = uniqueFields.toArray(new String[0]);
         int fieldCount = Math.min(uniqueFields.size(), maxFields);
@@ -393,12 +382,5 @@ public class LoadedSurveyModel implements Serializable {
         scene.headerBody = "You can always go back and change your answer.";
 
         return scene;
-    }
-
-    private enum Category {
-        Human,
-        Nature,
-        SmartMachine,
-        Space
     }
 }
