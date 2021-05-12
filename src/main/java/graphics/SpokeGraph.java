@@ -104,7 +104,7 @@ public class SpokeGraph {
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
             double weight = normalWeights[i];
-            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 3 / 2;
+            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 5 / 4;
             if (buttons.length > 5) {
                 radius = radius * ((float) 5 / buttons.length);
                 // todo anyone else know a good way to shrink circles as we add more?
