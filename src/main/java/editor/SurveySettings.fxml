@@ -73,10 +73,10 @@
                     <padding> <Insets left="15" /> </padding>
                     <Spinner fx:id="sceneAnimationSpinner">
                         <valueFactory>
-                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="600"/>
+                            <SpinnerValueFactory.IntegerSpinnerValueFactory min="0" max="1000"/>
                         </valueFactory>
                     </Spinner>
-                    <Label text="frames">
+                    <Label text="milliseconds">
                         <padding>
                             <Insets left="5" right="15" />
                         </padding>

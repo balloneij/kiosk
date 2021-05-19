@@ -6,7 +6,6 @@ import graphics.SceneAnimationHelper;
 import graphics.SpokeGraph;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -68,7 +67,7 @@ public class PathwayScene implements Scene {
         float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         this.spokeGraph = new SpokeGraph(size,
                 screenW / 2f - size / 2,
-                GraphicsUtil.headerY + GraphicsUtil.headerH,
+                GraphicsUtil.headerY + GraphicsUtil.headerH * 0.95,
                 this.model.centerText,
                 this.model.buttonModels,
                 model.centerColor);

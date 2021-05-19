@@ -142,6 +142,7 @@ public class Graphics {
         sketch.rectMode(PConstants.CENTER);
 
         // Draw the rounded rectangle
+        sketch.stroke(59, 58, 57, 63f);
         sketch.rect(x, y, w, h, r);
     }
 
@@ -219,8 +220,8 @@ public class Graphics {
         sketch.ellipseMode(PConstants.CENTER);
         sketch.noFill();
         float weight = (9 - (timeSinceLastTap * 21));
-        if (weight <= 0) {
-            weight = 0;
+        if (weight <= 1) {
+            weight = 1;
         }
         sketch.strokeWeight(weight);
         sketch.stroke(color);

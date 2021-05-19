@@ -73,7 +73,7 @@ public class CareerPathwayScene implements Scene {
         float size = screenH - GraphicsUtil.headerY - GraphicsUtil.headerH;
         this.spokeGraph = new SpokeGraph(size,
                 screenW / 2f - size / 2,
-                GraphicsUtil.headerY + GraphicsUtil.headerH,
+                GraphicsUtil.headerY + GraphicsUtil.headerH * 0.95,
                 model.centerText,
                 careerButtons,
                 careerWeights,

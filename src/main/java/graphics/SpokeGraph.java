@@ -42,7 +42,8 @@ public class SpokeGraph {
      * @param centerText text of the center wheel
      * @param buttons to create a spoke graph off of
      */
-    public SpokeGraph(double size, double x, double y, String centerText, ButtonModel[] buttons, int[] centerColor) {
+    public SpokeGraph(double size, double x, double y,
+                      String centerText, ButtonModel[] buttons, int[] centerColor) {
         this(size, x, y, centerText, buttons, new double[buttons.length], centerColor);
         Arrays.fill(weights, 0); // Set all weights to 0
     }
@@ -90,7 +91,6 @@ public class SpokeGraph {
         this.maxButtonRadius = size / 8.0;
         this.minButtonRadius = maxButtonRadius * MIN_BUTTON_RADIUS_RATIO;
 
-        double spokeLength = maxButtonRadius * 2;
         double angleDelta = (2 * Math.PI) / buttons.length;
 
         // The text has to fit inside the largest square possible inside the circle
@@ -104,7 +104,13 @@ public class SpokeGraph {
         this.buttonControls = new ButtonControl[buttons.length];
         for (int i = 0; i < buttons.length; i++) {
             double weight = normalWeights[i];
-            final float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight);
+            float radius = (float) lerp(minButtonRadius, maxButtonRadius, weight) * 5 / 4;
+            if (buttons.length > 5) {
+                radius = radius * ((float) 5 / buttons.length);
+                // todo anyone else know a good way to shrink circles as we add more?
+                //  re-define min and max radii?
+            }
+            double spokeLength = maxButtonRadius * 9 / 4 - radius * 0.8;
             final float diameter = radius * 2;
             final double centerSquareSize = Math.sqrt(Math.pow(diameter, 2) / 2);
             final float buttonX = (float)

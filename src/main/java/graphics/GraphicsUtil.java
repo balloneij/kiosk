@@ -55,7 +55,7 @@ public class GraphicsUtil {
         backButtonModel.text = "← Back";
         backButtonModel.rgb = Color.DW_BLACK_RGB;
         ButtonControl backButton = new ButtonControl(backButtonModel,
-            commonButtonPadding, sketch.height
+                (int) (commonButtonPadding * .6), sketch.height
             - (commonButtonHeight * 3 / 4) - commonButtonPadding,
             commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
         backButton.init(sketch);
@@ -79,7 +79,7 @@ public class GraphicsUtil {
         homeButtonModel.text = "◄◄ Restart";
         homeButtonModel.rgb = Color.DW_MAROON_RGB;
         ButtonControl homeButton = new ButtonControl(homeButtonModel,
-            commonButtonPadding, commonButtonPadding,
+                (int) (commonButtonPadding * .6), commonButtonPadding,
             commonButtonWidth * 3 / 4, commonButtonHeight * 3 / 4, false);
         homeButton.init(sketch);
         return homeButton;
@@ -147,25 +147,6 @@ public class GraphicsUtil {
         return msoeButton;
     }
 
-    public static ButtonControl initializeMsoeButtonUpperRight(Kiosk sketch) {
-        screenW = Kiosk.getSettings().screenW;
-        screenH = Kiosk.getSettings().screenH;
-
-        commonButtonWidth = screenW / 8;
-        commonButtonHeight = screenH / 8;
-        commonButtonPadding = screenH / 20;
-
-        ButtonModel msoeButtonModel = new ButtonModel();
-        msoeButtonModel.image = new ImageModel("assets/MSOE-U-BK_RD.png", 723 / 6, 883 / 6);
-        ButtonControl msoeButton = new ButtonControl(msoeButtonModel,
-                sketch.width - (commonButtonWidth)  + (commonButtonPadding / 3),
-                commonButtonPadding - (commonButtonPadding / 3),
-                commonButtonWidth * 3 / 4, commonButtonWidth * 3 / 4, false);
-        msoeButton.setNoButton(true);
-        msoeButton.init(sketch);
-        return msoeButton;
-    }
-
     /**
      * Draws the header.
      * @param sketch to draw to
@@ -196,7 +177,7 @@ public class GraphicsUtil {
 
         // Draw the white header box
         sketch.fill(255);
-        sketch.stroke(255);
+        sketch.stroke(59, 58, 57, 63f);
 
         Graphics.drawRoundedRectangle(sketch,
                 (float) (headerX + offsetX + headerW / 2),

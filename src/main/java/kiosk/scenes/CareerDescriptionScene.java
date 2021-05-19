@@ -2,8 +2,8 @@ package kiosk.scenes;
 
 import graphics.Graphics;
 import graphics.GraphicsUtil;
-import java.io.File;
 import graphics.SceneAnimationHelper;
+import java.io.File;
 import kiosk.Kiosk;
 import kiosk.SceneGraph;
 import kiosk.models.CareerDescriptionModel;

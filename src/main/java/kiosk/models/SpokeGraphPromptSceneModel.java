@@ -1,9 +1,8 @@
 package kiosk.models;
 
+import java.util.Arrays;
 import kiosk.scenes.Scene;
 import kiosk.scenes.SpokeGraphPromptScene;
-
-import java.util.Arrays;
 
 public final class SpokeGraphPromptSceneModel implements SceneModel {
 

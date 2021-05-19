@@ -20,12 +20,12 @@ import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import kiosk.models.CareerModelLoader;
 import kiosk.models.DefaultSceneModel;
 import kiosk.models.ErrorSceneModel;
 import kiosk.models.LoadedSurveyModel;
 import kiosk.models.SceneModel;
 import kiosk.models.TimeoutSceneModel;
-import kiosk.models.*;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
@@ -55,6 +55,7 @@ public class Kiosk extends PApplet {
     private File loadedFile;
     private boolean isFullScreen = false;
     private boolean fontsLoaded = false;
+    private boolean boopTouched = false;
     private ArrayList<Float> recentTapTimes;
     private ArrayList<MouseEvent> recentTapEvents;
     private ArrayList<Integer> recentTapColors;
@@ -158,6 +159,7 @@ public class Kiosk extends PApplet {
                     listener.invoke(event);
                 }
                 boop.checkTap(this, event);
+                boopTouched = true;
             }
         });
 
@@ -442,7 +444,10 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MouseClicked)) {
             listener.invoke(event);
         }
-        boop.checkTap(this, event);
+        if (!boopTouched) {
+            boop.checkTap(this, event);
+        }
+        boopTouched = false;
         recentTapEvents.add(event);
         recentTapTimes.add(0f);
         recentTapColors.add(Color.randomColor());
@@ -491,7 +496,6 @@ public class Kiosk extends PApplet {
                 : this.mouseListeners.get(InputEvent.MousePressed)) {
             listener.invoke(event);
         }
-        boop.checkTap(this, event);
     }
 
     /**
