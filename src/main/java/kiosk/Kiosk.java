@@ -102,6 +102,7 @@ public class Kiosk extends PApplet {
         fileChooser.setAcceptAllFileFilterUsed(false);
 
         Kiosk.settings = settings;
+        settings.setFullScreen(!isEditor);
 
         LoadedSurveyModel survey;
         this.surveyPath = surveyPath;
