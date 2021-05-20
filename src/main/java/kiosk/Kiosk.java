@@ -6,26 +6,17 @@ import graphics.Graphics;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.input.TouchEvent;
-import javafx.scene.input.TouchPoint;
-import javafx.stage.Stage;
+import java.util.*;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import kiosk.models.CareerModelLoader;
-import kiosk.models.DefaultSceneModel;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.SceneModel;
-import kiosk.models.TimeoutSceneModel;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TouchPoint;
+import javafx.stage.Stage;
+import kiosk.models.*;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
@@ -102,6 +93,7 @@ public class Kiosk extends PApplet {
         fileChooser.setAcceptAllFileFilterUsed(false);
 
         Kiosk.settings = settings;
+        settings.setFullScreen(!isEditor);
 
         LoadedSurveyModel survey;
         this.surveyPath = surveyPath;
@@ -367,45 +359,36 @@ public class Kiosk extends PApplet {
         }
     }
 
-    @Override
-    protected void handleKeyEvent(KeyEvent event) {
-        super.handleKeyEvent(event);
-    }
-
     /**
      * Event handler for when any key is pressed. Only certain keys have responses...
-     * F2 - Open JFileChooser to select (only) an XML file
-     * F5 - Refresh the current view to reflect the chosen file's paths
+     * 'o' - Open JFileChooser to select (only) an XML file
+     * 'r' - Refresh the current view to reflect the chosen file's paths
+     * 'ESC' - Closes the program
      * @param event args passed to the listener
      */
     @Override
-    public void keyPressed(KeyEvent event) {
-        super.keyPressed(event);
+    protected void handleKeyEvent(KeyEvent event) {
+        super.handleKeyEvent(event);
         if (this.hotkeysEnabled) {
-            if (event.getKeyCode() == 113) {
-                // F2 Key Press
+            if (Character.toLowerCase(event.getKey()) == '\u001B') {
+                // 'ESC' Key Press
+                this.noLoop();
+                this.getSurface().setVisible(false);
+            } else if (Character.toLowerCase(event.getKey()) == '\u006F') {
+                // 'o' Key Press
                 File file = showFileOpener();
                 if (file != null) {
                     this.surveyPath = file.getPath();
                     reloadSettings(isFullScreen);
                     loadSurveyFile(file);
                 }
-            } else if (event.getKeyCode() == 116) {
-                // F5 Key Press
+            } else if (Character.toLowerCase(event.getKey()) == '\u0072') {
+                // 'r' Key Press
                 if (loadedFile != null) {
                     reloadSettings(isFullScreen);
                     loadSurveyFile(loadedFile);
                 }
                 this.sceneGraph.reset();
-            } else if (event.getKeyCode() == 122) {
-                // F11 Key Press
-                Settings s = Settings.readSettings();
-                s.setFullScreen(!isFullScreen);
-                Kiosk kioskNew = new Kiosk(this.surveyPath, s, false);
-                kioskNew.setFontsLoaded(true);
-                kioskNew.run();
-                this.noLoop();
-                this.getSurface().setVisible(false);
             }
         }
 
