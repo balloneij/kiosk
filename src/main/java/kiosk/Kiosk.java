@@ -6,27 +6,17 @@ import graphics.Graphics;
 import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.TouchEvent;
-import javafx.scene.input.TouchPoint;
-import javafx.stage.Stage;
+import java.util.*;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import kiosk.models.CareerModelLoader;
-import kiosk.models.DefaultSceneModel;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.SceneModel;
-import kiosk.models.TimeoutSceneModel;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.TouchEvent;
+import javafx.scene.input.TouchPoint;
+import javafx.stage.Stage;
+import kiosk.models.*;
 import kiosk.scenes.Control;
 import kiosk.scenes.Scene;
 import kiosk.scenes.TimeoutScene;
@@ -380,11 +370,11 @@ public class Kiosk extends PApplet {
     protected void handleKeyEvent(KeyEvent event) {
         super.handleKeyEvent(event);
         if (this.hotkeysEnabled) {
-            if (event.getKey() == '\u001B') {
+            if (Character.toLowerCase(event.getKey()) == '\u001B') {
                 // 'ESC' Key Press
                 this.noLoop();
                 this.getSurface().setVisible(false);
-            } else if (event.getKey() == '\u006F') {
+            } else if (Character.toLowerCase(event.getKey()) == '\u006F') {
                 // 'o' Key Press
                 File file = showFileOpener();
                 if (file != null) {
@@ -392,7 +382,7 @@ public class Kiosk extends PApplet {
                     reloadSettings(isFullScreen);
                     loadSurveyFile(file);
                 }
-            } else if (event.getKey() == '\u0072') {
+            } else if (Character.toLowerCase(event.getKey()) == '\u0072') {
                 // 'r' Key Press
                 if (loadedFile != null) {
                     reloadSettings(isFullScreen);
