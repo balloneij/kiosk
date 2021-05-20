@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.TouchEvent;
 import javafx.scene.input.TouchPoint;
 import javafx.stage.Stage;
@@ -368,45 +369,36 @@ public class Kiosk extends PApplet {
         }
     }
 
-    @Override
-    protected void handleKeyEvent(KeyEvent event) {
-        super.handleKeyEvent(event);
-    }
-
     /**
      * Event handler for when any key is pressed. Only certain keys have responses...
-     * F2 - Open JFileChooser to select (only) an XML file
-     * F5 - Refresh the current view to reflect the chosen file's paths
+     * 'o' - Open JFileChooser to select (only) an XML file
+     * 'r' - Refresh the current view to reflect the chosen file's paths
+     * 'ESC' - Closes the program
      * @param event args passed to the listener
      */
     @Override
-    public void keyPressed(KeyEvent event) {
-        super.keyPressed(event);
+    protected void handleKeyEvent(KeyEvent event) {
+        super.handleKeyEvent(event);
         if (this.hotkeysEnabled) {
-            if (event.getKeyCode() == 113) {
-                // F2 Key Press
+            if (event.getKey() == '\u001B') {
+                // 'ESC' Key Press
+                this.noLoop();
+                this.getSurface().setVisible(false);
+            } else if (event.getKey() == '\u006F') {
+                // 'o' Key Press
                 File file = showFileOpener();
                 if (file != null) {
                     this.surveyPath = file.getPath();
                     reloadSettings(isFullScreen);
                     loadSurveyFile(file);
                 }
-            } else if (event.getKeyCode() == 116) {
-                // F5 Key Press
+            } else if (event.getKey() == '\u0072') {
+                // 'r' Key Press
                 if (loadedFile != null) {
                     reloadSettings(isFullScreen);
                     loadSurveyFile(loadedFile);
                 }
                 this.sceneGraph.reset();
-            } else if (event.getKeyCode() == 122) {
-                // F11 Key Press
-                Settings s = Settings.readSettings();
-                s.setFullScreen(!isFullScreen);
-                Kiosk kioskNew = new Kiosk(this.surveyPath, s, false);
-                kioskNew.setFontsLoaded(true);
-                kioskNew.run();
-                this.noLoop();
-                this.getSurface().setVisible(false);
             }
         }
 
