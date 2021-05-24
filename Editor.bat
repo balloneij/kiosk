@@ -10,7 +10,7 @@ FOR /F "usebackq skip=2 tokens=3" %%A IN (`REG QUERY %KEY_NAME% /v %VALUE_NAME% 
 )
 if defined ValueValue (
     if "%ValueValue%" == "1.8" (
-        start java -jar target/editor.jar
+        start java -jar editor.jar
         goto end
     ) else (
         @echo The current Java runtime is  %ValueValue%. Please install Java 1.8.
