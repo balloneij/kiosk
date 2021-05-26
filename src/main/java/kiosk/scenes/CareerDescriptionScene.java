@@ -80,7 +80,9 @@ public class CareerDescriptionScene implements Scene {
         final int sketchWidth = Kiosk.getSettings().screenW;
 
         // Images
-        this.model.image = new ImageModel();
+        if (this.model.image == null) {
+            this.model.image = new ImageModel();
+        }
         this.model.image.width = imageSize;
         this.model.image.height = imageSize;
 

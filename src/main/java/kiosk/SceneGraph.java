@@ -9,13 +9,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import kiosk.models.CareerDescriptionModel;
-import kiosk.models.CareerModel;
-import kiosk.models.CareerModelLoader;
-import kiosk.models.ErrorSceneModel;
-import kiosk.models.FilterGroupModel;
-import kiosk.models.LoadedSurveyModel;
-import kiosk.models.SceneModel;
+
+import kiosk.models.*;
 import kiosk.scenes.Scene;
 
 public class SceneGraph {
@@ -196,9 +191,11 @@ public class SceneGraph {
      * Pushes the end scene.
      */
     public void pushEndScene(CareerModel career) {
-        CareerDescriptionModel description = new CareerDescriptionModel();
-        description.careerModel = career;
-        pushScene(description);
+        CareerDescriptionModel model = new CareerDescriptionModel();
+        model.image = new ImageModel();
+        model.image.path = career.imagePath;
+        model.careerModel = career;
+        pushScene(model);
     }
 
     public synchronized boolean containsScene(String sceneId) {
